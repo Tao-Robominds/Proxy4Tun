@@ -1,8 +1,8 @@
 # =====================================================================
-# SAM4Tun Functional Ontology
+# SAM4Tun Ontology
 # ---------------------------------------------------------------------
 # Purpose:
-#   A machine-readable functional description of the SAM4Tun tunnel
+#   A machine-readable description of the SAM4Tun tunnel
 #   lining point-cloud segmentation pipeline (as implemented in
 #   notebook/t1&2.ipynb, notebook/t3.ipynb, notebook/t4&5.ipynb and
 #   described in the SAM4Tun paper, notebook/paper/sam4tun.pdf).
@@ -26,7 +26,7 @@
 # =====================================================================
 
 meta:
-  name: SAM4Tun Functional Ontology
+  name: SAM4Tun Ontology
   version: 0.1.0
   domain: tunnel lining point-cloud instance/semantic segmentation
   method: no-training, prompt-engineered Segment Anything Model (SAM)

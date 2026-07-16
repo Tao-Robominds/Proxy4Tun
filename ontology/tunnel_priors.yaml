@@ -3,7 +3,7 @@
 # ---------------------------------------------------------------------
 # Seg2Tunnel is used here ONLY as a source of per-tunnel prior knowledge.
 # These profiles are the tunnel-specific constants that the SAM4Tun
-# functional ontology references via `prior_ref` on tunnel_dependent
+# ontology references via `prior_ref` on tunnel_dependent
 # parameters.
 #
 # Values are transcribed from the notebooks:

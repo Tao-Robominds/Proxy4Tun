@@ -1,6 +1,6 @@
-# SAM4Tun Functional Ontology
+# SAM4Tun Ontology
 
-A functional ontology of the **SAM4Tun** tunnel-lining point-cloud segmentation
+An ontology of the **SAM4Tun** tunnel-lining point-cloud segmentation
 pipeline, designed to let **staged LLM agents** analyse the state of each pipeline
 stage and suggest parameter changes.
 
@@ -16,7 +16,7 @@ stage and suggest parameter changes.
 
 | File | Content |
 |------|---------|
-| `sam4tun_functional_ontology.yaml` | The ontology: artifacts, stages, parameters, quality metrics, failure modes, diagnostic rules, remediation actions, inter-stage dependencies, and the agent interface. |
+| `sam4tun_ontology.yaml` | The ontology: artifacts, stages, parameters, quality metrics, failure modes, diagnostic rules, remediation actions, inter-stage dependencies, and the agent interface. |
 | `tunnel_priors.yaml` | Seg2Tunnel-derived per-tunnel priors (T1–T5): diameter, radius/theta gates, block geometry, Hough settings, up-sampling schedule, etc. |
 
 ## Pipeline stages
