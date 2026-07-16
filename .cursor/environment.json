@@ -1,5 +1,5 @@
 {
   "$schema": "https://www.cursor.com/schemas/environment.schema.json",
   "name": "SAM4Tun Python 3.12",
-  "install": "python3.12 -m venv .venv && .venv/bin/python -m pip install --upgrade pip && .venv/bin/python -m pip install -r requirements.txt && .venv/bin/python -m pip install -e . --no-deps"
+  "install": "sudo apt-get update && sudo apt-get install -y python3.12-venv && python3.12 -m venv .venv && .venv/bin/python -m pip install --upgrade pip && .venv/bin/python -m pip install -r requirements.txt && .venv/bin/python -m pip install -e . --no-deps"
 }

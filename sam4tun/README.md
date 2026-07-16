@@ -64,7 +64,8 @@ python3.12 -m venv .venv
 ```
 
 Cursor Cloud performs these commands automatically through
-`.cursor/environment.json`. No Docker environment is required.
+`.cursor/environment.json`, including installation of `python3.12-venv` on the
+base VM. No Docker environment is required.
 
 Run stages 1–4 without requiring SAM:
 
