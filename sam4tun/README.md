@@ -58,8 +58,13 @@ tests a tunnel id.
 Install:
 
 ```bash
-python -m pip install -e .
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m pip install -e . --no-deps
 ```
+
+Cursor Cloud performs these commands automatically through
+`.cursor/environment.json`. No Docker environment is required.
 
 Run stages 1–4 without requiring SAM:
 
