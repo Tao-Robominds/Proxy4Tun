@@ -1,0 +1,131 @@
+# =====================================================================
+# Tunnel Priors (T1 - T5)
+# ---------------------------------------------------------------------
+# Seg2Tunnel is used here ONLY as a source of per-tunnel prior knowledge.
+# These profiles are the tunnel-specific constants that the SAM4Tun
+# ontology references via `prior_ref` on tunnel_dependent
+# parameters.
+#
+# Values are transcribed from the notebooks:
+#   T1, T2  -> notebook/t1&2.ipynb
+#   T3      -> notebook/t3.ipynb
+#   T4, T5  -> notebook/t4&5.ipynb
+#
+# IMPORTANT: these are the values observed in the reference notebooks.
+# Several are data/coverage dependent (especially n_segment_hint) and
+# MUST be recalibrated per scan. Units are noted per field.
+# =====================================================================
+
+defaults:
+  resolution_m_per_px: 0.005          # shared pixel scale (stages 3, 4, 5)
+  curvature_threshold: 0.0005
+  num_neighbors: 20
+  inter_radius: 0.06
+  num_interpolations: 2
+  duplicate_threshold: 0.02
+  grad_threshold: 0.2
+  y_step: 0.1
+  z_step: 0.001
+  bin_threshold: 127
+  dilate_kernel: 3
+  dilate_iterations: 1
+  angle_positive_deg: [5, 10]
+  angle_negative_deg: [-10, -5]
+  merge_close_points_px: 6
+  sam_model_type: vit_h
+  # generate_prompt_points inner defaults (code smell: may shadow the
+  # tunnel-specific process_row values if not overridden) - flag for review
+  prompt_inner_defaults: {segment_width: 1200, K_height: 1079.92, AB_height: 3239.77}
+
+# ---------------------------------------------------------------------
+tunnels:
+
+  T1: &t12
+    notebook: notebook/t1&2.ipynb
+    diameter_m: 5.5
+    radius_range: {inner: 2.7, outer: 2.8}         # mask_r: r<2.7 | r>2.8
+    theta_range: null                               # no circumferential gate
+    slice_filter_mode: remove_railway
+    ring_count: derived_from_slicing               # ring_count = len(slicing_cloud)
+    upsample_target_distance: [0.08, 0.04, 0.02]
+    outlier_depth_threshold: {low: 0.003, high: 0.008}
+    n_segment_hint: [0, 5]                          # sample = half station; recalibrate
+    hough:
+      oblique: {threshold: 50, minLineLength: 100, maxLineGap: 40}
+      horizontal: {threshold: 50, minLineLength: 100, maxLineGap: 10}
+      vertical_threshold: 500
+    detection:
+      pattern_tolerance: 50
+    block_height: {K: 1079.92, AB: 3239.77}         # mm
+    taper_angle_deg: 7.52
+    segment_per_ring: 6
+    segment_width_mm: 1200
+    block_to_label: {K: 1, B1: 2, A1: 3, A2: 4, A3: 5, B2: 6}
+
+  T2:
+    <<: *t12
+    notebook: notebook/t1&2.ipynb
+    note: "Shares the t1&2 notebook profile with T1."
+
+  T3:
+    notebook: notebook/t3.ipynb
+    diameter_m: 5.9
+    radius_range: {inner: 2.85, outer: 3.0}         # mask_r: r<2.85 | r>3
+    theta_range: {low: 1.55, high: 17.15}           # mask_theta present for T3
+    slice_filter_mode: remove_railway
+    ring_count: derived_from_slicing
+    upsample_target_distance: [0.08, 0.04, 0.02]
+    outlier_depth_threshold: {low: 0.01, high: 0.01}  # call overrode low=0.01
+    n_segment_hint: [11, 11]                          # recalibrate per coverage
+    hough:
+      oblique: {threshold: 30, minLineLength: 40, maxLineGap: 30}
+      horizontal: {threshold: 30, minLineLength: 50, maxLineGap: 10}
+      vertical_threshold: 1500
+    detection:
+      pattern_tolerance: null                        # not explicit in notebook; calibrate
+    block_height: {K: 823.8, AB: 3346.8}             # mm (detection used AB 3346.68)
+    taper_angle_deg: 6.12
+    segment_per_ring: 6
+    segment_width_mm: 1200
+    block_to_label: {K: 1, B1: 2, A1: 3, A2: 4, A3: 5, B2: 6}
+
+  T4: &t45
+    notebook: notebook/t4&5.ipynb
+    diameter_m: 7.5
+    radius_range: {inner: 3.65, outer: 3.9}          # mask_r: r<3.65 | r>3.9 (stale "5.5" comment in code)
+    theta_range: null
+    slice_filter_mode: remove_top_tube               # in-built, no railway but a service tube on top
+    ring_count: derived_from_slicing
+    upsample_target_distance: [0.09, 0.045, 0.0225]
+    outlier_depth_threshold: {low: 0.0065, high: 0.013}
+    n_segment_hint: [5, 14]                           # recalibrate per coverage
+    hough:
+      oblique: {threshold: 50, minLineLength: 100, maxLineGap: 50}
+      horizontal: {threshold: 50, minLineLength: 105, maxLineGap: 10}
+      vertical_threshold: 800
+    detection:
+      pattern_tolerance: null                         # calibrate
+    block_height: {K: 1226.97, AB: 3726.88}           # mm
+    taper_angle_deg: 9.8
+    segment_per_ring: 7
+    segment_width_mm: 1800
+    block_to_label: {K: 1, B1: 2, A1: 3, A2: 4, A3: 5, A4: 6, B2: 7}
+
+  T5:
+    <<: *t45
+    notebook: notebook/t4&5.ipynb
+    note: "Shares the t4&5 notebook profile with T4."
+
+# ---------------------------------------------------------------------
+# Derivation helpers (how pixel-domain priors are computed from the
+# above, kept explicit so agents do not hardcode pixel values):
+#   K_height_pixel  = block_height.K  / (1000 * resolution_m_per_px)
+#   AB_height_pixel = block_height.AB / (1000 * resolution_m_per_px)
+#   num_A_blocks    = segment_per_ring - 3        # K + B1 + B2 + A*(n-3)
+#   x_step          = (max_h - min_h) / ring_count
+# ---------------------------------------------------------------------
+derivations:
+  K_height_pixel: "block_height.K / (1000 * resolution_m_per_px)"
+  AB_height_pixel: "block_height.AB / (1000 * resolution_m_per_px)"
+  num_A_blocks: "segment_per_ring - 3"
+  x_step: "(max_h - min_h) / ring_count"

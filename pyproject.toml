@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sam4tun-pipeline"
+version = "0.1.0"
+description = "Parameterized five-stage SAM4Tun point-cloud segmentation pipeline"
+requires-python = ">=3.11"
+dependencies = [
+  "matplotlib",
+  "numpy",
+  "opencv-python-headless",
+  "pandas",
+  "scikit-learn",
+  "scipy",
+  "shapely",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+sam = ["torch"]
+
+[project.scripts]
+sam4tun = "sam4tun.pipeline:main"
+
+[tool.setuptools.packages.find]
+include = ["sam4tun*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
