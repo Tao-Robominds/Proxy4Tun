@@ -8,9 +8,9 @@ stage and suggest parameter changes.
   `notebook/t3.ipynb`, `notebook/t4&5.ipynb`; paper `notebook/paper/sam4tun.pdf`).
 - **Seg2Tunnel role:** prior knowledge only — the per-tunnel constants for
   T1–T5 live in `tunnel_priors.yaml`. Seg2Tunnel is *not* modelled as a pipeline.
-- **Algorithm 4 is split** into two sub-algorithms, as requested:
-  - `stage_4a_detection` — joint / segment **prompt-centre detection**
-  - `stage_4b_segmentation` — **SAM template-prompt segmentation + reprojection**
+- The former Algorithm 4 is modelled as **two independent stages/algorithms**:
+  - `stage_4_detection` (**Algorithm 4**) — joint / segment **prompt-centre detection**
+  - `stage_5_segmentation` (**Algorithm 5**) — **SAM template-prompt segmentation + reprojection**
 
 ## Files
 
@@ -27,8 +27,8 @@ raw point cloud
   ▼  Algorithm 1  ── stage_1_centreline   (axis → slices → ellipse centres → 3D curve → h,θ,r)
   ▼  Algorithm 2  ── stage_2_denoise      (radial gate + density/gradient filtering → pred=9 lining)
   ▼  Algorithm 3  ── stage_3_upsample     (surface + joint up-sampling → unrolled depth map + pixel↔point)
-  ▼  Algorithm 4a ── stage_4a_detection   (outlier map → Hough lines → distance pattern → prompt centres)
-  ▼  Algorithm 4b ── stage_4b_segmentation(SAM template prompts → masks → label/ring maps → reproject to 3D)
+  ▼  Algorithm 4  ── stage_4_detection    (outlier map → Hough lines → distance pattern → prompt centres)
+  ▼  Algorithm 5  ── stage_5_segmentation (SAM template prompts → masks → label/ring maps → reproject to 3D)
   │
   ▼ segmented point cloud (pred, pred_ring)
 ```
@@ -59,7 +59,7 @@ Each stage has one agent. The workflow per agent:
   `tunnel_priors.yaml`), so changing `resolution` rescales them consistently.
 - **Causal chains** (`inter_stage_dependencies`) capture the most common
   cross-stage error propagation, e.g. a misplaced `n_segment` (stage 3) breaks
-  the joint distance pattern (stage 4a), which then offsets SAM crops (stage 4b).
+  the joint distance pattern (stage 4), which then offsets SAM crops (stage 5).
 
 ## Notes / open items
 

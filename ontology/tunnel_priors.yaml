@@ -17,7 +17,7 @@
 # =====================================================================
 
 defaults:
-  resolution_m_per_px: 0.005          # shared pixel scale (stages 3, 4a, 4b)
+  resolution_m_per_px: 0.005          # shared pixel scale (stages 3, 4, 5)
   curvature_threshold: 0.0005
   num_neighbors: 20
   inter_radius: 0.06

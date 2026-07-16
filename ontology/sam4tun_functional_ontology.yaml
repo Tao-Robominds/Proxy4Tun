@@ -20,9 +20,9 @@
 #   companion file `tunnel_priors.yaml` and referenced here through the
 #   `tunnel_dependent: true` flag on parameters.
 #
-# Algorithm 4 is split, as requested, into two sub-algorithms:
-#   - stage_4a_detection    (joint / segment prompt-centre detection)
-#   - stage_4b_segmentation (SAM template-prompt segmentation + reprojection)
+# The former Algorithm 4 is modelled as two independent stages/algorithms:
+#   - stage_4_detection    (Algorithm 4: joint / segment prompt-centre detection)
+#   - stage_5_segmentation (Algorithm 5: SAM template-prompt segmentation + reprojection)
 # =====================================================================
 
 meta:
@@ -87,38 +87,38 @@ artifacts:
   enhanced_joint_cloud:
     description: "df_enhance_joint: enhanced joint/outlier (boundary) points."
     produced_by: stage_3_upsample
-    consumed_by: [stage_3_upsample, stage_4a_detection]
+    consumed_by: [stage_3_upsample, stage_4_detection]
   depth_map:
     description: "Unrolled 2D depth image (depth_map.png) at given resolution."
     space: image
     produced_by: stage_3_upsample
-    consumed_by: [stage_4a_detection, stage_4b_segmentation]
+    consumed_by: [stage_4_detection, stage_5_segmentation]
   pixel_to_point:
     description: "Mapping from depth-map pixels back to point-cloud indices."
     produced_by: stage_3_upsample
-    consumed_by: [stage_4b_segmentation]
+    consumed_by: [stage_5_segmentation]
   outlier_depth_map:
     description: "Depth map containing only joint/outlier points (window_size=1, outlier_mode=True)."
     space: image
-    produced_by: stage_4a_detection
-    consumed_by: [stage_4a_detection]
+    produced_by: stage_4_detection
+    consumed_by: [stage_4_detection]
   prompt_centres:
     description: "initial_points.csv (df_loc): X,Y prompt-centre pixel coords, one per ring joint locus."
     space: image
-    produced_by: stage_4a_detection
-    consumed_by: [stage_4b_segmentation]
+    produced_by: stage_4_detection
+    consumed_by: [stage_5_segmentation]
   instance_masks:
     description: "results.pkl: per-block SAM masks, scores, logits, crop offsets."
-    produced_by: stage_4b_segmentation
-    consumed_by: [stage_4b_segmentation]
+    produced_by: stage_5_segmentation
+    consumed_by: [stage_5_segmentation]
   label_ring_maps:
     description: "logits_map / label_map / ring_map merged over the depth map."
     space: image
-    produced_by: stage_4b_segmentation
-    consumed_by: [stage_4b_segmentation]
+    produced_by: stage_5_segmentation
+    consumed_by: [stage_5_segmentation]
   segmented_point_cloud:
     description: "updated_df with pred (block label) and pred_ring (instance id). Final output."
-    produced_by: stage_4b_segmentation
+    produced_by: stage_5_segmentation
     consumed_by: [external_deformation_analysis]
 
 # ---------------------------------------------------------------------
@@ -362,7 +362,7 @@ stages:
         type: float
         default: 0.005
         tunnel_dependent: false
-        role: "Shared with stages 4a/4b; changing it rescales all pixel-domain priors."
+        role: "Shared with stages 4/5; changing it rescales all pixel-domain priors."
       - id: p_window_size
         name: projection window_size
         type: int
@@ -390,33 +390,33 @@ stages:
         symptom: "faint or missing joint lines -> detection misses prompt centres."
     consumes_priors: [upsample_target_distance, outlier_depth_threshold, n_segment_hint]
 
-  # ============================= STAGE 4a ============================
-  - id: stage_4a_detection
-    algorithm: "Algorithm 4 (part 1)"
+  # ============================= STAGE 4 =============================
+  - id: stage_4_detection
+    algorithm: "Algorithm 4"
     name: Joint / segment prompt-centre detection
     purpose: >
       Detect segment joints on the unrolled map and derive one prompt
-      centre per ring locus, output as initial_points.csv. This is the
-      DETECTION sub-algorithm split out of Algorithm 4.
+      centre per ring locus,       output as initial_points.csv. This is the
+      DETECTION algorithm (Algorithm 4).
     inputs: [enhanced_joint_cloud, depth_map]
     outputs: [outlier_depth_map, prompt_centres]
     substeps:
-      - id: s4a_1
+      - id: s4_1
         name: Build outlier-only map
         detail: "project_to_depth_map_inter(window_size=1, outlier_mode=True)."
-      - id: s4a_2
+      - id: s4_2
         name: Binarise and dilate
         detail: "threshold=127; dilate kernel 3x3, iterations=1."
-      - id: s4a_3
+      - id: s4_3
         name: Hough line detection
         detail: >
           Oblique HoughLinesP + horizontal HoughLinesP + vertical HoughLines.
           Thresholds/minLineLength/maxLineGap and the vertical accumulator
           threshold are tunnel-specific.
-      - id: s4a_4
+      - id: s4_4
         name: Angle filtering
         detail: "Keep oblique lines in [5,10] deg (positive) and [-10,-5] deg (negative); horizontal as fallback only."
-      - id: s4a_5
+      - id: s4_5
         name: Intersection + distance-pattern matching
         detail: >
           line_segment_vertical_intersection; merge_close_points(threshold=6);
@@ -512,29 +512,29 @@ stages:
         likely_upstream: [f_n_segment_misplaced]
     consumes_priors: [hough, block_height, detection.pattern_tolerance]
 
-  # ============================= STAGE 4b ============================
-  - id: stage_4b_segmentation
-    algorithm: "Algorithm 4 (part 2)"
+  # ============================= STAGE 5 =============================
+  - id: stage_5_segmentation
+    algorithm: "Algorithm 5"
     name: SAM template-prompt segmentation and reprojection
     purpose: >
       From each prompt centre, build a per-block template mask + prompt
       points, run SAM (vit_h), merge masks into label/ring maps, and
       project labels back to the 3D point cloud. This is the
-      SEGMENTATION sub-algorithm split out of Algorithm 4.
+      SEGMENTATION algorithm (Algorithm 5).
     inputs: [prompt_centres, depth_map, pixel_to_point]
     outputs: [instance_masks, label_ring_maps, segmented_point_cloud]
     substeps:
-      - id: s4b_1
+      - id: s5_1
         name: Template prompt + SAM mask
         detail: >
           generate_template_mask (per block K/B1/B2/A*), generate_prompt_points,
           crop_image_and_mask_logits, compute_logits_from_mask (->256x256),
           process_row iterates blocks per ring using segment_per_ring,
           segment_width, K_height, AB_height, angle (tunnel-specific). Model vit_h.
-      - id: s4b_2
+      - id: s5_2
         name: Merge masks
         detail: "logits_map / label_map / ring_map; block_to_label mapping (block count is tunnel-specific)."
-      - id: s4b_3
+      - id: s5_3
         name: Project back to point cloud
         detail: "project_back_to_point_cloud: update pred where pred==9; set pred_ring; pred_ring==-1 -> pred=0."
     parameters:
@@ -630,16 +630,16 @@ inter_stage_dependencies:
     effect: stage_3_upsample.f_depth_holes
     note: "Too-tight radial gate deletes lining -> depth-map voids."
   - cause: stage_3_upsample.f_n_segment_misplaced
-    effect: stage_4a_detection.f_pattern_mismatch
+    effect: stage_4_detection.f_pattern_mismatch
     note: "Misplaced high-density region breaks the K/AB distance pattern."
   - cause: stage_3_upsample.f_joint_oversmoothed
-    effect: stage_4a_detection.f_missing_lines
+    effect: stage_4_detection.f_missing_lines
     note: "Faint joints -> too few oblique lines -> unstable prompt centres."
-  - cause: stage_4a_detection.f_pattern_mismatch
-    effect: stage_4b_segmentation.f_crop_offset
+  - cause: stage_4_detection.f_pattern_mismatch
+    effect: stage_5_segmentation.f_crop_offset
     note: "Bad prompt centres -> crops and templates land off-segment."
-  - cause: stage_4a_detection.f_wrong_vertical_band
-    effect: stage_4b_segmentation.f_boundary_rings_missing
+  - cause: stage_4_detection.f_wrong_vertical_band
+    effect: stage_5_segmentation.f_boundary_rings_missing
     note: "Wrong vertical window -> edge rings never receive prompts."
 
 # ---------------------------------------------------------------------
@@ -674,27 +674,27 @@ diagnostic_rules:
     when: "m_joint_contrast low"
     implies: f_joint_oversmoothed
   - id: d7
-    stage: stage_4a_detection
+    stage: stage_4_detection
     when: "m_line_yield low AND horizontal fallback triggered"
     implies: f_missing_lines
   - id: d8
-    stage: stage_4a_detection
+    stage: stage_4_detection
     when: "m_spacing_regularity poor vs K/AB pattern"
     implies: f_pattern_mismatch
   - id: d9
-    stage: stage_4a_detection
+    stage: stage_4_detection
     when: "m_prompt_count much larger than expected"
     implies: f_spurious_lines
   - id: d10
-    stage: stage_4b_segmentation
+    stage: stage_5_segmentation
     when: "m_sam_score low AND m_label_consistency broken"
     implies: f_template_mismatch
   - id: d11
-    stage: stage_4b_segmentation
+    stage: stage_5_segmentation
     when: "m_coverage low at map ends AND m_ring_match < expected"
     implies: f_boundary_rings_missing
   - id: d12
-    stage: stage_4b_segmentation
+    stage: stage_5_segmentation
     when: "m_coverage low uniformly OR background bleed high"
     implies: f_over_under_coverage
 
@@ -783,7 +783,7 @@ agent_interface:
     preconditions_checked: "which cross-stage preconditions were verified"
     confidence: "low/medium/high with rationale"
   orchestration_hint: >
-    Run agents in pipeline order (1 -> 2 -> 3 -> 4a -> 4b). Before a stage
+    Run agents in pipeline order (1 -> 2 -> 3 -> 4 -> 5). Before a stage
     agent proposes changes to its own parameters, it must consult
     inter_stage_dependencies and, if an upstream failure_mode is a likely
     cause, defer to the upstream stage agent first.
