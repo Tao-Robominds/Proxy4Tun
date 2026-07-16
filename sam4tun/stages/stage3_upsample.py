@@ -210,7 +210,7 @@ def run_stage3(
     config: Stage3Config,
     profile: str,
 ) -> Path:
-    upstream_manifest = Path(upstream_manifest)
+    upstream_manifest = Path(upstream_manifest).resolve()
     upstream = StageState.read(upstream_manifest)
     output_dir = ensure_output_dir(output_dir)
     df = pd.read_csv(upstream.require("denoised_point_cloud", upstream_manifest))

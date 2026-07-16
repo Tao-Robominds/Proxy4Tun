@@ -229,7 +229,7 @@ def run_stage4(
 ) -> Path:
     import cv2
 
-    upstream_manifest = Path(upstream_manifest)
+    upstream_manifest = Path(upstream_manifest).resolve()
     upstream = StageState.read(upstream_manifest)
     output_dir = ensure_output_dir(output_dir)
     surface = pd.read_csv(

@@ -315,11 +315,11 @@ def run_stage5(
     profile: str,
     predictor: Any | None = None,
 ) -> Path:
-    upstream_manifest = Path(upstream_manifest)
+    upstream_manifest = Path(upstream_manifest).resolve()
     detection = StageState.read(upstream_manifest)
-    stage3_manifest = Path(detection.upstream_manifest or "")
+    stage3_manifest = Path(detection.upstream_manifest or "").resolve()
     stage3 = StageState.read(stage3_manifest)
-    stage2_manifest = Path(stage3.upstream_manifest or "")
+    stage2_manifest = Path(stage3.upstream_manifest or "").resolve()
     stage2 = StageState.read(stage2_manifest)
     output_dir = ensure_output_dir(output_dir)
     depth = np.load(stage3.require("depth_map", stage3_manifest))

@@ -65,6 +65,10 @@ def denoise_point_cloud(
     result.loc[~candidate_mask, "pred"] = 0
 
     candidates = result.loc[candidate_mask]
+    if candidates.empty:
+        return result, pd.DataFrame(
+            columns=["h_bin", "theta_low", "theta_high", "radius_cutoff"]
+        )
     h_bins = np.linspace(
         float(candidates["h"].min()),
         float(candidates["h"].max()) + np.finfo(float).eps,
@@ -118,7 +122,7 @@ def run_stage2(
     config: Stage2Config,
     profile: str,
 ) -> Path:
-    upstream_manifest = Path(upstream_manifest)
+    upstream_manifest = Path(upstream_manifest).resolve()
     upstream = StageState.read(upstream_manifest)
     output_dir = ensure_output_dir(output_dir)
     df = pd.read_csv(upstream.require("unwrapped_point_cloud", upstream_manifest))

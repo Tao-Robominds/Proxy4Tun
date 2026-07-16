@@ -143,7 +143,7 @@ def fit_ellipse_ransac(
 
 def fit_centre_curve(
     centres: np.ndarray, degree: int
-) -> tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, list]:
     from sklearn.linear_model import LinearRegression, RANSACRegressor
     from sklearn.pipeline import make_pipeline
     from sklearn.preprocessing import PolynomialFeatures
@@ -159,10 +159,10 @@ def fit_centre_curve(
         model.fit(t, coordinate)
         models.append(model)
         fitted.append(model.predict(t))
-    return np.column_stack(fitted), np.asarray(models, dtype=object)
+    return np.column_stack(fitted), models
 
 
-def sample_curve(models: np.ndarray, count: int, ring_count: int) -> tuple[np.ndarray, np.ndarray]:
+def sample_curve(models: list, count: int, ring_count: int) -> tuple[np.ndarray, np.ndarray]:
     t = np.linspace(0, ring_count - 1, count)[:, None]
     points = np.column_stack([model.predict(t) for model in models])
     derivative = np.gradient(points, axis=0)
