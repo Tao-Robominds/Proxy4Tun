@@ -1,0 +1,38 @@
+{
+  "case_id": "1-1",
+  "status": "best_observed_screening_run",
+  "note": "Fractional-factorial row p3_ff7_02; highest observed 1-1 mIoU in the study. Not an independently confirmed optimum \u2014 confirmed causal factors are depth_threshold_low/high.",
+  "input": {
+    "path": "data/subsets/1-1.txt",
+    "sha256": "4887463ce9ce2d9b7370e01454e429fa49db4c79cd280f544792a59f2ca0e186"
+  },
+  "profile": {
+    "snapshot_dir": "reports/experiments/1-1-best-observed/parameters",
+    "params_sha256": "cf3d7f9378ba727129842eed4856872b3a825016a1148c491a5960e2487669a0",
+    "swap_tunnel_centers": true
+  },
+  "command": {
+    "study_root": "data/1-1-ablation-study-20260716_141415",
+    "run_id": "p3_ff7_02",
+    "phase": "fractional_factorial",
+    "agent_family": "agents/t1&2"
+  },
+  "direction": {
+    "swap_tunnel_centers": true,
+    "validation": "ablation study checkpoint lineage"
+  },
+  "metrics": {
+    "OA": 0.914,
+    "F1": 0.897,
+    "mIoU": 0.815,
+    "mAP": 0.485,
+    "mAP50": 0.64,
+    "mAP75": 0.5683,
+    "mAP90": 0.2083
+  },
+  "archive": {
+    "local_artifacts": "data/ablation/1-1",
+    "evaluation_summary": "reports/experiments/1-1-best-observed/performance.md",
+    "source_log": "logs/1-1-best-observed-p3_ff7_02.log"
+  }
+}

@@ -1,7 +1,46 @@
+# Python / packaging
 __pycache__/
 *.py[cod]
-.venv/
-.pytest_cache/
+*$py.class
 *.egg-info/
+.eggs/
 build/
 dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments (do not commit)
+venv/
+.venv/
+.env
+.env.*
+
+# Editor / OS noise
+.DS_Store
+._*
+Thumbs.db
+.idea/
+.vscode/
+
+# SAM weights (vendor tree may be tracked; checkpoints are not)
+*.pth
+*.pt
+sam4tun/segment-anything/segment_anything.egg-info/
+
+# Point clouds and generated pipeline outputs; keep subset README only
+/data/*
+!/data/subsets/
+/data/subsets/*
+!/data/subsets/README.md
+/sam4tun/data/
+
+# Logs (local only; manifests cite log names)
+/logs/
+*.log
+
+# Notebook checkpoints
+**/.ipynb_checkpoints/
+
+# Canvas local deps
+canvases/**/node_modules/

@@ -1,0 +1,52 @@
+{
+  "case_id": "2-1",
+  "status": "best_observed_transfer_run",
+  "note": "Practical-minimum Opus 4.6 keys on sample base, with swap_tunnel_centers flipped false. Original-direction practical-minimum preserved below.",
+  "input": {
+    "path": "data/subsets/2-1.txt",
+    "sha256": "8dc8c43a12ace12f8fb59e85b184a16a21c72e4953cc9824bfdc150a9019ea94"
+  },
+  "profile": {
+    "snapshot_dir": "reports/experiments/2-1-best-observed/parameters",
+    "params_sha256": "edc7b677b36b307c4a8506f32844e306d55ded5465e4b7f491dfeae4ffd5a2a0",
+    "lineage": "agents/t1&2/2-1/practical-minimum-opus4.6-flipdir/lineage.json",
+    "base": "agents/sample/parameters",
+    "overlay_source": "agents/t1&2/2-1/*_m_s_k_opus4.6.json",
+    "swap_tunnel_centers": false
+  },
+  "command": {
+    "env": {
+      "PROXY4TUN_OUT_ROOT": "data",
+      "PROXY4TUN_INPUT_TXT": "data/subsets/2-1.txt",
+      "PROXY4TUN_PARAMS_DIR": "agents/t1&2/2-1/practical-minimum-opus4.6-flipdir"
+    },
+    "tunnel_id": "2-1-practical-min-opus4.6-flipdir",
+    "agent_family": "agents/t1&2"
+  },
+  "direction": {
+    "swap_tunnel_centers": false,
+    "flipped_from": true,
+    "comparison": "reports/experiments/2-1-best-observed/direction_comparison.json"
+  },
+  "metrics": {
+    "OA": 0.955,
+    "F1": 0.945,
+    "mIoU": 0.9,
+    "mAP": 0.795
+  },
+  "original_direction": {
+    "swap_tunnel_centers": true,
+    "output": "data/2-1-practical-min-opus4.6",
+    "metrics": {
+      "OA": 0.942,
+      "F1": 0.93,
+      "mIoU": 0.873,
+      "mAP": 0.7405
+    }
+  },
+  "archive": {
+    "local_artifacts": "data/ablation/2-1",
+    "evaluation_summary": "reports/experiments/2-1-best-observed/performance.md",
+    "source_log": "logs/2-1-best-observed.log"
+  }
+}

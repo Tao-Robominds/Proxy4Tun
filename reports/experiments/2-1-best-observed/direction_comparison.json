@@ -1,0 +1,38 @@
+{
+  "case_id": "2-1-practical-min-opus4.6-flipdir",
+  "change_only": {
+    "swap_tunnel_centers": {
+      "from": true,
+      "to": false
+    }
+  },
+  "direction_vector": [
+    11.99184843,
+    1.80804529
+  ],
+  "flipped": {
+    "OA": 0.955,
+    "F1": 0.945,
+    "mIoU": 0.9,
+    "mAP": 0.795
+  },
+  "original": {
+    "OA": 0.942,
+    "F1": 0.93,
+    "mIoU": 0.873,
+    "mAP": 0.7405
+  },
+  "delta": {
+    "OA": 0.013,
+    "F1": 0.015,
+    "mIoU": 0.027,
+    "mAP": 0.0545
+  },
+  "full_opus_reference": {
+    "OA": 0.9489,
+    "F1": 0.9434,
+    "mIoU": 0.894
+  },
+  "log": "logs/agents_t12_2-1_practical_min_opus46_flipdir.log",
+  "evidence": "data/2-1-practical-min-opus4.6-flipdir/evaluation/performance.md"
+}
