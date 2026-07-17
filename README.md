@@ -21,14 +21,16 @@ Requires Python ≥ 3.11. SAM weights are local
 | Path | Purpose |
 |---|---|
 | `agents/sample/` | LOW / sample parameterized stages + `parameters/` |
-| `agents/t1&2/` | T1/T2 parameterized stages; default HIGH in `parameters/` |
+| `agents/t1&2/` | T1/T2 family stages; default HIGH in `parameters/` |
+| `agents/t3/` | T3 family stages + `t3_geometry.py`; default params in `3-1-1/` |
 | `agents/ontology/` | Machine-readable ontology + tunnel priors |
 | `sam4tun/` | Modular stage scripts, helpers, SAM vendor tree |
 | `data/subsets/` | Local labelled subset clouds (gitignored) |
 | `data/<tunnel_id>/` | Default artifact root for new CLI runs |
 | `reports/` | Experiment reports and lightweight winner manifests |
 
-See [`agents/README.md`](agents/README.md) for profile naming.
+See [`agents/README.md`](agents/README.md) for profile naming and parameter
+overrides.
 
 ## Safe run examples
 
@@ -50,7 +52,7 @@ Resume / allow existing output directory:
 
 ```bash
 ./venv/bin/python -m sam4tun.pipeline data/subsets/2-1.txt data/2-1 \
-  --profile t1&2 --params-dir agents/t1\&2/2-1/practical-minimum-opus4.6-flipdir \
+  --profile t1&2 --params-dir agents/t1\&2/2-1 \
   --resume
 ```
 

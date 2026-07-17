@@ -1,0 +1,23 @@
+{
+  "case": "3-1-1",
+  "n_points": 642638,
+  "rings": [
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36
+  ],
+  "direction": {
+    "spearman_rho_before_orient": 0.9999999999999999,
+    "orient_centers_by_ring_swapped": true,
+    "recommended_swap_tunnel_centers": true,
+    "notebook_default_swap_tunnel_centers": true,
+    "spearman_rho_raw": -0.9999999999999999
+  }
+}

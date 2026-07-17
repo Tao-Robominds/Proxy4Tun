@@ -1,0 +1,45 @@
+{
+  "case_id": "3-1-1",
+  "variant": "literal",
+  "status": "completed",
+  "input": {
+    "path": "data/subsets/3-1-1.txt",
+    "sha256": "f7808f00ecb3c54a0965b5782f60c009fa178adec2c2a79016cdc2180c250576",
+    "n_points": 642638,
+    "rings": [
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36
+    ]
+  },
+  "profile": {
+    "params_dir": "agents/t3/variants/literal",
+    "params_sha256": "fd087ae76224203cbfe2b6a5233694addb985184f05f265ba7a93e65cb3de27a",
+    "swap_tunnel_centers": true
+  },
+  "command": "./venv/bin/python -m sam4tun.pipeline data/subsets/3-1-1.txt data/3-1-1-literal --profile t3 --params-dir agents/t3/variants/literal --overwrite",
+  "direction": {
+    "swap_tunnel_centers": true,
+    "held_constant_across_variants": true,
+    "spearman_rho_raw": -1.0
+  },
+  "metrics": {
+    "OA": 0.304,
+    "F1": 0.162,
+    "mIoU": 0.121,
+    "mAP": 0.0
+  },
+  "archive": {
+    "local_artifacts": "data/ablation/3-1-1-literal",
+    "scratch_run": "data/3-1-1-literal",
+    "evaluation_summary": "reports/experiments/3-1-1-literal/performance.md",
+    "source_log": "logs/t3_3-1-1_literal.log"
+  }
+}

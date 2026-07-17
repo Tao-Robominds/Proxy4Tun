@@ -78,8 +78,12 @@ diameter = params["diameter"]
 batch_size = params["batch_size"]
 n_jobs = params["n_jobs"]
 swap_tunnel_centers = params["swap_tunnel_centers"]
-# Optional fixes (default off → identical to pre-enhancement behaviour).
-# Optional flags: deterministic_theta_orientation, residual_recentre (default off).
+# Optional post-unwrap centreline residual correction (see agents/t3/README.md).
+# The degree-2 polynomial centreline cannot follow ring-to-ring snaking on short
+# subsets, which makes r swing sinusoidally with theta and pushes lining points
+# outside the narrow T3 denoising band. When enabled, we fit
+# r = r0 + a*cos(phi) + b*sin(phi) per axial bin and remove the residual.
+# Deterministic circumferential handedness (see calculate_angle_with_direction).
 deterministic_theta_orientation = bool(params.get("deterministic_theta_orientation", False))
 residual_recentre = bool(params.get("residual_recentre", False))
 recentre_bin_size = float(params.get("recentre_bin_size", 0.5))
@@ -667,9 +671,14 @@ def calculate_angle_with_direction(A, B, C, T, deterministic_orientation):
     B is the closest point of A on the curve, 
     Angle ABC is angle value of point A in cylindrical coordinates.
     T is the local tangent (travel direction) of the centreline at B.
-    With deterministic_orientation the handedness comes from cross(AB, T).z
-    (pinned by swap_tunnel_centers) instead of the Tz-dependent notebook
-    convention (cross(AB, BC).z).
+
+    Mirror-side convention: the notebook decides theta's handedness from
+    cross(AB, BC).z, whose horizontal components are proportional to -Tz.
+    When the centreline grade is ~0 (short subsets) the sign of Tz is decided
+    by RANSAC noise, so the whole unrolling can mirror at random between runs.
+    With deterministic_orientation the handedness comes directly from the
+    horizontal travel direction (cross(AB, T).z), which is pinned by
+    swap_tunnel_centers. Both conventions agree whenever Tz < 0.
     '''
     AB = B - A
     BC = C - B
@@ -800,6 +809,7 @@ if residual_recentre:
             continue
         A = np.column_stack((np.ones(m.sum()), np.cos(phi_vals[m]), np.sin(phi_vals[m])))
         coef, *_ = np.linalg.lstsq(A, r_vals[m], rcond=None)
+        # one reweighting pass so bolts / fixtures do not bias the lining fit
         res = r_vals[m] - A @ coef
         w = np.abs(res) < 3 * np.median(np.abs(res)) + 1e-9
         if w.sum() >= recentre_min_bin_points // 2:

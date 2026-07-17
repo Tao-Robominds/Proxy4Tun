@@ -1,0 +1,57 @@
+{
+  "case": "3-1-1",
+  "direction_held_constant": {
+    "swap_tunnel_centers": true,
+    "source": "orient_centers_by_ring on rings 27-36"
+  },
+  "differences": [
+    {
+      "stage": "denoising",
+      "key": "mask_theta_high_column",
+      "corrected": "theta",
+      "literal": "r",
+      "note": "notebook uses r>17.15 (likely typo)"
+    },
+    {
+      "stage": "enhancing",
+      "key": "use_upsampled_surface",
+      "corrected": true,
+      "literal": false,
+      "note": "notebook overwrites upsampled cloud with pred==7"
+    },
+    {
+      "stage": "enhancing",
+      "key": "enable_outlier_interpolation",
+      "corrected": true,
+      "literal": false,
+      "note": "notebook returns meaningful_df only"
+    },
+    {
+      "stage": "enhancing",
+      "key": "n_segment",
+      "corrected": [
+        2,
+        8
+      ],
+      "literal": [
+        11,
+        11
+      ],
+      "note": "adapted for 10-ring 3-1-1 vs notebook 50-ring station"
+    },
+    {
+      "stage": "detecting",
+      "key": "uniform_k_snap",
+      "corrected": true,
+      "literal": false,
+      "note": "agent extension absent from notebook"
+    },
+    {
+      "stage": "sam",
+      "key": "mirror_k_geometry",
+      "corrected": true,
+      "literal": false,
+      "note": "agent extension absent from notebook"
+    }
+  ]
+}

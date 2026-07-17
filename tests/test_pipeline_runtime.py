@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
 
 import pytest
@@ -98,13 +97,34 @@ def test_cli_dry_run_blocks_occupied_output(tmp_path):
 
 
 def test_resolve_params_dir_default_and_override(tmp_path):
-    from sam4tun.pipeline import _resolve_params_dir
+    from sam4tun.pipeline import PROFILE_SCRIPTS, _resolve_params_dir, _script_dir
 
+    t12 = (REPO / "agents" / "t1&2").resolve()
+    t3 = (REPO / "agents" / "t3").resolve()
     default = _resolve_params_dir("t1&2", None)
-    assert default == (REPO / "agents" / "t1&2" / "parameters").resolve()
+    assert default == (t12 / "parameters").resolve()
+    assert _script_dir("t1&2") == t12
+    assert _script_dir("t3") == t3
+    assert _script_dir("sample") == REPO / "agents" / "sample"
+    assert (t12 / "1_unfolding.py").is_file()
+    assert (t3 / "1_unfolding.py").is_file()
+    assert PROFILE_SCRIPTS["t12"] == t12
 
     overlay = tmp_path / "overlay"
     overlay.mkdir()
     for stage in ("unfolding", "denoising", "enhancing", "detecting", "sam"):
         (overlay / f"parameters_{stage}.json").write_text("{}")
     assert _resolve_params_dir("sample", str(overlay)) == overlay.resolve()
+
+
+def test_t12_unfolding_accepts_optional_flags_defaults_off():
+    """T1/T2 unfolding treats residual_recentre / deterministic_theta as optional."""
+    unfolding = json.loads(
+        (REPO / "agents" / "t1&2" / "parameters" / "parameters_unfolding.json").read_text()
+    )
+    assert "swap_tunnel_centers" in unfolding
+    assert "residual_recentre" not in unfolding
+    assert "deterministic_theta_orientation" not in unfolding
+    src = (REPO / "agents" / "t1&2" / "1_unfolding.py").read_text()
+    assert 'params.get("residual_recentre", False)' in src
+    assert 'params.get("deterministic_theta_orientation", False)' in src

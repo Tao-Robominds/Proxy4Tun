@@ -1,0 +1,42 @@
+{
+  "case_id": "3-1-1",
+  "variant": "corrected",
+  "input": {
+    "path": "data/subsets/3-1-1.txt",
+    "sha256": "f7808f00ecb3c54a0965b5782f60c009fa178adec2c2a79016cdc2180c250576",
+    "n_points": 642638,
+    "rings": [
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36
+    ]
+  },
+  "command": "./venv/bin/python -m sam4tun.pipeline data/subsets/3-1-1.txt data/3-1-1-corrected --profile t3 --params-dir agents/t3/variants/corrected --overwrite",
+  "direction": {
+    "swap_tunnel_centers": true,
+    "spearman_rho_raw": -1.0
+  },
+  "metrics": {
+    "OA": 0.631,
+    "F1": 0.638,
+    "mIoU": 0.48,
+    "mAP": 0.12
+  },
+  "pass_criteria": {
+    "stages_1_to_6": true,
+    "eval_rows": 642638,
+    "rings_27_36": true,
+    "t3_params_active": true,
+    "mIoU_gt_0_30": true
+  },
+  "gate_result": "PASS",
+  "output_path": "data/3-1-1-corrected",
+  "log": "logs/t3_3-1-1_corrected.log"
+}

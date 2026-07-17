@@ -12,11 +12,11 @@ def orient_centers_by_ring(
     min_points_per_ring=10,
 ):
     """
-    Orient center1 -> center2 along increasing ring numbers (shield-machine forward).
+    Orient center1 -> center2 along decreasing ring numbers (shield-machine forward).
 
     Ring ids are construction metadata, not segmentation ground truth. Projects each
     ring's XY centroid onto the candidate axis and swaps endpoints when Spearman
-    correlation is negative.
+    correlation is positive.
 
     Returns:
         center1, center2, rho, swapped
@@ -43,7 +43,7 @@ def orient_centers_by_ring(
         return center1, center2, float("nan"), False
 
     rho, _ = spearmanr(ring_ids, projs)
-    swapped = rho < 0
+    swapped = rho > 0
     if swapped:
         center1, center2 = center2.copy(), center1.copy()
     return center1, center2, rho, swapped

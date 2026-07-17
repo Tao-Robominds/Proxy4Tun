@@ -1,0 +1,34 @@
+{
+  "binary_threshold": 127,
+  "morphological_kernel_size": [
+    3,
+    3
+  ],
+  "dilation_iterations": 1,
+  "hough_threshold_oblique": 30,
+  "minLineLength_oblique": 40,
+  "maxLineGap_oblique": 30,
+  "hough_threshold_horizontal": 30,
+  "minLineLength_horizontal": 50,
+  "maxLineGap_horizontal": 10,
+  "hough_threshold_vertical": 1500,
+  "angle_range_oblique_positive": [
+    4,
+    10
+  ],
+  "angle_range_oblique_negative": [
+    -10,
+    -4
+  ],
+  "merge_distance": 3,
+  "ring_spacing_constant": 1.2,
+  "resolution": 0.005,
+  "K_height": 823.8,
+  "AB_height": 3346.68,
+  "pattern_tolerance": 10,
+  "vertical_rho_mode": "band",
+  "vertical_rho_min_factor": 14.0,
+  "vertical_rho_max_factor": 15.2,
+  "prompt_logic": "t3_inherit",
+  "uniform_k_snap": false
+}

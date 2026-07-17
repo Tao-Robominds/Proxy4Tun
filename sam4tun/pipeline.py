@@ -16,11 +16,28 @@ from .helpers.pipeline_io import (
 )
 
 _REPO = Path(REPO_ROOT)
-PROFILES = {
+# Each profile runs its own family stage scripts; sample is separate.
+PROFILE_PARAMS = {
     "sample": _REPO / "agents" / "sample",
     "t1&2": _REPO / "agents" / "t1&2",
     "t12": _REPO / "agents" / "t1&2",
+    "t3": _REPO / "agents" / "t3",
 }
+PROFILE_SCRIPTS = {
+    "sample": _REPO / "agents" / "sample",
+    "t1&2": _REPO / "agents" / "t1&2",
+    "t12": _REPO / "agents" / "t1&2",
+    "t3": _REPO / "agents" / "t3",
+}
+# Default params subdirectory under PROFILE_PARAMS[profile].
+PROFILE_DEFAULT_PARAMS_SUBDIR = {
+    "sample": "parameters",
+    "t1&2": "parameters",
+    "t12": "parameters",
+    "t3": "3-1-1",
+}
+# Back-compat alias used by older tests/docs.
+PROFILES = PROFILE_PARAMS
 
 STAGES = [
     "1_unfolding.py",
@@ -36,7 +53,10 @@ def _resolve_params_dir(profile: str, params_dir: str | None) -> Path:
     if params_dir:
         path = Path(params_dir).expanduser().resolve()
     else:
-        path = (PROFILES[profile] / "parameters").resolve()
+        if profile not in PROFILE_PARAMS:
+            raise ValueError(f"Unknown profile {profile!r}; choose from {sorted(PROFILE_PARAMS)}")
+        subdir = PROFILE_DEFAULT_PARAMS_SUBDIR[profile]
+        path = (PROFILE_PARAMS[profile] / subdir).resolve()
     if not path.is_dir():
         raise FileNotFoundError(f"Parameter directory not found: {path}")
     required = [
@@ -54,6 +74,12 @@ def _resolve_params_dir(profile: str, params_dir: str | None) -> Path:
     return path
 
 
+def _script_dir(profile: str) -> Path:
+    if profile not in PROFILE_SCRIPTS:
+        raise ValueError(f"Unknown profile {profile!r}; choose from {sorted(PROFILE_SCRIPTS)}")
+    return PROFILE_SCRIPTS[profile]
+
+
 def run_parameterized(
     *,
     input_txt: Path,
@@ -66,8 +92,8 @@ def run_parameterized(
     through_stage: int = 6,
 ) -> Path:
     """Run parameterized agent stages; return the run output directory."""
-    if profile not in PROFILES:
-        raise ValueError(f"Unknown profile {profile!r}; choose from {sorted(PROFILES)}")
+    if profile not in PROFILE_SCRIPTS:
+        raise ValueError(f"Unknown profile {profile!r}; choose from {sorted(PROFILE_SCRIPTS)}")
     if not 1 <= through_stage <= 6:
         raise ValueError("through_stage must be between 1 and 6")
 
@@ -85,10 +111,11 @@ def run_parameterized(
     except OutputPathError:
         raise
 
-    agent_dir = PROFILES[profile]
+    agent_dir = _script_dir(profile)
     env = os.environ.copy()
     env["PYTHONPATH"] = os.pathsep.join(
         [
+            str(agent_dir),
             str(SAM4TUN_ROOT),
             str(Path(SAM4TUN_ROOT) / "segment-anything"),
             env.get("PYTHONPATH", ""),
@@ -114,7 +141,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Run the parameterized SAM4Tun pipeline "
-            "(agents/sample or agents/t1&2) with explicit I/O paths."
+            "(agents/sample, agents/t1&2, or agents/t3) with explicit I/O paths."
         )
     )
     parser.add_argument(
@@ -211,6 +238,7 @@ def main(argv: list[str] | None = None) -> None:
         print(f"  out_root:   {out_root.resolve()}")
         print(f"  tunnel_id:  {tunnel_id}")
         print(f"  profile:    {args.profile}")
+        print(f"  scripts:    {_script_dir(args.profile)}")
         print(f"  params_dir: {params_dir}")
         print(f"  through:    {args.through_stage}")
         return
