@@ -58,39 +58,87 @@ repeatable**, which is necessary for debugging, but:
 orientation handling must be accompanied by a `segment_order` review. The two
 parameters are only valid as a pair.
 
-## 4. General solution for future development
+## 4. Key finding: in the notebooks, the human *was* the canonicalization step
 
-Ideally, orientation should be *derived from the data*, not frozen as booleans:
+The expert-tuned notebooks (`sam4tun/notebook/t1&2.ipynb`, `t3.ipynb`,
+`t4&5.ipynb`) contain **no orientation handling at all**: no
+`swap_tunnel_centers` (that knob was invented during productionization to
+reproduce the notebook's historical output), no deterministic theta, no random
+seeds, and a single hardcoded `block_to_label`. Yet they produced correct
+results — because the author executed cells interactively, looked at the
+depth-map plot, and wrote every downstream constant (block order, K-geometry
+mirroring, `y_bounds`, prompt coordinates) to match whatever orientation that
+one execution happened to produce. Correctness was enforced by eyeballs, not
+code. If a rerun had flipped the frame, the author would have silently
+re-adjusted the constants, leaving no trace.
 
-1. **Pin h explicitly**: choose the bounding-rect end deterministically from a
-   data property (e.g. always start from the end with lower mean ring index,
-   or the geographically southern/western end), not from `argmin` tie-breaking
-   plus a compensating `swap_tunnel_centers` flag.
-2. **Pin theta explicitly**: `deterministic_theta_orientation: true` everywhere
-   (derive handedness from the travel direction, never from the Tz sign of a
-   RANSAC fit).
-3. **Self-check after unfolding**: verify orientation invariants before
-   heavier stages run, e.g. correlation of h with ring index must be positive;
-   the K-block (or other known asymmetric feature) must sit on the expected
-   theta side. Fail fast with a clear message instead of producing a mirrored
-   map.
-4. **Seed all stochastic components** (`random_seed`) so accepted runs can be
-   reproduced bitwise.
-5. **Freeze anchors as (code + params + artifacts) triples.** The 3-1-1 and
+Productionization inherited the constants without inheriting the human. That
+is the root cause of every orientation regression in this report: the frozen
+booleans encode one lucky execution, and nothing in the pipeline re-checked
+them. **Replacing that invisible human glance with an explicit, data-derived
+canonicalization step is therefore one of the key improvements over the
+expert-tuned process** — it converts tacit expert knowledge ("the map looks
+right") into a mechanical invariant the pipeline enforces on every run.
+
+## 5. Implemented solution: canonical orientation (2026-07)
+
+All three family `1_unfolding.py` scripts now support opt-in
+`canonical_orientation: true` (default `false`; frozen anchors unaffected):
+
+- **h direction from the data**: the input cloud's `ring` column is monotonic
+  along the tunnel. The bounding-rect centre pair is oriented so that travel
+  runs toward increasing ring index. `swap_tunnel_centers` is ignored — the
+  `argmin` tie-break can no longer flip the frame across code versions.
+- **theta handedness from travel direction**: `deterministic_theta_orientation`
+  is forced on, so the RANSAC Tz-sign lottery is out of the loop. Because both
+  axes derive from the same travel direction, flipping h rotates the map 180°
+  instead of mirroring it — which is why one standard `segment_order` works
+  across tunnels.
+- **`h_ring_sign` (+1 default / -1)**: declares which way the tuned downstream
+  geometry expects h to run relative to ring index. Unlike
+  `swap_tunnel_centers`, its meaning is defined by the data, not by code
+  internals, so it stays valid across code changes.
+- **Post-unwrap invariant**: `corr(h, ring)` must match `h_ring_sign`
+  (|corr| > 0.5) or the stage exits with an error instead of producing a
+  mirrored map. Observed |corr| is ~0.98 on all five tunnels.
+
+Verified results (`data/<case>-canonical/`, params in `data/params-<case>-canon/`;
+gate proof in `logs/canonical-gate-proof.md`):
+
+| Case  | Canonical mIoU | Previous validated | Anchor | Settings beyond defaults |
+|-------|---------------|--------------------|--------|--------------------------|
+| 1-1   | 0.787         | 0.789              | 0.815  | none |
+| 2-1   | 0.874         | 0.903              | 0.900  | none |
+| 3-1-1 | 0.850         | 0.850              | 0.881  | `h_ring_sign: -1`, reversed `segment_order`, `random_seed: 1` |
+| 4-1   | 0.635         | 0.636              | 0.741  | none |
+| 5-1   | 0.808         | 0.689              | 0.681  | none — **beats the anchor**, the canonical frame suits the geometric tiler better |
+
+3-1-1 keeps `h_ring_sign: -1` because its downstream T3 geometry (detection
+offsets, recentre band) was tuned on the anchor-era frame; in the +1 frame the
+recentre residual triples (30 cm vs 9 cm) and mIoU drops to 0.43. That is a
+quality coupling, not an orientation bug — re-tuning stages 2–5 in the +1
+frame would remove the exception.
+
+Remaining practices that still apply:
+
+1. **Seed all stochastic components** (`random_seed`) so accepted runs can be
+   reproduced bitwise (reproducibility is separate from correctness).
+2. **Freeze anchors as (code + params + artifacts) triples.** The 3-1-1 and
    4-1 regressions were code/config drift: frozen params were only correct
    relative to the code revision that froze them. When stage code changes,
    re-verify each anchor and re-freeze the params if orientation semantics
    moved.
 
-## 5. Parameter tuning guide (post-cleanup)
+## 6. Parameter tuning guide (post-cleanup)
 
 Tune in this order — later knobs are meaningless while earlier ones are wrong:
 
-1. **Orientation block** (binary, decide once per tunnel):
-   `swap_tunnel_centers`, `deterministic_theta_orientation` (always `true`),
-   `segment_order` (must match the resulting theta handedness), `random_seed`.
-   Validation: depth map visually matches expected layout; confusion matrix is
-   diagonal, not a permutation.
+1. **Orientation block** (decide once per tunnel):
+   `canonical_orientation: true` + `random_seed`; only add `h_ring_sign: -1`
+   (with the matching reversed `segment_order`) when downstream geometry was
+   tuned on a legacy frame. `swap_tunnel_centers` is legacy-only.
+   Validation: the canonical invariant passes in the stage-1 log; confusion
+   matrix is diagonal, not a permutation.
 2. **Centreline / unroll quality**: `polynomial_degree`, `num_samples_factor`,
    `residual_recentre` + `recentre_*` (T3: without recentre the narrow r-band
    discards ~46% of lining points on short subsets). Validation: recentre
@@ -103,9 +151,9 @@ Tune in this order — later knobs are meaningless while earlier ones are wrong:
    `y_bounds`. Only tune when steps 1–4 are validated; per-class IoU
    differences (not permutations) are the signal here.
 
-Per-tunnel state after this cleanup (see `data/cleanup/README.md` for the
-artifact tree): 1-1 = 0.789, 2-1 = 0.903, 3-1-1 = 0.850, 4-1 = 0.636,
-5-1 = 0.689. The 4-1 anchor value (0.741) predates orientation pinning and was
-only reachable when unpinned RANSAC happened to land on the favourable mirror;
-recovering it deterministically requires re-tuning the detection/SAM stages on
-the pinned orientation (step 4–5 above).
+Per-tunnel state after this cleanup: see the canonical results table in §5
+(artifact trees under `data/<case>-canonical/`, earlier validated runs under
+`data/cleanup/`). The 4-1 anchor value (0.741) predates orientation pinning
+and was only reachable when unpinned RANSAC happened to land on the favourable
+mirror; recovering it deterministically requires re-tuning the detection/SAM
+stages on the pinned orientation (step 4–5 above).

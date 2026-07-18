@@ -81,6 +81,19 @@ swap_tunnel_centers = params["swap_tunnel_centers"]
 # Optional fixes (default off → identical to pre-enhancement behaviour).
 # Optional flags: deterministic_theta_orientation, residual_recentre (default off).
 deterministic_theta_orientation = bool(params.get("deterministic_theta_orientation", False))
+# Canonical orientation: derive the travel direction from the data (ring index
+# is monotonic along the tunnel) instead of the frozen swap_tunnel_centers
+# boolean, and force theta handedness from that travel direction.
+canonical_orientation = bool(params.get("canonical_orientation", False))
+# Which way the tuned downstream geometry expects h to run relative to ring
+# index (+1: h increases with ring, -1: decreases). Unlike swap_tunnel_centers,
+# this is defined purely by the data and the desired frame, so it stays valid
+# across code changes and is verified after unwrapping.
+h_ring_sign = int(params.get("h_ring_sign", 1))
+if h_ring_sign not in (-1, 1):
+    sys.exit("h_ring_sign must be +1 or -1")
+if canonical_orientation:
+    deterministic_theta_orientation = True
 residual_recentre = bool(params.get("residual_recentre", False))
 recentre_bin_size = float(params.get("recentre_bin_size", 0.5))
 recentre_r_tolerance = float(params.get("recentre_r_tolerance", 0.35))
@@ -108,7 +121,20 @@ edges = [np.linalg.norm(rect_vertices[i] - rect_vertices[(i + 1) % 4]) for i in 
 short_edge_index = np.argmin(edges)
 center1 = (rect_vertices[short_edge_index] + rect_vertices[(short_edge_index + 1) % 4]) / 2
 center2 = (rect_vertices[(short_edge_index + 2) % 4] + rect_vertices[(short_edge_index + 3) % 4]) / 2
-if swap_tunnel_centers:
+if canonical_orientation:
+    # Orient center1 -> center2 towards increasing ring index.
+    axis = center2 - center1
+    axis_proj = (points_2d_xoy - center1) @ axis
+    axis_ring_corr = float(np.corrcoef(axis_proj, ring)[0, 1])
+    if axis_ring_corr * h_ring_sign < 0:
+        center1, center2 = center2, center1
+    print(
+        f"Canonical orientation: corr(axis_projection, ring)={axis_ring_corr:+.4f}, "
+        f"h_ring_sign={h_ring_sign:+d} -> "
+        f"{'swapped' if axis_ring_corr * h_ring_sign < 0 else 'kept'} centres "
+        f"(swap_tunnel_centers ignored); theta pinned to travel direction"
+    )
+elif swap_tunnel_centers:
     center1, center2 = center2, center1
 vector = center2 - center1
 print(vector)
@@ -775,6 +801,16 @@ df_point_cloud['r'] = np.array(cylindrical_coords)[:,0]
 df_point_cloud['theta'] = np.array(cylindrical_coords)[:,1]* (np.pi*diameter / 360)
 df_point_cloud['h'] = np.array(cylindrical_coords)[:,2]
 df_point_cloud.head()
+
+if canonical_orientation:
+    h_ring_corr = float(df_point_cloud['h'].corr(df_point_cloud['ring']))
+    print(f"Canonical invariant: corr(h, ring)={h_ring_corr:+.4f} (expected sign {h_ring_sign:+d})")
+    if not h_ring_corr * h_ring_sign > 0.5:
+        sys.exit(
+            "Canonical orientation invariant violated: corr(h, ring) = "
+            f"{h_ring_corr:+.4f} but h_ring_sign = {h_ring_sign:+d}; "
+            "h axis is not aligned with the expected frame"
+        )
 
 if residual_recentre:
     nominal_R = diameter / 2.0
