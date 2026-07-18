@@ -9,8 +9,8 @@ reported as supporting metrics.
 
 The preserved winners are archived locally as:
 
-- `data/ablation/1-1/`
-- `data/ablation/2-1/`
+- `data/anchors/1-1/`
+- `data/anchors/2-1/`
 
 Tracked lightweight lineage (parameter snapshots, evaluation summaries,
 manifests) lives under:

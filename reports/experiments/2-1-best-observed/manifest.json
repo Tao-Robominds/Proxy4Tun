@@ -9,19 +9,19 @@
   "profile": {
     "snapshot_dir": "reports/experiments/2-1-best-observed/parameters",
     "params_sha256": "edc7b677b36b307c4a8506f32844e306d55ded5465e4b7f491dfeae4ffd5a2a0",
-    "lineage": "agents/t1&2/2-1/practical-minimum-opus4.6-flipdir/lineage.json",
-    "base": "agents/sample/parameters",
-    "overlay_source": "agents/t1&2/2-1/*_m_s_k_opus4.6.json",
+    "lineage": "anchors/t1&2/2-1/practical-minimum-opus4.6-flipdir/lineage.json",
+    "base": "anchors/sample/parameters",
+    "overlay_source": "anchors/t1&2/2-1/*_m_s_k_opus4.6.json",
     "swap_tunnel_centers": false
   },
   "command": {
     "env": {
       "PROXY4TUN_OUT_ROOT": "data",
       "PROXY4TUN_INPUT_TXT": "data/subsets/2-1.txt",
-      "PROXY4TUN_PARAMS_DIR": "agents/t1&2/2-1/practical-minimum-opus4.6-flipdir"
+      "PROXY4TUN_PARAMS_DIR": "anchors/t1&2/2-1/practical-minimum-opus4.6-flipdir"
     },
     "tunnel_id": "2-1-practical-min-opus4.6-flipdir",
-    "agent_family": "agents/t1&2"
+    "agent_family": "anchors/t1&2"
   },
   "direction": {
     "swap_tunnel_centers": false,
@@ -45,7 +45,7 @@
     }
   },
   "archive": {
-    "local_artifacts": "data/ablation/2-1",
+    "local_artifacts": "data/anchors/2-1",
     "evaluation_summary": "reports/experiments/2-1-best-observed/performance.md",
     "source_log": "logs/2-1-best-observed.log"
   }

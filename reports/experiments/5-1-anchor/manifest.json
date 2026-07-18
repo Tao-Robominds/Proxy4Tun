@@ -1,0 +1,28 @@
+{
+  "case_id": "5-1",
+  "status": "anchor",
+  "note": "Recentre + detection tune; mIoU-gated depth improvement (not hole-fill cosmetic)",
+  "input": {
+    "path": "data/subsets/5-1.txt"
+  },
+  "profile": {
+    "snapshot_dir": "anchors/t4&5/5-1",
+    "swap_tunnel_centers": false,
+    "residual_recentre": true
+  },
+  "metrics": {
+    "OA": 0.842,
+    "F1": 0.802,
+    "mIoU": 0.681,
+    "depth_nan_pct": 18.9
+  },
+  "archive": {
+    "local_artifacts": "data/anchors/5-1",
+    "evaluation_summary": "data/anchors/5-1/evaluation/performance.md",
+    "source_logs": [
+      "logs/t45_5-1_recentre.log",
+      "logs/t45_5-1_recentre_det_detect.log"
+    ]
+  },
+  "report": "reports/t45-5-1-depth-improvement.md"
+}

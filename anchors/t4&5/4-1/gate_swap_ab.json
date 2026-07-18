@@ -1,0 +1,46 @@
+{
+  "case_id": "4-1",
+  "profile": "t4&5",
+  "params_dir": "anchors/t4&5/4-1",
+  "swap_ab": {
+    "swap_false": {
+      "output": "data/4-1-swapfalse",
+      "mIoU": 0.741,
+      "OA": 0.861,
+      "F1": 0.85,
+      "log": "logs/t45_4-1_swapfalse.log"
+    },
+    "swap_true": {
+      "output": "data/4-1-swaptrue",
+      "mIoU": 0.494,
+      "OA": 0.715,
+      "F1": 0.645,
+      "log": "logs/t45_4-1_swaptrue.log"
+    }
+  },
+  "chosen_swap_tunnel_centers": false,
+  "promoted_output": "data/anchors/4-1",
+  "anchors": {
+    "1-1": 0.815,
+    "2-1": 0.9,
+    "3-1-1": 0.881
+  },
+  "pass_criteria": "winner mIoU >= 0.80 (t1&2/t3 band)",
+  "winner_mIoU": 0.741,
+  "result": "CONDITIONAL \u2014 swap=false wins clearly; below 0.80 bar after follow-ups",
+  "followups_tried": [
+    {
+      "config": "det_theta+residual_recentre",
+      "mIoU": 0.635
+    },
+    {
+      "config": "n_segment[1,9]",
+      "mIoU": 0.659
+    },
+    {
+      "config": "residual_recentre_only",
+      "mIoU": 0.635
+    }
+  ],
+  "date": "2026-07-17"
+}

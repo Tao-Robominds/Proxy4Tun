@@ -18,16 +18,20 @@ from .helpers.pipeline_io import (
 _REPO = Path(REPO_ROOT)
 # Each profile runs its own family stage scripts; sample is separate.
 PROFILE_PARAMS = {
-    "sample": _REPO / "agents" / "sample",
-    "t1&2": _REPO / "agents" / "t1&2",
-    "t12": _REPO / "agents" / "t1&2",
-    "t3": _REPO / "agents" / "t3",
+    "sample": _REPO / "anchors" / "sample",
+    "t1&2": _REPO / "anchors" / "t1&2",
+    "t12": _REPO / "anchors" / "t1&2",
+    "t3": _REPO / "anchors" / "t3",
+    "t4&5": _REPO / "anchors" / "t4&5",
+    "t45": _REPO / "anchors" / "t4&5",
 }
 PROFILE_SCRIPTS = {
-    "sample": _REPO / "agents" / "sample",
-    "t1&2": _REPO / "agents" / "t1&2",
-    "t12": _REPO / "agents" / "t1&2",
-    "t3": _REPO / "agents" / "t3",
+    "sample": _REPO / "anchors" / "sample",
+    "t1&2": _REPO / "anchors" / "t1&2",
+    "t12": _REPO / "anchors" / "t1&2",
+    "t3": _REPO / "anchors" / "t3",
+    "t4&5": _REPO / "anchors" / "t4&5",
+    "t45": _REPO / "anchors" / "t4&5",
 }
 # Default params subdirectory under PROFILE_PARAMS[profile].
 PROFILE_DEFAULT_PARAMS_SUBDIR = {
@@ -35,6 +39,8 @@ PROFILE_DEFAULT_PARAMS_SUBDIR = {
     "t1&2": "parameters",
     "t12": "parameters",
     "t3": "3-1-1",
+    "t4&5": "4-1",
+    "t45": "4-1",
 }
 # Back-compat alias used by older tests/docs.
 PROFILES = PROFILE_PARAMS
@@ -141,7 +147,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Run the parameterized SAM4Tun pipeline "
-            "(agents/sample, agents/t1&2, or agents/t3) with explicit I/O paths."
+            "(anchors/sample, t1&2, t3, or t4&5) with explicit I/O paths."
         )
     )
     parser.add_argument(

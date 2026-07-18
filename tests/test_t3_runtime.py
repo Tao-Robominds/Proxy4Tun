@@ -21,7 +21,7 @@ def _sys_path(monkeypatch):
 
 
 def test_canonical_t3_parameters_exist():
-    params = REPO / "agents" / "t3" / "3-1-1"
+    params = REPO / "anchors" / "t3" / "3-1-1"
     for stage in ("unfolding", "denoising", "enhancing", "detecting", "sam"):
         path = params / f"parameters_{stage}.json"
         assert path.is_file(), path
@@ -44,7 +44,7 @@ def test_resolve_params_dir_t3():
     from sam4tun.pipeline import _resolve_params_dir
 
     assert _resolve_params_dir("t3", None) == (
-        REPO / "agents" / "t3" / "3-1-1"
+        REPO / "anchors" / "t3" / "3-1-1"
     ).resolve()
 
 
@@ -61,7 +61,7 @@ def test_cli_profile_t3_dry_run(tmp_path):
 def test_t3_geometry_shapes():
     import sys
 
-    sys.path.insert(0, str(REPO / "agents" / "t3"))
+    sys.path.insert(0, str(REPO / "anchors" / "t3"))
     import t3_geometry
 
     verts = t3_geometry.template_vertices_mm(0.0, 0.0, "K")
@@ -74,7 +74,7 @@ def test_t3_geometry_shapes():
 def test_t3_profile_uses_family_scripts():
     from sam4tun.pipeline import _script_dir
 
-    t3 = (REPO / "agents" / "t3").resolve()
+    t3 = (REPO / "anchors" / "t3").resolve()
     assert _script_dir("t3") == t3
     for stage in (
         "1_unfolding.py",

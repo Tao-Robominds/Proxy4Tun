@@ -15,7 +15,7 @@
     "study_root": "data/1-1-ablation-study-20260716_141415",
     "run_id": "p3_ff7_02",
     "phase": "fractional_factorial",
-    "agent_family": "agents/t1&2"
+    "agent_family": "anchors/t1&2"
   },
   "direction": {
     "swap_tunnel_centers": true,
@@ -31,7 +31,7 @@
     "mAP90": 0.2083
   },
   "archive": {
-    "local_artifacts": "data/ablation/1-1",
+    "local_artifacts": "data/anchors/1-1",
     "evaluation_summary": "reports/experiments/1-1-best-observed/performance.md",
     "source_log": "logs/1-1-best-observed-p3_ff7_02.log"
   }

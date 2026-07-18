@@ -1,8 +1,11 @@
 # T3 Agent: Corrected vs Literal on `3-1-1`
 
+> **Current anchor:** params `anchors/t3/3-1-1/`, artifacts `data/anchors/3-1-1/`,
+> log `logs/t3_3-1-1.log`, mIoU **0.881**. Historical paths below use pre-anchor names.
+
 ## Scope
 
-Build `agents/t3` from `sam4tun/notebook/t3.ipynb` and compare two
+Build `anchors/t3` from `sam4tun/notebook/t3.ipynb` and compare two
 reproducible variants on labelled subset `3-1-1` (642,638 points, rings
 27–36). Direction was held constant (`swap_tunnel_centers: true`, Spearman
 ρ on raw axis ≈ −1.0).

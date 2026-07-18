@@ -1,0 +1,25 @@
+{
+  "case_id": "4-1",
+  "status": "anchor",
+  "note": "swap_tunnel_centers=false wins A/B gate; geometric SAM 7-class",
+  "input": {
+    "path": "data/subsets/4-1.txt"
+  },
+  "profile": {
+    "snapshot_dir": "anchors/t4&5/4-1",
+    "swap_tunnel_centers": false,
+    "residual_recentre": false
+  },
+  "metrics": {
+    "OA": 0.861,
+    "F1": 0.850,
+    "mIoU": 0.741
+  },
+  "archive": {
+    "local_artifacts": "data/anchors/4-1",
+    "evaluation_summary": "data/anchors/4-1/evaluation/performance.md",
+    "source_log": "logs/t45_4-1_swapfalse.log"
+  },
+  "report": "reports/t45-4-1-swap-ab.md",
+  "gate": "anchors/t4&5/4-1/gate_swap_ab.json"
+}

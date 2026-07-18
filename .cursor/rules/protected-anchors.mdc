@@ -1,0 +1,39 @@
+---
+description: Never overwrite anchors/ or data/anchors/ reference trees
+alwaysApply: true
+---
+
+# Protected anchor paths
+
+**HARD RULE:** Never overwrite, delete, truncate, or pipeline-write into:
+
+- `anchors/` — reference stage scripts and `parameters_*.json` snapshots
+- `data/anchors/` — frozen full-pipeline artifact trees (`1-1` … `5-1`)
+
+These are promoted research anchors. Treat them as read-only unless the user
+explicitly asks to update the anchor definition itself.
+
+## Allowed
+
+- Read params and artifacts for comparison or reproduction checks
+- Copy *from* anchors into a new experiment directory
+- Run new experiments under `data/<experiment-id>/` (never under `data/anchors/`)
+
+## Forbidden
+
+- `sam4tun.pipeline` (or stage scripts) with output `data/anchors/<case>` or `--overwrite` on those trees
+- Editing `anchors/<family>/` JSON or stage scripts without explicit user request to change the anchor
+- Deleting or replacing files inside `data/anchors/` to “refresh” a run
+
+Also protected (existing): `data/baseline`, `data/bo`.
+
+## Examples
+
+```bash
+# BAD — overwrites frozen anchor artifacts
+./venv/bin/python -m sam4tun.pipeline data/subsets/5-1.txt data/anchors/5-1 --overwrite
+
+# GOOD — new experiment dir, anchor params as input only
+./venv/bin/python -m sam4tun.pipeline data/subsets/5-1.txt data/5-1-myexp --overwrite \
+  --params-dir anchors/t4\&5/5-1
+```
