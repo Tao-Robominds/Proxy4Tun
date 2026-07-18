@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Re-verify promoted anchors (canonical orientation) into a fresh output tree.
+# Does not write to data/anchors/.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY=./venv/bin/python

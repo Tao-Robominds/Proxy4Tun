@@ -1,7 +1,9 @@
 # T3 Agent: Corrected vs Literal on `3-1-1`
 
-> **Current anchor:** params `anchors/t3/3-1-1/`, artifacts `data/anchors/3-1-1/`,
-> log `logs/t3_3-1-1.log`, mIoU **0.881**. Historical paths below use pre-anchor names.
+> **Historical.** Current promoted anchor is canonical-orientation
+> (`anchors/t3/3-1-1/`, `data/anchors/3-1-1/`, mIoU **0.850**). See
+> [`orientation-sensitivity.md`](orientation-sensitivity.md).
+> Figures below refer to the pre-canonical freeze (mIoU 0.881).
 
 ## Scope
 

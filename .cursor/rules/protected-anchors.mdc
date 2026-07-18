@@ -10,8 +10,9 @@ alwaysApply: true
 - `anchors/` — reference stage scripts and `parameters_*.json` snapshots
 - `data/anchors/` — frozen full-pipeline artifact trees (`1-1` … `5-1`)
 
-These are promoted research anchors. Treat them as read-only unless the user
-explicitly asks to update the anchor definition itself.
+These are the promoted **canonical-orientation** research anchors. Treat them
+as read-only unless the user explicitly asks to update the anchor definition
+itself.
 
 ## Allowed
 

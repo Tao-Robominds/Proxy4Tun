@@ -28,6 +28,8 @@ def test_canonical_t45_parameters_exist():
     assert unfolding["diameter"] == 7.5
     assert unfolding["polynomial_degree"] == 2
     assert unfolding["slice_spacing_factor"] == 1.8
+    assert unfolding["canonical_orientation"] is True
+    assert unfolding.get("h_ring_sign", 1) == 1
     # Top-tube slice filtering is now hardcoded in 1_unfolding.py; the former
     # slice_filter_mode / vertical_filter_window knobs were removed in cleanup.
     assert "slice_filter_mode" not in unfolding

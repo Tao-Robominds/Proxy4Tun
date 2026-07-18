@@ -1,5 +1,10 @@
 # Critical Parameters Experiment
 
+> **Historical.** Current promoted `1-1` / `2-1` anchors use canonical
+> orientation (mIoU 0.787 / 0.874). See
+> [`orientation-sensitivity.md`](orientation-sensitivity.md) and
+> [`anchors-summary.md`](anchors-summary.md).
+
 ## Scope
 
 This report documents the parameter-transfer experiments for the six-stage

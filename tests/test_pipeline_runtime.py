@@ -30,6 +30,15 @@ def test_canonical_t12_parameters_exist():
     assert "swap_tunnel_centers" in unfolding
 
 
+def test_promoted_t12_case_params_use_canonical_orientation():
+    for case in ("1-1", "2-1"):
+        unfolding = json.loads(
+            (REPO / "anchors" / "t1&2" / case / "parameters_unfolding.json").read_text()
+        )
+        assert unfolding["canonical_orientation"] is True
+        assert unfolding.get("h_ring_sign", 1) == 1
+
+
 def test_prepare_output_dir_rejects_existing_without_flags(tmp_path, monkeypatch):
     from helpers.pipeline_io import OutputPathError, prepare_output_dir
 

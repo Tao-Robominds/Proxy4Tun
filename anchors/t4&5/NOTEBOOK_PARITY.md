@@ -3,8 +3,11 @@
 **Notebook:** `sam4tun/notebook/t4&5.ipynb`  
 **Anchor:** `anchors/t4&5/` + `t45_geometry.py`  
 **Parameter sets:** `4-1/` (CLI default), `5-1/` (rings 110–119)  
-**Frozen runs:** `data/anchors/4-1/` (mIoU 0.741), `data/anchors/5-1/` (mIoU 0.681)  
+**Frozen runs (canonical):** `data/anchors/4-1/` (mIoU 0.635), `data/anchors/5-1/` (mIoU 0.808)  
 **Parent index:** [`../NOTEBOOK_ANCHOR_PARITY.md`](../NOTEBOOK_ANCHOR_PARITY.md)
+
+> Promoted cases use `canonical_orientation=true`. Pre-canonical mIoU 0.741 /
+> 0.681 and `swap_tunnel_centers`-only recipes in the tables below are historical.
 
 ---
 

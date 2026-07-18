@@ -28,7 +28,9 @@ def test_canonical_t3_parameters_exist():
     unfolding = json.loads((params / "parameters_unfolding.json").read_text())
     assert unfolding["diameter"] == 5.9
     assert unfolding["polynomial_degree"] == 2
-    assert "swap_tunnel_centers" in unfolding
+    assert unfolding["canonical_orientation"] is True
+    assert unfolding["h_ring_sign"] == -1
+    assert unfolding["random_seed"] == 1
     # Centreline residual recentring compensates for the degree-2 fit on short
     # subsets; without it the narrow T3 denoising r-band discards ~46% of points.
     assert unfolding["residual_recentre"] is True
@@ -38,6 +40,7 @@ def test_canonical_t3_parameters_exist():
     sam = json.loads((params / "parameters_sam.json").read_text())
     assert sam["geometry_profile"] == "t3"
     assert sam["K_height"] == 823.8
+    assert sam["segment_order"] == ["K", "B2", "A3", "A2", "A1", "B1"]
 
 
 def test_resolve_params_dir_t3():

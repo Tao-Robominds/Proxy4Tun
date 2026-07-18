@@ -17,6 +17,8 @@
   "swap_tunnel_centers": false,
   "top_tube_radius": 3.5,
   "top_tube_top_n": 10,
-  "deterministic_theta_orientation": false,
-  "residual_recentre": false
+  "deterministic_theta_orientation": true,
+  "residual_recentre": false,
+  "canonical_orientation": true,
+  "h_ring_sign": 1
 }

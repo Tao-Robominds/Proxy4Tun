@@ -33,12 +33,18 @@ highlighted in each family report.
 |---|---|---|---|
 | Pipeline state (`state.pkl`, stage I/O) | Yes | Yes | Yes |
 | Evaluation stage (`6_evaluation.py`) | Yes | Yes | Yes |
-| `swap_tunnel_centers` as JSON flag | Yes | Yes | Yes |
-| `deterministic_theta_orientation` | Optional (off) | **On** in `3-1-1` | Optional (off) |
+| `canonical_orientation` (promoted default) | **On** in `1-1`/`2-1` | **On** in `3-1-1` | **On** in `4-1`/`5-1` |
+| `h_ring_sign` | `+1` | `-1` in `3-1-1` | `+1` |
+| `swap_tunnel_centers` (legacy; ignored when canonical) | kept in JSON | kept in JSON | kept in JSON |
+| `deterministic_theta_orientation` | Forced by canonical | Forced by canonical | Forced by canonical |
 | `residual_recentre` | Optional (off) | **On** in `3-1-1` | **On** in `5-1` only |
 | Detection vertical-line fallback | Yes | Yes | Yes |
 | Geometric SAM fallback | No | No | **Yes** (tunnels 4/5, 7-class) |
 | Dedicated geometry module | No | `t3_geometry.py` | `t45_geometry.py` |
+
+Current promoted mIoU and orientation lessons:
+[`../reports/orientation-sensitivity.md`](../reports/orientation-sensitivity.md),
+[`../reports/anchors-summary.md`](../reports/anchors-summary.md).
 
 ## Cross-family anchor-only parameters (summary)
 
@@ -47,7 +53,8 @@ named in the corresponding notebook:
 
 | Parameter | Families | Stage |
 |---|---|---|
-| `swap_tunnel_centers` | All | Unfolding |
+| `canonical_orientation`, `h_ring_sign`, `random_seed` | All (promoted cases) | Unfolding |
+| `swap_tunnel_centers` (legacy) | All | Unfolding |
 | `deterministic_theta_orientation` | All | Unfolding |
 | `residual_recentre`, `recentre_*` | All (code); enabled T3 `3-1-1`, T4/T5 `5-1` | Unfolding |
 | `mask_theta_high_column` | T3 | Denoising |
@@ -63,8 +70,9 @@ named in the corresponding notebook:
    `t12_pattern` vs notebook Algorithm 4.
 2. **T3 denoising** — notebook applies high angular gate on column `r` instead
    of `theta` (`mask_theta` line uses `r > 17.15`).
-3. **T3 short subsets** — `residual_recentre`, `deterministic_theta_orientation`,
-   and `uniform_k_snap` are required for labelled 10-ring runs; absent from notebook.
+3. **T3 short subsets** — `residual_recentre`, `canonical_orientation` (with
+   `h_ring_sign=-1` / reversed `segment_order`), and `uniform_k_snap` are
+   required for labelled 10-ring runs; absent from notebook.
 4. **T4/T5 SAM** — promoted anchors use **geometric fallback**, not full SAM,
    for tunnel IDs prefixed `4` or `5` with seven segments per ring.
 5. **T4/T5 5-1** — `residual_recentre=true` and detection retune

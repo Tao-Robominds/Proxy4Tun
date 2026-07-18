@@ -1,8 +1,12 @@
 # T4/T5 4-1 — swap A/B gate
 
+> **Historical.** Current promoted anchor is canonical-orientation
+> (`data/anchors/4-1/`, mIoU 0.635). See
+> [`orientation-sensitivity.md`](orientation-sensitivity.md).
+
 **Case:** `4-1` (rings subset, profile `t4&5`)  
-**Params:** `anchors/t4&5/4-1/`  
-**Promoted anchor:** `data/anchors/4-1/` (from swap=false run)
+**Params (at time of experiment):** `anchors/t4&5/4-1/`  
+**Then-promoted artifacts:** swap=false run (mIoU 0.741)
 
 ## Swap comparison (2026-07-17)
 

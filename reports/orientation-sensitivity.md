@@ -1,11 +1,13 @@
 # Pipeline sensitivity report: orientation, randomness, and label alignment
 
-**Scope.** Lessons from the 2026-07 anchor cleanup and the re-verification runs
-in `data/cleanup/`. The cleanup removed experimental leftovers from the
-`anchors/` stage scripts (depth hole-fill hooks, dead theta gates, unused SAM
-fallbacks). Re-running all five tunnels exposed a class of failures that had
-nothing to do with the removed code: **the pipeline's output frame is not
-pinned**, and downstream stages silently assume a specific orientation.
+**Scope.** Lessons from the 2026-07 anchor cleanup, the intermediate runs in
+`data/cleanup/`, and the canonical-orientation promotion now living in
+`anchors/<family>/<case>/` + `data/anchors/`. The cleanup removed experimental
+leftovers from the stage scripts (depth hole-fill hooks, dead theta gates,
+unused SAM fallbacks). Re-running all five tunnels exposed a class of failures
+that had nothing to do with the removed code: **the pipeline's output frame
+was not pinned**, and downstream stages silently assumed a specific
+orientation.
 
 ## 1. The failure class: orientation is decided three separate times
 
@@ -52,7 +54,7 @@ repeatable**, which is necessary for debugging, but:
 3. Cause: theta now runs mirrored relative to the anchor map, and the SAM
    stage tiles blocks in a hardcoded circumferential order. Fix: reverse
    `segment_order` in `parameters_sam.json` to `[K, B2, A3, A2, A1, B1]`.
-   mIoU: 0.850 (anchor 0.881; residual gap is background-edge IoU only).
+   mIoU: 0.850 (vs prior legacy frozen 0.881; residual gap is background-edge IoU only).
 
 **Lesson: `segment_order` is coupled to theta handedness.** Any change to
 orientation handling must be accompanied by a `segment_order` review. The two
@@ -82,8 +84,10 @@ right") into a mechanical invariant the pipeline enforces on every run.
 
 ## 5. Implemented solution: canonical orientation (2026-07)
 
-All three family `1_unfolding.py` scripts now support opt-in
-`canonical_orientation: true` (default `false`; frozen anchors unaffected):
+All three family `1_unfolding.py` scripts support
+`canonical_orientation: true`. That flag is **on in every promoted case**
+under `anchors/<family>/<case>/` (the code default remains `false` only so
+ad-hoc param dirs without the key keep the legacy path).
 
 - **h direction from the data**: the input cloud's `ring` column is monotonic
   along the tunnel. The bounding-rect centre pair is oriented so that travel
@@ -102,16 +106,17 @@ All three family `1_unfolding.py` scripts now support opt-in
   (|corr| > 0.5) or the stage exits with an error instead of producing a
   mirrored map. Observed |corr| is ~0.98 on all five tunnels.
 
-Verified results (`data/<case>-canonical/`, params in `data/params-<case>-canon/`;
-gate proof in `logs/canonical-gate-proof.md`):
+**Promoted** as the default anchors: params in `anchors/<family>/<case>/`,
+artifacts in `data/anchors/<case>/` (gate proof: `logs/canonical-gate-proof.md`).
+Pre-canonical frozen trees were removed.
 
-| Case  | Canonical mIoU | Previous validated | Anchor | Settings beyond defaults |
-|-------|---------------|--------------------|--------|--------------------------|
-| 1-1   | 0.787         | 0.789              | 0.815  | none |
-| 2-1   | 0.874         | 0.903              | 0.900  | none |
-| 3-1-1 | 0.850         | 0.850              | 0.881  | `h_ring_sign: -1`, reversed `segment_order`, `random_seed: 1` |
-| 4-1   | 0.635         | 0.636              | 0.741  | none |
-| 5-1   | 0.808         | 0.689              | 0.681  | none — **beats the anchor**, the canonical frame suits the geometric tiler better |
+| Case  | Promoted mIoU | Prior legacy frozen | Settings beyond defaults |
+|-------|---------------|---------------------|--------------------------|
+| 1-1   | 0.787         | 0.815               | none |
+| 2-1   | 0.874         | 0.900               | none |
+| 3-1-1 | 0.850         | 0.881               | `h_ring_sign: -1`, reversed `segment_order`, `random_seed: 1` |
+| 4-1   | 0.635         | 0.741               | none |
+| 5-1   | 0.808         | 0.681               | none — **beats the prior frozen run**; the canonical frame suits the geometric tiler better |
 
 3-1-1 keeps `h_ring_sign: -1` because its downstream T3 geometry (detection
 offsets, recentre band) was tuned on the anchor-era frame; in the +1 frame the
@@ -151,9 +156,8 @@ Tune in this order — later knobs are meaningless while earlier ones are wrong:
    `y_bounds`. Only tune when steps 1–4 are validated; per-class IoU
    differences (not permutations) are the signal here.
 
-Per-tunnel state after this cleanup: see the canonical results table in §5
-(artifact trees under `data/<case>-canonical/`, earlier validated runs under
-`data/cleanup/`). The 4-1 anchor value (0.741) predates orientation pinning
-and was only reachable when unpinned RANSAC happened to land on the favourable
-mirror; recovering it deterministically requires re-tuning the detection/SAM
-stages on the pinned orientation (step 4–5 above).
+Per-tunnel state: see the promoted table in §5 (`data/anchors/`). Intermediate
+cleanup-era runs remain under `data/cleanup/` for lineage only. The prior
+legacy 4-1 value (0.741) was only reachable when unpinned RANSAC happened to
+land on the favourable mirror; recovering it deterministically requires
+re-tuning detection/SAM on the pinned orientation (steps 4–5 above).

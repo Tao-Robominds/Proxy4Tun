@@ -3,7 +3,11 @@
 **Notebook:** `sam4tun/notebook/t1&2.ipynb`  
 **Anchor:** `anchors/t1&2/` (`1_unfolding.py` … `6_evaluation.py`)  
 **Parameter sets:** `parameters/` (HIGH default), `1-1/`, `2-1/`  
+**Frozen runs (canonical):** `data/anchors/1-1/` (mIoU 0.787), `data/anchors/2-1/` (mIoU 0.874)  
 **Parent index:** [`../NOTEBOOK_ANCHOR_PARITY.md`](../NOTEBOOK_ANCHOR_PARITY.md)
+
+> Promoted cases use `canonical_orientation=true`. Legacy `swap_tunnel_centers`
+> values in tables below are historical / ignored when canonical is on.
 
 ---
 

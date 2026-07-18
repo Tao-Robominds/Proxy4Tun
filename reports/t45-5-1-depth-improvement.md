@@ -1,8 +1,12 @@
 # T4/T5 5-1 — depth map improvement for mIoU
 
+> **Historical.** Current promoted anchor is canonical-orientation
+> (`data/anchors/5-1/`, mIoU 0.808). See
+> [`orientation-sensitivity.md`](orientation-sensitivity.md).
+
 **Case:** `5-1` (rings 110–119)  
-**Params:** `anchors/t4&5/5-1/`  
-**Promoted anchor:** `data/anchors/5-1/` (recentre + detection tune)
+**Params (at time of experiment):** `anchors/t4&5/5-1/`  
+**Then-promoted artifacts:** recentre + detection tune (mIoU 0.681)
 
 ## Goal
 

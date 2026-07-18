@@ -8,6 +8,10 @@ subset. Each anchor pairs:
 2. **Frozen pipeline artifacts** under `data/anchors/<case-id>/`
 3. **Lineage notes** in `reports/` and `data/anchors/<case-id>/prepare_note.md`
 
+Defaults use **canonical orientation** (`canonical_orientation: true`): h is
+derived from ring-index correlation and theta from travel direction. See
+[`reports/orientation-sensitivity.md`](../reports/orientation-sensitivity.md).
+
 Use anchors as the starting point for further research — not as overwrite
 targets. New experiments go under `data/<experiment-name>/`.
 
@@ -28,23 +32,19 @@ anchors/
 
 data/anchors/
 ├── 1-1/ … 5-1/      # full stage artifacts + evaluation/ for each anchor
-
-agents/ontology/     # machine-readable ontology (not moved with anchors)
 ```
 
 ## Anchor index
 
-| Case | Family | Params dir | mIoU | Log | Report |
-|---|---|---|---:|---|---|
-| `1-1` | t1&2 | `anchors/t1&2/1-1/` | 0.815 | `logs/1-1-best-observed-p3_ff7_02.log` | `reports/experiments/1-1-best-observed/` |
-| `2-1` | t1&2 | `anchors/t1&2/2-1/` | 0.900 | `logs/2-1-best-observed.log` | `reports/experiments/2-1-best-observed/` |
-| `3-1-1` | t3 | `anchors/t3/3-1-1/` | 0.881 | `logs/t3_3-1-1.log` | `reports/t3-3-1-1-corrected-vs-literal.md` |
-| `4-1` | t4&5 | `anchors/t4&5/4-1/` | 0.741 | `logs/t45_4-1_swapfalse.log` | `reports/t45-4-1-swap-ab.md` |
-| `5-1` | t4&5 | `anchors/t4&5/5-1/` | 0.681 | `logs/t45_5-1_recentre.log` | `reports/t45-5-1-depth-improvement.md` |
+| Case | Family | Params dir | mIoU | Notes |
+|---|---|---|---:|---|
+| `1-1` | t1&2 | `anchors/t1&2/1-1/` | 0.787 | canonical defaults |
+| `2-1` | t1&2 | `anchors/t1&2/2-1/` | 0.874 | canonical defaults |
+| `3-1-1` | t3 | `anchors/t3/3-1-1/` | 0.850 | `h_ring_sign: -1`, reversed `segment_order`, `random_seed: 1` |
+| `4-1` | t4&5 | `anchors/t4&5/4-1/` | 0.635 | canonical defaults |
+| `5-1` | t4&5 | `anchors/t4&5/5-1/` | 0.808 | canonical defaults |
 
-See [`data/anchors/README.md`](../data/anchors/README.md) for artifact contents
-and [`reports/anchors-summary.md`](../reports/anchors-summary.md) for metrics
-detail.
+See [`data/anchors/README.md`](../data/anchors/README.md) for artifact contents.
 
 **Notebook parity:** [`NOTEBOOK_ANCHOR_PARITY.md`](NOTEBOOK_ANCHOR_PARITY.md) —
 formal comparison of notebooks vs anchors (implementation + parameters).
@@ -75,12 +75,14 @@ export PROXY4TUN_PARAMS_DIR="$PWD/anchors/t4&5/5-1"
 `parameters_*.json` files. When unset, the CLI uses each profile's default
 subdir (`parameters/`, `3-1-1/`, `4-1/`, etc.).
 
-## Direction and unfolding flags
+## Orientation flags (current defaults)
 
-| Flag | When to use |
+| Flag | Role |
 |---|---|
-| `swap_tunnel_centers` | Validate per scan; flipping changed 2-1 mIoU 0.873→0.900 |
-| `residual_recentre` | Required for T3; fixes off-centre left-end voids on T4/T5 (5-1) |
-| `deterministic_theta_orientation` | T3 optional; keep off for T1/T2 until validated |
+| `canonical_orientation` | **Default on** for promoted cases. Derives h from ring index; forces deterministic theta. Ignores `swap_tunnel_centers`. |
+| `h_ring_sign` | `+1` (default) or `-1` when downstream geometry was tuned on a legacy frame (3-1-1). |
+| `residual_recentre` | Required for T3; also used on T4/T5 where enabled. |
+| `random_seed` | Optional bitwise reproducibility (set on 3-1-1). |
+| `swap_tunnel_centers` | Legacy only; ignored when `canonical_orientation` is true. |
 
 Ontology and priors: [`agents/ontology/`](../agents/ontology/).

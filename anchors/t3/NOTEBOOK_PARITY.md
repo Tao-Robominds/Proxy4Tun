@@ -3,8 +3,11 @@
 **Notebook:** `sam4tun/notebook/t3.ipynb`  
 **Anchor:** `anchors/t3/` + `t3_geometry.py`  
 **Parameter set:** `3-1-1/` (CLI default for `--profile t3`)  
-**Frozen run:** `data/anchors/3-1-1/` (mIoU 0.881)  
+**Frozen run (canonical):** `data/anchors/3-1-1/` (mIoU 0.850; `h_ring_sign=-1`)  
 **Parent index:** [`../NOTEBOOK_ANCHOR_PARITY.md`](../NOTEBOOK_ANCHOR_PARITY.md)
+
+> Promoted recipe uses `canonical_orientation=true`. Tables that mention only
+> `swap_tunnel_centers` / pre-canonical mIoU 0.881 are historical.
 
 ---
 

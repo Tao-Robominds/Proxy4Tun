@@ -28,13 +28,16 @@ Requires Python ≥ 3.11. SAM weights are local
 
 ## Anchor quick reference
 
+Promoted defaults use **canonical orientation** (`canonical_orientation: true`).
+See [`reports/orientation-sensitivity.md`](reports/orientation-sensitivity.md).
+
 | Case | Profile | Params | mIoU |
 |---|---|---|---:|
-| 1-1 | `t1&2` | `anchors/t1&2/1-1/` | 0.815 |
-| 2-1 | `t1&2` | `anchors/t1&2/2-1/` | 0.900 |
-| 3-1-1 | `t3` | `anchors/t3/3-1-1/` | 0.881 |
-| 4-1 | `t4&5` | `anchors/t4&5/4-1/` | 0.741 |
-| 5-1 | `t4&5` | `anchors/t4&5/5-1/` | 0.681 |
+| 1-1 | `t1&2` | `anchors/t1&2/1-1/` | 0.787 |
+| 2-1 | `t1&2` | `anchors/t1&2/2-1/` | 0.874 |
+| 3-1-1 | `t3` | `anchors/t3/3-1-1/` | 0.850 |
+| 4-1 | `t4&5` | `anchors/t4&5/4-1/` | 0.635 |
+| 5-1 | `t4&5` | `anchors/t4&5/5-1/` | 0.808 |
 
 ## Safe run examples
 
@@ -78,9 +81,8 @@ be overwritten by routine experiments.
 
 - Anchors: [`anchors/README.md`](anchors/README.md), [`data/anchors/README.md`](data/anchors/README.md)
 - Summary metrics: [`reports/anchors-summary.md`](reports/anchors-summary.md)
-- T1/T2 ablation: [`reports/critical-parameters-experiment.md`](reports/critical-parameters-experiment.md)
-- T3 parity: [`reports/t3-3-1-1-corrected-vs-literal.md`](reports/t3-3-1-1-corrected-vs-literal.md)
-- T4/T5 5-1 depth work: [`reports/t45-5-1-depth-improvement.md`](reports/t45-5-1-depth-improvement.md)
+- Orientation / cleanup lessons: [`reports/orientation-sensitivity.md`](reports/orientation-sensitivity.md)
+- Historical ablations (pre-canonical): [`reports/critical-parameters-experiment.md`](reports/critical-parameters-experiment.md), [`reports/t3-3-1-1-corrected-vs-literal.md`](reports/t3-3-1-1-corrected-vs-literal.md), [`reports/t45-5-1-depth-improvement.md`](reports/t45-5-1-depth-improvement.md)
 - Winner manifests: [`reports/experiments/`](reports/experiments/)
 
 ## Tests
