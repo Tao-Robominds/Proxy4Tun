@@ -65,7 +65,6 @@ resolution = processing["resolution"]
 padding = processing["padding"]
 crop_margin = processing["crop_margin"]
 y_bounds = processing["y_bounds"]
-y_exceptions_offsets = processing.get("y_exceptions_offsets", [])
 geometry_profile = config.get("geometry_profile", "t45")
 mirror_k_geometry = bool(config.get("mirror_k_geometry", False))
 segment_loop_extra = int(config.get("segment_loop_extra", 1))

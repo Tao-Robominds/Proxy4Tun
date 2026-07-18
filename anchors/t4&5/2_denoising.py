@@ -50,9 +50,6 @@ for key in expected_keys:
         sys.exit(f"Missing required parameter '{key}' in {param_file}")
 mask_r_low = params["mask_r_low"]
 mask_r_high = params["mask_r_high"]
-mask_theta_low = params.get("mask_theta_low")
-mask_theta_high = params.get("mask_theta_high")
-mask_theta_high_column = params.get("mask_theta_high_column", "theta")
 y_step = params["y_step"]
 z_step = params["z_step"]
 grad_threshold = params["grad_threshold"]
@@ -61,7 +58,6 @@ smoothing_offset = params["smoothing_offset"]
 default_cutoff_z = params["default_cutoff_z"]
 print(
     f"Using parameters: mask_r_low={mask_r_low}, mask_r_high={mask_r_high}, "
-    f"mask_theta=[{mask_theta_low},{mask_theta_high}] col={mask_theta_high_column}, "
     f"y_step={y_step}, z_step={z_step}, default_cutoff_z={default_cutoff_z}"
 )
 
@@ -78,17 +74,7 @@ df_point_cloud['pred'] = 7
 mask_r = (df_point_cloud['r'] < mask_r_low)|(df_point_cloud['r'] > mask_r_high)
 df_point_cloud.loc[mask_r, 'pred'] = 0
 
-# Optional circumferential gate (T3)
-mask_theta = None
-if mask_theta_low is not None and mask_theta_high is not None:
-    high_series = df_point_cloud[mask_theta_high_column]
-    mask_theta = (df_point_cloud['theta'] < mask_theta_low) | (high_series > mask_theta_high)
-    df_point_cloud.loc[mask_theta, 'pred'] = 0
-    print(f"Theta gate removed {(mask_theta & ~mask_r).sum()} points (high_column={mask_theta_high_column})")
-
-# Remaining point cloud data
-keep = ~mask_r if mask_theta is None else (~mask_r & ~mask_theta)
-filtered_df = df_point_cloud[keep].copy()
+filtered_df = df_point_cloud[~mask_r].copy()
 
 # Define bins for X, Y, and Z directions
 x_points = filtered_df['h'].values

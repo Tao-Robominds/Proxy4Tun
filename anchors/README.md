@@ -46,6 +46,9 @@ See [`data/anchors/README.md`](../data/anchors/README.md) for artifact contents
 and [`reports/anchors-summary.md`](../reports/anchors-summary.md) for metrics
 detail.
 
+**Notebook parity:** [`NOTEBOOK_ANCHOR_PARITY.md`](NOTEBOOK_ANCHOR_PARITY.md) —
+formal comparison of notebooks vs anchors (implementation + parameters).
+
 ## Running from an anchor
 
 Full pipeline (writes to a **new** output dir, not `data/anchors/`):

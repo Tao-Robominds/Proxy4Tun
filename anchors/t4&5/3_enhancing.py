@@ -24,7 +24,6 @@ from scipy.spatial import KDTree, cKDTree
 import numba as nb
 from numba import njit, prange
 from scipy.interpolate import griddata
-from scipy import ndimage
 from tqdm.auto import tqdm
 from collections import defaultdict
 import pickle
@@ -82,36 +81,11 @@ coverage_mode = params.get("coverage_mode", "half_from_min")
 use_upsampled_surface = bool(params.get("use_upsampled_surface", True))
 enable_outlier_interpolation = bool(params.get("enable_outlier_interpolation", True))
 curvature_outlier_min = params.get("curvature_outlier_min", None)
-# Fill NaNs within this distance of valid depth (metres). 0 disables.
-max_hole_fill_m = float(params.get("max_hole_fill_m", 0.0))
-# Fully inpaint NaN components up to this area (px); skips the largest component.
-max_enclosed_hole_px = int(params.get("max_enclosed_hole_px", 0))
-# Fill interior row gaps between first/last valid sample; edge fill invents borders.
-fill_depth_row_spans = bool(params.get("fill_depth_row_spans", False))
-fill_depth_row_edges = bool(params.get("fill_depth_row_edges", False))
-# Final bridge for leftover gaps (metres), e.g. full-nan theta bands. 0 disables.
-max_gap_bridge_m = float(params.get("max_gap_bridge_m", 0.0))
-# Drop leading/trailing columns with NaN fraction above this (None/1 disables).
-trim_sparse_col_nan_frac = params.get("trim_sparse_col_nan_frac", None)
-if trim_sparse_col_nan_frac is not None:
-    trim_sparse_col_nan_frac = float(trim_sparse_col_nan_frac)
-# Optional [lo, hi] percentile clip on axial h when building the depth-map bbox.
-# Removes empty tails from sparse scan ends without inventing depth.
-_h_clip = params.get("depth_map_h_percentile")
-depth_map_h_percentile = None
-if _h_clip is not None:
-    if not (isinstance(_h_clip, (list, tuple)) and len(_h_clip) == 2):
-        sys.exit("depth_map_h_percentile must be [low, high], e.g. [1, 99]")
-    depth_map_h_percentile = (float(_h_clip[0]), float(_h_clip[1]))
 print(
     f"T3 enhancing flags: coverage_mode={coverage_mode}, "
     f"use_upsampled_surface={use_upsampled_surface}, "
     f"enable_outlier_interpolation={enable_outlier_interpolation}, "
-    f"curvature_outlier_min={curvature_outlier_min}, "
-    f"max_hole_fill_m={max_hole_fill_m}, max_enclosed_hole_px={max_enclosed_hole_px}, "
-    f"fill_depth_row_spans={fill_depth_row_spans}, fill_depth_row_edges={fill_depth_row_edges}, "
-    f"max_gap_bridge_m={max_gap_bridge_m}, trim_sparse_col_nan_frac={trim_sparse_col_nan_frac}, "
-    f"depth_map_h_percentile={depth_map_h_percentile}"
+    f"curvature_outlier_min={curvature_outlier_min}"
 )
 
 paths = ensure_dir(tunnel_id)
@@ -502,190 +476,12 @@ from scipy.interpolate import griddata
 from tqdm.auto import tqdm
 from collections import defaultdict
 
-def _fill_nan_components(out, max_enclosed_hole_px):
-    """Inpaint NaN components up to max area, skipping the single largest one."""
-    nan_mask = np.isnan(out)
-    if not np.any(nan_mask) or max_enclosed_hole_px <= 0:
-        return out
-    labeled, n_comp = ndimage.label(nan_mask)
-    if n_comp == 0:
-        return out
-    sizes = np.asarray(
-        ndimage.sum(nan_mask, labeled, index=np.arange(1, n_comp + 1))
-    )
-    largest_lab = int(np.argmax(sizes) + 1)
-    _, nearest = ndimage.distance_transform_edt(nan_mask, return_indices=True)
-    for lab in range(1, n_comp + 1):
-        if lab == largest_lab:
-            continue
-        size = int(sizes[lab - 1])
-        if size == 0 or size > max_enclosed_hole_px:
-            continue
-        comp = labeled == lab
-        out[comp] = out[nearest[0][comp], nearest[1][comp]]
-    return out
-
-
-def _fill_row_spans_and_edges(out, fill_edges=True):
-    """
-    Per-row inpainting without circular distance disks.
-
-    - Span fill: NaNs between the first and last valid sample on a row.
-    - Edge fill (optional): leading/trailing NaNs outside that span. Prefer
-      cropping sparse axial tails instead of edge fill when the left/right
-      margin is mostly empty — edge fill invents streaky borders.
-    """
-    height, width = out.shape
-    for y in range(height):
-        row = out[y]
-        valid = np.where(~np.isnan(row))[0]
-        if valid.size == 0:
-            continue
-        lo, hi = int(valid[0]), int(valid[-1])
-        if hi > lo:
-            gap = np.isnan(row[lo : hi + 1])
-            if np.any(gap):
-                idx = valid
-                xs = np.where(gap)[0] + lo
-                # nearest valid along the same row
-                j = np.searchsorted(idx, xs)
-                j = np.clip(j, 1, len(idx) - 1)
-                left = idx[j - 1]
-                right = idx[j]
-                use_right = (xs - left) > (right - xs)
-                src = np.where(use_right, right, left)
-                row[xs] = row[src]
-        if fill_edges:
-            if lo > 0:
-                row[:lo] = row[lo]
-            if hi + 1 < width:
-                row[hi + 1 :] = row[hi]
-        out[y] = row
-    return out
-
-
-def _trim_sparse_depth_margins(depth_map, max_col_nan_frac=0.25):
-    """
-    Drop leading/trailing columns whose NaN fraction exceeds max_col_nan_frac.
-
-    Removes empty left/right scan tails (the large circular white bites) without
-    inventing depth via edge extrapolation.
-
-    Returns (trimmed_map, col_lo) where col_lo is the left crop offset in the
-    pre-trim frame (0 if no trim).
-    """
-    if max_col_nan_frac is None or max_col_nan_frac >= 1.0:
-        return depth_map, 0
-    nan_frac = np.isnan(depth_map).mean(axis=0)
-    keep = nan_frac <= float(max_col_nan_frac)
-    if not np.any(keep):
-        return depth_map, 0
-    idx = np.where(keep)[0]
-    lo, hi = int(idx[0]), int(idx[-1])
-    # Keep a contiguous block from first to last acceptable column.
-    trimmed = depth_map[:, lo : hi + 1]
-    print(
-        f"Trim sparse margins: cols [{lo}, {hi}] kept "
-        f"(was W={depth_map.shape[1]} -> {trimmed.shape[1]}), "
-        f"max_col_nan_frac={max_col_nan_frac}"
-    )
-    return trimmed, lo
-
-
-def fill_depth_map_holes(
-    depth_map,
-    max_dist_px=0,
-    max_enclosed_hole_px=0,
-    fill_row_spans=False,
-    fill_row_edges=False,
-    max_gap_bridge_px=0,
-    trim_sparse_col_nan_frac=None,
-):
-    """
-    Inpaint NaN holes after sparse projection.
-
-    - Component fill: inpaint every NaN connected component with area <=
-      max_enclosed_hole_px (interior holes and small border indentations /
-      theta-seam cutouts). The giant outside/coverage component is skipped.
-    - Distance fill: nearest-valid grow for remaining NaNs within max_dist_px
-      (seals thin corridors that keep fjord-holes attached to the exterior).
-    - Second component fill: catches holes newly detached after the grow.
-    - Optional row-span fill: closes gaps between first/last valid on each row.
-    - Optional edge fill: extrapolate to image borders (usually worse than trim).
-    - Optional gap bridge: final EDT fill for leftover gaps (e.g. full-nan
-      theta bands) up to max_gap_bridge_px.
-    - Optional margin trim: drop sparse leading/trailing columns.
-    """
-    if (
-        max_dist_px <= 0
-        and max_enclosed_hole_px <= 0
-        and not fill_row_spans
-        and not fill_row_edges
-        and max_gap_bridge_px <= 0
-        and trim_sparse_col_nan_frac is None
-    ):
-        return depth_map, 0
-
-    out = depth_map.copy()
-    if not np.any(np.isnan(out)) and trim_sparse_col_nan_frac is None:
-        return out, 0
-
-    # Trim empty axial tails first so EDT grow cannot scallop into them.
-    trim_lo = 0
-    if trim_sparse_col_nan_frac is not None:
-        out, trim_lo = _trim_sparse_depth_margins(
-            out, max_col_nan_frac=trim_sparse_col_nan_frac
-        )
-
-    if np.any(np.isnan(out)):
-        out = _fill_nan_components(out, max_enclosed_hole_px)
-
-        if max_dist_px > 0:
-            still_nan = np.isnan(out)
-            if np.any(still_nan):
-                dist2, nearest2 = ndimage.distance_transform_edt(still_nan, return_indices=True)
-                fillable = still_nan & (dist2 > 0) & (dist2 <= float(max_dist_px))
-                if np.any(fillable):
-                    out[fillable] = out[nearest2[0][fillable], nearest2[1][fillable]]
-
-        # Corridors sealed by distance grow can detach fjord holes from the exterior.
-        out = _fill_nan_components(out, max_enclosed_hole_px)
-
-        if fill_row_spans or fill_row_edges:
-            out = _fill_row_spans_and_edges(out, fill_edges=fill_row_edges)
-
-        if max_gap_bridge_px > 0:
-            still_nan = np.isnan(out)
-            if np.any(still_nan):
-                dist3, nearest3 = ndimage.distance_transform_edt(still_nan, return_indices=True)
-                bridge = still_nan & (dist3 > 0) & (dist3 <= float(max_gap_bridge_px))
-                if np.any(bridge):
-                    out[bridge] = out[nearest3[0][bridge], nearest3[1][bridge]]
-
-    n_filled = int(np.isnan(depth_map).sum() - np.isnan(out).sum())
-    print(
-        f"Hole fill: max_dist_px={max_dist_px}, max_enclosed_hole_px={max_enclosed_hole_px}, "
-        f"fill_row_spans={fill_row_spans}, fill_row_edges={fill_row_edges}, "
-        f"max_gap_bridge_px={max_gap_bridge_px}, "
-        f"filled={n_filled}, nan% {np.isnan(depth_map).mean()*100:.2f} -> {np.isnan(out).mean()*100:.2f}, "
-        f"shape {depth_map.shape} -> {out.shape}"
-    )
-    return out, trim_lo
-
-
 def project_to_depth_map_inter(
     data1,
     data2,
     resolution=0.005,
     window_size=5,
     outlier_mode=False,
-    max_hole_fill_m=0.0,
-    max_enclosed_hole_px=0,
-    depth_map_h_percentile=None,
-    fill_row_spans=False,
-    fill_row_edges=False,
-    max_gap_bridge_m=0.0,
-    trim_sparse_col_nan_frac=None,
 ):
     """
     Optimized version of the function that projects 2D point cloud data into a depth map.
@@ -714,27 +510,6 @@ def project_to_depth_map_inter(
     data1 = to_numpy_arrays(data1)
     data2 = to_numpy_arrays(data2)
     data1_index = np.asarray(data1_index)
-
-    # Optional axial percentile clip drops empty scan tails from the depth-map bbox.
-    if depth_map_h_percentile is not None:
-        h_all = np.concatenate([data1[0], data2[0]])
-        x_lo, x_hi = np.percentile(h_all, list(depth_map_h_percentile))
-        m1 = (data1[0] >= x_lo) & (data1[0] <= x_hi)
-        m2 = (data2[0] >= x_lo) & (data2[0] <= x_hi)
-        if int(m1.sum()) == 0:
-            print("Depth-map h percentile clip removed all segment points; keeping full span")
-        else:
-            print(
-                f"Depth-map h percentile clip {depth_map_h_percentile}: "
-                f"h=[{x_lo:.3f}, {x_hi:.3f}] "
-                f"(segment {int(m1.sum())}/{data1.shape[1]}, joint {int(m2.sum())}/{data2.shape[1]})"
-            )
-            data1 = data1[:, m1]
-            data1_index = data1_index[m1]
-            if int(m2.sum()) > 0:
-                data2 = data2[:, m2]
-            else:
-                data2 = data1[:, :0]
 
     x_min = min(data1[0].min(), data2[0].min()) if data2.shape[1] else float(data1[0].min())
     x_max = max(data1[0].max(), data2[0].max()) if data2.shape[1] else float(data1[0].max())
@@ -813,42 +588,6 @@ def project_to_depth_map_inter(
         # Fill in the interpolated results into the depth map
         depth_map[interp_points[:, 0], interp_points[:, 1]] = interp_values
 
-    if outlier_mode is False and (
-        max_hole_fill_m > 0
-        or max_enclosed_hole_px > 0
-        or fill_row_spans
-        or fill_row_edges
-        or max_gap_bridge_m > 0
-        or trim_sparse_col_nan_frac is not None
-    ):
-        max_dist_px = int(round(float(max_hole_fill_m) / float(resolution))) if max_hole_fill_m > 0 else 0
-        max_gap_bridge_px = (
-            int(round(float(max_gap_bridge_m) / float(resolution))) if max_gap_bridge_m > 0 else 0
-        )
-        depth_map, trim_lo = fill_depth_map_holes(
-            depth_map,
-            max_dist_px=max_dist_px,
-            max_enclosed_hole_px=max_enclosed_hole_px,
-            fill_row_spans=fill_row_spans,
-            fill_row_edges=fill_row_edges,
-            max_gap_bridge_px=max_gap_bridge_px,
-            trim_sparse_col_nan_frac=trim_sparse_col_nan_frac,
-        )
-        if trim_lo and pixel_to_point:
-            w = depth_map.shape[1]
-            h = depth_map.shape[0]
-            shifted = []
-            for rec in pixel_to_point:
-                x = int(rec["pixel_x"]) - trim_lo
-                y = int(rec["pixel_y"])
-                if 0 <= x < w and 0 <= y < h:
-                    shifted.append({"pixel_x": x, "pixel_y": y, "index": rec["index"]})
-            print(
-                f"pixel_to_point trim-shift lo={trim_lo}: "
-                f"{len(pixel_to_point)} -> {len(shifted)}"
-            )
-            pixel_to_point = shifted
-
     if outlier_mode==True:
         pixel_to_point = []
 
@@ -882,13 +621,6 @@ depth_map, pixel_to_point = project_to_depth_map_inter(
     data_joint,
     resolution=resolution,
     window_size=window_size,
-    max_hole_fill_m=max_hole_fill_m,
-    max_enclosed_hole_px=max_enclosed_hole_px,
-    depth_map_h_percentile=depth_map_h_percentile,
-    fill_row_spans=fill_depth_row_spans,
-    fill_row_edges=fill_depth_row_edges,
-    max_gap_bridge_m=max_gap_bridge_m,
-    trim_sparse_col_nan_frac=trim_sparse_col_nan_frac,
 )
 plt.figure(figsize=(12, 24))
 plt.imshow(depth_map, cmap='viridis', vmin=depth_vmin, vmax=depth_vmax)

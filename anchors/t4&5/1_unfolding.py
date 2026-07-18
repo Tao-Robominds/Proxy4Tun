@@ -52,7 +52,7 @@ def _load_params(stage: str):
 
 params, param_file = _load_params("unfolding")
 expected_keys = [
-    "delta", "slice_spacing_factor", "vertical_filter_window",
+    "delta", "slice_spacing_factor",
     "ransac_threshold", "ransac_probability", "ransac_inlier_ratio",
     "ransac_sample_size", "ransac_initial_iterations", "ransac_inlier_threshold_multiplier",
     "polynomial_degree", "num_samples_factor", "t_extrapolation_start", "t_extrapolation_end",
@@ -63,7 +63,6 @@ for key in expected_keys:
         sys.exit(f"Missing required parameter '{key}' in {param_file}")
 delta = params["delta"]
 slice_spacing_factor = params["slice_spacing_factor"]
-vertical_filter_window = params["vertical_filter_window"]
 ransac_threshold = params["ransac_threshold"]
 ransac_probability = params["ransac_probability"]
 ransac_inlier_ratio = params["ransac_inlier_ratio"]
@@ -78,7 +77,6 @@ diameter = params["diameter"]
 batch_size = params["batch_size"]
 n_jobs = params["n_jobs"]
 swap_tunnel_centers = params["swap_tunnel_centers"]
-slice_filter_mode = params.get("slice_filter_mode", "remove_railway")
 top_tube_radius = float(params.get("top_tube_radius", 3.5))
 top_tube_top_n = int(params.get("top_tube_top_n", 10))
 # Optional post-unwrap centreline residual correction / deterministic theta.
@@ -256,51 +254,41 @@ for i in range(len(origin)):
     point2ds_temp = project_to_plane(slicing_cloud[i], origin[i], normal)
     point2ds.append(point2ds_temp)
 
-# Process each set of 2D points (slice filter)
+# T4/T5: in-built service tube on top — keep points outside radius about stable mid.
 filtered_point2ds = []
-if slice_filter_mode == "remove_top_tube":
-    # T4/T5: in-built service tube on top — keep points outside radius about stable mid.
-    print(
-        f"Slice filter: remove_top_tube radius={top_tube_radius} top_n={top_tube_top_n}"
-    )
+print(
+    f"Slice filter: remove_top_tube radius={top_tube_radius} top_n={top_tube_top_n}"
+)
 
-    def _stable_extreme(points, coord_index, top_n):
-        sorted_points = sorted(points, key=lambda p: p[coord_index], reverse=True)
-        top_points = sorted_points[:top_n]
-        bottom_points = sorted_points[-top_n:]
-        if not top_points or not bottom_points:
-            return None, None
-        max_val = top_points[0][coord_index]
-        min_val = bottom_points[-1][coord_index]
-        threshold = (max_val - min_val) * 0.1
-        stable_top = [p for p in top_points if abs(p[coord_index] - max_val) <= threshold]
-        stable_bottom = [p for p in bottom_points if abs(p[coord_index] - min_val) <= threshold]
-        stable_max = max(p[coord_index] for p in stable_top) if stable_top else max_val
-        stable_min = min(p[coord_index] for p in stable_bottom) if stable_bottom else min_val
-        return stable_max, stable_min
+def _stable_extreme(points, coord_index, top_n):
+    sorted_points = sorted(points, key=lambda p: p[coord_index], reverse=True)
+    top_points = sorted_points[:top_n]
+    bottom_points = sorted_points[-top_n:]
+    if not top_points or not bottom_points:
+        return None, None
+    max_val = top_points[0][coord_index]
+    min_val = bottom_points[-1][coord_index]
+    threshold = (max_val - min_val) * 0.1
+    stable_top = [p for p in top_points if abs(p[coord_index] - max_val) <= threshold]
+    stable_bottom = [p for p in bottom_points if abs(p[coord_index] - min_val) <= threshold]
+    stable_max = max(p[coord_index] for p in stable_top) if stable_top else max_val
+    stable_min = min(p[coord_index] for p in stable_bottom) if stable_bottom else min_val
+    return stable_max, stable_min
 
-    for points in point2ds:
-        x_max, x_min = _stable_extreme(points, 0, top_tube_top_n)
-        y_max, y_min = _stable_extreme(points, 1, top_tube_top_n)
-        if None in (x_max, x_min, y_max, y_min):
-            filtered_point2ds.append(list(points))
-            continue
-        x_mid = (x_max + x_min) / 2.0
-        y_mid = (y_max + y_min) / 2.0
-        filtered_points = [
-            point
-            for point in points
-            if ((point[0] - x_mid) ** 2 + (point[1] - y_mid) ** 2) > top_tube_radius ** 2
-        ]
-        filtered_point2ds.append(filtered_points)
-else:
-    # T1/T2/T3-style railway / near-ceiling window
-    for points in point2ds:
-        y_max = max(point[1] for point in points)
-        filtered_points = [
-            point for point in points if abs(point[1] - y_max) <= vertical_filter_window
-        ]
-        filtered_point2ds.append(filtered_points)
+for points in point2ds:
+    x_max, x_min = _stable_extreme(points, 0, top_tube_top_n)
+    y_max, y_min = _stable_extreme(points, 1, top_tube_top_n)
+    if None in (x_max, x_min, y_max, y_min):
+        filtered_point2ds.append(list(points))
+        continue
+    x_mid = (x_max + x_min) / 2.0
+    y_mid = (y_max + y_min) / 2.0
+    filtered_points = [
+        point
+        for point in points
+        if ((point[0] - x_mid) ** 2 + (point[1] - y_mid) ** 2) > top_tube_radius ** 2
+    ]
+    filtered_point2ds.append(filtered_points)
 # if you want to visulize
 import matplotlib.pyplot as plt
 

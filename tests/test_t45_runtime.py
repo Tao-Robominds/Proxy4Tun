@@ -28,7 +28,10 @@ def test_canonical_t45_parameters_exist():
     assert unfolding["diameter"] == 7.5
     assert unfolding["polynomial_degree"] == 2
     assert unfolding["slice_spacing_factor"] == 1.8
-    assert unfolding["slice_filter_mode"] == "remove_top_tube"
+    # Top-tube slice filtering is now hardcoded in 1_unfolding.py; the former
+    # slice_filter_mode / vertical_filter_window knobs were removed in cleanup.
+    assert "slice_filter_mode" not in unfolding
+    assert "vertical_filter_window" not in unfolding
     denoise = json.loads((params / "parameters_denoising.json").read_text())
     assert denoise["mask_r_low"] == 3.65
     assert denoise["mask_r_high"] == 3.9

@@ -16,7 +16,7 @@ Frozen runs: [`data/anchors/4-1/`](../../data/anchors/4-1/),
 
 ## T4/T5 settings
 
-- Unfolding: diameter `7.5`, poly degree `2`, `slice_filter_mode: remove_top_tube`
+- Unfolding: diameter `7.5`, poly degree `2`, top-tube slice filter (`top_tube_radius` / `top_tube_top_n`)
 - Denoising: radial band `3.65–3.9` (no theta gate)
 - Enhancing: upsample `0.09/0.045/0.0225`, depths `0.0065/0.013`, `n_segment [5,14]`
 - Detection: Hough on `depth_map_outlier`; 5-1 uses synthetic 10 verticals (`hough_threshold_vertical=5000`)
