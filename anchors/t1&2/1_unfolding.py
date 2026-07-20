@@ -98,6 +98,15 @@ residual_recentre = bool(params.get("residual_recentre", False))
 recentre_bin_size = float(params.get("recentre_bin_size", 0.5))
 recentre_r_tolerance = float(params.get("recentre_r_tolerance", 0.35))
 recentre_min_bin_points = int(params.get("recentre_min_bin_points", 500))
+# Optional seed pinning all stochastic fits (ellipse RANSAC sampling,
+# centreline RANSACRegressor); makes the unfolding bitwise reproducible.
+random_seed = params.get("random_seed")
+if random_seed is not None:
+    random_seed = int(random_seed)
+    import random as _random_mod
+    _random_mod.seed(random_seed)
+    np.random.seed(random_seed)
+    print(f"Random seed pinned: {random_seed}")
 
 paths = ensure_dir(tunnel_id)
 point_cloud_data = np.loadtxt(paths["input_txt"])
@@ -570,9 +579,9 @@ y_poly = t_poly
 z_poly = t_poly
 
 # Initialize RANSAC Regressor for x, y, z
-ransac_x = RANSACRegressor()
-ransac_y = RANSACRegressor()
-ransac_z = RANSACRegressor()
+ransac_x = RANSACRegressor(random_state=random_seed)
+ransac_y = RANSACRegressor(random_state=random_seed)
+ransac_z = RANSACRegressor(random_state=random_seed)
 
 # Fit the RANSAC model to x, y, z coordinates
 ransac_x.fit(x_poly, cps_arr[:, 0])

@@ -30,5 +30,8 @@
   "vertical_rho_min_factor": 14.0,
   "vertical_rho_max_factor": 15.2,
   "prompt_logic": "t3_inherit",
-  "uniform_k_snap": true
+  "uniform_k_snap": true,
+  "k_row_pattern": [1123.0, 1553.0],
+  "k_row_tolerance": 200.0,
+  "k_row_action": "snap"
 }

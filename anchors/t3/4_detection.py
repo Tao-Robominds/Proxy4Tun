@@ -74,9 +74,19 @@ vertical_rho_min_factor = float(params.get("vertical_rho_min_factor", 0.0))
 vertical_rho_max_factor = float(params.get("vertical_rho_max_factor", 5.0))
 prompt_logic = params.get("prompt_logic", "t12_pattern")
 uniform_k_snap = bool(params.get("uniform_k_snap", tunnel_id.startswith("3-")))
+# When uniform_k_snap is on, clamp the shared K Y to the design rows used by
+# the assume path (1123 / 1553 px). This is ordinary T3 detection logic — not
+# a proxy feature.
+_k_row_raw = params.get("k_row_pattern", [1123.0, 1553.0])
+k_row_pattern = [float(v) for v in _k_row_raw]
+k_row_tolerance = float(params.get("k_row_tolerance", 200.0))
+k_row_action = str(params.get("k_row_action", "snap")).lower()
+if k_row_action not in ("snap", "fail", "warn"):
+    sys.exit(f"Invalid k_row_action={k_row_action!r}; expected snap|fail|warn")
 print(
     f"T3 detecting: K/AB={K_height}/{AB_height}, prompt_logic={prompt_logic}, "
-    f"vertical_rho_mode={vertical_rho_mode}, uniform_k_snap={uniform_k_snap}"
+    f"vertical_rho_mode={vertical_rho_mode}, uniform_k_snap={uniform_k_snap}, "
+    f"k_row_action={k_row_action}, k_row_tolerance={k_row_tolerance}"
 )
 
 paths = ensure_dir(tunnel_id)
@@ -482,19 +492,89 @@ else:
                 adjusted_points.append(('assume', (vertical_x, assumed_y)))
 
 # Continuous T3: uniform single K Y from anchor detections (optional)
+k_row_gate_record = None
 if uniform_k_snap:
     _ANCHOR_TYPES = {"midpoint", "horizontal", "positive_slope", "negative_slope"}
     _anchor_ys = [pt[1] for label, pt in adjusted_points if label in _ANCHOR_TYPES]
     if _anchor_ys:
-        y_star = float(np.median(_anchor_ys))
+        y_star_measured = float(np.median(_anchor_ys))
         if len(_anchor_ys) > 1 and np.std(_anchor_ys) > 40:
             print(f"Warning: anchor Y std {np.std(_anchor_ys):.1f} > 40 before T3 uniform snap")
+        # Sanity gate: y_star must sit near a design K row, else labels rotate.
+        nearest_row = float(min(k_row_pattern, key=lambda r: abs(r - y_star_measured)))
+        distance = float(abs(y_star_measured - nearest_row))
+        within = distance <= k_row_tolerance
+        y_star_used = y_star_measured
+        action_taken = "accept"
+        if within:
+            print(
+                f"T3 K-row gate OK: y_star={y_star_measured:.1f} within "
+                f"{distance:.1f}px of design row {nearest_row:.1f} "
+                f"(tol={k_row_tolerance:.1f})"
+            )
+        else:
+            msg = (
+                f"T3 K-row gate TRIGGERED: y_star={y_star_measured:.1f} is "
+                f"{distance:.1f}px from nearest design row {nearest_row:.1f} "
+                f"(tol={k_row_tolerance:.1f}, action={k_row_action})"
+            )
+            if k_row_action == "fail":
+                print(msg)
+                print(
+                    "Aborting stage 4 so the runner can retry with another seed. "
+                    "Exit code 3."
+                )
+                # Persist gate evidence even on fail-fast.
+                _gate_dir = os.path.dirname(paths["initial_points"])
+                os.makedirs(_gate_dir, exist_ok=True)
+                with open(os.path.join(_gate_dir, "k_row_gate.json"), "w") as _gf:
+                    json.dump(
+                        {
+                            "y_star_measured": y_star_measured,
+                            "y_star_used": None,
+                            "nearest_design_row": nearest_row,
+                            "distance_px": distance,
+                            "tolerance_px": k_row_tolerance,
+                            "k_row_pattern": k_row_pattern,
+                            "within_tolerance": False,
+                            "action_requested": k_row_action,
+                            "action_taken": "fail",
+                            "n_anchor_ys": len(_anchor_ys),
+                            "anchor_y_std": float(np.std(_anchor_ys)) if len(_anchor_ys) > 1 else 0.0,
+                        },
+                        _gf,
+                        indent=2,
+                    )
+                    _gf.write("\n")
+                sys.exit(3)
+            elif k_row_action == "snap":
+                y_star_used = nearest_row
+                action_taken = "snap"
+                print(msg)
+                print(f"T3 K-row gate SNAP: replacing y_star with {y_star_used:.1f}")
+            else:  # warn
+                action_taken = "warn"
+                print(f"WARNING: {msg} — proceeding with measured y_star")
+
         _n = len(adjusted_points)
         adjusted_points = [
-            ("propagated", (pt[0], y_star))
+            ("propagated", (pt[0], y_star_used))
             for _, pt in adjusted_points
         ]
-        print(f"T3 K uniform: set all {_n} rings to Y={y_star:.1f}")
+        print(f"T3 K uniform: set all {_n} rings to Y={y_star_used:.1f}")
+        k_row_gate_record = {
+            "y_star_measured": y_star_measured,
+            "y_star_used": y_star_used,
+            "nearest_design_row": nearest_row,
+            "distance_px": distance,
+            "tolerance_px": k_row_tolerance,
+            "k_row_pattern": k_row_pattern,
+            "within_tolerance": within,
+            "action_requested": k_row_action,
+            "action_taken": action_taken,
+            "n_anchor_ys": len(_anchor_ys),
+            "anchor_y_std": float(np.std(_anchor_ys)) if len(_anchor_ys) > 1 else 0.0,
+        }
 
 df_loc = pd.DataFrame(adjusted_points, columns=['Type', 'Coordinates'])
 df_loc['X'] = df_loc['Coordinates'].apply(lambda coord: coord[0])
@@ -535,5 +615,11 @@ plt.savefig(os.path.join(os.path.dirname(paths["initial_points"]), "initial_prom
 df_loc.to_csv(paths["initial_points"], index=False)
 state["df_loc"] = df_loc
 save_state(paths["state"], state)
+if k_row_gate_record is not None:
+    _gate_path = os.path.join(os.path.dirname(paths["initial_points"]), "k_row_gate.json")
+    with open(_gate_path, "w") as _gf:
+        json.dump(k_row_gate_record, _gf, indent=2)
+        _gf.write("\n")
+    print(f"K-row gate evidence -> {_gate_path}")
 print(f"Detection complete -> {paths['initial_points']}")
 

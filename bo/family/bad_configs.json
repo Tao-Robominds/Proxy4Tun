@@ -1,0 +1,113 @@
+{
+  "t1&2": {
+    "family": "t1&2",
+    "source_case": "2-1",
+    "trial_id": "2-1-t002",
+    "acquisition": "sobol_init",
+    "training_mIoU": 0.032,
+    "overlay": {
+      "denoising": {
+        "mask_r_low": 2.2765596207231287,
+        "mask_r_high": 2.7311800641939046,
+        "z_step": 0.006841400215402246,
+        "grad_threshold": 0.18567917034961284
+      },
+      "enhancing": {
+        "curvature_threshold": 0.004459666217677296,
+        "inter_radius": 0.02277838118374348
+      },
+      "detecting": {
+        "binary_threshold": 134,
+        "hough_threshold_oblique": 72,
+        "hough_threshold_horizontal": 77,
+        "hough_threshold_vertical": 571,
+        "maxLineGap_oblique": 49
+      },
+      "sam": {
+        "processing.y_bounds": [
+          3720,
+          13100
+        ]
+      }
+    },
+    "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/2-1-bo-proxy/runs/2-1-t002",
+    "sibling_anchor_mious": [
+      0.787,
+      0.874
+    ],
+    "delta_vs_min_anchor": 0.755
+  },
+  "t3": {
+    "family": "t3",
+    "source_case": "3-1-1",
+    "trial_id": "3-1-1-t025",
+    "acquisition": "uncertainty",
+    "training_mIoU": 0.043,
+    "overlay": {
+      "denoising": {
+        "mask_r_low": 2.786526433030133,
+        "mask_r_high": 2.9038663210520226,
+        "mask_theta_low": 1.5446460329287075,
+        "mask_theta_high": 15.15235439796783
+      },
+      "enhancing": {
+        "curvature_threshold": 0.0004750348429401023
+      },
+      "detecting": {
+        "binary_threshold": 130,
+        "hough_threshold_oblique": 40,
+        "hough_threshold_horizontal": 36,
+        "hough_threshold_vertical": 1861,
+        "maxLineGap_oblique": 56,
+        "pattern_tolerance": 13,
+        "uniform_k_snap": true
+      },
+      "sam": {
+        "segment_width": 1084,
+        "K_height": 905.5965504983162,
+        "angle": 8.983174479478013
+      }
+    },
+    "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/3-1-1-bo-proxy/runs/3-1-1-t025",
+    "sibling_anchor_mious": [
+      0.85
+    ],
+    "delta_vs_min_anchor": 0.8069999999999999
+  },
+  "t4&5": {
+    "family": "t4&5",
+    "source_case": "4-1",
+    "trial_id": "4-1-t009",
+    "acquisition": "sobol_init",
+    "training_mIoU": 0.036,
+    "overlay": {
+      "denoising": {
+        "mask_r_low": 3.770759604219347,
+        "mask_r_high": 3.9584849450737236
+      },
+      "enhancing": {
+        "curvature_threshold": 0.0011064445704221727
+      },
+      "detecting": {
+        "binary_threshold": 108,
+        "hough_threshold_oblique": 64,
+        "hough_threshold_horizontal": 64,
+        "hough_threshold_vertical": 1107,
+        "maxLineGap_oblique": 63,
+        "maxLineGap_horizontal": 27,
+        "pattern_tolerance": 16
+      },
+      "sam": {
+        "segment_width": 1732,
+        "K_height": 1443.498516920954,
+        "angle": 8.031056614592671
+      }
+    },
+    "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/4-1-bo-proxy/runs/4-1-t009",
+    "sibling_anchor_mious": [
+      0.635,
+      0.808
+    ],
+    "delta_vs_min_anchor": 0.599
+  }
+}

@@ -20,6 +20,22 @@ Frozen run: [`data/anchors/3-1-1/`](../../data/anchors/3-1-1/) (canonical orient
 - SAM: notebook T3 template coordinates via `t3_geometry.py`;
   `segment_order: [K, B2, A3, A2, A1, B1]` (paired with `h_ring_sign=-1`)
 
+## `uniform_k_snap` K-Y clamp (detection plumbing)
+
+With `uniform_k_snap=true`, all rings share one K prompt Y
+(`median` of anchor detections). That Y is clamped to the design rows
+already used by the assume path:
+
+| Parameter | Default | Meaning |
+|-----------|---------|---------|
+| `k_row_pattern` | `[1123.0, 1553.0]` | Allowed shared K rows (px) |
+| `k_row_tolerance` | `200.0` | Max distance before clamp/fail |
+| `k_row_action` | `"snap"` | `snap` / `fail` / `warn` |
+
+Writes `k_row_gate.json` beside `initial_points.csv`. Not part of the
+mIoU proxy — just T3 detection. Prefer `random_seed=10` for full-pipeline
+runs. Regression check: `./venv/bin/python bo/test_ystar_gate.py`.
+
 ## Run
 
 ```bash
