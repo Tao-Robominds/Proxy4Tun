@@ -1,0 +1,38 @@
+{
+  "target_miou": 0.7,
+  "baseline_unified_miou": 0.634,
+  "legacy_swapfalse_miou": 0.741,
+  "final_best_miou": 0.661,
+  "target_reached": false,
+  "winner": {
+    "tag": "F_nseg1-9_residual_recentre_seed0",
+    "mIoU": 0.661,
+    "params": {
+      "unfolding.random_seed": 0,
+      "unfolding.residual_recentre": true,
+      "unfolding.theta_sign": 1,
+      "enhancing.n_segment_start": 1,
+      "enhancing.n_segment_end": 9
+    },
+    "output_dir": "data/unified/4-1",
+    "command": "./venv/bin/python unified/run_unified.py --case 4-1 --overwrite"
+  },
+  "approaches_tried": [
+    "A: random_seed sweep under canonical orientation (peak 0.638)",
+    "B: h_ring_sign=-1 + reversed segment_order (collapsed to ~0.14)",
+    "C: mirror_k_geometry (no gain; sweep interrupted)",
+    "D/E: theta_sign=-1 (+/- reverse order) collapsed to 0.164 without reverse_circumferential; with reverse_circ recovered to 0.641 but below F",
+    "F: n_segment[1,9] + residual_recentre + seed0 → 0.661 (best)",
+    "H: other n_segment windows (no better than F)",
+    "I: K/AB joint scale (hurt badly)",
+    "J: segment_width (no effect under geometric fallback)",
+    "K: full SAM instead of geometric fallback (0.657)",
+    "L: geometric_ky_offset (hurt; peak at offset 0)"
+  ],
+  "conclusion": "Bounded deterministic retune improved 4-1 from 0.634 → 0.661 (+0.027 vs frozen anchor 0.635) but did not recover the legacy 0.741 / clear the 0.70 bar. The legacy 0.741 depended on an unpinned-RANSAC theta mirror that is not cleanly reachable via h_ring_sign or theta_sign under the current geometric tiler; further gains need a deeper detection/SAM redesign beyond this bounded sweep.",
+  "pass_fail_criteria": {
+    "miou_ge_0.70": false,
+    "deterministic_seeded": true,
+    "anchors_untouched": true
+  }
+}
