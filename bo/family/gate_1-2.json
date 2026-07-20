@@ -2,7 +2,7 @@
   "case": "1-2",
   "config_kind": "anchor",
   "command": "./venv/bin/python bo/run_holdout.py --gate # 1-2 full pipeline, params from anchors/t1&2/1-1, random_seed=10",
-  "lineage": "sibling anchor params anchors/t1&2/1-1 \u2192 data/1-2-family-proxy/runs/1-2-anchor; stages 1\u20136 via anchors/t1&2 scripts",
+  "lineage": "sibling anchor params anchors/t1&2/1-1 \u2192 data/bo/1-2-family-proxy/runs/1-2-anchor; stages 1\u20136 via anchors/t1&2 scripts",
   "pass_fail_criteria": {
     "pipeline_ok": true,
     "miou_finite_and_ge_0.30": true,
@@ -14,7 +14,7 @@
   "tier1_complete": true,
   "passed": true,
   "evidence_path": "/home/boringtao/Projects/Proxy4Tun/bo/family/gate_1-2.json",
-  "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/1-2-family-proxy/runs/1-2-anchor",
-  "log_path": "/home/boringtao/Projects/Proxy4Tun/data/1-2-family-proxy/logs/1-2-anchor.log",
-  "study_root": "/home/boringtao/Projects/Proxy4Tun/data/1-2-family-proxy"
+  "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/1-2-family-proxy/runs/1-2-anchor",
+  "log_path": "/home/boringtao/Projects/Proxy4Tun/data/bo/1-2-family-proxy/logs/1-2-anchor.log",
+  "study_root": "/home/boringtao/Projects/Proxy4Tun/data/bo/1-2-family-proxy"
 }

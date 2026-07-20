@@ -42,7 +42,7 @@ REPORT_PATH = FAMILY_DIR / "report.md"
 
 def load_campaign(case: str, study_root: Path | None = None) -> pd.DataFrame:
     """Load successful non-repeat trials from a BO campaign manifest."""
-    root = Path(study_root) if study_root else REPO_ROOT / "data" / f"{case}-bo-proxy"
+    root = Path(study_root) if study_root else REPO_ROOT / "data" / "bo" / f"{case}-bo-proxy"
     manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
     rows = []
     for t in manifest.get("trials", []):
@@ -128,7 +128,7 @@ def _calibrate_alarm(y: np.ndarray, pred: np.ndarray, low_q: float = 0.33) -> fl
 def load_family_training(family: str) -> pd.DataFrame:
     frames = []
     for case in FAMILY_TRAIN_CASES[family]:
-        root = REPO_ROOT / "data" / f"{case}-bo-proxy"
+        root = REPO_ROOT / "data" / "bo" / f"{case}-bo-proxy"
         if not (root / "manifest.json").exists():
             raise FileNotFoundError(f"Missing campaign for {case}: {root}")
         # Temporarily allow load_campaign for cases in CASE_CONFIG
@@ -146,7 +146,7 @@ def select_bad_configs() -> dict[str, Any]:
     for family, cases in FAMILY_TRAIN_CASES.items():
         best: dict[str, Any] | None = None
         for case in cases:
-            man_path = REPO_ROOT / "data" / f"{case}-bo-proxy" / "manifest.json"
+            man_path = REPO_ROOT / "data" / "bo" / f"{case}-bo-proxy" / "manifest.json"
             man = json.loads(man_path.read_text(encoding="utf-8"))
             for t in man.get("trials", []):
                 if t.get("status") != "ok" or t.get("mIoU") is None:
@@ -280,7 +280,7 @@ def train_family_proxies() -> dict[str, Any]:
 
 
 def _load_holdout_run(subset: str, config_kind: str) -> dict[str, Any] | None:
-    man_path = REPO_ROOT / "data" / f"{subset}-family-proxy" / "manifest.json"
+    man_path = REPO_ROOT / "data" / "bo" / f"{subset}-family-proxy" / "manifest.json"
     if not man_path.exists():
         return None
     man = json.loads(man_path.read_text(encoding="utf-8"))
@@ -425,7 +425,8 @@ def write_report(df: pd.DataFrame | None = None) -> Path:
     lines.append("- Feature set: **B1+B2lean** (GT-free).")
     lines.append("- Train within family; test on held-out sub-tunnels.")
     lines.append("- Per held-out subset: sibling **anchor** config + one frozen **known-bad** config.")
-    lines.append("- Training cases: t1&2=`1-1+2-1`, t3=`3-1-1`, t4&5=`4-1+5-1`.")
+    lines.append("- Training cases: t1&2=`1-1+2-1`, t3=`3-1+3-2`, t4&5=`4-1+5-1`.")
+    lines.append("- T3 subsets are ring windows of one scan (`data/3-1.txt`); holdouts are other sections, not other tunnels.")
     lines.append("")
 
     lines.append("## Training (within-family)")
@@ -572,9 +573,14 @@ def write_report(df: pd.DataFrame | None = None) -> Path:
     lines.append("## Limitations")
     lines.append("")
     lines.append("- Only two quality levels per held-out tunnel (anchor + one known-bad); not a full ranking study.")
-    lines.append("- t3 trained on a single tunnel (`3-1-1`); 3-1-1 geometry params (`segment_order`, `h_ring_sign`) may not transfer — alarm should catch that.")
+    lines.append(
+        "- T3 train/holdout sections are windows of the **same** physical scan "
+        "(`3-1`…`3-5`); transfer is cross-section, not cross-tunnel. "
+        "Sibling params come from `anchors/t3/3-1-1` (`segment_order`, `h_ring_sign`)."
+    )
     lines.append("- Known-bad configs are frozen from training-tunnel BO archives; transfer of *that specific failure mode* is assumed.")
     lines.append("- Sibling-anchor params are the honest deployment baseline, not per-tunnel retuning.")
+    lines.append("- t3 holdout anchor calibration remains biased low (proxy under-predicts good sections).")
     lines.append("")
     lines.append("## Confidence")
     lines.append("")
@@ -590,7 +596,7 @@ def write_report(df: pd.DataFrame | None = None) -> Path:
             conf = "Low–moderate"
         lines.append(
             f"**{conf}** based on holdout MAE={mae:.3f}, ranking accuracy="
-            f"{acc if acc is not None else 'n/a'}, and the single-tunnel t3 caveat."
+            f"{acc if acc is not None else 'n/a'}, and the T3 same-scan caveat."
         )
     lines.append("")
 

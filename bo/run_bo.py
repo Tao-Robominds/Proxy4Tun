@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """GP-based BO campaign for GT-free mIoU proxy discovery.
 
-Outputs under data/<case>-bo-proxy/ (never data/anchors, data/baseline, data/bo).
+Outputs under data/bo/<case>-bo-proxy/ (never data/anchors or data/baseline).
 """
 
 from __future__ import annotations
@@ -147,7 +147,7 @@ class BOCampaign:
         self.study_root = (
             Path(study_root).resolve()
             if study_root
-            else (REPO_ROOT / "data" / f"{case}-bo-proxy").resolve()
+            else (REPO_ROOT / "data" / "bo" / f"{case}-bo-proxy").resolve()
         )
         self.runs_root = self.study_root / "runs"
         self.params_root = self.study_root / "params"
@@ -267,7 +267,10 @@ class BOCampaign:
 
         # Prefer the promoted frozen anchor stage-1 artifacts (read-only copy).
         # This removes unseeded RANSAC variance from the campaign baseline.
-        frozen = REPO_ROOT / "data" / "anchors" / self.case
+        # ``frozen_anchor`` lets renamed cases (e.g. 3-1) reuse protected
+        # data/anchors/3-1-1 without moving the protected tree.
+        frozen_id = str(self.cfg.get("frozen_anchor") or self.case)
+        frozen = REPO_ROOT / "data" / "anchors" / frozen_id
         if prefer_frozen_anchor and (frozen / "state.pkl").exists() and (frozen / "unwrapped.csv").exists():
             for fname in CHECKPOINT_FILES:
                 src = frozen / fname
@@ -277,6 +280,7 @@ class BOCampaign:
                 "source": str(frozen),
                 "mode": "copy_from_frozen_anchor",
                 "case": self.case,
+                "frozen_anchor": frozen_id,
             }
             (self.ckpt_dir / "checkpoint_meta.json").write_text(
                 json.dumps(meta, indent=2) + "\n", encoding="utf-8"
@@ -451,44 +455,47 @@ class BOCampaign:
         rec = self.run_trial(
             tid, x0, "anchor_from_frozen_stage1", full_pipeline=False, force=force
         )
-        target = float(self.cfg["anchor_miou"])
+        target_raw = self.cfg.get("anchor_miou")
+        target = float(target_raw) if target_raw is not None else float("nan")
         miou = rec.mIoU if rec.mIoU is not None else float("nan")
-        delta = abs(miou - target) if math.isfinite(miou) else float("inf")
+        delta = abs(miou - target) if math.isfinite(miou) and math.isfinite(target) else float("inf")
         inv_ok = rec.metrics.get("orient_invariant_ok") == 1.0
         tier1_ok = has_complete_tier1(rec.metrics)
         if not inv_ok and rec.metrics.get("orient_h_ring_corr") is not None:
             corr = float(rec.metrics["orient_h_ring_corr"])
             h_sign = int(self.params_base["unfolding"].get("h_ring_sign", 1))
             inv_ok = (np.sign(corr) == np.sign(h_sign)) and abs(corr) > 0.5
+        miou_tol_ok = bool(math.isfinite(delta) and delta <= 0.02) if math.isfinite(target) else math.isfinite(miou)
         passed = (
             rec.status == "ok"
             and math.isfinite(miou)
-            and delta <= 0.02
+            and miou_tol_ok
             and inv_ok
             and tier1_ok
         )
+        frozen_id = str(self.cfg.get("frozen_anchor") or self.case)
         cmd = (
-            f"copy stage-1 from data/anchors/{self.case} → checkpoints/after_1; "
+            f"copy stage-1 from data/anchors/{frozen_id} → checkpoints/after_1; "
             f"then stages 2-6 via bo/run_bo.py with params {self.cfg['params_dir']}"
         )
         gate = {
             "case": self.case,
             "command": cmd,
             "lineage": (
-                "bo/run_bo.py --gate: frozen data/anchors/<case> stage-1 checkpoint "
+                "bo/run_bo.py --gate: frozen data/anchors/<frozen_anchor|case> stage-1 checkpoint "
                 "+ stages 2-6 with anchor params (avoids unseeded RANSAC drift)"
             ),
-            "target_mIoU": target,
+            "target_mIoU": target if math.isfinite(target) else None,
             "measured_mIoU": miou,
             "delta_mIoU": delta if math.isfinite(delta) else None,
-            "pass_miou_tol": bool(delta <= 0.02),
+            "pass_miou_tol": miou_tol_ok,
             "orient_h_ring_corr": rec.metrics.get("orient_h_ring_corr"),
             "orient_invariant_ok": inv_ok,
             "tier1_complete": tier1_ok,
-            "stage1_checkpoint_source": str(REPO_ROOT / "data" / "anchors" / self.case),
+            "stage1_checkpoint_source": str(REPO_ROOT / "data" / "anchors" / frozen_id),
             "pass_fail_criteria": {
                 "pipeline_ok": rec.status == "ok",
-                "miou_within_0.02_of_anchor": bool(delta <= 0.02),
+                "miou_within_0.02_of_anchor": miou_tol_ok,
                 "canonical_invariant_passed": inv_ok,
                 "intrinsics_tier1_no_nan": tier1_ok,
             },

@@ -42,12 +42,21 @@ CASE_CONFIG: dict[str, dict[str, Any]] = {
         "anchor_miou": 0.874,
         "expected_rings": 10,
     },
-    "3-1-1": {
+    "3-1": {
         "family": "t3",
         "profile": "t3",
-        "params_dir": "anchors/t3/3-1-1",
-        "input_txt": "data/subsets/3-1-1.txt",
+        "params_dir": "anchors/t3/3-1-1",  # protected anchor params (unchanged)
+        "frozen_anchor": "3-1-1",  # protected data/anchors/3-1-1 stage-1
+        "input_txt": "data/subsets/3-1.txt",
         "anchor_miou": 0.850,
+        "expected_rings": 10,
+    },
+    "3-2": {
+        "family": "t3",
+        "profile": "t3",
+        "params_dir": "anchors/t3/3-1-1",  # sibling params; no dedicated 3-2 anchor
+        "input_txt": "data/subsets/3-2.txt",
+        "anchor_miou": 0.631,  # from seeded stage-1 gate run (data/bo/3-2-bo-proxy)
         "expected_rings": 10,
     },
     "4-1": {
@@ -71,13 +80,13 @@ CASE_CONFIG: dict[str, dict[str, Any]] = {
 # Per-family training cases (BO campaigns) and held-out evaluation subsets.
 FAMILY_TRAIN_CASES: dict[str, tuple[str, ...]] = {
     "t1&2": ("1-1", "2-1"),
-    "t3": ("3-1-1",),
+    "t3": ("3-1", "3-2"),
     "t4&5": ("4-1", "5-1"),
 }
 
 FAMILY_HOLDOUT_SUBSETS: dict[str, tuple[str, ...]] = {
     "t1&2": ("1-2", "1-3", "1-4", "1-5", "2-2", "2-3", "2-4", "2-5"),
-    "t3": ("3-1-2", "3-1-3"),
+    "t3": ("3-3", "3-4", "3-5"),
     "t4&5": (
         "4-2",
         "4-3",
@@ -114,8 +123,8 @@ def sibling_anchor_case(subset: str) -> str:
         return "1-1"
     if subset.startswith("2-"):
         return "2-1"
-    if subset.startswith("3-1-"):
-        return "3-1-1"
+    if subset.startswith("3-"):
+        return "3-1"
     if subset.startswith("4-"):
         return "4-1"
     if subset.startswith("5-"):

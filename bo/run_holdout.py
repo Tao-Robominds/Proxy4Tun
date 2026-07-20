@@ -2,7 +2,7 @@
 """Held-out subset runner for per-family proxy evaluation.
 
 Runs sibling-anchor (and optionally known-bad) configs on unseen sub-tunnels.
-Outputs under data/<subset>-family-proxy/ (never data/anchors|baseline|bo).
+Outputs under data/bo/<subset>-family-proxy/ (never data/anchors or data/baseline).
 """
 
 from __future__ import annotations
@@ -112,7 +112,7 @@ def _load_bad_overlay(family: str) -> dict[str, dict[str, Any]]:
 
 
 def study_root_for(subset: str) -> Path:
-    return (REPO_ROOT / "data" / f"{subset}-family-proxy").resolve()
+    return (REPO_ROOT / "data" / "bo" / f"{subset}-family-proxy").resolve()
 
 
 def run_holdout_config(
@@ -246,14 +246,15 @@ def run_holdout_config(
     return rec
 
 
-def run_gate_1_2(*, force: bool = False) -> dict[str, Any]:
+def run_holdout_gate(subset: str, *, force: bool = False, floor: float = 0.30) -> dict[str, Any]:
     """Single-instance validation before scaling held-out evaluation.
 
-    Case: 1-2 with sibling 1-1 anchor params, random_seed=10, full pipeline.
-    Pass if pipeline ok, mIoU finite and >= 0.30, Tier-1 complete.
-    (No promoted anchor mIoU for 1-2 — floor proves eval + intrinsics work.)
+    Full pipeline with sibling anchor params and random_seed=10.
+    Pass if pipeline ok, mIoU finite and >= floor, Tier-1 complete.
     """
-    subset = "1-2"
+    from spaces import holdout_case_config
+
+    cfg = holdout_case_config(subset)
     FAMILY_DIR.mkdir(parents=True, exist_ok=True)
     rec = run_holdout_config(subset, "anchor", random_seed=10, force=force)
     miou = rec.get("mIoU")
@@ -261,23 +262,25 @@ def run_gate_1_2(*, force: bool = False) -> dict[str, Any]:
     passed = (
         rec["status"] == "ok"
         and math.isfinite(miou_f)
-        and miou_f >= 0.30
+        and miou_f >= floor
         and bool(rec["tier1_complete"])
     )
+    evidence = FAMILY_DIR / f"gate_{subset}.json"
     gate = {
         "case": subset,
         "config_kind": "anchor",
         "command": (
-            "./venv/bin/python bo/run_holdout.py --gate "
-            "# 1-2 full pipeline, params from anchors/t1&2/1-1, random_seed=10"
+            f"./venv/bin/python bo/run_holdout.py --gate-subset {subset} "
+            f"# full pipeline, params from {cfg['params_dir']}, random_seed=10"
         ),
         "lineage": (
-            "sibling anchor params anchors/t1&2/1-1 → data/1-2-family-proxy/runs/1-2-anchor; "
-            "stages 1–6 via anchors/t1&2 scripts"
+            f"sibling anchor params {cfg['params_dir']} → "
+            f"data/bo/{subset}-family-proxy/runs/{subset}-anchor; "
+            f"stages 1–6 via anchors/{cfg['profile']} scripts"
         ),
         "pass_fail_criteria": {
             "pipeline_ok": rec["status"] == "ok",
-            "miou_finite_and_ge_0.30": bool(math.isfinite(miou_f) and miou_f >= 0.30),
+            f"miou_finite_and_ge_{floor}": bool(math.isfinite(miou_f) and miou_f >= floor),
             "intrinsics_tier1_no_nan": bool(rec["tier1_complete"]),
         },
         "measured_mIoU": miou,
@@ -285,17 +288,21 @@ def run_gate_1_2(*, force: bool = False) -> dict[str, Any]:
         "orient_invariant_ok": rec.get("orient_invariant_ok"),
         "tier1_complete": rec["tier1_complete"],
         "passed": passed,
-        "evidence_path": str(FAMILY_DIR / "gate_1-2.json"),
+        "evidence_path": str(evidence),
         "output_dir": rec["output_dir"],
         "log_path": rec["log_path"],
         "study_root": str(study_root_for(subset)),
     }
-    out = FAMILY_DIR / "gate_1-2.json"
-    out.write_text(json.dumps(gate, indent=2) + "\n", encoding="utf-8")
+    evidence.write_text(json.dumps(gate, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(gate, indent=2))
     if not passed:
-        raise RuntimeError(f"Holdout validation gate FAILED for 1-2; see {out}")
+        raise RuntimeError(f"Holdout validation gate FAILED for {subset}; see {evidence}")
     return gate
+
+
+def run_gate_1_2(*, force: bool = False) -> dict[str, Any]:
+    """Back-compat wrapper for the original 1-2 gate."""
+    return run_holdout_gate("1-2", force=force)
 
 
 def all_holdout_subsets() -> list[str]:
@@ -324,6 +331,12 @@ def run_all_holdout(
 def main() -> None:
     p = argparse.ArgumentParser(description="Per-family held-out subset runner")
     p.add_argument("--gate", action="store_true", help="Single-instance gate on 1-2")
+    p.add_argument(
+        "--gate-subset",
+        type=str,
+        default=None,
+        help="Single-instance gate on a held-out subset (e.g. 3-4)",
+    )
     p.add_argument("--subset", type=str, default=None, help="e.g. 1-3")
     p.add_argument(
         "--config",
@@ -337,6 +350,9 @@ def main() -> None:
     p.add_argument("--seed", type=int, default=10)
     args = p.parse_args()
 
+    if args.gate_subset:
+        run_holdout_gate(args.gate_subset, force=args.force)
+        return
     if args.gate:
         run_gate_1_2(force=args.force)
         return
@@ -356,7 +372,7 @@ def main() -> None:
             run_holdout_config(args.subset, kind, random_seed=args.seed, force=args.force)
         return
 
-    p.error("Specify --gate, --subset, or --all")
+    p.error("Specify --gate, --gate-subset, --subset, or --all")
 
 
 if __name__ == "__main__":
