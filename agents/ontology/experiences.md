@@ -11,7 +11,7 @@ Sources: `reports/orientation-sensitivity.md`,
 `reports/critical-parameters-experiment.md`,
 `reports/t3-3-1-1-corrected-vs-literal.md`, `reports/t45-5-1-depth-improvement.md`,
 `reports/t45-4-1-swap-ab.md`, `reports/unified.md`, `bo-unified/report.md`,
-`bo-unified/ablation.md`.
+`bo-unified/ablation.md`, `bo-elegant/report.md`.
 
 ---
 
@@ -164,14 +164,17 @@ stages 1–3 are healthy before touching detection/SAM parameters.
 
 ## 9. Proxy score: how to read it during reflection
 
-- The per-family B1+B2lean proxy ranks anchor vs bad 24/24 and its alarm has
-  precision 1.00, but absolute calibration varies by family (t1&2 anchor MAE
-  0.095, t4&5 0.074, t3 0.295). Use it as a **directional** improvement
-  signal; corroborate any claimed improvement against the artifacts
-  themselves (line count, NaN fraction, permutation signature).
+- Prefer the **bo-elegant** unified lean proxy (§11) for new reflection
+  loops. The earlier per-family B1+B2lean (`bo-unified`) still ranks
+  anchor vs bad 24/24 with alarm precision 1.00, but absolute calibration
+  varies by family (t1&2 anchor MAE 0.095, t4&5 0.074, t3 0.295). In either
+  case use the score as a **directional** improvement signal; corroborate
+  against the artifacts themselves (line count, NaN fraction, permutation
+  signature).
 - A proxy *increase* driven purely by evidence features (retention, NaN,
-  detection ratios) while B1 coherence features degrade is suspect —
-  cosmetic fixes (hole-fill) produced exactly this pattern and lost mIoU.
+  detection ratios) while coherence features (`sam_fill_rate`,
+  `det_real_detection_ratio`) degrade is suspect — cosmetic fixes
+  (hole-fill) produced exactly this pattern and lost mIoU.
 
 ## 10. Anti-patterns observed in past campaigns
 
@@ -185,3 +188,58 @@ stages 1–3 are healthy before touching detection/SAM parameters.
 - Rerunning stage 1 mid-comparison: it re-rolls the centreline and confounds
   attribution (the `literal-orientfix` confound). Keep stage-1 artifacts
   frozen and replay stages 2–6 when comparing parameter overlays.
+
+## 11. bo-elegant: 3-anchor unified lean proxy
+
+Deployment default for label-free control is the **bo-elegant v2** pooled
+Ridge (`bo-elegant/family/models_v2.json`). v1 (`models.json`) is retained
+for side-by-side comparison only. See `bo-elegant/t3_review.md` and
+`bo-elegant/report.md` (Proxy v2 section).
+
+### Regime-mismatch lesson (critical)
+
+Any feature whose value is set by a **strategy switch** rather than measured
+quality must not enter a cross-family proxy. Concrete case:
+`uniform_k_snap=true` on continuous rewrites every `Type` to `propagated`,
+so `det_real_detection_ratio=0` on every healthy t3 run — even when
+`k_row_gate.json` proves real anchors (`n_anchor_ys=10` on 3-6, residual
+5.6 px). v1 put +0.136 weight on that ratio and docked every continuous
+holdout by ~0.18 proxy points (MAE_anchor 0.312). **Use the strategy's own
+residual** (`k_row_gate.distance_px` → `det_row_residual_px`) instead of the
+post-strategy Type histogram.
+
+### v2 lean features (5)
+
+- Evidence: `depth_nan_ratio` (+0.090), (`denoise_retained_ratio` pruned)
+- Coherence: `sam_fill_rate` (+0.376), `det_row_residual_px` (−0.180,
+  log1p of gate distance; **only when `det_row_gated=1`**),
+  `det_row_gated` (+0.170), `sam_ontology_divergence` (+0.043)
+- Dropped: `det_real_detection_ratio` (regime-confounded; diagnostic only),
+  `det_row_y_std`, `phase_incoherence_deg` (still useful as an OR-ed alarm
+  backstop via `phase_check.py`, not in the lean Ridge)
+
+### Holdout (54 runs)
+
+| Metric | v1 | v2 |
+|---|---:|---:|
+| Pooled MAE | 0.113 | **0.094** |
+| Spearman | 0.719 | **0.808** |
+| Ranking | 27/27 | 27/27 |
+| Alarm P / R | 0.87 / 0.96 | **1.00 / 1.00** |
+| Continuous MAE_anchor | 0.312 | **0.108** |
+| 3-6 proxy (mIoU 0.836) | 0.384 | **0.809** |
+
+Continuous v1 false alarms (`3-4`, `3-5`, `3-6`, `3-8`) are cleared.
+Staggered/complex MAE stays within ~0.02 of v1. Training: artifact-keeping
+trials under `data/bo-elegant/{2-1,3-1,5-1}-trials/` (stage-1 frozen from
+`data/anchors`, stages 2–6 overlays).
+
+### How the reflective agent should read v2
+
+- Prefer absolute proxy level again on continuous (no longer forced to
+  deltas-only), but still corroborate against `k_row_gate.json` residual
+  (single-digit px = healthy), fill rate, and phase incoherence.
+- A high proxy with `det_row_gated=0` and washed-out depth/joints is still
+  suspect (complex mid-quality case `4-4` remains the hard FN pattern).
+- Do **not** treat rising `det_real_detection_ratio` as a continuous-family
+  success signal under snap — check the gate residual instead.

@@ -1,0 +1,152 @@
+{
+  "version": 2,
+  "created_at": "2026-07-22T20:58:52.211428",
+  "train_anchors": [
+    "2-1",
+    "3-1",
+    "5-1"
+  ],
+  "n_train_rows": 63,
+  "train_case_counts": {
+    "2-1": 14,
+    "3-1": 35,
+    "5-1": 14
+  },
+  "candidate_features": {
+    "Evidence": [
+      "depth_nan_ratio",
+      "denoise_retained_ratio"
+    ],
+    "Coherence": [
+      "sam_fill_rate",
+      "sam_ontology_divergence",
+      "det_row_residual_px",
+      "det_row_gated",
+      "det_row_y_std",
+      "phase_incoherence_deg"
+    ]
+  },
+  "dropped_upfront": {
+    "det_real_detection_ratio": "regime-confounded under uniform_k_snap: healthy continuous runs rewrite Types to propagated so ratio=0 even when k_row_gate proves real anchors; docks every continuous holdout by ~0.18 proxy points",
+    "depth_outlier_ratio": "permutation-control failure of full B2 (family-conditional)",
+    "det_fallback_ratio": "exact complement of det_real_detection_ratio; keep diagnostic only",
+    "det_midpoint_ratio": "regime-constant / near-zero coef in pooled model",
+    "det_n_points": "regime-constant / near-zero coef",
+    "det_ring_count_error": "near-zero coef everywhere",
+    "det_x_spacing_cv": "near-zero coef everywhere",
+    "det_y_std": "sentinel 0 under all-propagated Types; replaced by det_row_y_std",
+    "sam_segment_size_cv": "near-zero coef everywhere",
+    "sam_ring_completeness": "redundant with sam_fill_rate in v1 ablation"
+  },
+  "selected_set": "loo_det_row_y_std+pruned",
+  "features": [
+    "sam_fill_rate",
+    "sam_ontology_divergence",
+    "det_row_residual_px",
+    "det_row_gated",
+    "depth_nan_ratio"
+  ],
+  "model": {
+    "scaler_mean": [
+      0.530149450082394,
+      0.24186073830790214,
+      1.1498778556999523,
+      0.25396825396825395,
+      0.3313256611822339
+    ],
+    "scaler_scale": [
+      0.2562641811518183,
+      0.08751697543127564,
+      2.116984054380404,
+      0.43527965716832023,
+      0.2742010057398581
+    ],
+    "coef": [
+      0.3754665997338326,
+      0.04341118888509733,
+      -0.17988304915240044,
+      0.16957140824755562,
+      0.0901890093678428
+    ],
+    "intercept": 0.5017460317460316,
+    "alpha": 0.5623413251903491,
+    "features": [
+      "sam_fill_rate",
+      "sam_ontology_divergence",
+      "det_row_residual_px",
+      "det_row_gated",
+      "depth_nan_ratio"
+    ],
+    "n_train": 63,
+    "train_mae": 0.12187514802073235,
+    "train_spearman": 0.8294445266119028,
+    "train_pearson": 0.8539239123652682
+  },
+  "full_candidate_model": {
+    "scaler_mean": [
+      0.3313256611822339,
+      0.5690464730926047,
+      0.530149450082394,
+      0.24186073830790214,
+      1.1498778556999523,
+      0.25396825396825395,
+      113.07658976972705,
+      7.023809523809523
+    ],
+    "scaler_scale": [
+      0.2742010057398581,
+      0.26287149032070056,
+      0.2562641811518183,
+      0.08751697543127564,
+      2.116984054380404,
+      0.43527965716832023,
+      212.92735697450811,
+      8.678612907340945
+    ],
+    "coef": [
+      0.02551136839215222,
+      -0.03445408353446483,
+      0.34766046267836875,
+      0.06080972182783714,
+      -0.1860314717753569,
+      0.17918351073450317,
+      0.03632513199855236,
+      -0.001317235744400902
+    ],
+    "intercept": 0.5017460317460316,
+    "alpha": 0.5623413251903491,
+    "features": [
+      "depth_nan_ratio",
+      "denoise_retained_ratio",
+      "sam_fill_rate",
+      "sam_ontology_divergence",
+      "det_row_residual_px",
+      "det_row_gated",
+      "det_row_y_std",
+      "phase_incoherence_deg"
+    ],
+    "n_train": 63,
+    "train_mae": 0.1228438020970536,
+    "train_spearman": 0.8165538453167738,
+    "train_pearson": 0.8561879288079062
+  },
+  "alarm_threshold": 0.43021744773224424,
+  "low_miou_floor": 0.20166,
+  "permutation": {
+    "real_mae": 0.12187514802073235,
+    "real_spearman": 0.8294445266119028,
+    "perm_mae_mean": 0.2908714626351184,
+    "perm_mae_std": 0.01606940940650072,
+    "perm_spearman_mean": 0.22809484431896312,
+    "perm_spearman_std": 0.08666485481673628,
+    "pass": true,
+    "n_repeats": 20
+  },
+  "selection": {
+    "train_mae": 0.12187514802073235,
+    "train_spearman": 0.8294445266119028,
+    "lolo_mae": 0.15018316964992903,
+    "lolo_spearman": 0.41966969981935764
+  },
+  "provenance": "data/bo-elegant/<case>-trials manifests + data/anchors/{2-1,3-1,5-1}; regime-neutral coherence features"
+}

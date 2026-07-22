@@ -1,0 +1,224 @@
+{
+  "variants": [
+    {
+      "set": "Evidence",
+      "n_features": 2,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio"
+      ],
+      "train_mae": 0.1421232733839186,
+      "train_spearman": 0.6147810821572106,
+      "train_pearson": 0.7959274455046874,
+      "lolo_mae": 0.18086310723365018,
+      "lolo_spearman": 0.46877361347535845,
+      "coef_abs": {
+        "depth_nan_ratio": 0.20427463999614837,
+        "denoise_retained_ratio": 0.46300990676030374
+      },
+      "alpha": 0.1
+    },
+    {
+      "set": "Coherence",
+      "n_features": 4,
+      "features": [
+        "det_real_detection_ratio",
+        "sam_fill_rate",
+        "sam_ring_completeness",
+        "sam_ontology_divergence"
+      ],
+      "train_mae": 0.10355292254606774,
+      "train_spearman": 0.8136930337234225,
+      "train_pearson": 0.8881028091425226,
+      "lolo_mae": 0.16554666123420891,
+      "lolo_spearman": 0.7791734225499486,
+      "coef_abs": {
+        "det_real_detection_ratio": 0.1339429060477424,
+        "sam_fill_rate": 0.20420252482675272,
+        "sam_ring_completeness": 0.0058719352223497445,
+        "sam_ontology_divergence": 0.012106578389483424
+      },
+      "alpha": 1.7782794100389228
+    },
+    {
+      "set": "Evidence+Coherence",
+      "n_features": 6,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "det_real_detection_ratio",
+        "sam_fill_rate",
+        "sam_ring_completeness",
+        "sam_ontology_divergence"
+      ],
+      "train_mae": 0.1011600056482588,
+      "train_spearman": 0.8162273687308043,
+      "train_pearson": 0.8890179038942928,
+      "lolo_mae": 0.16661097064417604,
+      "lolo_spearman": 0.7888501123605867,
+      "coef_abs": {
+        "depth_nan_ratio": 0.050064896293254224,
+        "denoise_retained_ratio": 0.07357373123812702,
+        "det_real_detection_ratio": 0.1349590017380815,
+        "sam_fill_rate": 0.18158122708735933,
+        "sam_ring_completeness": 0.0036183009961744395,
+        "sam_ontology_divergence": 0.016610378081988036
+      },
+      "alpha": 1.7782794100389228
+    },
+    {
+      "set": "loo_depth_nan_ratio",
+      "n_features": 5,
+      "features": [
+        "denoise_retained_ratio",
+        "det_real_detection_ratio",
+        "sam_fill_rate",
+        "sam_ring_completeness",
+        "sam_ontology_divergence"
+      ],
+      "train_mae": 0.1027580398540052,
+      "train_spearman": 0.8143980742893857,
+      "train_pearson": 0.8879951470247959,
+      "lolo_mae": 0.2050095179636878,
+      "lolo_spearman": 0.7800660286461069,
+      "coef_abs": {
+        "denoise_retained_ratio": 0.02009733338001296,
+        "det_real_detection_ratio": 0.13420362608730585,
+        "sam_fill_rate": 0.190863942491132,
+        "sam_ring_completeness": 0.01103738085796091,
+        "sam_ontology_divergence": 0.016812518829763257
+      },
+      "alpha": 1.0
+    },
+    {
+      "set": "loo_denoise_retained_ratio",
+      "n_features": 5,
+      "features": [
+        "depth_nan_ratio",
+        "det_real_detection_ratio",
+        "sam_fill_rate",
+        "sam_ring_completeness",
+        "sam_ontology_divergence"
+      ],
+      "train_mae": 0.10352396562325034,
+      "train_spearman": 0.8138883490153447,
+      "train_pearson": 0.8881854317052905,
+      "lolo_mae": 0.17291413355932703,
+      "lolo_spearman": 0.7920519413524453,
+      "coef_abs": {
+        "depth_nan_ratio": 0.002802765678698249,
+        "det_real_detection_ratio": 0.13397397642336495,
+        "sam_fill_rate": 0.20645222922074535,
+        "sam_ring_completeness": 0.005110441524737275,
+        "sam_ontology_divergence": 0.01200002997108987
+      },
+      "alpha": 1.7782794100389228
+    },
+    {
+      "set": "loo_det_real_detection_ratio",
+      "n_features": 5,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "sam_fill_rate",
+        "sam_ring_completeness",
+        "sam_ontology_divergence"
+      ],
+      "train_mae": 0.13355882043532946,
+      "train_spearman": 0.6484848794828231,
+      "train_pearson": 0.8259241670654258,
+      "lolo_mae": 0.16985818359158675,
+      "lolo_spearman": 0.47621032415100445,
+      "coef_abs": {
+        "depth_nan_ratio": 0.015453166189513645,
+        "denoise_retained_ratio": 0.0383471086001938,
+        "sam_fill_rate": 0.2680441129163158,
+        "sam_ring_completeness": 0.027303144363528764,
+        "sam_ontology_divergence": 0.01751688673791643
+      },
+      "alpha": 1.7782794100389228
+    },
+    {
+      "set": "loo_sam_fill_rate",
+      "n_features": 5,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "det_real_detection_ratio",
+        "sam_ring_completeness",
+        "sam_ontology_divergence"
+      ],
+      "train_mae": 0.10035293120938167,
+      "train_spearman": 0.8119304323085141,
+      "train_pearson": 0.8817200133998643,
+      "lolo_mae": 0.17223147661615035,
+      "lolo_spearman": 0.7503044654263521,
+      "coef_abs": {
+        "depth_nan_ratio": 0.22470431465653284,
+        "denoise_retained_ratio": 0.4148904991138034,
+        "det_real_detection_ratio": 0.1508839869870151,
+        "sam_ring_completeness": 0.004547444478912865,
+        "sam_ontology_divergence": 0.02324254601457687
+      },
+      "alpha": 0.1
+    },
+    {
+      "set": "loo_sam_ring_completeness",
+      "n_features": 5,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "det_real_detection_ratio",
+        "sam_fill_rate",
+        "sam_ontology_divergence"
+      ],
+      "train_mae": 0.10023103663240811,
+      "train_spearman": 0.8188903260035982,
+      "train_pearson": 0.889772529435343,
+      "lolo_mae": 0.16881389299825114,
+      "lolo_spearman": 0.6623457612042684,
+      "coef_abs": {
+        "depth_nan_ratio": 0.08062845054452472,
+        "denoise_retained_ratio": 0.08983185336787963,
+        "det_real_detection_ratio": 0.13550794212251915,
+        "sam_fill_rate": 0.19623631029437466,
+        "sam_ontology_divergence": 0.019968697077284103
+      },
+      "alpha": 1.0
+    },
+    {
+      "set": "loo_sam_ontology_divergence",
+      "n_features": 5,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "det_real_detection_ratio",
+        "sam_fill_rate",
+        "sam_ring_completeness"
+      ],
+      "train_mae": 0.10150486725392156,
+      "train_spearman": 0.809615231531094,
+      "train_pearson": 0.88808094883022,
+      "lolo_mae": 0.1589620304209283,
+      "lolo_spearman": 0.7931908271618028,
+      "coef_abs": {
+        "depth_nan_ratio": 0.04536186041116658,
+        "denoise_retained_ratio": 0.06161111455338844,
+        "det_real_detection_ratio": 0.135024773701792,
+        "sam_fill_rate": 0.17551989634342596,
+        "sam_ring_completeness": 0.004703293043014312
+      },
+      "alpha": 1.7782794100389228
+    }
+  ],
+  "dropped_upfront": {
+    "depth_outlier_ratio": "permutation-control failure of full B2 (family-conditional)",
+    "det_fallback_ratio": "exact complement of det_real_detection_ratio; keep one",
+    "det_midpoint_ratio": "regime-constant / near-zero coef in pooled model",
+    "det_n_points": "regime-constant / near-zero coef",
+    "det_ring_count_error": "near-zero coef everywhere",
+    "det_x_spacing_cv": "near-zero coef everywhere",
+    "det_y_std": "near-zero coef everywhere",
+    "sam_segment_size_cv": "near-zero coef everywhere"
+  }
+}

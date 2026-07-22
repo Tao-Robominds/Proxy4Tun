@@ -1,0 +1,314 @@
+{
+  "variants": [
+    {
+      "set": "Evidence",
+      "n_features": 2,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio"
+      ],
+      "train_mae": 0.1502754492314125,
+      "train_spearman": 0.750351086151367,
+      "train_pearson": 0.7825520479648335,
+      "lolo_mae": 0.15530191220089112,
+      "lolo_spearman": 0.4545162000122849,
+      "coef_abs": {
+        "depth_nan_ratio": 0.10270801982228903,
+        "denoise_retained_ratio": 0.35484239940972306
+      },
+      "alpha": 0.1778279410038923
+    },
+    {
+      "set": "Coherence",
+      "n_features": 6,
+      "features": [
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.12250899421187436,
+      "train_spearman": 0.814729465841113,
+      "train_pearson": 0.8529809689954968,
+      "lolo_mae": 0.5332106531674714,
+      "lolo_spearman": 0.4243477559297219,
+      "coef_abs": {
+        "sam_fill_rate": 0.2844814997189733,
+        "sam_ontology_divergence": 0.05638269675983161,
+        "det_row_residual_px": 0.17530780345313926,
+        "det_row_gated": 0.16477620530219766,
+        "det_row_y_std": 0.03670870825585615,
+        "phase_incoherence_deg": 0.0025554633239889823
+      },
+      "alpha": 1.0
+    },
+    {
+      "set": "Evidence+Coherence",
+      "n_features": 8,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.1228438020970536,
+      "train_spearman": 0.8165538453167738,
+      "train_pearson": 0.8561879288079062,
+      "lolo_mae": 0.5502226377143443,
+      "lolo_spearman": 0.4090285268942395,
+      "coef_abs": {
+        "depth_nan_ratio": 0.02551136839215222,
+        "denoise_retained_ratio": 0.03445408353446483,
+        "sam_fill_rate": 0.34766046267836875,
+        "sam_ontology_divergence": 0.06080972182783714,
+        "det_row_residual_px": 0.1860314717753569,
+        "det_row_gated": 0.17918351073450317,
+        "det_row_y_std": 0.03632513199855236,
+        "phase_incoherence_deg": 0.001317235744400902
+      },
+      "alpha": 0.5623413251903491
+    },
+    {
+      "set": "loo_depth_nan_ratio",
+      "n_features": 7,
+      "features": [
+        "denoise_retained_ratio",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.12301351371449094,
+      "train_spearman": 0.8185222547510395,
+      "train_pearson": 0.8559221241469512,
+      "lolo_mae": 0.5798015627708785,
+      "lolo_spearman": 0.4159875669134068,
+      "coef_abs": {
+        "denoise_retained_ratio": 0.05404794398081169,
+        "sam_fill_rate": 0.3412649387989852,
+        "sam_ontology_divergence": 0.05967849400036038,
+        "det_row_residual_px": 0.18675807688177237,
+        "det_row_gated": 0.1792968948349733,
+        "det_row_y_std": 0.03734956194569272,
+        "phase_incoherence_deg": 0.0005725533058084098
+      },
+      "alpha": 0.5623413251903491
+    },
+    {
+      "set": "loo_denoise_retained_ratio",
+      "n_features": 7,
+      "features": [
+        "depth_nan_ratio",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.1223861942610799,
+      "train_spearman": 0.812953096351654,
+      "train_pearson": 0.8531870771809776,
+      "lolo_mae": 0.5708020021036689,
+      "lolo_spearman": 0.4131852689191113,
+      "coef_abs": {
+        "depth_nan_ratio": 0.004149143950427807,
+        "sam_fill_rate": 0.288488827104333,
+        "sam_ontology_divergence": 0.05636419383332125,
+        "det_row_residual_px": 0.17498658336372686,
+        "det_row_gated": 0.16471545861374354,
+        "det_row_y_std": 0.03649495055828439,
+        "phase_incoherence_deg": 0.00206884415922326
+      },
+      "alpha": 1.0
+    },
+    {
+      "set": "loo_sam_fill_rate",
+      "n_features": 7,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.1315765186038912,
+      "train_spearman": 0.7832589198859659,
+      "train_pearson": 0.8321717536522253,
+      "lolo_mae": 0.6179530612699382,
+      "lolo_spearman": 0.39250191538970025,
+      "coef_abs": {
+        "depth_nan_ratio": 0.08136925250002675,
+        "denoise_retained_ratio": 0.18925416744901866,
+        "sam_ontology_divergence": 0.048092578142827525,
+        "det_row_residual_px": 0.19596424620358135,
+        "det_row_gated": 0.16990669440277936,
+        "det_row_y_std": 0.05072673797731975,
+        "phase_incoherence_deg": 0.011572988061026357
+      },
+      "alpha": 1.0
+    },
+    {
+      "set": "loo_sam_ontology_divergence",
+      "n_features": 7,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "sam_fill_rate",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.12433188602528401,
+      "train_spearman": 0.8167938952477818,
+      "train_pearson": 0.8493379132605481,
+      "lolo_mae": 0.5872499124679608,
+      "lolo_spearman": 0.4177991210335072,
+      "coef_abs": {
+        "depth_nan_ratio": 0.0013883945452614899,
+        "denoise_retained_ratio": 0.08426627339385734,
+        "sam_fill_rate": 0.33560485876970614,
+        "det_row_residual_px": 0.17928246168123962,
+        "det_row_gated": 0.1719906071471365,
+        "det_row_y_std": 0.007423378580683093,
+        "phase_incoherence_deg": 0.007463111473159145
+      },
+      "alpha": 0.5623413251903491
+    },
+    {
+      "set": "loo_det_row_residual_px",
+      "n_features": 7,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.13590264884393244,
+      "train_spearman": 0.7815545653758091,
+      "train_pearson": 0.8281140972251233,
+      "lolo_mae": 0.5397139574039038,
+      "lolo_spearman": 0.4068234538891829,
+      "coef_abs": {
+        "depth_nan_ratio": 0.050386207307892575,
+        "denoise_retained_ratio": 0.07644867482507856,
+        "sam_fill_rate": 0.4169755641153827,
+        "sam_ontology_divergence": 0.05109336319455332,
+        "det_row_gated": 0.010918473433398856,
+        "det_row_y_std": 0.021710082487709892,
+        "phase_incoherence_deg": 0.002420631835037823
+      },
+      "alpha": 0.5623413251903491
+    },
+    {
+      "set": "loo_det_row_gated",
+      "n_features": 7,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.13656878956932747,
+      "train_spearman": 0.7618464660400532,
+      "train_pearson": 0.8244061020750834,
+      "lolo_mae": 0.43969347670484504,
+      "lolo_spearman": 0.4068234538891829,
+      "coef_abs": {
+        "depth_nan_ratio": 0.010037756156570453,
+        "denoise_retained_ratio": 0.000355289559556134,
+        "sam_fill_rate": 0.2968578323405793,
+        "sam_ontology_divergence": 0.04789822875171665,
+        "det_row_residual_px": 0.02687718447294707,
+        "det_row_y_std": 0.02554863027305876,
+        "phase_incoherence_deg": 0.002230348375181268
+      },
+      "alpha": 1.0
+    },
+    {
+      "set": "loo_det_row_y_std",
+      "n_features": 7,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.12369718466954112,
+      "train_spearman": 0.8194824544750714,
+      "train_pearson": 0.8549843551461455,
+      "lolo_mae": 0.15356453927733557,
+      "lolo_spearman": 0.4516510163617375,
+      "coef_abs": {
+        "depth_nan_ratio": 0.03467072426235518,
+        "denoise_retained_ratio": 0.031779329331660985,
+        "sam_fill_rate": 0.35862737605175005,
+        "sam_ontology_divergence": 0.04994275137842136,
+        "det_row_residual_px": 0.18221448085447395,
+        "det_row_gated": 0.17581226218559742,
+        "phase_incoherence_deg": 0.023844602797273518
+      },
+      "alpha": 0.5623413251903491
+    },
+    {
+      "set": "loo_phase_incoherence_deg",
+      "n_features": 7,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std"
+      ],
+      "train_mae": 0.12290560699157685,
+      "train_spearman": 0.8165538453167738,
+      "train_pearson": 0.8561670337500323,
+      "lolo_mae": 0.5343476240987943,
+      "lolo_spearman": 0.411641689468314,
+      "coef_abs": {
+        "depth_nan_ratio": 0.024771136698340926,
+        "denoise_retained_ratio": 0.03453164844859656,
+        "sam_fill_rate": 0.34731791383828703,
+        "sam_ontology_divergence": 0.060665088737668654,
+        "det_row_residual_px": 0.18598870402287487,
+        "det_row_gated": 0.1792340860749092,
+        "det_row_y_std": 0.03522279584430721
+      },
+      "alpha": 0.5623413251903491
+    }
+  ],
+  "dropped_upfront": {
+    "det_real_detection_ratio": "regime-confounded under uniform_k_snap: healthy continuous runs rewrite Types to propagated so ratio=0 even when k_row_gate proves real anchors; docks every continuous holdout by ~0.18 proxy points",
+    "depth_outlier_ratio": "permutation-control failure of full B2 (family-conditional)",
+    "det_fallback_ratio": "exact complement of det_real_detection_ratio; keep diagnostic only",
+    "det_midpoint_ratio": "regime-constant / near-zero coef in pooled model",
+    "det_n_points": "regime-constant / near-zero coef",
+    "det_ring_count_error": "near-zero coef everywhere",
+    "det_x_spacing_cv": "near-zero coef everywhere",
+    "det_y_std": "sentinel 0 under all-propagated Types; replaced by det_row_y_std",
+    "sam_segment_size_cv": "near-zero coef everywhere",
+    "sam_ring_completeness": "redundant with sam_fill_rate in v1 ablation"
+  }
+}
