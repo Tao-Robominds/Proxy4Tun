@@ -1,0 +1,10 @@
+\begin{tabular}{p{0.30\textwidth}p{0.20\textwidth}p{0.40\textwidth}}
+\toprule
+Deployment priority & Proxy choice & Decision rule \\
+\midrule
+Maximum mIoU & 1 feature & highest mean selected mIoU in Stage A \\
+Safety against bad selections & 1 feature & lowest high-proxy/low-mIoU mismatch rate \\
+Capturing improvement opportunities & 4 features & lowest low-proxy/high-mIoU mismatch rate \\
+Balanced default & 1 feature & best selected mIoU among the three target families \\
+\bottomrule
+\end{tabular}

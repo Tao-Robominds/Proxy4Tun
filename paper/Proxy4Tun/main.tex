@@ -1,0 +1,604 @@
+\UseRawInputEncoding
+%% ReflectiveTun — Automation in Construction (cas-dc double-column template)
+
+\documentclass[a4paper,fleqn]{cas-dc}
+
+\usepackage[numbers]{natbib}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amssymb} % for \checkmark, \circlearrowright
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+\usepackage{placeins}
+\usepackage{flafter} % prevent floats from appearing before their definition
+\usepackage{float} % provides [H] to force a float to appear exactly here
+\usepackage{caption}
+\usepackage{subcaption} % provides subfigure environment
+\usepackage{balance}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit}
+% pgfplots optional; figures generated via scripts/drawing
+% \usepackage{pgfplots}
+% \pgfplotsset{compat=1.18}
+
+% ─── Shared TikZ styles (reused across figures) ────────────────────────────
+\tikzset{%
+  box/.style={draw,rounded corners,align=center,minimum height=8mm,inner sep=4pt},
+  gate/.style={draw,rounded corners,align=center,minimum height=10mm,inner sep=5pt},
+  arrow/.style={-{Latex[length=2mm]}, thick}%
+}
+
+\usepackage{soul} % for \\hl
+% Allow soul highlighting to contain common cross-reference commands
+\soulregister\ref7
+\soulregister\pageref7
+\soulregister\eqref7
+% Highlight helper that also works in math mode (e.g., $+36\%$)
+\newcommand{\hlpct}[1]{\ifmmode\mbox{\hl{#1}}\else\hl{#1}\fi}
+\usepackage[most]{tcolorbox} % for section-wide highlighting
+
+% ─── Hidden subsection helper (keeps numbering/labels, hides printed title) ─
+\makeatletter
+\newcommand{\hiddensubsection}[1]{%
+  \refstepcounter{subsection}%
+  \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}#1}%
+  \@afterheading%
+}
+\makeatother
+
+\providecommand{\printorcid}{}
+\providecommand{\printfacebook}{}
+\providecommand{\printtwitter}{}
+\providecommand{\printlinkedin}{}
+\providecommand{\printgplus}{}
+\providecommand{\printinstagram}{}
+\providecommand{\printemails}{}
+\providecommand{\printurls}{}
+\usepackage{lineno}
+%\linenumbers % (disabled)
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+% ────────────────────────────── Front matter ──────────────────────────────
+
+{\shorttitle{Proxy4Tun: deployment-label-free proxy and reflective control for tunnel segmentation}
+\shortauthors{X.\ Tao et~al.}
+
+\title[mode=title]{Proxy4Tun: a proxy-guided reflective framework for deployment-label-free segmental tunnel lining segmentation}
+
+\author[1]{Xinghui Tao}
+\credit{Conceptualization, Methodology, Software, Writing -- original draft}
+
+\author[1]{Guangming Wang}
+\cormark[1]
+\ead{gw462@cam.ac.uk}
+\credit{Supervision, Writing -- review \& editing}
+
+\author[1]{Brian Sheil}
+\credit{Supervision, Funding acquisition, Project administration}
+
+\cortext[cor1]{Corresponding author}
+
+\affiliation[1]{organization={Construction Engineering, University of Cambridge},
+    addressline={Trumpington Street},
+    city={Cambridge},
+    postcode={CB2 1PZ},
+    country={United Kingdom}}
+
+\begin{abstract}
+Segment-wise inspection of tunnel linings requires accurate point-cloud segmentation, yet deployment rarely provides ground-truth (GT) labels for retuning or quality control. We present \textbf{Proxy4Tun}, a deployment-label-free assess-and-refine framework for a unified SAM4Tun pipeline spanning staggered, continuous, and complex linings. At design time, Bayesian optimisation (BO) on six labelled family anchors generates experience that relates GT-free intrinsic metrics to mIoU; we calibrate per-family Ridge proxies on the resulting $225$ trials. The deployment default uses a coherence-plus-evidence feature set (B1+B2lean), augmented by a phase-coherence alarm on regular linings. At deployment, a staged reflective agent reads the frozen proxy, ontology diagnostics, and empirical experience notes to propose bounded Stage~2--5 overlays without GT. On $24$ held-out subsets scored under sibling-anchor and known-bad overlays ($48$ runs), per-family proxies rank anchor above bad in $24/24$ cases (holdout MAE~$0.110$), and the phase-augmented alarm recovers a label-rotation false negative that intrinsic regression alone misses. The results support calibrated intrinsic proxies as an auditable control signal for label-free tunnel-lining segmentation.
+\end{abstract}
+
+\begin{highlights}
+\item Deployment-label-free quality control for segmental tunnel-lining segmentation.
+\item Design-time BO experience distilled into per-family GT-free mIoU proxies (B1+B2lean).
+\item Phase-coherence alarm recovers circumferential label-rotation failures on regular linings.
+\item Ontology-grounded reflective agent proposes bounded parameter updates guided by the proxy.
+\end{highlights}
+
+\begin{keywords}
+Tunnel-lining segmentation \sep Point-cloud segmentation \sep Deployment quality control \sep Intrinsic proxy \sep Bayesian optimisation \sep Reflective LLM agents
+\end{keywords}
+
+\maketitle
+
+\smallskip
+
+\section{Introduction}\label{sec:intro}
+
+Automated inspection of segmental tunnel linings supports structural health assessment under constrained access and high network scale~\cite{attard2018tunnelInspectionReview,montero2015roboticTunnelInspection}. Modern laser scanning yields dense measurements, but mixed structure, occlusions, and changing lining geometry make reliable segment-wise labelling difficult~\cite{huang2021bimMlUnderground,sjolander2023automatedTunnelInspections}. In practice, a deployed system must not only segment: without GT labels it must also decide whether to \emph{accept}, \emph{refine}, or \emph{flag} each result.
+
+\begin{figure*}[t]
+\centering
+\begin{subfigure}{0.98\textwidth}
+{\raggedright\subsection*{Motivation}\vspace{-0.5\baselineskip}}
+\centering
+\includegraphics[width=0.8\textwidth]{figures/motivation.pdf}
+\par\smallskip
+(a)
+\end{subfigure}
+
+\vspace{4mm}
+
+\begin{subfigure}{0.98\textwidth}
+{\raggedright\subsection*{Position}\vspace{0.3\baselineskip}}
+\centering
+\includegraphics[width=1\textwidth]{figures/position.pdf}
+\par\smallskip
+(b)
+\end{subfigure}
+
+\caption{
+Motivation and positioning of Proxy4Tun.
+(a)~At deployment, tunnel segmentation outputs require accept, refine, or flag decisions without GT.
+(b)~Existing approaches trade deployment adaptability against quality-control (QC) strength. Proxy4Tun targets strong QC with auditable adaptation by freezing a design-time intrinsic proxy and driving reflective refinement without deployment labels.
+}
+\label{fig:proxy4tun_motivation_positioning}
+\end{figure*}
+
+Existing tunnel point-cloud methods span auditable geometric pipelines~\cite{duan2021shieldTunnelLiningPointCloud,lin2024seg2tunnel}, supervised deep models that need large labels~\cite{qi2017pointnetpp,hu2020randlanet,wang2025tunnelnn}, and foundation-model pipelines such as SAM4Tun~\cite{ye2025sam4tun,kang2024samTunnelPointCloud,kirillov2023segmentAnything} that reduce annotation but remain sensitive to expert-tuned parameters. LLM-guided adapters (e.g.\ R4Tun) can retune parameters with structured context, yet they still leave open the deployment-control question: \emph{how should the system know, without GT, that a candidate configuration is acceptable?} Medical and general vision QC literature provides reverse classification accuracy and related label-free checks~\cite{valindria2017rca,robinson2018segmentationQuality,fournel2021segmentationQC}, but these are not specialised to the failure modes of cylindrical tunnel unfolding---orientation collapse, hollow evidence, and circumferential phase errors.
+
+Proxy4Tun addresses deployment control for a fixed unified SAM4Tun stage graph. Design-time BO on a small labelled panel is used only as an \emph{experience generator}: it exposes how intrinsic, observable metrics track mIoU across high- and low-quality trials. Those metrics are frozen into per-family Ridge proxies and alarms. At deployment, scoring and reflective refinement use only pipeline artifacts. A staged ontology (failure modes, diagnostic rules, inter-stage dependencies) plus empirical experience notes constrain the reflective agent's proposals, while the proxy supplies a directional improvement signal and accept/alarm decision.
+
+This paper makes the following contributions:
+\begin{enumerate}
+\item A deployment-label-free control formulation for segmental tunnel-lining segmentation that couples a GT-free intrinsic proxy with accept/refine/flag decisions.
+\item Design-time BO experience on six family anchors ($225$ trials) distilled into per-family Ridge proxies over coherence (B1) and evidence (B2lean) features, with a phase-coherence alarm for regular linings.
+\item An ontology-grounded reflective agent that proposes bounded Stage~2--5 overlays under proxy guidance, with explicit upstream deferral and causal tuning priority.
+\item Holdout evidence on $24$ unseen subsets ($48$ anchor/bad runs): perfect anchor-vs-bad ranking, feature-block ablation justifying B1+B2lean, and phase recovery of a label-rotation false negative.
+\end{enumerate}
+
+The rest of this paper is organised as follows. Section~\ref{sec:related} reviews related work on tunnel segmentation and deployment control. Section~\ref{sec:methods} presents methodology. Section~\ref{sec:results} reports results. Section~\ref{sec:discussion} discusses findings and limitations. Section~\ref{sec:conclusions} concludes.
+
+\section{Related work}\label{sec:related}
+
+This study situates Proxy4Tun among (i)~tunnel and infrastructure point-cloud segmentation, (ii)~deployment-time quality control without labels, (iii)~Bayesian optimisation as design-time experience generation, and (iv)~reflective LLM agents for iterative refinement. The distinguishing requirement is \emph{deployment control}: accept, refine, or flag a multi-stage tunnel pipeline when GT is unavailable.
+
+\subsection{Tunnel and infrastructure point-cloud segmentation}
+
+Tunnel inspection surveys motivate automated extraction of lining components from TLS and photogrammetry~\cite{attard2018tunnelInspectionReview,montero2015roboticTunnelInspection,sjolander2023automatedTunnelInspections}. Geometric and feature-engineered pipelines fit centrelines, unroll surfaces, and apply density or curvature rules~\cite{duan2021shieldTunnelLiningPointCloud,huang2021bimMlUnderground}; their logic is auditable but brittle when diameter, joint pattern, or density change. Supervised deep models on points---PointNet++~\cite{qi2017pointnetpp}, RandLA-Net~\cite{hu2020randlanet}, KPConv~\cite{thomas2019kpconv}, Mask3D~\cite{schult2023mask3d}---and tunnel-specific networks~\cite{ji2023spcnet,zhou2023aspcnet,zhang2022unrollingnet,wang2025tunnelnn} improve adaptability when labels exist, yet labelled tunnel corpora remain scarce and retraining is costly for each new lining family. Seg2Tunnel provides a public segmental-lining benchmark~\cite{lin2024seg2tunnel}. Foundation-model pipelines project tunnels to panoramic depth maps and prompt SAM~\cite{kirillov2023segmentAnything,kang2024samTunnelPointCloud}; SAM4Tun~\cite{ye2025sam4tun} achieves strong expert-tuned accuracy but exposes dozens of stage parameters that do not transfer off the reference. Proxy4Tun keeps that stage graph fixed and focuses on \emph{controlling} it at deployment rather than replacing the segmenter.
+
+\subsection{Deployment-time quality control without labels}
+
+When GT is absent, segmentation systems need secondary signals for reliability. Early work estimated segmentation error without labels~\cite{kohlberger2012segmentationError}; reverse classification accuracy and related QC scores similarly assess trustworthiness from model behaviour or image evidence~\cite{valindria2017rca,robinson2018segmentationQuality,fournel2021segmentationQC,cosarinsky2025inContextRCA}. Related work detects erroneous surface regions~\cite{zaman2023erroneousSurfaceRegions} or LiDAR perception failures~\cite{bogdoll2025lidarFailureDetection}, and uncertainty methods (dropout, ensembles, calibration) quantify predictive confidence~\cite{gal2016dropout,kendall2017uncertainties,lakshminarayanan2017deepEnsembles,guo2017calibration,vassilev2024uncertaintyInfrastructure}. These approaches rarely encode tunnel-specific failure modes---mirrored unrolls, fallback-heavy detections, or within-ring phase rotations---nor do they expose an engineer-auditable accept/refine/flag loop tied to pipeline stages. Proxy4Tun builds the control signal from \emph{intrinsic stage artifacts} of the tunnel pipeline itself, calibrated once against mIoU on a small design panel.
+
+\subsection{Bayesian optimisation for design-time experience}
+
+Bayesian optimisation (BO) efficiently searches expensive black-box objectives with Gaussian-process surrogates and acquisition rules such as Expected Improvement~\cite{mockus1978bayesian,jones1998ego,rasmussen2006gpml,snoek2012practicalBO,shahriari2016reviewBO,frazier2018tutorialBO,garnett2023bayesianOptimization}. In Proxy4Tun, BO is \emph{not} the deployment optimiser. It is a design-time experience generator: labelled family anchors are explored to populate a corpus of high-, medium-, and low-quality trials so that intrinsic features can be related to GT mIoU offline. The surrogate and acquisition are then discarded; only the frozen Ridge proxy and alarms travel to deployment. This differs from using BO online on each new tunnel, which would reintroduce labels or an unverified surrogate at runtime.
+
+\subsection{Reflective and agentic LLM refinement}
+
+Reasoning-oriented LLMs support multi-step diagnosis via chain-of-thought and related protocols~\cite{wei2022chainOfThought,yao2023treeOfThoughts}. Self-Refine, Reflexion, and ReAct-style loops iterate on feedback without gradient updates~\cite{madaan2023selfrefine,shinn2023reflexion,yao2023react}. Proxy4Tun adopts a reflective loop specialised to infrastructure pipelines: each stage agent consumes ontology state (metrics, failure modes, inter-stage dependencies) and an experience document of calibrated anti-patterns, proposes bounded parameter deltas, and accepts a round only when the GT-free proxy improves without coherence collapse. Unlike open-ended agent coding, the action space is the pipeline parameter schema; unlike one-shot LLM adapters, reflection is closed-loop on live artifacts and can defer to upstream stages before touching detection or SAM.
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Methodology}\label{sec:methods}
+% ══════════════════════════════════════════════════════════════════════════
+
+Our methodology defines the deployment-label-free quality-control task for segmental tunnel-lining segmentation, summarises the fixed unified SAM4Tun pipeline across lining families, and specifies the Proxy4Tun layer: design-time Bayesian optimisation (BO) that generates labelled experience, a ground-truth-free (GT-free) intrinsic proxy calibrated on that experience, and a staged reflective agent that reads the proxy together with an ontology-grounded context to propose bounded parameter updates. We then describe the feature-block ablation, Seg2Tunnel subset panel, holdout protocol, and metrics.
+
+\subsection{Task definition}\label{sec:problem-def}
+
+The upstream task is semantic segmentation of segmental tunnel linings from terrestrial laser scanning (TLS) point clouds. Given a raw point cloud of a tunnel section, each point is assigned a structural class label---background, key segment~(K), adjacent segments~(B), and standard segments~(A), with an additional class for seven-segment complex rings---following the Seg2Tunnel annotation schema~\cite{ye2025sam4tun}. The unit of analysis is a multi-ring subset.
+
+A fixed expert configuration of the open-source SAM4Tun pipeline transfers poorly when lining layout, diameter, or scanning geometry depart from the tuning reference. At deployment, ground-truth (GT) labels are typically unavailable for either retuning or post-hoc quality control. Proxy4Tun addresses this gap: it does not alter the underlying stage algorithms, but learns a GT-free score that ranks candidate parameterisations and raises an alarm when a run is likely to be low quality. GT mIoU is used only at design time for proxy calibration and for offline evaluation of the proxy itself.
+
+\subsection{Unified pipeline}\label{sec:pipeline}
+
+\begin{figure*}[htp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/r4tun_pipeline.pdf}
+\caption{Unified SAM4Tun stage chain used by Proxy4Tun. Stages~1--3 produce an oriented cylindrical frame and an enhanced panoramic depth map; Stage~4 detects joint lines and prompt centres; Stage~5 applies template prompts to SAM and reprojects masks to 3D. Family mode (\texttt{staggered}/\texttt{continuous}/\texttt{complex}) selects geometry priors and detection/SAM templates without changing the stage graph.}
+\label{fig:unified-pipeline}
+\end{figure*}
+
+Proxy4Tun builds on a single unified stage graph (Fig.~\ref{fig:unified-pipeline}) that covers the three Seg2Tunnel lining families---staggered~(T1/T2), continuous~(T3), and complex interleaved~(T4/T5)---via a family-mode switch rather than separate code paths. Orientation knobs (e.g.\ circumferential handedness and ring-index sign) are frozen in the family parameter snapshots; BO and proxy evaluation then perturb only the tunable Stage~2--5 overlays. The stage algorithms remain fixed across all experimental conditions; only parameter values change.
+
+\begin{figure*}[htp]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/stage_u.pdf}
+\caption{Stage~1---Unfolding. Left: fitted tunnel cross-section used to determine the reference centre and radius for cylindrical unfolding. Centre: 2D panoramic depth map derived from the 3D point cloud. Right: zoomed region of the unfolded map showing radial-distance encoding.}
+\label{fig:stage-u}
+\end{figure*}
+
+\textbf{Stage~1---Unfolding} (Fig.~\ref{fig:stage-u}) establishes a cylindrical coordinate system. The point cloud is sliced at regular longitudinal intervals; each cross-section is fit by RANSAC ellipse estimation~\cite{fischler1981ransac}; ellipse centres are interpolated into a smooth centreline that defines the frame~$(r,\theta,h)$. The lining surface is projected into a panoramic depth map in which each pixel stores radial distance to the centreline. Residual recentring and sign conventions for~$h$ and~$\theta$ are treated as orientation invariants: a mirrored unroll can look geometrically clean while mapping every asymmetric class to its circumferential mirror, collapsing mIoU without an obvious cosmetic failure in the depth image.
+
+\begin{figure*}[htp]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/stage_d.pdf}
+\caption{Stage~2---Denoising. Left: radial-distance distribution used to filter points outside the expected lining surface. Centre: unfolded depth map after filtering. Right: zoomed region of the denoised map.}
+\label{fig:stage-d}
+\end{figure*}
+
+\textbf{Stage~2---Denoising} (Fig.~\ref{fig:stage-d}) removes non-structural artefacts by grid-based radial-density filtering inspired by DBSCAN~\cite{ester1996dbscan}, constrained by radial masks~$(R_\mathrm{low},R_\mathrm{high})$ (and, where applicable, angular masks). Dense connected regions are retained as lining; isolated points are rejected. The retained-point ratio and residual NaN structure of the depth map are primary evidence signals for the proxy.
+
+\begin{figure*}[htp]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/stage_e.pdf}
+\caption{Stage~3---Enhancing. Left: curvature-guided surface and boundary interpolation with progressive upsampling. Centre: enhanced panoramic depth map. Right: zoomed views of the highlighted region.}
+\label{fig:stage-e}
+\end{figure*}
+
+\textbf{Stage~3---Enhancing} (Fig.~\ref{fig:stage-e}) restores geometric continuity before detection. Local curvature guides point insertion: smooth panel regions are densified while high-curvature joints are preserved. Progressive upsampling and pixel-level outlier repair produce a depth map that balances panel continuity with sharp joint contrast---the input required by Hough detection.
+
+\begin{figure*}[htp]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/stage_p.pdf}
+\caption{Stage~4--5---Detection and SAM segmentation. Hough-transform line detection~\cite{duda1972hough} recovers ring joints; template prompts for K/B/A (and the complex seventh class where applicable) are passed to SAM~\cite{kirillov2023segmentAnything}; 2D masks are reprojected to 3D via the stored pixel--point map.}
+\label{fig:stage-p}
+\end{figure*}
+
+\textbf{Stages~4--5---Detection and segmentation} (Fig.~\ref{fig:stage-p}) recover joint lines with orientation-specific Hough thresholds, assemble prompt centres under the family layout grammar, and invoke SAM with template prompts. Masks are reprojected to per-point labels. Detection regularity (spacing, ring count, fallback rate) and SAM layout statistics (fill rate, completeness, segment-size variation, ontology divergence) form the coherence half of the proxy feature set.
+
+The pipeline exposes dozens of tunable parameters across geometry, filtering, interpolation, detection thresholds, and SAM crop settings. In this study, family anchors provide warm-start configurations; BO explores a bounded overlay on Stages~2--5 (family-specific search spaces), while Stage~1 orientation remains pinned. A staged ontology of artifacts, quality metrics, failure modes, and remediation actions supplies the diagnostic vocabulary from which the intrinsic feature blocks below are distilled.
+
+\subsection{Proxy4Tun}\label{sec:method}
+
+\begin{figure*}[htp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/design-time.pdf}
+\caption{Design-time Proxy4Tun workflow. Labelled family anchors generate BO experience (parameters, GT-free intrinsic features, offline GT mIoU). Feature-block ablation and Ridge calibration freeze a per-family deployment proxy and alarm thresholds.}
+\label{fig:design-time}
+\end{figure*}
+
+\begin{figure*}[htp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/deploy-time.pdf}
+\caption{Deployment-time Proxy4Tun workflow. A new subset is processed by the unified pipeline under a candidate parameter overlay. Intrinsic features feed the frozen proxy (score + alarm); a reflective agent may propose a bounded overlay and re-run within budget. No GT labels are required at deployment.}
+\label{fig:deploy-time}
+\end{figure*}
+
+Proxy4Tun separates \emph{design time}, where a small labelled panel and BO trials are available, from \emph{deployment time}, where only pipeline artifacts may be observed (Figs.~\ref{fig:design-time}--\ref{fig:deploy-time}). The proxy provides a scalar GT-free score and alarm; the reflective agent (Section~\ref{sec:agent-design}) turns that signal, together with stage artifacts and ontology knowledge, into concrete parameter proposals.
+
+\subsubsection{Intrinsic feature blocks}\label{sec:features}
+
+Every completed run yields a vector of GT-free intrinsic metrics computed from stage artifacts (denoising retention, depth completeness, detection provenance, and SAM layout statistics). We organise these metrics into two complementary blocks aligned with the ontology's failure taxonomy:
+
+\begin{itemize}
+\item \textbf{Block~B1 (coherence)}---internal self-consistency of the proposed segmentation in the pipeline's own frame: detection spacing CV, vertical scatter, ring-count error, SAM fill rate, ring completeness, segment-size CV, and ontology divergence.
+\item \textbf{Block~B2 (evidence)}---how much of the result rests on observed data versus interpolation or fallback: denoise retained ratio, depth NaN ratio, depth outlier ratio, midpoint ratio, real-detection ratio, fallback ratio, and detection count. A lean subset \textbf{B2lean} retains only \{\texttt{denoise\_retained\_ratio}, \texttt{depth\_nan\_ratio}, \texttt{det\_real\_detection\_ratio}, \texttt{det\_fallback\_ratio}\}, dropping family-conditional or near-constant coordinates.
+\end{itemize}
+
+The deployment feature set is the concatenation \textbf{B1+B2lean} (11 dimensions). Coherence features catch form and regularity failures; evidence features catch hollow or heavily fallback-driven runs that can still look locally regular. A third prior block (phase/order agreement with build-record geometry) is reserved for auxiliary alarms and is not required by the Tier-1 regression proxy.
+
+\subsubsection{BO experience generation}\label{sec:bo-experience}
+
+Design-time BO treats GT mIoU as the optimisation objective while logging the intrinsic feature vector for every trial. For each training subset, a Gaussian-process surrogate proposes overlays within family-specific bounds; Expected Improvement selects the next candidate:
+\begin{equation}
+\theta_{t+1}
+= \arg\max_{\theta} \mathrm{EI}_t(\theta),
+\qquad
+\mathrm{EI}_t(\theta)
+= \mathbb{E}\bigl[\max\bigl(s(\theta)-s_{\mathrm{best}},0\bigr)\bigr],
+\label{eq:expected_improvement}
+\end{equation}
+where $s(\theta)$ is the observed mIoU for overlay~$\theta$, and $s_{\mathrm{best}}$ is the best score so far. The resulting trial corpus deliberately retains high-, medium-, and low-quality layouts so that the proxy must learn to \emph{rank} failure as well as success. From each family we additionally freeze one \emph{known-bad} overlay (a historically low-mIoU trial far below the sibling-anchor floor) for holdout stress testing.
+
+\subsubsection{Per-family Ridge proxy}\label{sec:ridge-proxy}
+
+Let $\phi(\theta)\in\mathbb{R}^{d}$ denote the intrinsic feature vector of a completed run and $y$ its GT mIoU. Within each lining family $f\in\{\mathrm{t1\&2},\mathrm{t3},\mathrm{t4\&5}\}$ we fit an $\ell_2$-regularised linear regressor by leave-one-out RidgeCV on the family's training trials:
+\begin{equation}
+\hat{y}_f(\phi)
+= w_f^{\top}\phi + b_f,
+\label{eq:ridge-proxy}
+\end{equation}
+with regularisation strength selected on the training folds. A pooled cross-family model (optionally with family one-hot indicators) is retained as a comparator, but the deployment default uses separate per-family weights: lining grammar and scan regimes differ enough that a single hyperplane underfits family-specific feature--mIoU slopes.
+
+An alarm threshold $\tau_f$ is calibrated on training predictions so that low proxy scores flag likely low-mIoU runs. At deployment, the frozen $(\hat{y}_f,\tau_f)$ pair scores candidates without labels. Algorithm~\ref{alg:proxy_calibration} summarises design-time calibration; Algorithm~\ref{alg:proxy_deploy} summarises deployment scoring.
+
+\begin{algorithm}[ht]
+\caption{Design-time calibration of the GT-free proxy}\label{alg:proxy_calibration}
+\begin{algorithmic}[1]
+\Require Family training subsets; warm-start overlays $\theta_0$; BO budget $T$; feature set $\Phi$ (e.g.\ B1+B2lean)
+\Ensure Per-family Ridge models $\{\hat{y}_f\}$, alarm thresholds $\{\tau_f\}$
+\For{each family $f$}
+    \State Initialise trial set $\mathcal{D}_f$ with warm-start $\theta_0$
+    \For{$t=1,\ldots,T$}
+        \State Run unified pipeline with overlay $\theta_t$; record $\phi_t=\Phi(\mathrm{artifacts})$, $y_t=\mathrm{mIoU}^{GT}$
+        \State Update GP surrogate; select $\theta_{t+1}$ by EI (Eq.~\ref{eq:expected_improvement})
+    \EndFor
+    \State Fit RidgeCV $\hat{y}_f$ on $\{(\phi_i,y_i)\}\subset\mathcal{D}_f$
+    \State Calibrate alarm threshold $\tau_f$ on training predictions
+\EndFor
+\State \Return $\{\hat{y}_f,\tau_f\}$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[ht]
+\caption{Deployment-time proxy scoring}\label{alg:proxy_deploy}
+\begin{algorithmic}[1]
+\Require New subset; family $f$; candidate overlays $\{\theta\}$; frozen $\hat{y}_f,\tau_f$; optional phase check
+\Ensure Ranked scores; accept/alarm decision per candidate
+\For{each candidate $\theta$}
+    \State Run unified pipeline; compute $\phi=\Phi(\mathrm{artifacts})$ (no GT)
+    \State $\hat{y}\gets\hat{y}_f(\phi)$; $\mathrm{alarm}_\mathrm{proxy}\gets[\hat{y}\le\tau_f]$
+    \State $\mathrm{alarm}\gets\mathrm{alarm}_\mathrm{proxy}\lor\mathrm{alarm}_\mathrm{phase}$ \Comment{phase applicable on staggered/continuous only}
+\EndFor
+\State \Return scores/alarms; accept best safe candidate, else invoke Alg.~\ref{alg:reflective_adaptation}
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Phase-coherence alarm}\label{sec:phase-alarm}
+
+Intrinsic regression can miss a specific failure mode: within-ring \emph{block-label rotation}, where segment form is coherent and evidence ratios look healthy, yet the circumferential phase of labels is wrong relative to neighbouring rings. For staggered and continuous families we therefore add a GT-free phase check: each ring's predicted block clock is compared to its nearest peer rings; large clock-face disagreement raises $\mathrm{alarm}_\mathrm{phase}$. The deployment alarm is the logical OR of the proxy threshold and the phase check. Complex (T4/T5) rings lack a stable repeating phase prior under interleaved keys, so the phase check is marked inapplicable there.
+
+\subsection{Reflective agent design}\label{sec:agent-design}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/agent_design.pdf}
+\caption{Reflective agent architecture in Proxy4Tun.
+(a)~Each stage agent assembles a shared context (memory, state, knowledge, and the frozen proxy score/alarm) and an LLM analyst that performs structured reflection.
+(b)~Reflection protocol: (1)~referencing family priors, (2)~diagnostic inspection against ontology rules and intrinsic metrics, (3)~upstream causal check, (4)~bounded parameter proposal, (5)~proxy-guided validation and JSON output.}
+\label{fig:agent-design}
+\end{figure*}
+
+The proxy ranks and alarms; it does not by itself choose which parameters to change. Proxy4Tun therefore couples the frozen per-family proxy to a \emph{reflective agent} layer that proposes bounded overlays without GT (Fig.~\ref{fig:agent-design}). One agent is associated with each pipeline stage. An analyst constructs the LLM prompt from the current context, invokes a fixed reflection protocol (Section~\ref{sec:reflection}), and parses a schema-conformant parameter JSON that the corresponding stage executes unchanged. After each round, intrinsic features and the proxy are recomputed; the agent may continue while budget remains and the proxy (and, where applicable, the phase alarm) indicate room for improvement. Stage scripts and evaluation code are identical across rounds---only the parameter overlay changes---and every proposal is logged with a textual rationale for engineer review or override.
+
+Unlike R4Tun's one-shot per-stage adaptation from raw characteristics, reflection here is \emph{closed-loop}: each round observes live artifacts from the unified pipeline, scores them with the GT-free proxy, and may defer changes when an upstream failure is the likely cause. A reflection pilot freezes Stage~1 artifacts when comparing Stage~2--5 overlays so that centreline resampling does not confound attribution; unfolding overlays, when needed, trigger a full Stage~1--5 rerun.
+
+\subsubsection{Context design}\label{sec:context-comp}
+
+Each stage agent receives structured context with four components (Fig.~\ref{fig:agent-design}a).
+
+\textbf{Memory} stores the family anchor: tunnel priors (diameter, radial/angular gates, segment grammar, key-layout mode) and the warm-start parameter snapshot for the sibling reference case. Memory is static within a reflection campaign and supplies the baseline against which live deviations are judged.
+
+\textbf{State} is the cumulative post-stage summary for the current candidate: present artifacts, current parameter values, measured quality metrics (including the B1/B2lean intrinsic vector), the proxy score $\hat{y}_f$, proxy/phase alarms, and compact artifact descriptions (e.g.\ depth-map completeness, detected line count). State grows as stages execute and is prioritised over Memory when the two conflict, because it reflects geometry after upstream processing.
+
+\textbf{Knowledge} comprises (i)~the staged ontology---artifacts, diagnostic rules, failure modes, remediation actions, and inter-stage dependencies---and (ii)~an experience document of empirically calibrated lessons (orientation invariants, anti-patterns such as chasing NaN fraction to zero, and the causal tuning order). Knowledge is authored once and shared across tunnels; numeric thresholds remain symbolic in the ontology and are interpreted relative to family-normal ranges in the experience notes.
+
+\textbf{Proxy signal} injects the frozen Ridge score and alarms as first-class context. The agent is instructed to treat $\hat{y}_f$ as a \emph{directional} improvement signal: absolute calibration varies by family (notably larger anchor MAE on continuous tunnels), so round-to-round $\Delta\hat{y}$ and corroborating artifacts take precedence over the raw score. A proxy increase driven only by evidence features while B1 coherence degrades is treated as suspect (the pattern previously associated with cosmetic depth repairs that reduced GT mIoU).
+
+\subsubsection{Reflection protocol}\label{sec:reflection}
+
+Reflection follows a five-step protocol (Algorithm~\ref{alg:reflective_adaptation}; Fig.~\ref{fig:agent-design}b), with an explicit upstream-deferral step that R4Tun's one-shot CoT does not require:
+
+\begin{enumerate}
+    \item \emph{Referencing:} Compare the current tunnel's priors and warm-start parameters against Memory; note family mode (staggered / continuous / complex) and which Stage~1 orientation knobs are pinned.
+    \item \emph{Diagnostic inspection:} Evaluate ontology diagnostic rules against State metrics and artifacts; emit matched failure modes. Prefer State over Memory on conflict. Check the phase alarm and permutation-shaped confusion signatures before attributing failure to detection or SAM.
+    \item \emph{Upstream causal check:} Consult inter-stage dependencies. If a matched failure is likely caused upstream, defer to that stage's agent and do not retune local parameters in the current round.
+    \item \emph{Bounded adaptation:} Propose an ordered list of remediation actions with concrete parameter deltas inside Knowledge bounds, respecting the causal priority used in experience: orientation $\rightarrow$ centreline/recentre $\rightarrow$ radial band $\rightarrow$ detection $\rightarrow$ SAM. Within a short reflection budget, early rounds confirm Stages~1--3 health before touching Hough or SAM geometry.
+    \item \emph{Proxy-guided validation and JSON output:} Self-check logical constraints (e.g.\ $R_\mathrm{low}<R_\mathrm{high}$); reject proposals that flip pinned orientation knobs on a canonical frame; emit schema-conformant JSON. After execution, accept the round only if $\hat{y}$ improves (or alarm clears) without B1 coherence collapse; otherwise revert and flag for review.
+\end{enumerate}
+
+\noindent\textbf{Notation for Algorithm~\ref{alg:reflective_adaptation}.}
+$M$ is Memory (priors and warm-start $P_{\mathrm{ref}}$); $S$ is cumulative State; $K$ is Knowledge (ontology rules, bounds~$B$, dependencies~$D$, experience priors); $\hat{y}_f$ is the frozen family proxy; $R$ is the reflection budget in rounds.
+
+\begin{algorithm}[ht]
+\caption{Proxy-guided reflective parameter adaptation}\label{alg:reflective_adaptation}
+\begin{algorithmic}[1]
+\Require Subset; family $f$; Memory $M$; Knowledge $K$; frozen proxy $\hat{y}_f,\tau_f$; budget $R$
+\Ensure Accepted overlay $P^\star$ (or flagged baseline)
+\State Run unified pipeline with warm-start; compute $\phi$, $\hat{y}\gets\hat{y}_f(\phi)$, alarms
+\State $P^\star\gets P_{\mathrm{ref}}$; $\hat{y}^\star\gets\hat{y}$
+\For{$r=1,\ldots,R$}
+    \State \textbf{Phase 1--2:} Build State $S$; match diagnostic rules in $K$; list failure modes
+    \State \textbf{Phase 3:} If any failure has likely upstream cause in $D$, set active stage $\leftarrow$ upstream; else local stage
+    \State \textbf{Phase 4:} Propose $P_{\mathrm{proposed}}$ within bounds $B$ for the active stage (experience priority)
+    \State \textbf{Phase 5:} Validate constraints; reject pinned-orientation flips; format JSON overlay
+    \State Execute pipeline (freeze Stage~1 when overlay excludes unfolding); recompute $\phi',\hat{y}',\mathrm{alarms}'$
+    \If{$\hat{y}'>\hat{y}^\star$ \textbf{and} B1 coherence not degraded}
+        \State $P^\star\gets P_{\mathrm{proposed}}$; $\hat{y}^\star\gets\hat{y}'$
+    \Else
+        \State Revert overlay; continue or stop if no safe improvement remains
+    \EndIf
+    \If{$\hat{y}^\star>\tau_f$ \textbf{and not} phase-alarmed}
+        \State \textbf{break} \Comment{Accept}
+    \EndIf
+\EndFor
+\State \Return $P^\star$ (flag for review if still alarmed)
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Experimental setup}\label{sec:exp-setup}
+
+\subsubsection{Dataset}\label{sec:dataset}
+
+We use Seg2Tunnel multi-ring subsets spanning the three lining families (Table~\ref{tab:dataset}; Fig.~\ref{fig:tunnel_type}). Training experience comprises six labelled cases---two per family ($1$-$1$, $2$-$1$; $3$-$1$, $3$-$2$; $4$-$1$, $5$-$1$)---yielding $225$ BO trials after ingest. Holdout evaluation uses $24$ unseen sibling subsets ($8$ per family), each scored under both the sibling-anchor overlay and the family's frozen known-bad overlay ($48$ scored runs). GT labels are used for offline mIoU and for proxy calibration only; they are never provided to the proxy at scoring time.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/dataset.pdf}
+\caption{Tunnel lining pattern categories. Left to right: staggered rings with a repeating key pattern; continuous rings with a fixed ring-wise order; complex rings with interleaved keys and no simple repeating phase.}
+\label{fig:tunnel_type}
+\end{figure*}
+
+\begin{table*}[t]
+\caption{Dataset and proxy-evaluation panel.}\label{tab:dataset}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l l l l @{}}
+\toprule
+ & \multicolumn{2}{c}{Regular (T1, T2, T3)} & Complex (T4, T5) \\
+\cmidrule(lr){2-3}\cmidrule(l){4-4}
+Property & Staggered (T1, T2) & Continuous (T3) & \\
+\midrule
+Inner diameter & 5.5\,m & 5.9\,m & 7.5\,m \\
+Ring length & 1.2\,m & 1.2\,m & 1.8\,m \\
+Segments/ring & 6 & 6 & 7 \\
+Joint type & Staggered & Continuous & Complex interleaved \\
+Key-segment position & Ring-to-ring repeating pattern & Fixed ring-wise order & No repeating pattern \\
+Scanning & Single-station & Multi-station & Single-station, offset \\
+Eval.\ schema & 6-class & 6-class & 7-class \\
+BO training cases & $1$-$1$, $2$-$1$ & $3$-$1$, $3$-$2$ & $4$-$1$, $5$-$1$ \\
+Holdout subsets & $1$-$2{\ldots}1$-$5$, $2$-$2{\ldots}2$-$5$ & $3$-$3{\ldots}3$-$10$ & $4$-$2{\ldots}4$-$5$, $5$-$2{\ldots}5$-$5$ \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+\subsubsection{Experimental design}\label{sec:comparators}
+
+The study follows a cumulative feature-block ablation that isolates each proxy component while holding the unified pipeline and holdout grid fixed (Table~\ref{tab:ablation}). All fits reuse the frozen training table and the $48$ holdout manifests; no new pipeline runs are introduced during ablation. Conditions vary (i)~the feature set (B1, B2lean, B2, B1+B2lean, B1+B2), (ii)~the model structure (per-family Ridge vs.\ a single pooled Ridge, with or without family one-hot), and (iii)~whether the phase alarm is OR-ed with the proxy threshold.
+
+\begin{table}[ht]
+\caption{Proxy ablation conditions.}\label{tab:ablation}
+\begin{tabular*}{\tblwidth}{@{} c l l >{\raggedright\arraybackslash}p{3.2cm} @{}}
+\toprule
+Level & Code & Condition & What the proxy uses \\
+\midrule
+0 & B1 & Coherence only & 7 form/regularity features \\
+1 & B2lean & Evidence lean & 4 evidence features \\
+2 & B2 & Evidence full & 7 evidence features \\
+3 & B1+B2lean & Coherence + lean evidence & 11 features (deployment default) \\
+4 & B1+B2 & Coherence + full evidence & 14 features \\
+--- & pooled / +oh & Structure variants & One model ($\pm$ family one-hot) vs.\ per-family \\
+--- & +phase & Alarm augmentation & Proxy alarm OR phase check \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+As a capacity control, we permute mIoU labels within each family, refit the per-family B1+B2lean models, and repeat ($20$ shuffles). A large gap between real and permuted holdout MAE (and ranking accuracy) indicates that the fit exploits genuine feature--mIoU structure rather than Ridge capacity alone. Train-parity and holdout gates on representative subsets verify that the unified pipeline reproduces the experience-generating anchors before proxy metrics are interpreted.
+
+\subsubsection{Evaluation metrics}\label{sec:metrics}
+
+Segmentation quality for offline analysis is measured by mean Intersection-over-Union (mIoU). For class~$c$,
+\begin{equation}
+\mathrm{IoU}_c = \frac{\mathrm{TP}_c}{\mathrm{TP}_c + \mathrm{FP}_c + \mathrm{FN}_c}, \qquad
+\mathrm{mIoU} = \frac{1}{C}\sum_{c=1}^{C}\mathrm{IoU}_c,
+\end{equation}
+where $C=6$ for regular tunnels and $C=7$ for complex tunnels. Proxy quality is evaluated on the $48$ holdout runs by:
+\begin{enumerate}
+\item \textbf{Absolute error}---MAE between $\hat{y}$ and GT mIoU, reported overall and stratified by anchor vs.\ known-bad;
+\item \textbf{Ranking accuracy}---whether $\hat{y}(\mathrm{anchor})>\hat{y}(\mathrm{bad})$ on each of the $24$ subset pairs;
+\item \textbf{Alarm precision/recall}---treating known-bad (and optionally low-mIoU anchors) as the positive alarm class;
+\item \textbf{Spearman} rank correlation between $\hat{y}$ and GT mIoU on the holdout pool.
+\end{enumerate}
+The primary deployment criteria are perfect (or near-perfect) anchor-vs-bad ranking and high alarm precision: a false accept of a collapsed configuration is costlier than a modest calibration bias on already-acceptable anchors.
+
+\section{Results}\label{sec:results}
+
+We report (i)~unified-pipeline parity gates that validate the experience corpus, (ii)~holdout proxy calibration and ranking, (iii)~feature-block and structure ablations, (iv)~permutation and phase-alarm controls, and (v)~qualitative 3D comparisons of sibling-anchor versus known-bad overlays. GT mIoU is used only offline.
+
+\subsection{Unified pipeline and experience validity}\label{sec:results-parity}
+
+Before interpreting proxy metrics, we verify that the unified stage graph reproduces the family anchors used to generate BO experience. Train-parity gates on representative cases yield mIoU $0.800$ ($1$-$1$), $0.850$ ($3$-$1$), and $0.818$ ($5$-$1$), within $|\Delta\mathrm{mIoU}|\le 0.02$ of the corresponding frozen anchors. Holdout sibling-anchor gates similarly pass on representative subsets (e.g.\ $1$-$2$: $0.821$; $3$-$6$: $0.836$; $3$-$10$: $0.853$). These checks justify reusing the $225$ historical BO trials as $(\phi,y)$ pairs for Ridge training under the unified pipeline.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/proxy_family_miou_bars.pdf}
+\caption{Holdout panel mean GT mIoU by lining family for sibling-anchor versus frozen known-bad overlays ($8$ subsets per family). Known-bad configurations collapse mean mIoU below $0.05$ in every family, providing a sharp ranking target for the proxy.}
+\label{fig:family-miou-bars}
+\end{figure*}
+
+Figure~\ref{fig:family-miou-bars} summarises the holdout stress panel: sibling-anchor overlays retain family-mean mIoU of $0.737$ (staggered), $0.762$ (continuous), and $0.680$ (complex), while known-bad overlays remain near $0.04$--$0.05$. Qualitatively, Figure~\ref{fig:3d-anchor-bad} shows sampled 3D predictions for one subset per family: anchors preserve coherent block structure, whereas bad overlays fragment or misassign lining classes.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/proxy4tun_3d_anchor_vs_bad.pdf}
+\caption{Qualitative 3D samples on holdout subsets $1$-$2$ (staggered), $3$-$6$ (continuous), and $5$-$2$ (complex). Top: sibling-anchor overlays. Bottom: family known-bad overlays. Points coloured by predicted segment class (background suppressed).}
+\label{fig:3d-anchor-bad}
+\end{figure*}
+
+\subsection{Holdout proxy calibration}\label{sec:results-proxy}
+
+\begin{table*}[t]
+\caption{Holdout calibration of per-family versus pooled proxies (B1+B2lean). MAE stratified by config kind; ranking is anchor~$>$~bad over $24$ subset pairs.}
+\label{tab:holdout-calibration}
+\centering
+\footnotesize
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l l c c c c @{}}
+\toprule
+Family & Config & $n$ & MAE (per-family) & MAE (pooled) & Mean GT mIoU \\
+\midrule
+t1\&2 & anchor & 8 & 0.095 & 0.104 & 0.737 \\
+t1\&2 & bad & 8 & 0.066 & 0.091 & 0.046 \\
+t3 & anchor & 8 & 0.295 & 0.337 & 0.762 \\
+t3 & bad & 8 & 0.036 & 0.035 & 0.039 \\
+t4\&5 & anchor & 8 & 0.074 & 0.085 & 0.680 \\
+t4\&5 & bad & 8 & 0.097 & 0.073 & 0.046 \\
+\midrule
+Overall & --- & 48 & \textbf{0.110} & 0.121 & --- \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.55\textwidth]{figures/proxy_holdout_scatter.pdf}
+\caption{Per-family proxy $\hat{y}$ versus GT mIoU on the $48$ holdout runs. Anchor and known-bad clouds separate along the identity line; ranking accuracy is $24/24$.}
+\label{fig:holdout-scatter}
+\end{figure*}
+
+Table~\ref{tab:holdout-calibration} and Figure~\ref{fig:holdout-scatter} report the frozen B1+B2lean proxies. Overall holdout MAE is $0.110$ for per-family models versus $0.121$ for a single pooled model. Ranking accuracy is perfect for both ($24/24$). Absolute calibration is family-dependent: staggered and complex anchors are relatively well calibrated (MAE $0.095$ and $0.074$), whereas continuous (T3) anchors show larger underestimation (MAE $0.295$) even when ranking against bad remains correct. This motivates reading $\hat{y}$ as a \emph{directional} signal during reflection---especially on T3---and corroborating gains against artifacts.
+
+\subsection{Feature-block and structure ablation}\label{sec:results-ablation}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/proxy_ablation_mae.pdf}
+\caption{Holdout MAE across feature sets and model structures. Every configuration ranks anchor above bad on all $24$ pairs. The deployment default (per-family B1+B2lean, dashed) trades a small MAE gap versus pure B2 for higher alarm precision and fewer family-conditional features.}
+\label{fig:ablation-mae}
+\end{figure*}
+
+\begin{table*}[t]
+\caption{Selected per-family ablation rows on the $48$-run holdout grid. Rank is anchor~$>$~bad accuracy.}
+\label{tab:ablation-rows}
+\centering
+\footnotesize
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l c c c c c @{}}
+\toprule
+Feature set & MAE & MAE$_{\mathrm{anchor}}$ & MAE$_{\mathrm{bad}}$ & Spearman & Rank \\
+\midrule
+B1 & 0.114 & 0.151 & 0.077 & 0.751 & 24/24 \\
+B2lean & 0.101 & 0.177 & 0.024 & 0.703 & 24/24 \\
+B2 & 0.092 & 0.166 & 0.018 & 0.731 & 24/24 \\
+B1+B2lean (deploy) & 0.110 & 0.155 & 0.066 & 0.719 & 24/24 \\
+B1+B2 & 0.097 & 0.144 & 0.050 & 0.772 & 24/24 \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+Figure~\ref{fig:ablation-mae} and Table~\ref{tab:ablation-rows} compare feature sets under per-family, pooled, and pooled+one-hot Ridge fits. All ablated configurations achieve $24/24$ ranking. Lowest MAE is per-family B2 ($0.092$), with B1+B2 close behind ($0.097$). The deployment default B1+B2lean ($0.110$) sits $0.018$ above the B2 winner but adds coherence features that catch form failures evidence alone may miss outside this panel, and it uses fewer family-conditional coordinates than full B2. Per-family models outperform pooled fits ($\pm$ family one-hot) at matched feature sets (e.g.\ B1+B2lean: $0.110$ vs.\ $0.122$/$0.121$), so separate family proxies are retained.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.75\textwidth]{figures/proxy_ablation_alarm.pdf}
+\caption{Alarm precision and recall for per-family proxies. B1+B2lean achieves perfect precision at recall $0.89$; OR-ing the phase check raises recall to $0.93$ (recovering $1$-$5$-anchor) at a one-false-positive cost.}
+\label{fig:ablation-alarm}
+\end{figure*}
+
+Figure~\ref{fig:ablation-alarm} compares alarm quality. Evidence-only B2lean has perfect ranking but weaker alarm precision ($0.80$). B1+B2lean restores precision $1.00$ at recall $0.89$. OR-ing the phase-coherence alarm recovers the $1$-$5$ label-rotation false negative (FN $3\rightarrow 2$) with precision $0.96$ and recall $0.93$.
+
+\subsection{Permutation control}\label{sec:results-perm}
+
+Within-family mIoU permutation (20 repeats, seed~$0$), refitting per-family B1+B2lean, yields holdout MAE $0.353\pm 0.013$ and ranking accuracy $0.50\pm 0.17$, versus real-fit MAE $0.110$ and ranking $1.00$. The gap indicates that holdout performance is not a Ridge capacity artifact.
+
+\subsection{Implications for reflective control}\label{sec:results-reflect}
+
+The frozen proxy and phase alarm supply the closed-loop signals required by Algorithm~\ref{alg:reflective_adaptation}: ranking separates usable overlays from collapsed ones, while family-dependent absolute bias (especially T3) argues for accepting rounds on $\Delta\hat{y}$ and artifact corroboration rather than raw score thresholds alone. Qualitative failures that look ``clean'' in depth maps but rotate block labels remain the primary motivation for retaining the phase check alongside B1+B2lean.
+
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Key findings}
+
+First, a compact GT-free feature set can rank deployment candidates reliably across lining families when trained on BO experience that includes deliberate failures. Perfect $24/24$ ranking is robust across feature ablations; the practical choice is therefore driven by alarm precision and feature parsimony, not ranking alone. Second, per-family proxies beat a pooled model even with family one-hot indicators: lining grammar and scan regimes change the feature--mIoU slopes. Third, absolute proxy calibration is imperfect---notably on continuous tunnels---so reflective agents should treat $\hat{y}$ as directional. Fourth, some high-cost failures (circumferential phase) are invisible to the regression features yet recoverable with a lightweight GT-free phase check.
+
+\subsection{Positioning relative to prior deployment control}
+
+Relative to static SAM4Tun, Proxy4Tun adds an explicit accept/alarm channel without requiring deployment labels. Relative to one-shot LLM adapters, it adds a calibrated numeric critic and a closed reflection loop with upstream deferral. Relative to generic segmentation QC~\cite{valindria2017rca,fournel2021segmentationQC}, the features and phase check are specialised to cylindrical unfolding and segmental grammars. BO remains offline experience generation~\cite{snoek2012practicalBO,garnett2023bayesianOptimization}, avoiding online label queries.
+
+\subsection{Limitations}
+
+The study evaluates proxy ranking and alarms on sibling-anchor versus known-bad overlays; full multi-round reflective campaigns on all $24$ holdouts are left as deployment pilots. Complex linings lack a stable phase prior, so phase alarms do not apply there. T3 absolute calibration remains a weakness. Absolute segmentation ceilings remain those of the underlying SAM4Tun stage algorithms and family anchors; the proxy cannot invent geometric evidence that upstream stages discarded. Finally, LLM reflection inherits stochasticity and constraint-satisfaction limits of prompted validation.
+
+\section{Conclusions}\label{sec:conclusions}
+
+Proxy4Tun couples design-time BO experience with a frozen GT-free proxy and an ontology-grounded reflective agent to support accept/refine/flag decisions for segmental tunnel-lining segmentation without deployment labels. On a $48$-run holdout grid spanning staggered, continuous, and complex linings, per-family B1+B2lean proxies rank sibling-anchor above known-bad configurations in every case, and a phase-coherence alarm recovers a label-rotation failure missed by regression alone. Feature ablations and a permutation control support the deployed feature set. These results indicate that intrinsic, stage-observable metrics can serve as an auditable control plane for foundation-model tunnel pipelines when GT is unavailable.
+
+\section*{Data availability}
+
+The source code, parameter snapshots, BO experience tables, and evaluation scripts will be released upon publication. The Seg2Tunnel dataset is publicly available~\cite{lin2024seg2tunnel}.
+
+\section*{Declaration of competing interest}
+
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\bibliographystyle{model1-num-names}
+\bibliography{references}
+\end{document}

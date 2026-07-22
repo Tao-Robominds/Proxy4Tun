@@ -1,0 +1,511 @@
+﻿Proxy4Tun: self-refine framework for label-free tunnel point-cloud segmentation at deployment
+Highlights
+* Label-free point cloud tunnel-lining segmentation at deployment.
+* Ring-level projection-based pipeline employing boundary detection.
+* Gravity-referenced tunnel bottom alignment is essential.
+* Offline BO-calibrated intrinsic proxy serving as an mIoU indicator.
+* Self-refinement increasing mean mIoU 3.46-fold over static SAM4Tun.
+
+
+Abstraction
+1. Introduction
+Gap: Ring-level motivation
+  
+
+Figure 1. Motivation for ring-level segmentation and proxy tuning. Even within the same tunnel, rings can exhibit markedly different point-cloud characteristics. For example, ring T5-1/R273 is much sparser than T5-1/R270, producing larger white/background regions. Treating the tunnel as a single homogeneous object would therefore hide ring-specific variation and lead to suboptimal segmentation parameters. Our pipeline segments the tunnel at the ring level, unfolds each ring independently into a depth image, applies a proxy tuner to adapt the segmentation parameters for that ring, and then reprojects the optimised segmentation back onto the 3D point cloud.
+
+
+________________
+Pipeline
+
+
+  
+
+Figure 2. Ring-level segmentation pipeline with proxy-guided self-refinement. Each ring-level point cloud is first unfolded into a 2D depth-map projection. During the line-detection stage, a proxy tuner iteratively adjusts the detection parameters using a proxy score with guardrails, continuing until the score reaches a plateau or the tuning budget is exhausted. The detected boundaries then define the regions assigned as 2D segments, and the resulting segmentation is finally reprojected back onto the original 3D point cloud.
+________________
+BO-calibrated proxy
+  
+
+Figure 3. Learning an observable proxy objective from Bayesian optimisation (BO). BO  is first used on selected GT-available rings to explore how different detection parameters change the unfolded depth map, boundary layout, and segmentation output. From these BO trials, we identify observable features that correlate with segmentation quality, including depth completeness, boundary regularity, and segment balance. These features are then used to train a proxy equation that predicts expected mIoU without requiring ground-truth labels at deployment time, enabling the tuner to select better parameters for new rings using only intrinsic visual/geometric cues.
+
+________________
+
+
+Proxy tuner
+  
+
+Figure 4. Proxy-guided LLM tuner at deployment. Given a new ring-level depth map. The LLM proposes boundary detection  parameters based on the point cloud characteristics. Each parameter set is evaluated by the learned proxy score, which estimates expected mIoU without ground-truth labels. The tuner iteratively refines the parameters until the proxy score reaches a plateau or the evaluation budget is exhausted, and the highest-scoring candidate is selected as the final segmentation estimate.
+2. Related work
+3. Methodology
+Dataset
+Table 1. Composition of the BO calibration and held-out evaluation panels. The BO panel contains six selected labelled rings used only at design time, while the held-out panel contains 50 rings used for evaluation. Descriptors summarise point density, ring coverage, keystone span, and cyclic joint pattern diversity across the panels.
+Descriptor
+	BO calibration
+	Held-out
+	Rings
+	6
+	50
+	Density (dense / medium / low)
+	2 / 2 / 2
+	13 / 18 / 19
+	Coverage (full / partial)
+	5 / 1
+	48 / 2
+	K-span (narrow / normal / wide)
+	1 / 3 / 2
+	3 / 22 / 25
+	Joint pattern (canonical / reversed canonical)
+	3 / 3
+	26 / 24
+	
+
+Data preprocessing
+  Figure 5. Resolving rotational ambiguity by bottom alignment. The ring unfolding process has an inherent rotational phase ambiguity: the same 3D ring can be projected with different angular starting points, causing the observed tunnel surface to be split across the depth-map boundary and leaving large white/empty regions in the 2D image. We therefore apply bottom alignment, shifting the unfolding so the physical tunnel bottom is consistently placed at the same reference row. This removes the ambiguous rotation axis, producing a more continuous depth map.
+BO
+BO is used as a design-time experience generator, not as the final optimisation engine. On the labelled calibration panel, BO explores parameter changes and failure cases to reveal which intrinsic, observable signals track mIoU/OA. These signals are then distilled into a frozen proxy and guardrails for label-free deployment.
+
+
+Proxy
+Employ the Ridge model for standard offline supervised, GT-based mIoU training on BO-derived data. During deployment, runtime scoring is exclusively performed using the three non-GT observable features.
+
+Ablation study
+* SAM4Tun static parameters
+* Rotation-ambiguous with initialised parameters as baseline
+* Stabilised unfolding with gravity-referenced alignment
+* Intrinsic reflection iterations within budget
+Table 2. Fixed adaptation budget used during iterative intrinsic refinement. Each ring is allowed up to 3 refinement rounds, with at most 18 candidate layouts evaluated per round. The search terminates early after one non-improving round.
+Budget item
+	Value
+	Max rounds per ring
+	3
+	Patience
+	1 non-improving round
+	Max candidates per round
+	100
+	Evaluation metrics
+* mIoU/OA
+* CI
+* P-value
+
+
+4. Results
+Proxy formula
+proxy_miou = 0.015213 
+-0.031164 * struct_missing_ids
++0.196603 * depth_row_nonempty_ratio 
++0.081910 * geom_boundary_gap
+Overall performance
+
+
+  
+
+
+
+Figure 5. Overall segmentation performance on the 50-ring held-out panel. The stage-wise bars show that Intrinsics4Tun improves progressively from seeded adaptation through stabilisation and intrinsic refinement, with the largest gain achieved by the final refined stage.  
+
+
+Table 3. Exact overall statistics corresponding to Figure 5.
+Stage
+	mIoU value
+	Lift
+	95% CI
+	P-value
+	SAM4Tun: static
+	0.1374
+	-
+	[0.0719, 0.2029]
+	Reference
+	Intrinsics4Tun: seeded
+	0.1668
+	+0.0295
+	[0.1381, 0.1955]
+	0.318 vs static
+	Intrinsics4Tun: aligned
+	0.2901
+	+0.1233
+	[0.2300, 0.3503]
+	1.64e-4 vs seeded
+	Intrinsics4Tun: refined
+	0.4750
+	+0.1849
+	[0.4121, 0.5379]
+	8.90e-4 vs stabilised
+	
+
+  
+
+Figure 6. Per-tunnel mIoU comparison between the SAM4Tun static baseline and refined Intrinsics4Tun. Intrinsics4Tun improves performance on every tunnel, with the largest gains on T3-T5 where the static baseline fails to transfer under tunnel diameter and segment-count shifts.
+
+
+Table 4. Exact per-tunnel statistics corresponding to Figure 6. 
+Tunnel
+	SAM4Tun
+	Intrinsics4Tun
+	Lift
+	T1
+	0.2094
+	0.4574
+	+0.2480
+	T2
+	0.4637
+	0.6566
+	+0.1928
+	T3
+	0.0000
+	0.5349
+	+0.5349
+	T4
+	0.0000
+	0.4187
+	+0.4187
+	T5
+	0.0000
+	0.3528
+	+0.3528
+	
+
+Cross-LLM consistency
+(We are using Claude Opus 4.7)
+
+
+5. Discussion
+Key findings
+The results suggest three main findings.  
+1. Ring-level segmentation is an effective formulation for tunnel-lining point clouds.
+2. A well-calibrated intrinsic proxy can provide effective label-free quality control. 
+3. Intrinsic self-refinement enables practical adaptation. 
+Limitations
+1. The intrinsic proxy is not perfectly accurate. (Table 6 in Appendix)
+2. The intrinsic search is also not exhaustive. 
+6. Conclusions
+
+
+Appendix
+Table 5. Ring-level mIoU progression across the 50-ring held-out panel. Each row reports one held-out ring, grouped by tunnel, with mIoU at three Intrinsics4Tun stages: seeded initialisation, gravity-stabilised preprocessing, and final intrinsic refinement. The table shows how stabilisation and proxy-guided refinement contribute differently across tunnel conditions, with the refined stage producing the final selected segmentation used for overall performance reporting.
+
+
+Ring
+	Tunnel
+	Seeded
+	Stabilised
+	Refined
+	1-1/r18
+	1
+	0.095
+	0.253
+	0.325
+	1-1/r19
+	1
+	0.093
+	0.093
+	0.437
+	1-2/r58
+	1
+	0.104
+	0.236
+	0.314
+	1-2/r59
+	1
+	0.092
+	0.092
+	0.427
+	1-3/r125
+	1
+	0.172
+	0.172
+	0.288
+	1-3/r131
+	1
+	0.121
+	0.121
+	0.319
+	1-4/r197
+	1
+	0.227
+	0.227
+	0.800
+	1-4/r204
+	1
+	0.187
+	0.187
+	0.757
+	1-5/r270
+	1
+	0.072
+	0.072
+	0.544
+	1-5/r273
+	1
+	0.114
+	0.114
+	0.362
+	2-1/r60
+	2
+	0.076
+	0.076
+	0.674
+	2-1/r64
+	2
+	0.390
+	0.390
+	0.662
+	2-2/r141
+	2
+	0.097
+	0.097
+	0.674
+	2-2/r143
+	2
+	0.369
+	0.369
+	0.731
+	2-3/r220
+	2
+	0.072
+	0.072
+	0.649
+	2-3/r224
+	2
+	0.378
+	0.378
+	0.551
+	2-4/r298
+	2
+	0.092
+	0.092
+	0.614
+	2-4/r304
+	2
+	0.426
+	0.426
+	0.630
+	2-5/r353
+	2
+	0.377
+	0.377
+	0.715
+	2-5/r360
+	2
+	0.073
+	0.073
+	0.667
+	3-1-1/r28
+	3
+	0.127
+	0.127
+	0.564
+	3-1-1/r31
+	3
+	0.149
+	0.149
+	0.786
+	3-1-1/r32
+	3
+	0.249
+	0.249
+	0.408
+	3-1-1/r36
+	3
+	0.073
+	0.073
+	0.082
+	3-1-2/r46
+	3
+	0.181
+	0.181
+	0.595
+	3-1-2/r47
+	3
+	0.201
+	0.201
+	0.419
+	3-1-2/r48
+	3
+	0.135
+	0.135
+	0.559
+	3-1-3/r77
+	3
+	0.128
+	0.128
+	0.285
+	3-1-3/r78
+	3
+	0.119
+	0.119
+	0.790
+	3-1-3/r86
+	3
+	0.377
+	0.377
+	0.408
+	4-1/r110
+	4
+	0.076
+	0.629
+	0.183
+	4-10/r398
+	4
+	0.196
+	0.830
+	0.190
+	4-2/r142
+	4
+	0.190
+	0.610
+	0.202
+	4-3/r177
+	4
+	0.169
+	0.585
+	0.459
+	4-4/r212
+	4
+	0.075
+	0.159
+	0.815
+	4-5/r249
+	4
+	0.159
+	0.411
+	0.186
+	4-6/r276
+	4
+	0.122
+	0.128
+	0.356
+	4-7/r308
+	4
+	0.081
+	0.173
+	0.814
+	4-8/r332
+	4
+	0.097
+	0.599
+	0.198
+	4-9/r363
+	4
+	0.188
+	0.164
+	0.784
+	5-1/r118
+	5
+	0.190
+	0.596
+	0.254
+	5-2/r140
+	5
+	0.166
+	0.581
+	0.177
+	5-3/r192
+	5
+	0.123
+	0.609
+	0.258
+	5-3/r195
+	5
+	0.401
+	0.171
+	0.255
+	5-4/r227
+	5
+	0.137
+	0.780
+	0.170
+	5-5/r254
+	5
+	0.163
+	0.408
+	0.167
+	5-5/r259
+	5
+	0.162
+	0.169
+	0.833
+	5-6/r285
+	5
+	0.130
+	0.159
+	0.402
+	5-7/r317
+	5
+	0.067
+	0.643
+	0.565
+	5-7/r322
+	5
+	0.082
+	0.447
+	0.447
+	
+
+
+
+Table 6. Regression cases where intrinsic refinement underperforms stabilised preprocessing. The table lists held-out rings for which the final refined Intrinsics4Tun result has lower mIoU than the stabilised stage. These 12 cases, all from T4 and T5, indicate proxy-selection failures on irregular tunnel conditions where the intrinsic score favoured a candidate that was structurally plausible but worse under ground-truth mIoU.
+Ring
+	Tunnel
+	Stabilised
+	Refined
+	Drop
+	4-10/r398
+	4
+	0.830
+	0.190
+	-0.640
+	4-1/r110
+	4
+	0.629
+	0.183
+	-0.446
+	4-2/r142
+	4
+	0.610
+	0.202
+	-0.408
+	4-8/r332
+	4
+	0.599
+	0.198
+	-0.401
+	4-5/r249
+	4
+	0.411
+	0.186
+	-0.225
+	4-3/r177
+	4
+	0.585
+	0.459
+	-0.126
+	5-4/r227
+	5
+	0.780
+	0.170
+	-0.610
+	5-2/r140
+	5
+	0.581
+	0.177
+	-0.404
+	5-3/r192
+	5
+	0.609
+	0.258
+	-0.351
+	5-1/r118
+	5
+	0.596
+	0.254
+	-0.342
+	5-5/r254
+	5
+	0.408
+	0.167
+	-0.241
+	5-7/r317
+	5
+	0.643
+	0.565
+	-0.079

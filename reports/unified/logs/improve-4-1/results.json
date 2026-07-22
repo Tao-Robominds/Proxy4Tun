@@ -1,0 +1,113 @@
+{
+  "target_miou": 0.7,
+  "baseline_unified_miou": 0.634,
+  "legacy_swapfalse_miou": 0.741,
+  "results": [
+    {
+      "tag": "A_seed0",
+      "mIoU": 0.634,
+      "elapsed_s": 278.5,
+      "exit": 0,
+      "timestamp": "2026-07-20T17:25:34"
+    },
+    {
+      "tag": "A_seed1",
+      "mIoU": 0.626,
+      "elapsed_s": 272.0,
+      "exit": 0,
+      "timestamp": "2026-07-20T17:30:06"
+    },
+    {
+      "tag": "A_seed2",
+      "mIoU": 0.633,
+      "elapsed_s": 275.8,
+      "exit": 0,
+      "timestamp": "2026-07-20T17:34:42"
+    },
+    {
+      "tag": "A_seed3",
+      "mIoU": 0.637,
+      "elapsed_s": 284.7,
+      "exit": 0,
+      "timestamp": "2026-07-20T17:39:27"
+    },
+    {
+      "tag": "A_seed4",
+      "mIoU": 0.633,
+      "elapsed_s": 275.9,
+      "exit": 0,
+      "timestamp": "2026-07-20T17:44:03"
+    },
+    {
+      "tag": "A_seed5",
+      "mIoU": 0.355,
+      "elapsed_s": 256.1,
+      "exit": 0,
+      "timestamp": "2026-07-20T17:48:19"
+    },
+    {
+      "tag": "A_seed10",
+      "mIoU": 0.626,
+      "elapsed_s": 284.5,
+      "exit": 0,
+      "timestamp": "2026-07-20T17:53:03"
+    },
+    {
+      "tag": "A_seed42",
+      "mIoU": 0.638,
+      "elapsed_s": 290.6,
+      "exit": 0,
+      "timestamp": "2026-07-20T17:57:54"
+    },
+    {
+      "tag": "B_hring-1_seed0",
+      "mIoU": 0.137,
+      "elapsed_s": 286.0,
+      "exit": 0,
+      "timestamp": "2026-07-20T18:02:40"
+    },
+    {
+      "tag": "B_hring-1_seed1",
+      "mIoU": 0.139,
+      "elapsed_s": 282.8,
+      "exit": 0,
+      "timestamp": "2026-07-20T18:07:23"
+    },
+    {
+      "tag": "B_hring-1_seed2",
+      "mIoU": 0.139,
+      "elapsed_s": 280.1,
+      "exit": 0,
+      "timestamp": "2026-07-20T18:12:03"
+    },
+    {
+      "tag": "B_hring-1_seed3",
+      "mIoU": 0.141,
+      "elapsed_s": 279.6,
+      "exit": 0,
+      "timestamp": "2026-07-20T18:16:42"
+    },
+    {
+      "tag": "C_mirrork_seed0",
+      "mIoU": 0.141,
+      "elapsed_s": 48.5,
+      "exit": -15,
+      "timestamp": "2026-07-20T18:17:31"
+    },
+    {
+      "tag": "C_mirrork_seed1",
+      "mIoU": 0.141,
+      "elapsed_s": 217.5,
+      "exit": 1,
+      "timestamp": "2026-07-20T18:21:08"
+    },
+    {
+      "tag": "C_mirrork_seed2",
+      "mIoU": 0.164,
+      "elapsed_s": 265.3,
+      "exit": 0,
+      "timestamp": "2026-07-20T18:25:34"
+    }
+  ],
+  "winner": null
+}

@@ -1,0 +1,2547 @@
+[
+  {
+    "run": "data/bo-unified/1-2-family-proxy/runs/1-2-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 3.4,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 9160,
+        "nearest_peer_dist_deg": 12.0
+      },
+      {
+        "ring": 2,
+        "points": 25409,
+        "nearest_peer_dist_deg": 14.0
+      },
+      {
+        "ring": 3,
+        "points": 46087,
+        "nearest_peer_dist_deg": 0.7
+      },
+      {
+        "ring": 4,
+        "points": 89842,
+        "nearest_peer_dist_deg": 1.9
+      },
+      {
+        "ring": 5,
+        "points": 183055,
+        "nearest_peer_dist_deg": 1.5
+      },
+      {
+        "ring": 6,
+        "points": 397947,
+        "nearest_peer_dist_deg": 3.4
+      },
+      {
+        "ring": 7,
+        "points": 345719,
+        "nearest_peer_dist_deg": 5.6
+      },
+      {
+        "ring": 8,
+        "points": 163473,
+        "nearest_peer_dist_deg": 2.1
+      },
+      {
+        "ring": 9,
+        "points": 81348,
+        "nearest_peer_dist_deg": 0.7
+      },
+      {
+        "ring": 0,
+        "points": 41579,
+        "nearest_peer_dist_deg": 1.9
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/1-2-family-proxy/runs/1-2-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 21.5,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 929,
+        "nearest_peer_dist_deg": 21.8
+      },
+      {
+        "ring": 2,
+        "points": 1784,
+        "nearest_peer_dist_deg": 5.1
+      },
+      {
+        "ring": 3,
+        "points": 2497,
+        "nearest_peer_dist_deg": 19.8
+      },
+      {
+        "ring": 4,
+        "points": 6063,
+        "nearest_peer_dist_deg": 5.1
+      },
+      {
+        "ring": 5,
+        "points": 14065,
+        "nearest_peer_dist_deg": 5.0
+      },
+      {
+        "ring": 6,
+        "points": 23787,
+        "nearest_peer_dist_deg": 66.3
+      },
+      {
+        "ring": 7,
+        "points": 21952,
+        "nearest_peer_dist_deg": 3.7
+      },
+      {
+        "ring": 8,
+        "points": 10603,
+        "nearest_peer_dist_deg": 5.0
+      },
+      {
+        "ring": 9,
+        "points": 5300,
+        "nearest_peer_dist_deg": 3.7
+      },
+      {
+        "ring": 0,
+        "points": 2975,
+        "nearest_peer_dist_deg": 6.4
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": true
+  },
+  {
+    "run": "data/bo-unified/1-3-family-proxy/runs/1-3-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 4.2,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 22017,
+        "nearest_peer_dist_deg": 1.3
+      },
+      {
+        "ring": 2,
+        "points": 40134,
+        "nearest_peer_dist_deg": 1.3
+      },
+      {
+        "ring": 3,
+        "points": 75621,
+        "nearest_peer_dist_deg": 1.3
+      },
+      {
+        "ring": 4,
+        "points": 155800,
+        "nearest_peer_dist_deg": 1.3
+      },
+      {
+        "ring": 5,
+        "points": 337731,
+        "nearest_peer_dist_deg": 2.4
+      },
+      {
+        "ring": 6,
+        "points": 410443,
+        "nearest_peer_dist_deg": 3.8
+      },
+      {
+        "ring": 7,
+        "points": 188107,
+        "nearest_peer_dist_deg": 1.4
+      },
+      {
+        "ring": 8,
+        "points": 91976,
+        "nearest_peer_dist_deg": 2.2
+      },
+      {
+        "ring": 9,
+        "points": 46964,
+        "nearest_peer_dist_deg": 2.3
+      },
+      {
+        "ring": 0,
+        "points": 25188,
+        "nearest_peer_dist_deg": 98.4
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/1-3-family-proxy/runs/1-3-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 9.5,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 1456,
+        "nearest_peer_dist_deg": 12.7
+      },
+      {
+        "ring": 2,
+        "points": 2094,
+        "nearest_peer_dist_deg": 9.2
+      },
+      {
+        "ring": 3,
+        "points": 3162,
+        "nearest_peer_dist_deg": 25.2
+      },
+      {
+        "ring": 4,
+        "points": 19855,
+        "nearest_peer_dist_deg": 9.2
+      },
+      {
+        "ring": 5,
+        "points": 72471,
+        "nearest_peer_dist_deg": 4.1
+      },
+      {
+        "ring": 6,
+        "points": 137070,
+        "nearest_peer_dist_deg": 12.7
+      },
+      {
+        "ring": 7,
+        "points": 32539,
+        "nearest_peer_dist_deg": 4.1
+      },
+      {
+        "ring": 8,
+        "points": 6555,
+        "nearest_peer_dist_deg": 15.4
+      },
+      {
+        "ring": 9,
+        "points": 1851,
+        "nearest_peer_dist_deg": 27.2
+      },
+      {
+        "ring": 0,
+        "points": 1017,
+        "nearest_peer_dist_deg": 15.7
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/1-4-family-proxy/runs/1-4-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 6.0,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 59876,
+        "nearest_peer_dist_deg": 1.8
+      },
+      {
+        "ring": 2,
+        "points": 123949,
+        "nearest_peer_dist_deg": 2.1
+      },
+      {
+        "ring": 3,
+        "points": 241456,
+        "nearest_peer_dist_deg": 1.2
+      },
+      {
+        "ring": 4,
+        "points": 428261,
+        "nearest_peer_dist_deg": 8.4
+      },
+      {
+        "ring": 5,
+        "points": 227329,
+        "nearest_peer_dist_deg": 1.2
+      },
+      {
+        "ring": 6,
+        "points": 108255,
+        "nearest_peer_dist_deg": 2.1
+      },
+      {
+        "ring": 7,
+        "points": 54168,
+        "nearest_peer_dist_deg": 1.9
+      },
+      {
+        "ring": 8,
+        "points": 29147,
+        "nearest_peer_dist_deg": 100.0
+      },
+      {
+        "ring": 9,
+        "points": 16541,
+        "nearest_peer_dist_deg": 1.9
+      },
+      {
+        "ring": 0,
+        "points": 8269,
+        "nearest_peer_dist_deg": 3.3
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/1-4-family-proxy/runs/1-4-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 9.9,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 3554,
+        "nearest_peer_dist_deg": 15.3
+      },
+      {
+        "ring": 2,
+        "points": 6899,
+        "nearest_peer_dist_deg": 8.4
+      },
+      {
+        "ring": 3,
+        "points": 18695,
+        "nearest_peer_dist_deg": 8.8
+      },
+      {
+        "ring": 4,
+        "points": 31626,
+        "nearest_peer_dist_deg": 9.7
+      },
+      {
+        "ring": 5,
+        "points": 16176,
+        "nearest_peer_dist_deg": 8.8
+      },
+      {
+        "ring": 6,
+        "points": 4965,
+        "nearest_peer_dist_deg": 8.4
+      },
+      {
+        "ring": 7,
+        "points": 6794,
+        "nearest_peer_dist_deg": 13.7
+      },
+      {
+        "ring": 8,
+        "points": 7728,
+        "nearest_peer_dist_deg": 6.8
+      },
+      {
+        "ring": 9,
+        "points": 6292,
+        "nearest_peer_dist_deg": 17.4
+      },
+      {
+        "ring": 0,
+        "points": 3026,
+        "nearest_peer_dist_deg": 6.8
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/1-5-family-proxy/runs/1-5-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 20.6,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 8567,
+        "nearest_peer_dist_deg": 15.4
+      },
+      {
+        "ring": 2,
+        "points": 19308,
+        "nearest_peer_dist_deg": 21.2
+      },
+      {
+        "ring": 3,
+        "points": 32598,
+        "nearest_peer_dist_deg": 15.4
+      },
+      {
+        "ring": 4,
+        "points": 60310,
+        "nearest_peer_dist_deg": 4.2
+      },
+      {
+        "ring": 5,
+        "points": 121032,
+        "nearest_peer_dist_deg": 38.9
+      },
+      {
+        "ring": 6,
+        "points": 241565,
+        "nearest_peer_dist_deg": 4.2
+      },
+      {
+        "ring": 7,
+        "points": 511298,
+        "nearest_peer_dist_deg": 35.9
+      },
+      {
+        "ring": 8,
+        "points": 328587,
+        "nearest_peer_dist_deg": 5.3
+      },
+      {
+        "ring": 9,
+        "points": 164414,
+        "nearest_peer_dist_deg": 5.3
+      },
+      {
+        "ring": 0,
+        "points": 81542,
+        "nearest_peer_dist_deg": 52.6
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": true
+  },
+  {
+    "run": "data/bo-unified/1-5-family-proxy/runs/1-5-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 4.1,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 662,
+        "nearest_peer_dist_deg": 8.1
+      },
+      {
+        "ring": 2,
+        "points": 945,
+        "nearest_peer_dist_deg": 5.8
+      },
+      {
+        "ring": 3,
+        "points": 1563,
+        "nearest_peer_dist_deg": 6.5
+      },
+      {
+        "ring": 4,
+        "points": 2721,
+        "nearest_peer_dist_deg": 5.8
+      },
+      {
+        "ring": 5,
+        "points": 5197,
+        "nearest_peer_dist_deg": 6.5
+      },
+      {
+        "ring": 6,
+        "points": 13017,
+        "nearest_peer_dist_deg": 4.0
+      },
+      {
+        "ring": 7,
+        "points": 26568,
+        "nearest_peer_dist_deg": 4.0
+      },
+      {
+        "ring": 8,
+        "points": 13625,
+        "nearest_peer_dist_deg": 2.6
+      },
+      {
+        "ring": 9,
+        "points": 7604,
+        "nearest_peer_dist_deg": 2.6
+      },
+      {
+        "ring": 0,
+        "points": 3176,
+        "nearest_peer_dist_deg": 6.3
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/2-2-family-proxy/runs/2-2-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 14.5,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 20936,
+        "nearest_peer_dist_deg": 15.6
+      },
+      {
+        "ring": 2,
+        "points": 42660,
+        "nearest_peer_dist_deg": 1.4
+      },
+      {
+        "ring": 3,
+        "points": 80776,
+        "nearest_peer_dist_deg": 1.1
+      },
+      {
+        "ring": 4,
+        "points": 169629,
+        "nearest_peer_dist_deg": 2.3
+      },
+      {
+        "ring": 5,
+        "points": 346529,
+        "nearest_peer_dist_deg": 2.3
+      },
+      {
+        "ring": 6,
+        "points": 408908,
+        "nearest_peer_dist_deg": 45.6
+      },
+      {
+        "ring": 7,
+        "points": 196776,
+        "nearest_peer_dist_deg": 1.1
+      },
+      {
+        "ring": 8,
+        "points": 96397,
+        "nearest_peer_dist_deg": 1.5
+      },
+      {
+        "ring": 9,
+        "points": 48012,
+        "nearest_peer_dist_deg": 1.6
+      },
+      {
+        "ring": 0,
+        "points": 26448,
+        "nearest_peer_dist_deg": 1.4
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": true
+  },
+  {
+    "run": "data/bo-unified/2-2-family-proxy/runs/2-2-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 1.6,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 2339,
+        "nearest_peer_dist_deg": 5.5
+      },
+      {
+        "ring": 2,
+        "points": 3860,
+        "nearest_peer_dist_deg": 2.1
+      },
+      {
+        "ring": 3,
+        "points": 8097,
+        "nearest_peer_dist_deg": 2.5
+      },
+      {
+        "ring": 4,
+        "points": 19240,
+        "nearest_peer_dist_deg": 1.4
+      },
+      {
+        "ring": 5,
+        "points": 35424,
+        "nearest_peer_dist_deg": 1.5
+      },
+      {
+        "ring": 6,
+        "points": 25991,
+        "nearest_peer_dist_deg": 1.4
+      },
+      {
+        "ring": 7,
+        "points": 24402,
+        "nearest_peer_dist_deg": 1.5
+      },
+      {
+        "ring": 8,
+        "points": 9469,
+        "nearest_peer_dist_deg": 1.4
+      },
+      {
+        "ring": 9,
+        "points": 4349,
+        "nearest_peer_dist_deg": 2.5
+      },
+      {
+        "ring": 0,
+        "points": 2145,
+        "nearest_peer_dist_deg": 1.5
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/2-3-family-proxy/runs/2-3-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 2.4,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 24122,
+        "nearest_peer_dist_deg": 7.6
+      },
+      {
+        "ring": 2,
+        "points": 42789,
+        "nearest_peer_dist_deg": 1.0
+      },
+      {
+        "ring": 3,
+        "points": 85060,
+        "nearest_peer_dist_deg": 1.2
+      },
+      {
+        "ring": 4,
+        "points": 175232,
+        "nearest_peer_dist_deg": 2.5
+      },
+      {
+        "ring": 5,
+        "points": 374586,
+        "nearest_peer_dist_deg": 2.1
+      },
+      {
+        "ring": 6,
+        "points": 393863,
+        "nearest_peer_dist_deg": 3.8
+      },
+      {
+        "ring": 7,
+        "points": 188472,
+        "nearest_peer_dist_deg": 1.3
+      },
+      {
+        "ring": 8,
+        "points": 92822,
+        "nearest_peer_dist_deg": 1.7
+      },
+      {
+        "ring": 9,
+        "points": 46928,
+        "nearest_peer_dist_deg": 1.2
+      },
+      {
+        "ring": 0,
+        "points": 25426,
+        "nearest_peer_dist_deg": 1.0
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/2-3-family-proxy/runs/2-3-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 20.3,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 2600,
+        "nearest_peer_dist_deg": 7.9
+      },
+      {
+        "ring": 2,
+        "points": 4221,
+        "nearest_peer_dist_deg": 8.3
+      },
+      {
+        "ring": 3,
+        "points": 7976,
+        "nearest_peer_dist_deg": 7.9
+      },
+      {
+        "ring": 4,
+        "points": 19218,
+        "nearest_peer_dist_deg": 0.9
+      },
+      {
+        "ring": 5,
+        "points": 36285,
+        "nearest_peer_dist_deg": 0.9
+      },
+      {
+        "ring": 6,
+        "points": 32394,
+        "nearest_peer_dist_deg": 79.0
+      },
+      {
+        "ring": 7,
+        "points": 22630,
+        "nearest_peer_dist_deg": 2.0
+      },
+      {
+        "ring": 8,
+        "points": 9017,
+        "nearest_peer_dist_deg": 2.6
+      },
+      {
+        "ring": 9,
+        "points": 4298,
+        "nearest_peer_dist_deg": 10.5
+      },
+      {
+        "ring": 0,
+        "points": 1784,
+        "nearest_peer_dist_deg": 2.6
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": true
+  },
+  {
+    "run": "data/bo-unified/2-4-family-proxy/runs/2-4-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 2.6,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 33663,
+        "nearest_peer_dist_deg": 2.8
+      },
+      {
+        "ring": 2,
+        "points": 62993,
+        "nearest_peer_dist_deg": 0.6
+      },
+      {
+        "ring": 3,
+        "points": 128676,
+        "nearest_peer_dist_deg": 1.6
+      },
+      {
+        "ring": 4,
+        "points": 264185,
+        "nearest_peer_dist_deg": 1.7
+      },
+      {
+        "ring": 5,
+        "points": 462975,
+        "nearest_peer_dist_deg": 4.6
+      },
+      {
+        "ring": 6,
+        "points": 248736,
+        "nearest_peer_dist_deg": 1.7
+      },
+      {
+        "ring": 7,
+        "points": 120992,
+        "nearest_peer_dist_deg": 1.6
+      },
+      {
+        "ring": 8,
+        "points": 61758,
+        "nearest_peer_dist_deg": 0.6
+      },
+      {
+        "ring": 9,
+        "points": 33159,
+        "nearest_peer_dist_deg": 2.0
+      },
+      {
+        "ring": 0,
+        "points": 18893,
+        "nearest_peer_dist_deg": 1.1
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/2-4-family-proxy/runs/2-4-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 5.2,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 3455,
+        "nearest_peer_dist_deg": 6.0
+      },
+      {
+        "ring": 2,
+        "points": 5277,
+        "nearest_peer_dist_deg": 3.1
+      },
+      {
+        "ring": 3,
+        "points": 12433,
+        "nearest_peer_dist_deg": 10.2
+      },
+      {
+        "ring": 4,
+        "points": 32827,
+        "nearest_peer_dist_deg": 3.1
+      },
+      {
+        "ring": 5,
+        "points": 32613,
+        "nearest_peer_dist_deg": 10.5
+      },
+      {
+        "ring": 6,
+        "points": 27224,
+        "nearest_peer_dist_deg": 1.2
+      },
+      {
+        "ring": 7,
+        "points": 10678,
+        "nearest_peer_dist_deg": 3.2
+      },
+      {
+        "ring": 8,
+        "points": 5248,
+        "nearest_peer_dist_deg": 1.2
+      },
+      {
+        "ring": 9,
+        "points": 2291,
+        "nearest_peer_dist_deg": 3.2
+      },
+      {
+        "ring": 0,
+        "points": 1249,
+        "nearest_peer_dist_deg": 3.9
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/2-5-family-proxy/runs/2-5-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 2.4,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 8153,
+        "nearest_peer_dist_deg": 1.9
+      },
+      {
+        "ring": 2,
+        "points": 12603,
+        "nearest_peer_dist_deg": 26.9
+      },
+      {
+        "ring": 3,
+        "points": 25021,
+        "nearest_peer_dist_deg": 1.9
+      },
+      {
+        "ring": 4,
+        "points": 44860,
+        "nearest_peer_dist_deg": 1.3
+      },
+      {
+        "ring": 5,
+        "points": 87409,
+        "nearest_peer_dist_deg": 0.9
+      },
+      {
+        "ring": 6,
+        "points": 175290,
+        "nearest_peer_dist_deg": 1.4
+      },
+      {
+        "ring": 7,
+        "points": 385145,
+        "nearest_peer_dist_deg": 2.9
+      },
+      {
+        "ring": 8,
+        "points": 360019,
+        "nearest_peer_dist_deg": 2.9
+      },
+      {
+        "ring": 9,
+        "points": 172875,
+        "nearest_peer_dist_deg": 0.9
+      },
+      {
+        "ring": 0,
+        "points": 84906,
+        "nearest_peer_dist_deg": 1.3
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/2-5-family-proxy/runs/2-5-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 16.3,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 861,
+        "nearest_peer_dist_deg": 15.0
+      },
+      {
+        "ring": 2,
+        "points": 1085,
+        "nearest_peer_dist_deg": 3.3
+      },
+      {
+        "ring": 3,
+        "points": 2085,
+        "nearest_peer_dist_deg": 2.8
+      },
+      {
+        "ring": 4,
+        "points": 3923,
+        "nearest_peer_dist_deg": 3.3
+      },
+      {
+        "ring": 5,
+        "points": 8538,
+        "nearest_peer_dist_deg": 2.8
+      },
+      {
+        "ring": 6,
+        "points": 17416,
+        "nearest_peer_dist_deg": 6.2
+      },
+      {
+        "ring": 7,
+        "points": 30904,
+        "nearest_peer_dist_deg": 13.2
+      },
+      {
+        "ring": 8,
+        "points": 27629,
+        "nearest_peer_dist_deg": 33.7
+      },
+      {
+        "ring": 9,
+        "points": 19105,
+        "nearest_peer_dist_deg": 17.0
+      },
+      {
+        "ring": 0,
+        "points": 5176,
+        "nearest_peer_dist_deg": 13.2
+      }
+    ],
+    "family": "t1&2",
+    "applicable": true,
+    "phase_alarm": true
+  },
+  {
+    "run": "data/bo-unified/3-10-family-proxy/runs/3-10-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 1.3,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 10431,
+        "nearest_peer_dist_deg": 4.4
+      },
+      {
+        "ring": 2,
+        "points": 11694,
+        "nearest_peer_dist_deg": 3.3
+      },
+      {
+        "ring": 3,
+        "points": 14361,
+        "nearest_peer_dist_deg": 1.1
+      },
+      {
+        "ring": 4,
+        "points": 16238,
+        "nearest_peer_dist_deg": 1.2
+      },
+      {
+        "ring": 5,
+        "points": 16117,
+        "nearest_peer_dist_deg": 1.5
+      },
+      {
+        "ring": 6,
+        "points": 17741,
+        "nearest_peer_dist_deg": 0.8
+      },
+      {
+        "ring": 7,
+        "points": 19155,
+        "nearest_peer_dist_deg": 0.8
+      },
+      {
+        "ring": 8,
+        "points": 21293,
+        "nearest_peer_dist_deg": 0.9
+      },
+      {
+        "ring": 9,
+        "points": 22766,
+        "nearest_peer_dist_deg": 0.7
+      },
+      {
+        "ring": 0,
+        "points": 22752,
+        "nearest_peer_dist_deg": 0.7
+      }
+    ],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-10-family-proxy/runs/3-10-bad",
+    "n_rings_scored": 0,
+    "phase_incoherence_deg": null,
+    "rings": [],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-3-family-proxy/runs/3-3-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 1.7,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 27639,
+        "nearest_peer_dist_deg": 3.6
+      },
+      {
+        "ring": 2,
+        "points": 23281,
+        "nearest_peer_dist_deg": 2.1
+      },
+      {
+        "ring": 3,
+        "points": 20978,
+        "nearest_peer_dist_deg": 1.3
+      },
+      {
+        "ring": 4,
+        "points": 19598,
+        "nearest_peer_dist_deg": 1.3
+      },
+      {
+        "ring": 5,
+        "points": 19169,
+        "nearest_peer_dist_deg": 1.6
+      },
+      {
+        "ring": 6,
+        "points": 19648,
+        "nearest_peer_dist_deg": 1.6
+      },
+      {
+        "ring": 7,
+        "points": 20462,
+        "nearest_peer_dist_deg": 1.0
+      },
+      {
+        "ring": 8,
+        "points": 22130,
+        "nearest_peer_dist_deg": 1.3
+      },
+      {
+        "ring": 9,
+        "points": 24762,
+        "nearest_peer_dist_deg": 1.7
+      },
+      {
+        "ring": 0,
+        "points": 27539,
+        "nearest_peer_dist_deg": 1.0
+      }
+    ],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-3-family-proxy/runs/3-3-bad",
+    "n_rings_scored": 0,
+    "phase_incoherence_deg": null,
+    "rings": [],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-4-family-proxy/runs/3-4-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 2.5,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 9791,
+        "nearest_peer_dist_deg": 11.5
+      },
+      {
+        "ring": 2,
+        "points": 22185,
+        "nearest_peer_dist_deg": 0.8
+      },
+      {
+        "ring": 3,
+        "points": 21022,
+        "nearest_peer_dist_deg": 1.4
+      },
+      {
+        "ring": 4,
+        "points": 19789,
+        "nearest_peer_dist_deg": 0.5
+      },
+      {
+        "ring": 5,
+        "points": 16946,
+        "nearest_peer_dist_deg": 0.5
+      },
+      {
+        "ring": 6,
+        "points": 15596,
+        "nearest_peer_dist_deg": 2.2
+      },
+      {
+        "ring": 7,
+        "points": 9944,
+        "nearest_peer_dist_deg": 3.7
+      },
+      {
+        "ring": 8,
+        "points": 7645,
+        "nearest_peer_dist_deg": 3.9
+      },
+      {
+        "ring": 9,
+        "points": 8295,
+        "nearest_peer_dist_deg": 3.7
+      },
+      {
+        "ring": 0,
+        "points": 3562,
+        "nearest_peer_dist_deg": 5.9
+      }
+    ],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-4-family-proxy/runs/3-4-bad",
+    "n_rings_scored": 0,
+    "phase_incoherence_deg": null,
+    "rings": [],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-5-family-proxy/runs/3-5-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 4.5,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 5437,
+        "nearest_peer_dist_deg": 6.2
+      },
+      {
+        "ring": 2,
+        "points": 8913,
+        "nearest_peer_dist_deg": 3.1
+      },
+      {
+        "ring": 3,
+        "points": 12558,
+        "nearest_peer_dist_deg": 1.8
+      },
+      {
+        "ring": 4,
+        "points": 15204,
+        "nearest_peer_dist_deg": 2.8
+      },
+      {
+        "ring": 5,
+        "points": 13218,
+        "nearest_peer_dist_deg": 1.3
+      },
+      {
+        "ring": 6,
+        "points": 13770,
+        "nearest_peer_dist_deg": 1.3
+      },
+      {
+        "ring": 7,
+        "points": 16960,
+        "nearest_peer_dist_deg": 1.8
+      },
+      {
+        "ring": 8,
+        "points": 21036,
+        "nearest_peer_dist_deg": 2.6
+      },
+      {
+        "ring": 9,
+        "points": 16006,
+        "nearest_peer_dist_deg": 10.6
+      },
+      {
+        "ring": 0,
+        "points": 6326,
+        "nearest_peer_dist_deg": 26.7
+      }
+    ],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-5-family-proxy/runs/3-5-bad",
+    "n_rings_scored": 3,
+    "phase_incoherence_deg": 6.2,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 378,
+        "nearest_peer_dist_deg": 4.2
+      },
+      {
+        "ring": 8,
+        "points": 1032,
+        "nearest_peer_dist_deg": 4.2
+      },
+      {
+        "ring": 9,
+        "points": 959,
+        "nearest_peer_dist_deg": 9.1
+      }
+    ],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-6-family-proxy/runs/3-6-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 0.8,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 18565,
+        "nearest_peer_dist_deg": 1.2
+      },
+      {
+        "ring": 2,
+        "points": 21305,
+        "nearest_peer_dist_deg": 0.6
+      },
+      {
+        "ring": 3,
+        "points": 21964,
+        "nearest_peer_dist_deg": 0.5
+      },
+      {
+        "ring": 4,
+        "points": 23100,
+        "nearest_peer_dist_deg": 0.8
+      },
+      {
+        "ring": 5,
+        "points": 22033,
+        "nearest_peer_dist_deg": 1.0
+      },
+      {
+        "ring": 6,
+        "points": 21200,
+        "nearest_peer_dist_deg": 0.9
+      },
+      {
+        "ring": 7,
+        "points": 19801,
+        "nearest_peer_dist_deg": 0.5
+      },
+      {
+        "ring": 8,
+        "points": 18389,
+        "nearest_peer_dist_deg": 1.0
+      },
+      {
+        "ring": 9,
+        "points": 16148,
+        "nearest_peer_dist_deg": 0.5
+      },
+      {
+        "ring": 0,
+        "points": 15112,
+        "nearest_peer_dist_deg": 0.5
+      }
+    ],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-6-family-proxy/runs/3-6-bad",
+    "n_rings_scored": 9,
+    "phase_incoherence_deg": 1.9,
+    "rings": [
+      {
+        "ring": 2,
+        "points": 446,
+        "nearest_peer_dist_deg": 1.6
+      },
+      {
+        "ring": 3,
+        "points": 616,
+        "nearest_peer_dist_deg": 1.2
+      },
+      {
+        "ring": 4,
+        "points": 925,
+        "nearest_peer_dist_deg": 2.4
+      },
+      {
+        "ring": 5,
+        "points": 1126,
+        "nearest_peer_dist_deg": 2.4
+      },
+      {
+        "ring": 6,
+        "points": 723,
+        "nearest_peer_dist_deg": 1.2
+      },
+      {
+        "ring": 7,
+        "points": 874,
+        "nearest_peer_dist_deg": 3.0
+      },
+      {
+        "ring": 8,
+        "points": 452,
+        "nearest_peer_dist_deg": 0.6
+      },
+      {
+        "ring": 9,
+        "points": 291,
+        "nearest_peer_dist_deg": 2.5
+      },
+      {
+        "ring": 0,
+        "points": 341,
+        "nearest_peer_dist_deg": 0.6
+      }
+    ],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-7-family-proxy/runs/3-7-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 1.7,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 6544,
+        "nearest_peer_dist_deg": 3.1
+      },
+      {
+        "ring": 2,
+        "points": 7586,
+        "nearest_peer_dist_deg": 0.8
+      },
+      {
+        "ring": 3,
+        "points": 8437,
+        "nearest_peer_dist_deg": 0.8
+      },
+      {
+        "ring": 4,
+        "points": 10010,
+        "nearest_peer_dist_deg": 1.6
+      },
+      {
+        "ring": 5,
+        "points": 11316,
+        "nearest_peer_dist_deg": 1.7
+      },
+      {
+        "ring": 6,
+        "points": 11696,
+        "nearest_peer_dist_deg": 1.9
+      },
+      {
+        "ring": 7,
+        "points": 12542,
+        "nearest_peer_dist_deg": 1.9
+      },
+      {
+        "ring": 8,
+        "points": 14912,
+        "nearest_peer_dist_deg": 1.9
+      },
+      {
+        "ring": 9,
+        "points": 16798,
+        "nearest_peer_dist_deg": 1.1
+      },
+      {
+        "ring": 0,
+        "points": 17638,
+        "nearest_peer_dist_deg": 1.9
+      }
+    ],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-7-family-proxy/runs/3-7-bad",
+    "n_rings_scored": 0,
+    "phase_incoherence_deg": null,
+    "rings": [],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-8-family-proxy/runs/3-8-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 2.5,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 3159,
+        "nearest_peer_dist_deg": 19.9
+      },
+      {
+        "ring": 2,
+        "points": 8938,
+        "nearest_peer_dist_deg": 2.4
+      },
+      {
+        "ring": 3,
+        "points": 10237,
+        "nearest_peer_dist_deg": 2.4
+      },
+      {
+        "ring": 4,
+        "points": 12320,
+        "nearest_peer_dist_deg": 3.6
+      },
+      {
+        "ring": 5,
+        "points": 17401,
+        "nearest_peer_dist_deg": 1.5
+      },
+      {
+        "ring": 6,
+        "points": 17192,
+        "nearest_peer_dist_deg": 1.0
+      },
+      {
+        "ring": 7,
+        "points": 19405,
+        "nearest_peer_dist_deg": 1.0
+      },
+      {
+        "ring": 8,
+        "points": 20471,
+        "nearest_peer_dist_deg": 0.7
+      },
+      {
+        "ring": 9,
+        "points": 21600,
+        "nearest_peer_dist_deg": 0.7
+      },
+      {
+        "ring": 0,
+        "points": 14528,
+        "nearest_peer_dist_deg": 8.5
+      }
+    ],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-8-family-proxy/runs/3-8-bad",
+    "n_rings_scored": 0,
+    "phase_incoherence_deg": null,
+    "rings": [],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-9-family-proxy/runs/3-9-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 1.1,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 24611,
+        "nearest_peer_dist_deg": 1.8
+      },
+      {
+        "ring": 2,
+        "points": 24145,
+        "nearest_peer_dist_deg": 1.1
+      },
+      {
+        "ring": 3,
+        "points": 22822,
+        "nearest_peer_dist_deg": 0.7
+      },
+      {
+        "ring": 4,
+        "points": 20396,
+        "nearest_peer_dist_deg": 0.3
+      },
+      {
+        "ring": 5,
+        "points": 17625,
+        "nearest_peer_dist_deg": 0.3
+      },
+      {
+        "ring": 6,
+        "points": 16038,
+        "nearest_peer_dist_deg": 0.8
+      },
+      {
+        "ring": 7,
+        "points": 15181,
+        "nearest_peer_dist_deg": 1.4
+      },
+      {
+        "ring": 8,
+        "points": 12683,
+        "nearest_peer_dist_deg": 1.4
+      },
+      {
+        "ring": 9,
+        "points": 11526,
+        "nearest_peer_dist_deg": 0.8
+      },
+      {
+        "ring": 0,
+        "points": 11158,
+        "nearest_peer_dist_deg": 3.6
+      }
+    ],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/3-9-family-proxy/runs/3-9-bad",
+    "n_rings_scored": 2,
+    "phase_incoherence_deg": 19.5,
+    "rings": [
+      {
+        "ring": 1,
+        "points": 902,
+        "nearest_peer_dist_deg": 19.5
+      },
+      {
+        "ring": 2,
+        "points": 961,
+        "nearest_peer_dist_deg": 19.5
+      }
+    ],
+    "family": "t3",
+    "applicable": true,
+    "phase_alarm": true
+  },
+  {
+    "run": "data/bo-unified/4-2-family-proxy/runs/4-2-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 9.9,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 17259,
+        "nearest_peer_dist_deg": 42.7
+      },
+      {
+        "ring": 9,
+        "points": 30698,
+        "nearest_peer_dist_deg": 2.0
+      },
+      {
+        "ring": 8,
+        "points": 58424,
+        "nearest_peer_dist_deg": 47.5
+      },
+      {
+        "ring": 7,
+        "points": 124359,
+        "nearest_peer_dist_deg": 8.7
+      },
+      {
+        "ring": 6,
+        "points": 306178,
+        "nearest_peer_dist_deg": 6.5
+      },
+      {
+        "ring": 5,
+        "points": 417840,
+        "nearest_peer_dist_deg": 8.7
+      },
+      {
+        "ring": 4,
+        "points": 273496,
+        "nearest_peer_dist_deg": 6.5
+      },
+      {
+        "ring": 3,
+        "points": 112847,
+        "nearest_peer_dist_deg": 6.9
+      },
+      {
+        "ring": 2,
+        "points": 52817,
+        "nearest_peer_dist_deg": 22.0
+      },
+      {
+        "ring": 1,
+        "points": 28759,
+        "nearest_peer_dist_deg": 2.0
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/4-2-family-proxy/runs/4-2-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 9.7,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 430,
+        "nearest_peer_dist_deg": 14.0
+      },
+      {
+        "ring": 9,
+        "points": 742,
+        "nearest_peer_dist_deg": 2.7
+      },
+      {
+        "ring": 8,
+        "points": 1444,
+        "nearest_peer_dist_deg": 14.0
+      },
+      {
+        "ring": 7,
+        "points": 2977,
+        "nearest_peer_dist_deg": 5.4
+      },
+      {
+        "ring": 6,
+        "points": 9080,
+        "nearest_peer_dist_deg": 4.3
+      },
+      {
+        "ring": 5,
+        "points": 10172,
+        "nearest_peer_dist_deg": 21.7
+      },
+      {
+        "ring": 4,
+        "points": 8296,
+        "nearest_peer_dist_deg": 4.3
+      },
+      {
+        "ring": 3,
+        "points": 2888,
+        "nearest_peer_dist_deg": 5.8
+      },
+      {
+        "ring": 2,
+        "points": 1346,
+        "nearest_peer_dist_deg": 9.6
+      },
+      {
+        "ring": 1,
+        "points": 647,
+        "nearest_peer_dist_deg": 2.7
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/4-3-family-proxy/runs/4-3-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 19.0,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 13384,
+        "nearest_peer_dist_deg": 11.4
+      },
+      {
+        "ring": 9,
+        "points": 32289,
+        "nearest_peer_dist_deg": 5.3
+      },
+      {
+        "ring": 8,
+        "points": 61328,
+        "nearest_peer_dist_deg": 7.6
+      },
+      {
+        "ring": 7,
+        "points": 130730,
+        "nearest_peer_dist_deg": 56.7
+      },
+      {
+        "ring": 6,
+        "points": 328822,
+        "nearest_peer_dist_deg": 11.4
+      },
+      {
+        "ring": 5,
+        "points": 414595,
+        "nearest_peer_dist_deg": 15.0
+      },
+      {
+        "ring": 4,
+        "points": 250143,
+        "nearest_peer_dist_deg": 26.0
+      },
+      {
+        "ring": 3,
+        "points": 97967,
+        "nearest_peer_dist_deg": 15.0
+      },
+      {
+        "ring": 2,
+        "points": 46941,
+        "nearest_peer_dist_deg": 7.6
+      },
+      {
+        "ring": 1,
+        "points": 25430,
+        "nearest_peer_dist_deg": 5.3
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/4-3-family-proxy/runs/4-3-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 11.4,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 3219,
+        "nearest_peer_dist_deg": 14.4
+      },
+      {
+        "ring": 9,
+        "points": 742,
+        "nearest_peer_dist_deg": 14.7
+      },
+      {
+        "ring": 8,
+        "points": 2317,
+        "nearest_peer_dist_deg": 10.5
+      },
+      {
+        "ring": 7,
+        "points": 5088,
+        "nearest_peer_dist_deg": 4.6
+      },
+      {
+        "ring": 6,
+        "points": 18375,
+        "nearest_peer_dist_deg": 14.3
+      },
+      {
+        "ring": 5,
+        "points": 18937,
+        "nearest_peer_dist_deg": 15.5
+      },
+      {
+        "ring": 4,
+        "points": 12989,
+        "nearest_peer_dist_deg": 4.5
+      },
+      {
+        "ring": 3,
+        "points": 2656,
+        "nearest_peer_dist_deg": 9.8
+      },
+      {
+        "ring": 2,
+        "points": 1303,
+        "nearest_peer_dist_deg": 4.5
+      },
+      {
+        "ring": 1,
+        "points": 826,
+        "nearest_peer_dist_deg": 4.6
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/4-4-family-proxy/runs/4-4-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 25.9,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 7295,
+        "nearest_peer_dist_deg": 9.5
+      },
+      {
+        "ring": 9,
+        "points": 23374,
+        "nearest_peer_dist_deg": 8.1
+      },
+      {
+        "ring": 8,
+        "points": 43489,
+        "nearest_peer_dist_deg": 42.0
+      },
+      {
+        "ring": 7,
+        "points": 89588,
+        "nearest_peer_dist_deg": 4.0
+      },
+      {
+        "ring": 6,
+        "points": 222798,
+        "nearest_peer_dist_deg": 5.7
+      },
+      {
+        "ring": 5,
+        "points": 411731,
+        "nearest_peer_dist_deg": 15.9
+      },
+      {
+        "ring": 4,
+        "points": 357811,
+        "nearest_peer_dist_deg": 42.0
+      },
+      {
+        "ring": 3,
+        "points": 156509,
+        "nearest_peer_dist_deg": 68.4
+      },
+      {
+        "ring": 2,
+        "points": 68301,
+        "nearest_peer_dist_deg": 5.7
+      },
+      {
+        "ring": 1,
+        "points": 28404,
+        "nearest_peer_dist_deg": 4.0
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/4-4-family-proxy/runs/4-4-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 11.4,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 2789,
+        "nearest_peer_dist_deg": 9.3
+      },
+      {
+        "ring": 9,
+        "points": 1525,
+        "nearest_peer_dist_deg": 4.3
+      },
+      {
+        "ring": 8,
+        "points": 1124,
+        "nearest_peer_dist_deg": 15.1
+      },
+      {
+        "ring": 7,
+        "points": 2383,
+        "nearest_peer_dist_deg": 4.3
+      },
+      {
+        "ring": 6,
+        "points": 13705,
+        "nearest_peer_dist_deg": 9.1
+      },
+      {
+        "ring": 5,
+        "points": 49633,
+        "nearest_peer_dist_deg": 14.4
+      },
+      {
+        "ring": 4,
+        "points": 35379,
+        "nearest_peer_dist_deg": 9.1
+      },
+      {
+        "ring": 3,
+        "points": 5298,
+        "nearest_peer_dist_deg": 11.7
+      },
+      {
+        "ring": 2,
+        "points": 2142,
+        "nearest_peer_dist_deg": 9.3
+      },
+      {
+        "ring": 1,
+        "points": 970,
+        "nearest_peer_dist_deg": 11.7
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/4-5-family-proxy/runs/4-5-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 22.8,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 15042,
+        "nearest_peer_dist_deg": 4.9
+      },
+      {
+        "ring": 9,
+        "points": 27882,
+        "nearest_peer_dist_deg": 1.9
+      },
+      {
+        "ring": 8,
+        "points": 54074,
+        "nearest_peer_dist_deg": 2.3
+      },
+      {
+        "ring": 7,
+        "points": 115750,
+        "nearest_peer_dist_deg": 1.9
+      },
+      {
+        "ring": 6,
+        "points": 287506,
+        "nearest_peer_dist_deg": 24.1
+      },
+      {
+        "ring": 5,
+        "points": 420628,
+        "nearest_peer_dist_deg": 27.2
+      },
+      {
+        "ring": 4,
+        "points": 304193,
+        "nearest_peer_dist_deg": 27.2
+      },
+      {
+        "ring": 3,
+        "points": 124086,
+        "nearest_peer_dist_deg": 37.4
+      },
+      {
+        "ring": 2,
+        "points": 56901,
+        "nearest_peer_dist_deg": 2.3
+      },
+      {
+        "ring": 1,
+        "points": 30088,
+        "nearest_peer_dist_deg": 29.4
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/4-5-family-proxy/runs/4-5-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 6.8,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 421,
+        "nearest_peer_dist_deg": 13.3
+      },
+      {
+        "ring": 9,
+        "points": 637,
+        "nearest_peer_dist_deg": 3.4
+      },
+      {
+        "ring": 8,
+        "points": 1308,
+        "nearest_peer_dist_deg": 3.7
+      },
+      {
+        "ring": 7,
+        "points": 2730,
+        "nearest_peer_dist_deg": 3.4
+      },
+      {
+        "ring": 6,
+        "points": 9143,
+        "nearest_peer_dist_deg": 2.4
+      },
+      {
+        "ring": 5,
+        "points": 11823,
+        "nearest_peer_dist_deg": 15.4
+      },
+      {
+        "ring": 4,
+        "points": 8419,
+        "nearest_peer_dist_deg": 2.4
+      },
+      {
+        "ring": 3,
+        "points": 3048,
+        "nearest_peer_dist_deg": 3.5
+      },
+      {
+        "ring": 2,
+        "points": 1303,
+        "nearest_peer_dist_deg": 3.7
+      },
+      {
+        "ring": 1,
+        "points": 721,
+        "nearest_peer_dist_deg": 8.6
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/5-2-family-proxy/runs/5-2-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 15.8,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 14491,
+        "nearest_peer_dist_deg": 6.4
+      },
+      {
+        "ring": 9,
+        "points": 27271,
+        "nearest_peer_dist_deg": 1.1
+      },
+      {
+        "ring": 8,
+        "points": 49899,
+        "nearest_peer_dist_deg": 6.4
+      },
+      {
+        "ring": 7,
+        "points": 102271,
+        "nearest_peer_dist_deg": 18.7
+      },
+      {
+        "ring": 6,
+        "points": 247462,
+        "nearest_peer_dist_deg": 4.8
+      },
+      {
+        "ring": 5,
+        "points": 429629,
+        "nearest_peer_dist_deg": 8.9
+      },
+      {
+        "ring": 4,
+        "points": 349671,
+        "nearest_peer_dist_deg": 40.8
+      },
+      {
+        "ring": 3,
+        "points": 151866,
+        "nearest_peer_dist_deg": 8.9
+      },
+      {
+        "ring": 2,
+        "points": 67756,
+        "nearest_peer_dist_deg": 4.8
+      },
+      {
+        "ring": 1,
+        "points": 35329,
+        "nearest_peer_dist_deg": 1.1
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/5-2-family-proxy/runs/5-2-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 14.3,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 2125,
+        "nearest_peer_dist_deg": 45.6
+      },
+      {
+        "ring": 9,
+        "points": 4134,
+        "nearest_peer_dist_deg": 13.8
+      },
+      {
+        "ring": 8,
+        "points": 2238,
+        "nearest_peer_dist_deg": 12.3
+      },
+      {
+        "ring": 7,
+        "points": 4053,
+        "nearest_peer_dist_deg": 4.6
+      },
+      {
+        "ring": 6,
+        "points": 8918,
+        "nearest_peer_dist_deg": 25.6
+      },
+      {
+        "ring": 5,
+        "points": 11867,
+        "nearest_peer_dist_deg": 8.7
+      },
+      {
+        "ring": 4,
+        "points": 11118,
+        "nearest_peer_dist_deg": 20.5
+      },
+      {
+        "ring": 3,
+        "points": 7868,
+        "nearest_peer_dist_deg": 4.9
+      },
+      {
+        "ring": 2,
+        "points": 10876,
+        "nearest_peer_dist_deg": 12.3
+      },
+      {
+        "ring": 1,
+        "points": 2835,
+        "nearest_peer_dist_deg": 4.6
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/5-3-family-proxy/runs/5-3-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 21.8,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 15238,
+        "nearest_peer_dist_deg": 62.7
+      },
+      {
+        "ring": 9,
+        "points": 28316,
+        "nearest_peer_dist_deg": 2.5
+      },
+      {
+        "ring": 8,
+        "points": 52290,
+        "nearest_peer_dist_deg": 9.8
+      },
+      {
+        "ring": 7,
+        "points": 108827,
+        "nearest_peer_dist_deg": 65.4
+      },
+      {
+        "ring": 6,
+        "points": 262436,
+        "nearest_peer_dist_deg": 20.3
+      },
+      {
+        "ring": 5,
+        "points": 426826,
+        "nearest_peer_dist_deg": 20.3
+      },
+      {
+        "ring": 4,
+        "points": 326474,
+        "nearest_peer_dist_deg": 9.8
+      },
+      {
+        "ring": 3,
+        "points": 140354,
+        "nearest_peer_dist_deg": 22.1
+      },
+      {
+        "ring": 2,
+        "points": 62553,
+        "nearest_peer_dist_deg": 42.3
+      },
+      {
+        "ring": 1,
+        "points": 33867,
+        "nearest_peer_dist_deg": 2.5
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/5-3-family-proxy/runs/5-3-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 18.3,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 2357,
+        "nearest_peer_dist_deg": 23.7
+      },
+      {
+        "ring": 9,
+        "points": 4431,
+        "nearest_peer_dist_deg": 11.7
+      },
+      {
+        "ring": 8,
+        "points": 8797,
+        "nearest_peer_dist_deg": 52.3
+      },
+      {
+        "ring": 7,
+        "points": 15940,
+        "nearest_peer_dist_deg": 2.5
+      },
+      {
+        "ring": 6,
+        "points": 42719,
+        "nearest_peer_dist_deg": 20.6
+      },
+      {
+        "ring": 5,
+        "points": 12487,
+        "nearest_peer_dist_deg": 14.5
+      },
+      {
+        "ring": 4,
+        "points": 17860,
+        "nearest_peer_dist_deg": 20.6
+      },
+      {
+        "ring": 3,
+        "points": 14412,
+        "nearest_peer_dist_deg": 2.5
+      },
+      {
+        "ring": 2,
+        "points": 11987,
+        "nearest_peer_dist_deg": 29.7
+      },
+      {
+        "ring": 1,
+        "points": 4666,
+        "nearest_peer_dist_deg": 10.6
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/5-4-family-proxy/runs/5-4-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 26.8,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 14786,
+        "nearest_peer_dist_deg": 14.3
+      },
+      {
+        "ring": 9,
+        "points": 27886,
+        "nearest_peer_dist_deg": 0.8
+      },
+      {
+        "ring": 8,
+        "points": 51793,
+        "nearest_peer_dist_deg": 14.3
+      },
+      {
+        "ring": 7,
+        "points": 109931,
+        "nearest_peer_dist_deg": 10.8
+      },
+      {
+        "ring": 6,
+        "points": 270739,
+        "nearest_peer_dist_deg": 1.8
+      },
+      {
+        "ring": 5,
+        "points": 437120,
+        "nearest_peer_dist_deg": 63.8
+      },
+      {
+        "ring": 4,
+        "points": 338025,
+        "nearest_peer_dist_deg": 1.8
+      },
+      {
+        "ring": 3,
+        "points": 137059,
+        "nearest_peer_dist_deg": 57.6
+      },
+      {
+        "ring": 2,
+        "points": 63130,
+        "nearest_peer_dist_deg": 10.8
+      },
+      {
+        "ring": 1,
+        "points": 33454,
+        "nearest_peer_dist_deg": 0.8
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/5-4-family-proxy/runs/5-4-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 9.3,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 1725,
+        "nearest_peer_dist_deg": 22.1
+      },
+      {
+        "ring": 9,
+        "points": 2175,
+        "nearest_peer_dist_deg": 24.3
+      },
+      {
+        "ring": 8,
+        "points": 4697,
+        "nearest_peer_dist_deg": 10.1
+      },
+      {
+        "ring": 7,
+        "points": 14906,
+        "nearest_peer_dist_deg": 6.3
+      },
+      {
+        "ring": 6,
+        "points": 10564,
+        "nearest_peer_dist_deg": 9.4
+      },
+      {
+        "ring": 5,
+        "points": 11023,
+        "nearest_peer_dist_deg": 5.9
+      },
+      {
+        "ring": 4,
+        "points": 9490,
+        "nearest_peer_dist_deg": 14.2
+      },
+      {
+        "ring": 3,
+        "points": 7493,
+        "nearest_peer_dist_deg": 5.9
+      },
+      {
+        "ring": 2,
+        "points": 3914,
+        "nearest_peer_dist_deg": 9.4
+      },
+      {
+        "ring": 1,
+        "points": 1012,
+        "nearest_peer_dist_deg": 8.0
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/5-5-family-proxy/runs/5-5-anchor",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 28.8,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 14028,
+        "nearest_peer_dist_deg": 27.8
+      },
+      {
+        "ring": 9,
+        "points": 24968,
+        "nearest_peer_dist_deg": 6.7
+      },
+      {
+        "ring": 8,
+        "points": 45101,
+        "nearest_peer_dist_deg": 27.8
+      },
+      {
+        "ring": 7,
+        "points": 91570,
+        "nearest_peer_dist_deg": 6.7
+      },
+      {
+        "ring": 6,
+        "points": 219660,
+        "nearest_peer_dist_deg": 28.6
+      },
+      {
+        "ring": 5,
+        "points": 422162,
+        "nearest_peer_dist_deg": 28.6
+      },
+      {
+        "ring": 4,
+        "points": 377765,
+        "nearest_peer_dist_deg": 34.1
+      },
+      {
+        "ring": 3,
+        "points": 171247,
+        "nearest_peer_dist_deg": 27.5
+      },
+      {
+        "ring": 2,
+        "points": 75658,
+        "nearest_peer_dist_deg": 27.5
+      },
+      {
+        "ring": 1,
+        "points": 39142,
+        "nearest_peer_dist_deg": 55.6
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  },
+  {
+    "run": "data/bo-unified/5-5-family-proxy/runs/5-5-bad",
+    "n_rings_scored": 10,
+    "phase_incoherence_deg": 12.3,
+    "rings": [
+      {
+        "ring": 0,
+        "points": 2594,
+        "nearest_peer_dist_deg": 26.4
+      },
+      {
+        "ring": 9,
+        "points": 3635,
+        "nearest_peer_dist_deg": 16.0
+      },
+      {
+        "ring": 8,
+        "points": 6824,
+        "nearest_peer_dist_deg": 11.0
+      },
+      {
+        "ring": 7,
+        "points": 2847,
+        "nearest_peer_dist_deg": 16.0
+      },
+      {
+        "ring": 6,
+        "points": 5796,
+        "nearest_peer_dist_deg": 8.7
+      },
+      {
+        "ring": 5,
+        "points": 13632,
+        "nearest_peer_dist_deg": 13.7
+      },
+      {
+        "ring": 4,
+        "points": 11072,
+        "nearest_peer_dist_deg": 8.7
+      },
+      {
+        "ring": 3,
+        "points": 4429,
+        "nearest_peer_dist_deg": 11.1
+      },
+      {
+        "ring": 2,
+        "points": 2867,
+        "nearest_peer_dist_deg": 11.0
+      },
+      {
+        "ring": 1,
+        "points": 1009,
+        "nearest_peer_dist_deg": 11.1
+      }
+    ],
+    "family": "t4&5",
+    "applicable": false,
+    "phase_alarm": false
+  }
+]

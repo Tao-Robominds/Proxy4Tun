@@ -44,3 +44,11 @@ sam4tun/segment-anything/segment_anything.egg-info/
 
 # Canvas local deps
 canvases/**/node_modules/
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.out
+*.abs
+*.synctex.gz

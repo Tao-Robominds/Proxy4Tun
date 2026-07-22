@@ -19,6 +19,7 @@ stage and suggest parameter changes.
 |------|---------|
 | `sam4tun_ontology.yaml` | The ontology: artifacts, stages, parameters, quality metrics, failure modes, diagnostic rules, remediation actions, inter-stage dependencies, and the agent interface. |
 | `tunnel_priors.yaml` | Seg2Tunnel-derived per-tunnel priors (T1–T5): diameter, radius/theta gates, block geometry, Hough settings, up-sampling schedule, etc. |
+| `experiences.md` | Empirical lessons from past experiment campaigns: how to observe and analyse each artifact, measured effect sizes of fixes, and anti-patterns (for the reflective agent). |
 
 ## Pipeline stages
 

@@ -1,0 +1,12 @@
+\begin{tabular}{p{0.23\textwidth}p{0.38\textwidth}p{0.12\textwidth}p{0.18\textwidth}}
+\toprule
+Result artifact & Source CSV & Status & Manuscript slot \\
+\midrule
+Candidate mIoU distribution & \texttt{logs/v6\_proxy\_ablation\_study\_v1/candidate\_pool.csv} & reused & Fig.~\ref{fig:candidate_miou_distribution} \\
+Stage A proxy lift & \texttt{logs/v6\_proxy\_ablation\_study\_v1/proxy\_ablation\_results\_by\_ring.csv} & reused & Fig.~\ref{fig:stage_a_proxy_lift} \\
+Stage A mismatch & \texttt{logs/v6\_proxy\_ablation\_study\_v1/proxy\_ablation\_results\_by\_ring.csv} & derived & Fig.~\ref{fig:stage_a_proxy_mismatch} \\
+Stage A pairwise tests & \texttt{logs/v6\_proxy\_ablation\_study\_v1/proxy\_pairwise\_tests.csv} & reused & Table~\ref{tab:stage_a_pairwise_tests} \\
+Stage B 1/3/5 depth & \texttt{not found in prior outputs} & pending & Figs.~\ref{fig:stage_b_refinement_depth}--\ref{fig:stage_b_mismatch_depth} \\
+Final 50-ring comparison & \texttt{logs/v7\_diverse\_calibration\_restart/imported\_v5\_prior/selected\_scoreboard\_50rings.csv} & reused & Fig.~\ref{fig:final_selected_vs_initial} \\
+\bottomrule
+\end{tabular}

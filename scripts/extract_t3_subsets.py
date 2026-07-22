@@ -15,11 +15,35 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 
-# Non-overlapping, well-populated windows (avoid sparse rings 110+).
-# Existing: 3-1 = 27-36, 3-2 = 46-55, 3-3 = 77-86 (renamed from 3-1-*).
-DEFAULT_WINDOWS: dict[str, tuple[int, int]] = {
+# Full T3 map (ten 10-ring windows). Fixed legacy windows 3-1..3-5 are
+# listed for documentation / --windows refresh; default extraction only
+# writes the five gap windows 3-6..3-10 so existing files stay untouched.
+#
+#   3-1  27-36   train (former 3-1-1) — fixed
+#   3-2  46-55   train (former 3-1-2) — fixed
+#   3-3  77-86   holdout (former 3-1-3) — fixed
+#   3-4  57-66   holdout — fixed
+#   3-5  97-106  holdout — fixed
+#   3-6   1-10   gap (early)
+#   3-7  11-20   gap (early)
+#   3-8  67-76   gap (between 3-4 and 3-3)
+#   3-9  87-96   gap (between 3-3 and 3-5)
+#   3-10 36-45   gap (dense mid; 1-ring overlap with 3-1 at ring 36;
+#                replaces hung thin tail 107-116)
+ALL_WINDOWS: dict[str, tuple[int, int]] = {
+    "3-1": (27, 36),
+    "3-2": (46, 55),
+    "3-3": (77, 86),
     "3-4": (57, 66),
     "3-5": (97, 106),
+    "3-6": (1, 10),
+    "3-7": (11, 20),
+    "3-8": (67, 76),
+    "3-9": (87, 96),
+    "3-10": (36, 45),
+}
+DEFAULT_WINDOWS: dict[str, tuple[int, int]] = {
+    k: ALL_WINDOWS[k] for k in ("3-6", "3-7", "3-8", "3-9", "3-10")
 }
 
 
@@ -102,13 +126,17 @@ def main() -> None:
         "--windows",
         nargs="*",
         default=None,
-        help="Optional subset ids to extract (default: 3-4 3-5)",
+        help="Subset ids to extract (default: 3-6..3-10 gap windows). "
+        "Any key from ALL_WINDOWS is allowed.",
     )
     args = p.parse_args()
 
     windows = DEFAULT_WINDOWS
     if args.windows:
-        windows = {k: DEFAULT_WINDOWS[k] for k in args.windows}
+        unknown = [k for k in args.windows if k not in ALL_WINDOWS]
+        if unknown:
+            raise SystemExit(f"Unknown window id(s): {unknown}; known={list(ALL_WINDOWS)}")
+        windows = {k: ALL_WINDOWS[k] for k in args.windows}
     if not args.src.exists():
         raise SystemExit(f"Missing source {args.src}")
     extract_windows(args.src, args.out_dir, windows, target_points=args.target_points)
