@@ -1,6 +1,6 @@
 # Validation gate — subset 3-6 (proxy v2)
 
-_Generated 2026-07-22T21:00:20_
+_Generated 2026-07-23T13:06:21_
 
 ## Case
 
@@ -10,13 +10,13 @@ _Generated 2026-07-22T21:00:20_
 ## 3-6 metrics
 
 - mIoU = 0.836
-- proxy_v1 = 0.383905203903479
-- proxy_v2 = 0.8093222666424914
+- proxy_v1 = 0.4415167682586871
+- proxy_v2 = 0.7995032133283096
 - det_row_residual_px = 1.8841492652576053
 - phase_incoherence_deg = 0.8
 - det_real_detection_ratio (diagnostic) = 0.0
 
-## Continuous MAE_anchor = 0.108 (target ≤ 0.15; v1 was 0.31)
+## Continuous MAE_anchor = 0.084 (target ≤ 0.15; v1 was 0.31)
 
 ## Pass / fail criteria
 
@@ -29,14 +29,14 @@ _Generated 2026-07-22T21:00:20_
 
 ## Family MAE notes: {
   "staggered": {
-    "mae_v1": 0.08943390649593108,
-    "mae_v2": 0.0829932384726137,
-    "delta": -0.006440668023317386
+    "mae_v1": 0.08591631115401538,
+    "mae_v2": 0.06694389110126034,
+    "delta": -0.01897242005275504
   },
   "complex": {
-    "mae_v1": 0.0801867676619349,
-    "mae_v2": 0.09624455801513374,
-    "delta": 0.016057790353198834
+    "mae_v1": 0.06977033341482611,
+    "mae_v2": 0.07960604744389255,
+    "delta": 0.009835714029066439
   }
 }
 

@@ -2,43 +2,43 @@
   "variants": [
     {
       "set": "Evidence",
-      "n_features": 2,
+      "n_features": 3,
       "features": [
         "depth_nan_ratio",
-        "denoise_retained_ratio"
+        "denoise_retained_ratio",
+        "det_real_detection_ratio"
       ],
-      "train_mae": 0.1421232733839186,
-      "train_spearman": 0.6147810821572106,
-      "train_pearson": 0.7959274455046874,
-      "lolo_mae": 0.18086310723365018,
-      "lolo_spearman": 0.46877361347535845,
+      "train_mae": 0.10766467109553143,
+      "train_spearman": 0.8057098525931036,
+      "train_pearson": 0.8695244963530968,
+      "lolo_mae": 0.13788243268130373,
+      "lolo_spearman": 0.7411822816341175,
       "coef_abs": {
-        "depth_nan_ratio": 0.20427463999614837,
-        "denoise_retained_ratio": 0.46300990676030374
+        "depth_nan_ratio": 0.06998665990898045,
+        "denoise_retained_ratio": 0.253530869275969,
+        "det_real_detection_ratio": 0.14117308242171234
       },
-      "alpha": 0.1
+      "alpha": 0.31622776601683794
     },
     {
       "set": "Coherence",
-      "n_features": 4,
+      "n_features": 3,
       "features": [
-        "det_real_detection_ratio",
         "sam_fill_rate",
         "sam_ring_completeness",
         "sam_ontology_divergence"
       ],
-      "train_mae": 0.10355292254606774,
-      "train_spearman": 0.8136930337234225,
-      "train_pearson": 0.8881028091425226,
-      "lolo_mae": 0.16554666123420891,
-      "lolo_spearman": 0.7791734225499486,
+      "train_mae": 0.12460711498733476,
+      "train_spearman": 0.6704264694017164,
+      "train_pearson": 0.8382707113427803,
+      "lolo_mae": 0.1595690863053185,
+      "lolo_spearman": 0.498549012870573,
       "coef_abs": {
-        "det_real_detection_ratio": 0.1339429060477424,
-        "sam_fill_rate": 0.20420252482675272,
-        "sam_ring_completeness": 0.0058719352223497445,
-        "sam_ontology_divergence": 0.012106578389483424
+        "sam_fill_rate": 0.2934285350248522,
+        "sam_ring_completeness": 0.029080368691746017,
+        "sam_ontology_divergence": 0.019454671822768027
       },
-      "alpha": 1.7782794100389228
+      "alpha": 1.0
     },
     {
       "set": "Evidence+Coherence",
@@ -51,20 +51,20 @@
         "sam_ring_completeness",
         "sam_ontology_divergence"
       ],
-      "train_mae": 0.1011600056482588,
-      "train_spearman": 0.8162273687308043,
-      "train_pearson": 0.8890179038942928,
-      "lolo_mae": 0.16661097064417604,
-      "lolo_spearman": 0.7888501123605867,
+      "train_mae": 0.10060349456177044,
+      "train_spearman": 0.8271157149504225,
+      "train_pearson": 0.8882444377253536,
+      "lolo_mae": 0.16298507947438856,
+      "lolo_spearman": 0.7841269221573824,
       "coef_abs": {
-        "depth_nan_ratio": 0.050064896293254224,
-        "denoise_retained_ratio": 0.07357373123812702,
-        "det_real_detection_ratio": 0.1349590017380815,
-        "sam_fill_rate": 0.18158122708735933,
-        "sam_ring_completeness": 0.0036183009961744395,
-        "sam_ontology_divergence": 0.016610378081988036
+        "depth_nan_ratio": 0.05621415623773962,
+        "denoise_retained_ratio": 0.05739600549600965,
+        "det_real_detection_ratio": 0.12062051237498661,
+        "sam_fill_rate": 0.21404278174283375,
+        "sam_ring_completeness": 0.0003905811122557612,
+        "sam_ontology_divergence": 0.020819032579172322
       },
-      "alpha": 1.7782794100389228
+      "alpha": 1.0
     },
     {
       "set": "loo_depth_nan_ratio",
@@ -76,17 +76,17 @@
         "sam_ring_completeness",
         "sam_ontology_divergence"
       ],
-      "train_mae": 0.1027580398540052,
-      "train_spearman": 0.8143980742893857,
-      "train_pearson": 0.8879951470247959,
-      "lolo_mae": 0.2050095179636878,
-      "lolo_spearman": 0.7800660286461069,
+      "train_mae": 0.10231968135326129,
+      "train_spearman": 0.824285445998246,
+      "train_pearson": 0.8873840674926704,
+      "lolo_mae": 0.2223662032358924,
+      "lolo_spearman": 0.783595027224286,
       "coef_abs": {
-        "denoise_retained_ratio": 0.02009733338001296,
-        "det_real_detection_ratio": 0.13420362608730585,
-        "sam_fill_rate": 0.190863942491132,
-        "sam_ring_completeness": 0.01103738085796091,
-        "sam_ontology_divergence": 0.016812518829763257
+        "denoise_retained_ratio": 0.008736901613553005,
+        "det_real_detection_ratio": 0.11995445775949443,
+        "sam_fill_rate": 0.20917559929571977,
+        "sam_ring_completeness": 0.00784121119801573,
+        "sam_ontology_divergence": 0.017325683207353754
       },
       "alpha": 1.0
     },
@@ -100,17 +100,17 @@
         "sam_ring_completeness",
         "sam_ontology_divergence"
       ],
-      "train_mae": 0.10352396562325034,
-      "train_spearman": 0.8138883490153447,
-      "train_pearson": 0.8881854317052905,
-      "lolo_mae": 0.17291413355932703,
-      "lolo_spearman": 0.7920519413524453,
+      "train_mae": 0.10264534809490046,
+      "train_spearman": 0.8234276835059914,
+      "train_pearson": 0.8874040725411656,
+      "lolo_mae": 0.17070315394193172,
+      "lolo_spearman": 0.7911956670611368,
       "coef_abs": {
-        "depth_nan_ratio": 0.002802765678698249,
-        "det_real_detection_ratio": 0.13397397642336495,
-        "sam_fill_rate": 0.20645222922074535,
-        "sam_ring_completeness": 0.005110441524737275,
-        "sam_ontology_divergence": 0.01200002997108987
+        "depth_nan_ratio": 0.00040259154117983087,
+        "det_real_detection_ratio": 0.11998870956539642,
+        "sam_fill_rate": 0.21237009591878037,
+        "sam_ring_completeness": 0.004445153610058705,
+        "sam_ontology_divergence": 0.013567955222022837
       },
       "alpha": 1.7782794100389228
     },
@@ -124,17 +124,17 @@
         "sam_ring_completeness",
         "sam_ontology_divergence"
       ],
-      "train_mae": 0.13355882043532946,
-      "train_spearman": 0.6484848794828231,
-      "train_pearson": 0.8259241670654258,
-      "lolo_mae": 0.16985818359158675,
-      "lolo_spearman": 0.47621032415100445,
+      "train_mae": 0.1246165619691889,
+      "train_spearman": 0.6675996731721807,
+      "train_pearson": 0.8379487944798651,
+      "lolo_mae": 0.15656980184453215,
+      "lolo_spearman": 0.47152008283130303,
       "coef_abs": {
-        "depth_nan_ratio": 0.015453166189513645,
-        "denoise_retained_ratio": 0.0383471086001938,
-        "sam_fill_rate": 0.2680441129163158,
-        "sam_ring_completeness": 0.027303144363528764,
-        "sam_ontology_divergence": 0.01751688673791643
+        "depth_nan_ratio": 0.012237310740043084,
+        "denoise_retained_ratio": 0.020343312352638254,
+        "sam_fill_rate": 0.2814237586595807,
+        "sam_ring_completeness": 0.02650210430059441,
+        "sam_ontology_divergence": 0.017340508809649324
       },
       "alpha": 1.7782794100389228
     },
@@ -148,19 +148,19 @@
         "sam_ring_completeness",
         "sam_ontology_divergence"
       ],
-      "train_mae": 0.10035293120938167,
-      "train_spearman": 0.8119304323085141,
-      "train_pearson": 0.8817200133998643,
-      "lolo_mae": 0.17223147661615035,
-      "lolo_spearman": 0.7503044654263521,
+      "train_mae": 0.10876592288594145,
+      "train_spearman": 0.8075885955417261,
+      "train_pearson": 0.8696216740744005,
+      "lolo_mae": 0.17311312114025865,
+      "lolo_spearman": 0.7020785827757693,
       "coef_abs": {
-        "depth_nan_ratio": 0.22470431465653284,
-        "denoise_retained_ratio": 0.4148904991138034,
-        "det_real_detection_ratio": 0.1508839869870151,
-        "sam_ring_completeness": 0.004547444478912865,
-        "sam_ontology_divergence": 0.02324254601457687
+        "depth_nan_ratio": 0.03845421545663874,
+        "denoise_retained_ratio": 0.233702559753594,
+        "det_real_detection_ratio": 0.14005643359436526,
+        "sam_ring_completeness": 0.013420541930110552,
+        "sam_ontology_divergence": 0.009392692176728112
       },
-      "alpha": 0.1
+      "alpha": 0.5623413251903491
     },
     {
       "set": "loo_sam_ring_completeness",
@@ -172,17 +172,17 @@
         "sam_fill_rate",
         "sam_ontology_divergence"
       ],
-      "train_mae": 0.10023103663240811,
-      "train_spearman": 0.8188903260035982,
-      "train_pearson": 0.889772529435343,
-      "lolo_mae": 0.16881389299825114,
-      "lolo_spearman": 0.6623457612042684,
+      "train_mae": 0.10060094618112161,
+      "train_spearman": 0.8281957316916823,
+      "train_pearson": 0.8882510058319996,
+      "lolo_mae": 0.17940000125494418,
+      "lolo_spearman": 0.6303684597300689,
       "coef_abs": {
-        "depth_nan_ratio": 0.08062845054452472,
-        "denoise_retained_ratio": 0.08983185336787963,
-        "det_real_detection_ratio": 0.13550794212251915,
-        "sam_fill_rate": 0.19623631029437466,
-        "sam_ontology_divergence": 0.019968697077284103
+        "depth_nan_ratio": 0.056851184111751496,
+        "denoise_retained_ratio": 0.057613897947597525,
+        "det_real_detection_ratio": 0.12066342587993195,
+        "sam_fill_rate": 0.2141728127959578,
+        "sam_ontology_divergence": 0.02065191721545831
       },
       "alpha": 1.0
     },
@@ -196,29 +196,31 @@
         "sam_fill_rate",
         "sam_ring_completeness"
       ],
-      "train_mae": 0.10150486725392156,
-      "train_spearman": 0.809615231531094,
-      "train_pearson": 0.88808094883022,
-      "lolo_mae": 0.1589620304209283,
-      "lolo_spearman": 0.7931908271618028,
+      "train_mae": 0.10155372288977026,
+      "train_spearman": 0.8178470182223749,
+      "train_pearson": 0.8867590622954997,
+      "lolo_mae": 0.15532315111097103,
+      "lolo_spearman": 0.7852217775524434,
       "coef_abs": {
-        "depth_nan_ratio": 0.04536186041116658,
-        "denoise_retained_ratio": 0.06161111455338844,
-        "det_real_detection_ratio": 0.135024773701792,
-        "sam_fill_rate": 0.17551989634342596,
-        "sam_ring_completeness": 0.004703293043014312
+        "depth_nan_ratio": 0.025549014369295575,
+        "denoise_retained_ratio": 0.032388407085688964,
+        "det_real_detection_ratio": 0.12057642078299435,
+        "sam_fill_rate": 0.19391149029652557,
+        "sam_ring_completeness": 0.0051737415415347154
       },
       "alpha": 1.7782794100389228
     }
   ],
   "dropped_upfront": {
+    "det_real_detection_ratio": "regime-confounded under uniform_k_snap: healthy continuous runs rewrite Types to propagated so ratio=0 even when k_row_gate proves real anchors; docks every continuous holdout by ~0.18 proxy points",
     "depth_outlier_ratio": "permutation-control failure of full B2 (family-conditional)",
-    "det_fallback_ratio": "exact complement of det_real_detection_ratio; keep one",
+    "det_fallback_ratio": "exact complement of det_real_detection_ratio; keep diagnostic only",
     "det_midpoint_ratio": "regime-constant / near-zero coef in pooled model",
     "det_n_points": "regime-constant / near-zero coef",
     "det_ring_count_error": "near-zero coef everywhere",
     "det_x_spacing_cv": "near-zero coef everywhere",
-    "det_y_std": "near-zero coef everywhere",
-    "sam_segment_size_cv": "near-zero coef everywhere"
+    "det_y_std": "sentinel 0 under all-propagated Types; replaced by det_row_y_std",
+    "sam_segment_size_cv": "near-zero coef everywhere",
+    "sam_ring_completeness": "redundant with sam_fill_rate in v1 ablation"
   }
 }

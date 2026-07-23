@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Train a unified lean Ridge proxy on the 3-anchor archive (108 trials).
+"""Train a unified lean Ridge proxy on the 3-anchor BO corpus.
 
 Mini-ablation: Evidence / Coherence / Evidence+Coherence / leave-one-out.
 Permutation control required before freeze.
+
+Uses the local filled table ``family/training_table.csv`` when present
+(40 trials × 3 anchors = 120 rows); otherwise slices the bo-unified archive.
 """
 
 from __future__ import annotations
@@ -20,7 +23,21 @@ from sklearn.linear_model import RidgeCV
 from sklearn.metrics import mean_absolute_error
 from sklearn.preprocessing import StandardScaler
 
-from features import CANDIDATE, COHERENCE, DROPPED, EVIDENCE, TRAIN_ANCHORS
+from features import DROPPED, TRAIN_ANCHORS
+
+# v1 lean taxonomy (matches family/training_table.csv columns).
+# features.py CANDIDATE is the v2 set and is intentionally not used here.
+EVIDENCE: tuple[str, ...] = (
+    "depth_nan_ratio",
+    "denoise_retained_ratio",
+    "det_real_detection_ratio",
+)
+COHERENCE: tuple[str, ...] = (
+    "sam_fill_rate",
+    "sam_ring_completeness",
+    "sam_ontology_divergence",
+)
+CANDIDATE: tuple[str, ...] = EVIDENCE + COHERENCE
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 BO_DIR = Path(__file__).resolve().parent
@@ -43,10 +60,21 @@ def _safe_scale(scale: np.ndarray, eps: float = 1e-8) -> np.ndarray:
 
 
 def load_train() -> pd.DataFrame:
+    """Prefer filled local table (120 rows); else archived bo-unified slice."""
+    need = list(CANDIDATE) + ["mIoU", "case", "family"]
+    if TRAIN_TABLE_PATH.exists():
+        local = pd.read_csv(TRAIN_TABLE_PATH)
+        if set(TRAIN_ANCHORS).issubset(set(local["case"].unique())):
+            sub = local[local["case"].isin(TRAIN_ANCHORS)].copy()
+            if all(c in sub.columns for c in need):
+                sub = sub.dropna(subset=list(CANDIDATE) + ["mIoU"]).reset_index(drop=True)
+                if len(sub) >= 108:
+                    print(f"load_train: {TRAIN_TABLE_PATH} n={len(sub)}")
+                    return sub[need]
     df = pd.read_csv(TRAINING_CSV)
     sub = df[df["case"].isin(TRAIN_ANCHORS)].copy()
-    need = list(CANDIDATE) + ["mIoU", "case", "family"]
     sub = sub.dropna(subset=list(CANDIDATE) + ["mIoU"]).reset_index(drop=True)
+    print(f"load_train: fallback {TRAINING_CSV} n={len(sub)}")
     return sub[need]
 
 
@@ -272,8 +300,7 @@ def select_lean(ablation: dict[str, Any], df: pd.DataFrame) -> tuple[list[str], 
 def train_and_freeze() -> dict[str, Any]:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     df = load_train()
-    TRAIN_TABLE_PATH.write_text("")  # ensure parent exists
-    df.to_csv(TRAIN_TABLE_PATH, index=False)
+    # Do not overwrite the filled training_table.csv (keeps trial_id/source).
     print(f"Training rows: {len(df)} cases={sorted(df['case'].unique())}")
 
     ablation = run_ablation(df)
@@ -325,8 +352,8 @@ def train_and_freeze() -> dict[str, Any]:
             "lolo_spearman": chosen["lolo_spearman"],
         },
         "provenance": (
-            "bo-unified/family/training_table.csv rows for cases 2-1, 3-1, 5-1; "
-            "artifacts from deleted data/bo campaigns"
+            "bo-elegant/family/training_table.csv — 40 ok trials × anchors "
+            "2-1/3-1/5-1 (archived bo-unified rows + bo-elegant-fill tops-ups)"
         ),
     }
     MODELS_PATH.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")

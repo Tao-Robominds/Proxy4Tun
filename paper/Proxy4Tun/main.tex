@@ -292,7 +292,24 @@ Let $\phi(\theta)\in\mathbb{R}^{d}$ denote the intrinsic feature vector of a com
 \end{equation}
 with regularisation strength selected on the training folds. A pooled cross-family model (optionally with family one-hot indicators) is retained as a comparator, but the deployment default uses separate per-family weights: lining grammar and scan regimes differ enough that a single hyperplane underfits family-specific feature--mIoU slopes.
 
-An alarm threshold $\tau_f$ is calibrated on training predictions so that low proxy scores flag likely low-mIoU runs. At deployment, the frozen $(\hat{y}_f,\tau_f)$ pair scores candidates without labels. Algorithm~\ref{alg:proxy_calibration} summarises design-time calibration; Algorithm~\ref{alg:proxy_deploy} summarises deployment scoring.
+An alarm threshold $\tau_f$ is calibrated on training predictions so that low proxy scores flag likely low-mIoU runs. At deployment, the frozen $(\hat{y}_f,\tau_f)$ pair scores candidates without labels. Figure~\ref{fig:proxy-training} shows the BO training fit; Figure~\ref{fig:proxy-holdout} evaluates the frozen v2 proxy against GT on sibling-anchor holdout runs. Algorithm~\ref{alg:proxy_calibration} summarises design-time calibration; Algorithm~\ref{alg:proxy_deploy} summarises deployment scoring.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.62\columnwidth]{figures/proxy_training.pdf}
+\caption{BO-driven proxy training: proxy $\hat{y}$ versus GT mIoU on the $120$-trial corpus ($40$ each from staggered, continuous, and complex anchors; identity dashed). MAE~$=0.102$.}
+\label{fig:proxy-training}
+\end{figure}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/proxy_holdout.pdf}
+\caption{Holdout sibling-anchor evaluation with the frozen v2 proxy ($9$ subsets $\times$ $3$ families).
+For each subset, GT mIoU (blue) is shown beside the proxy score $\hat{y}$ (orange).
+Dashed / dash-dotted horizontal lines mark the per-family means of GT mIoU and proxy, respectively.
+The v2 feature set drops the continuous-regime confounder \texttt{det\_real\_detection\_ratio}, so continuous anchors are no longer systematically under-scored.}
+\label{fig:proxy-holdout}
+\end{figure*}
 
 \begin{algorithm}[ht]
 \caption{Design-time calibration of the GT-free proxy}\label{alg:proxy_calibration}
