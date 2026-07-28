@@ -23,9 +23,9 @@ OUT = REPO / "paper" / "Proxy4Tun" / "figures"
 HOLDOUT = REPO / "bo-full-stage" / "holdout_scores.csv"
 NOTEBOOK = REPO / "bo-notebook-direct" / "scores.csv"
 
-# Match ablation_bar_with_nollm.pdf palette for the adapted / refined bars.
-FAITHFUL_COLOR = "#9AA0A6"  # grey — static notebook / anchor-faithful
-BEFORE_COLOR = "#2C73D2"    # Opus blue — unified Bayesian-anchor
+# Soft greys/yellows so teal after-refinement remains the visual focus.
+FAITHFUL_COLOR = "#C5C9CE"  # light grey — Anchor-faithful
+BEFORE_COLOR = "#E8D48B"    # light muted yellow — Anchor-Bayesian
 AFTER_COLOR = "#44BBA4"     # Gemini teal — after refinement
 N_BOOT = 10_000
 SEED = 42
@@ -130,9 +130,9 @@ def main() -> None:
         ax,
         centers[0],
         [
-            (panel_faithful, FAITHFUL_COLOR, "Anchor-faithful"),
-            (panel_before, BEFORE_COLOR, "Anchor-Bayesian (before refinement)"),
-            (panel_after, AFTER_COLOR, "After refinement"),
+            (panel_faithful, FAITHFUL_COLOR, "Anchor"),
+            (panel_before, BEFORE_COLOR, "Anchor with Bayesian exploration"),
+            (panel_after, AFTER_COLOR, "Self-refinement"),
         ],
         bar_width,
     )
@@ -140,8 +140,8 @@ def main() -> None:
         ax,
         centers[1],
         [
-            (cand_before, BEFORE_COLOR, "Anchor-Bayesian (before refinement)"),
-            (cand_after, AFTER_COLOR, "After refinement"),
+            (cand_before, BEFORE_COLOR, "Anchor with Bayesian exploration"),
+            (cand_after, AFTER_COLOR, "Self-refinement"),
         ],
         bar_width,
     )

@@ -274,10 +274,12 @@ def plot_holdout(lean_model: dict) -> None:
 
     fig, ax = plt.subplots(figsize=(6.2, 6.0))
     lims = [-0.05, 1.05]
-    # Threshold segments: red alarm/reject lines, yellow accept boundary.
-    ax.hlines(alarm, lims[0], 0.7, color="#FF0000", ls="--", lw=0.9, zorder=7)
+    # Threshold segments: red alarm/reject L; yellow refine box [0.3,0.7]×[0.5,0.7].
+    ax.hlines(alarm, lims[0], 0.3, color="#FF0000", ls="--", lw=0.9, zorder=7)
+    ax.vlines(0.3, lims[0], 0.5, color="#FF0000", ls="--", lw=0.9, zorder=7)
+    ax.hlines(0.5, 0.3, 0.7, color="#F1C40F", ls="--", lw=0.9, zorder=7)
     ax.hlines(0.7, 0.3, 0.7, color="#F1C40F", ls="--", lw=0.9, zorder=7)
-    ax.vlines(0.3, lims[0], 0.7, color="#FF0000", ls="--", lw=0.9, zorder=7)
+    ax.vlines(0.3, 0.5, 0.7, color="#F1C40F", ls="--", lw=0.9, zorder=7)
     ax.vlines(0.7, 0.5, 0.7, color="#F1C40F", ls="--", lw=0.9, zorder=7)
 
     for fam in FAMILY_ORDER:

@@ -16,6 +16,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
 
 REPO = Path(__file__).resolve().parents[2]
 OUT = REPO / "paper" / "Proxy4Tun" / "figures"
@@ -69,9 +70,12 @@ def main() -> None:
     lims = [-0.05, 1.05]
 
     # Threshold segments (same geometry as proxy_holdout_fullstage).
-    ax.hlines(0.5, lims[0], 0.7, color="#FF0000", ls="--", lw=0.9, zorder=7)
+    # Threshold segments: red alarm/reject L; yellow refine box [0.3,0.7]×[0.5,0.7].
+    ax.hlines(0.5, lims[0], 0.3, color="#FF0000", ls="--", lw=0.9, zorder=7)
+    ax.vlines(0.3, lims[0], 0.5, color="#FF0000", ls="--", lw=0.9, zorder=7)
+    ax.hlines(0.5, 0.3, 0.7, color="#F1C40F", ls="--", lw=0.9, zorder=7)
     ax.hlines(0.7, 0.3, 0.7, color="#F1C40F", ls="--", lw=0.9, zorder=7)
-    ax.vlines(0.3, lims[0], 0.7, color="#FF0000", ls="--", lw=0.9, zorder=7)
+    ax.vlines(0.3, 0.5, 0.7, color="#F1C40F", ls="--", lw=0.9, zorder=7)
     ax.vlines(0.7, 0.5, 0.7, color="#F1C40F", ls="--", lw=0.9, zorder=7)
 
     # Green box enclosing all post-refinement points.
@@ -94,7 +98,7 @@ def main() -> None:
     for subset, (p0, m0, p1, m1) in DATA.items():
         color = FAMILY_COLORS[FAMILY_OF[subset.split("-")[0]]]
         ax.scatter(
-            m0, p0, c="#AEB4BA", marker="o", s=32, alpha=0.85,
+            m0, p0, c="#E8D48B", marker="o", s=32, alpha=0.85,
             edgecolors="white", linewidths=0.35, zorder=3,
         )
         ax.scatter(
@@ -116,13 +120,29 @@ def main() -> None:
             label=f.capitalize(),
         )
         for f in FAMILY_ORDER
-    ] + [
-        Line2D(
-            [0], [0], marker="o", color="w", markerfacecolor="#AEB4BA",
-            markersize=5.6, label="Previous score",
+    ]
+    fam_leg = ax.legend(
+        handles=fam_handles, frameon=False, loc="upper left", fontsize=12,
+    )
+    ax.add_artist(fam_leg)
+
+    # Bottom-right: dashed box markers matching the refine / after regions.
+    box_handles = [
+        Patch(
+            facecolor="none", edgecolor="#27AE60",
+            linestyle=(0, (2.0, 1.6)), linewidth=0.9,
+            label="After refinement",
+        ),
+        Patch(
+            facecolor="none", edgecolor="#F1C40F",
+            linestyle=(0, (2.0, 1.6)), linewidth=0.9,
+            label="Refinement baseline",
         ),
     ]
-    ax.legend(handles=fam_handles, frameon=False, loc="upper left", fontsize=12)
+    ax.legend(
+        handles=box_handles, frameon=False, loc="lower right", fontsize=12,
+        handlelength=0.85, handleheight=0.75, borderpad=0.25,
+    )
 
     fig.tight_layout()
     out = OUT / "proxy_refinement_fullstage.pdf"
