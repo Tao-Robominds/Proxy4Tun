@@ -182,8 +182,37 @@ def holdout_case_config(subset: str) -> dict[str, Any]:
     }
 
 
-def _t12_space() -> list[Dim]:
+def _unfolding_space_t12() -> list[Dim]:
+    # Anchor slice_spacing_factor=1.2; larger values collapse slice count.
     return [
+        Dim("ransac_threshold", "unfolding", "ransac_threshold", "float", 0.8, 1.2),
+        Dim("slice_spacing_factor", "unfolding", "slice_spacing_factor", "float", 1.05, 1.35),
+        Dim("polynomial_degree", "unfolding", "polynomial_degree", "int", 2, 3),
+        Dim("random_seed", "unfolding", "random_seed", "int", 0, 7),
+    ]
+
+
+def _unfolding_space_t3() -> list[Dim]:
+    return [
+        Dim("ransac_threshold", "unfolding", "ransac_threshold", "float", 0.8, 1.2),
+        Dim("slice_spacing_factor", "unfolding", "slice_spacing_factor", "float", 1.05, 1.35),
+        Dim("polynomial_degree", "unfolding", "polynomial_degree", "int", 2, 3),
+        Dim("random_seed", "unfolding", "random_seed", "int", 0, 7),
+    ]
+
+
+def _unfolding_space_t45() -> list[Dim]:
+    # Anchor slice_spacing_factor=1.8
+    return [
+        Dim("ransac_threshold", "unfolding", "ransac_threshold", "float", 0.8, 1.2),
+        Dim("slice_spacing_factor", "unfolding", "slice_spacing_factor", "float", 1.6, 2.0),
+        Dim("polynomial_degree", "unfolding", "polynomial_degree", "int", 2, 3),
+        Dim("random_seed", "unfolding", "random_seed", "int", 0, 7),
+    ]
+
+
+def _t12_space() -> list[Dim]:
+    return _unfolding_space_t12() + [
         Dim("mask_r_low", "denoising", "mask_r_low", "float", 2.20, 2.50),
         Dim("mask_r_high", "denoising", "mask_r_high", "float", 2.70, 2.90),
         Dim("z_step", "denoising", "z_step", "float", 0.001, 0.008),
@@ -208,7 +237,7 @@ def _t12_space() -> list[Dim]:
 
 
 def _t3_space() -> list[Dim]:
-    return [
+    return _unfolding_space_t3() + [
         Dim("mask_r_low", "denoising", "mask_r_low", "float", 2.70, 3.00),
         Dim("mask_r_high", "denoising", "mask_r_high", "float", 2.90, 3.15),
         Dim("mask_theta_low", "denoising", "mask_theta_low", "float", 1.0, 2.5),
@@ -228,7 +257,7 @@ def _t3_space() -> list[Dim]:
 
 
 def _t45_space() -> list[Dim]:
-    return [
+    return _unfolding_space_t45() + [
         Dim("mask_r_low", "denoising", "mask_r_low", "float", 3.50, 3.80),
         Dim("mask_r_high", "denoising", "mask_r_high", "float", 3.75, 4.05),
         Dim("curvature_threshold", "enhancing", "curvature_threshold", "float", 0.0002, 0.002),

@@ -1,7 +1,16 @@
 """GT-free intrinsic metrics from pipeline artifacts.
 
 Tier 0 — gate invariants (stage-1; gate whether the Tier-1 proxy applies):
-  orient_h_ring_corr, recentre_residual_max (from log if available)
+  orient_axis_corr (label-free: h vs PCA tunnel-axis projection),
+  orient_h_ring_corr (legacy diagnostic; uses ring metadata),
+  recentre_residual_max (from log if available)
+
+The orientation invariant (orient_invariant_ok) is label-free: it requires
+|corr(h, axis)| >= 0.6, where axis is the first principal direction of the
+(x, y, z) cloud with a deterministic sign convention. An optional per-case
+expected sign (h_axis_sign in parameters_unfolding.json, recorded once from
+the canonical stage-1 run) adds a direction check. The ring-based corr is
+kept as a diagnostic only, since ring indices are annotation metadata.
 
 Tier 1 — proxy features (denoising / detection / SAM):
   Provenance-aware: regularity metrics use real detections only.
@@ -21,10 +30,13 @@ REAL_TYPES = frozenset({"midpoint", "positive_slope", "negative_slope", "horizon
 FALLBACK_TYPES = frozenset({"assume", "propagated", "default"})
 
 TIER0_KEYS = (
+    "orient_axis_corr",
     "orient_h_ring_corr",
     "orient_invariant_ok",
     "recentre_residual_max_cm",
 )
+
+ORIENT_AXIS_MIN_ABS_CORR = 0.6
 
 TIER1_KEYS = (
     "denoise_retained_ratio",
@@ -88,23 +100,76 @@ def parse_tier0_from_log(log_text: str, h_ring_sign: int | None = None) -> dict[
 def compute_orient_from_unwrapped(
     run_dir: Path, h_ring_sign: int | None = None
 ) -> dict[str, float]:
+    """Legacy ring-based orientation diagnostic (uses annotation metadata).
+
+    Kept for comparison/debugging only; the gate invariant is the label-free
+    axis check in compute_orient_axis().
+    """
     path = Path(run_dir) / "unwrapped.csv"
     out: dict[str, float] = {
         "orient_h_ring_corr": float("nan"),
-        "orient_invariant_ok": float("nan"),
         "recentre_residual_max_cm": float("nan"),
     }
     if not path.exists():
         return out
-    df = pd.read_csv(path, usecols=["h", "ring"])
-    corr = float(df["h"].corr(df["ring"]))
-    out["orient_h_ring_corr"] = corr
-    if h_ring_sign is not None and np.isfinite(corr):
-        out["orient_invariant_ok"] = float(
-            (np.sign(corr) == np.sign(h_ring_sign)) and abs(corr) > 0.5
+    try:
+        df = pd.read_csv(path, usecols=["h", "ring"])
+    except ValueError:
+        # No ring column (e.g. unlabeled deployment data) — diagnostic unavailable.
+        return out
+    out["orient_h_ring_corr"] = float(df["h"].corr(df["ring"]))
+    return out
+
+
+def compute_orient_axis(
+    run_dir: Path,
+    expected_axis_sign: int | None = None,
+    *,
+    max_svd_points: int = 50_000,
+    seed: int = 0,
+) -> dict[str, float]:
+    """Label-free orientation invariant from geometry alone.
+
+    For a canonical unwrap, h is (up to sign) the axial coordinate, so
+    corr(h, t) with t = projection of (x, y, z) onto the cloud's first
+    principal axis must be near +-1. The axis sign is made deterministic
+    (largest-|component| positive) so the corr sign is reproducible; an
+    optional expected sign (recorded once per case from the canonical
+    stage-1 run) adds a direction check. No annotation columns are read.
+    """
+    path = Path(run_dir) / "unwrapped.csv"
+    out: dict[str, float] = {
+        "orient_axis_corr": float("nan"),
+        "orient_invariant_ok": float("nan"),
+    }
+    if not path.exists():
+        return out
+    df = pd.read_csv(path, usecols=["x", "y", "z", "h"])
+    pts = df[["x", "y", "z"]].to_numpy(dtype=float)
+    if len(pts) < 10:
+        return out
+    centred = pts - pts.mean(axis=0)
+    if len(centred) > max_svd_points:
+        idx = np.random.default_rng(seed).choice(
+            len(centred), max_svd_points, replace=False
         )
-    elif np.isfinite(corr):
-        out["orient_invariant_ok"] = float(abs(corr) > 0.5)
+        sample = centred[idx]
+    else:
+        sample = centred
+    _, _, vt = np.linalg.svd(sample, full_matrices=False)
+    axis = vt[0]
+    k = int(np.argmax(np.abs(axis)))
+    if axis[k] < 0:
+        axis = -axis
+    t = centred @ axis
+    corr = float(pd.Series(t).corr(df["h"]))
+    out["orient_axis_corr"] = corr
+    if not np.isfinite(corr):
+        return out
+    ok = abs(corr) >= ORIENT_AXIS_MIN_ABS_CORR
+    if expected_axis_sign is not None:
+        ok = ok and (np.sign(corr) == np.sign(expected_axis_sign))
+    out["orient_invariant_ok"] = float(ok)
     return out
 
 
@@ -275,6 +340,21 @@ def load_h_ring_sign(params_dir: Path | None) -> int | None:
     return int(data["h_ring_sign"])
 
 
+def load_h_axis_sign(params_dir: Path | None) -> int | None:
+    """Optional expected sign of corr(h, PCA axis), recorded per case from the
+    canonical stage-1 run. Label-free: derived from geometry, not annotations.
+    Note this is per-case (world-frame dependent), not per-family."""
+    if params_dir is None:
+        return None
+    path = Path(params_dir) / "parameters_unfolding.json"
+    if not path.exists():
+        return None
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if "h_axis_sign" not in data:
+        return None
+    return int(data["h_axis_sign"])
+
+
 def extract_intrinsics(
     run_dir: Path,
     *,
@@ -286,14 +366,19 @@ def extract_intrinsics(
     """Compute all Tier-0 + Tier-1 metrics for a run directory."""
     run_dir = Path(run_dir)
     h_sign = load_h_ring_sign(params_dir)
+    axis_sign = load_h_axis_sign(params_dir)
     segment_order = load_segment_order(params_dir)
 
     tier0 = parse_tier0_from_log(log_text, h_sign)
-    # Prefer artifact-derived corr when available (works without logs)
+    # Legacy ring-based corr kept as a diagnostic only (annotation metadata).
     from_csv = compute_orient_from_unwrapped(run_dir, h_sign)
     if np.isfinite(from_csv["orient_h_ring_corr"]):
         tier0["orient_h_ring_corr"] = from_csv["orient_h_ring_corr"]
-        tier0["orient_invariant_ok"] = from_csv["orient_invariant_ok"]
+    # Gate invariant: label-free geometric check (h vs PCA tunnel axis).
+    axis = compute_orient_axis(run_dir, axis_sign)
+    tier0["orient_axis_corr"] = axis["orient_axis_corr"]
+    if np.isfinite(axis["orient_invariant_ok"]):
+        tier0["orient_invariant_ok"] = axis["orient_invariant_ok"]
     # Keep recentre from log if present; CSV does not store it
 
     metrics: dict[str, Any] = {}

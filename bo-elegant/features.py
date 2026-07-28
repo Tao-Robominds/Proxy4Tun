@@ -24,10 +24,13 @@ sys.path.insert(0, str(REPO_ROOT / "bo-unified"))
 from intrinsics import extract_intrinsics  # noqa: E402
 from phase_check import phase_coherence  # noqa: E402
 
-# v2 candidate lean set. Mini-ablation may prune further.
+# Candidate lean set. Mini-ablation may prune further.
+# unfold_residual / orient_agreement audit stage-1 (bo-full-stage).
 EVIDENCE: tuple[str, ...] = (
     "depth_nan_ratio",
     "denoise_retained_ratio",
+    "unfold_residual",
+    "orient_agreement",
 )
 
 COHERENCE: tuple[str, ...] = (
@@ -191,6 +194,41 @@ def compute_phase_feature(run_dir: Path) -> dict[str, float]:
     return out
 
 
+def stage1_evidence_features(
+    metrics: dict[str, Any],
+    *,
+    params_dir: Path | None = None,
+) -> dict[str, float]:
+    """Stage-1 Evidence: centreline residual + continuous orientation agreement.
+
+    ``unfold_residual`` = log1p(recentre_residual_max_cm); NaN → 0 when residual
+    is unavailable (caller should backfill from stage-1 logs when possible).
+    ``orient_agreement`` = orient_axis_corr * expected_h_axis_sign (or just the
+    absolute corr if no expected sign is recorded).
+    """
+    resid = metrics.get("recentre_residual_max_cm", float("nan"))
+    try:
+        r = float(resid)
+        unfold = float(np.log1p(r)) if np.isfinite(r) and r >= 0 else float("nan")
+    except (TypeError, ValueError):
+        unfold = float("nan")
+
+    corr = metrics.get("orient_axis_corr", float("nan"))
+    try:
+        c = float(corr)
+    except (TypeError, ValueError):
+        c = float("nan")
+    # Agreement = how tightly h aligns with the tunnel axis. Direction
+    # (sign) is family/world-frame dependent and is not multiplied in —
+    # hard direction gates are deferred to future reflective agents.
+    agreement = abs(c) if np.isfinite(c) else float("nan")
+
+    return {
+        "unfold_residual": unfold if np.isfinite(unfold) else 0.0,
+        "orient_agreement": agreement if np.isfinite(agreement) else 0.0,
+    }
+
+
 def lean_vector(
     metrics: dict[str, Any], features: tuple[str, ...] | list[str] = CANDIDATE
 ) -> dict[str, float]:
@@ -210,19 +248,26 @@ def extract_lean(
     *,
     params_dir: Path | None = None,
     expected_rings: int = 10,
+    log_text: str = "",
 ) -> dict[str, Any]:
     """Compute full intrinsics + regime-neutral features, project to lean keys."""
     run_dir = Path(run_dir)
     metrics = extract_intrinsics(
         run_dir,
         params_dir=params_dir,
+        log_text=log_text,
         expected_rings=expected_rings,
     )
     metrics.update(compute_row_features(run_dir, params_dir=params_dir))
     metrics.update(compute_phase_feature(run_dir))
+    metrics.update(stage1_evidence_features(metrics, params_dir=params_dir))
     lean = lean_vector(metrics)
     lean["orient_h_ring_corr"] = float(metrics.get("orient_h_ring_corr", float("nan")))
+    lean["orient_axis_corr"] = float(metrics.get("orient_axis_corr", float("nan")))
     lean["orient_invariant_ok"] = float(metrics.get("orient_invariant_ok", float("nan")))
+    lean["recentre_residual_max_cm"] = float(
+        metrics.get("recentre_residual_max_cm", float("nan"))
+    )
     # Diagnostics kept for reports / ontology, not for the lean model.
     for k in DIAGNOSTIC:
         lean[k] = float(metrics.get(k, float("nan")))
