@@ -1,0 +1,34 @@
+{
+  "observation": "The detected-line view contains numerous short edge fragments and a 20% fallback-point fraction, while the correspondence overlay marks several joint candidates that do not explain a label boundary. Segment-size variation is high (CV 1.046), despite complete ring coverage and correct ring count.",
+  "rule": "Favor precision over recall when clutter can create unsupported prompts: require stronger binary and Hough evidence, restrict line-gap bridging and pattern tolerance, and use smaller SAM spatial scales to reduce propagation from a false joint.",
+  "failure_mode": "Noisy or weakly supported line fragments seed misplaced prompts, producing patchwork label transitions and high segment-size variability that do not align with physical joints.",
+  "rationale": "This is the precision-focused alternative. Stricter detection and shorter gap closure suppress isolated fragments, while narrower SAM geometry limits damage from any remaining false prompt. The vertical threshold stays conservative because the ten ring instances are already correct.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.7,
+      "mask_r_high": 3.85
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0016
+    },
+    "detecting": {
+      "binary_threshold": 148,
+      "hough_threshold_oblique": 56,
+      "hough_threshold_horizontal": 52,
+      "hough_threshold_vertical": 4200,
+      "maxLineGap_oblique": 42,
+      "maxLineGap_horizontal": 10,
+      "pattern_tolerance": 7
+    },
+    "sam": {
+      "segment_width": 1550,
+      "K_height": 1080.0,
+      "angle": 8.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T05:26:59.347213",
+  "provenance": {
+    "agent_id": "e3590abc-904b-4887-a0de-b0b195c11007"
+  }
+}

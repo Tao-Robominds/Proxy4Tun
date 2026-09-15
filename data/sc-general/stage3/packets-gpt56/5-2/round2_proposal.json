@@ -1,0 +1,34 @@
+{
+  "observation": "The detected-line image contains numerous short responses in textured regions, while the correspondence overlay still marks many label edges as unsupported. Segment-size CV is high at 1.087814 even though fill rate is 0.751179 and all ten rings are complete.",
+  "rule": "When clutter and uneven segment sizes coexist with correct ring count, test a precision-oriented detector and a smaller segmentation footprint so prompts are less likely to span unrelated panels.",
+  "failure_mode": "Texture fragments may compete with structural seams, and wide segmentation support may merge unequal areas despite complete ring coverage.",
+  "rationale": "This conservative alternative raises binary and Hough thresholds, shortens accepted gaps, and uses smaller, less tilted SAM geometry. It tests whether cleaner boundaries improve correspondence and segment balance while preserving the established topology.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.62,
+      "mask_r_high": 3.9
+    },
+    "enhancing": {
+      "curvature_threshold": 0.00135
+    },
+    "detecting": {
+      "binary_threshold": 148,
+      "hough_threshold_oblique": 55,
+      "hough_threshold_horizontal": 52,
+      "hough_threshold_vertical": 3300,
+      "maxLineGap_oblique": 42,
+      "maxLineGap_horizontal": 12,
+      "pattern_tolerance": 8
+    },
+    "sam": {
+      "segment_width": 1580,
+      "K_height": 1080.0,
+      "angle": 7.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T06:05:43.236543",
+  "provenance": {
+    "agent_id": "7f2acae5-57e4-48e7-aa7a-99a919bf3a65"
+  }
+}

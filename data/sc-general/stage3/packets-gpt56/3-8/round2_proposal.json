@@ -1,0 +1,36 @@
+{
+  "observation": "Round 1's full unfolding change degraded the proxy from 0.561 to 0.328, increased the recenter residual from 24.0 cm to 34.7 cm, raised depth missingness from 0.182 to 0.323, reduced SAM fill from 0.597 to 0.366, and collapsed correspondence F1 from 0.302 to 0.043 while leaving the ring count correct. Its depth map is strongly warped and incomplete, whereas the anchor correspondence view retains a coherent central joint but shows fallback prompts and many unsupported label boundaries.",
+  "rule": "After an unlocked unfolding trial worsens both geometry and all downstream proxy features, return to the anchor geometry and isolate stages 2-6. Use mild denoising to retain joint evidence, midpoint Hough thresholds to avoid both fallback-only under-detection and the low-threshold clutter seen after round 1, and conservative SAM dimensions that preserve the correct ten-ring partition.",
+  "failure_mode": "The round-1 cubic unfolding perturbation damaged spatial support before detection, so its low oblique threshold and long line-gap setting responded to warped fragments rather than reliable joints. On the anchor, the remaining downstream failure is under-supported line-to-prompt correspondence and uneven mask coverage, not ring-count recovery.",
+  "rationale": "Run from the anchor with full=false and no unfolding keys. The denoising limits are near the centers of their bounded ranges and therefore make only a mild support cleanup. Binary threshold 130 and midpoint Hough votes (40/40 and 1650 for vertical structure) provide a balanced detection test; a 30-pixel oblique gap avoids reconnecting distant fragments, while pattern tolerance 10 and disabled uniform snapping avoid forcing synthetic regularity onto the visibly slanted joint. SAM uses a narrower 1100-pixel segment width, K_height=900 to satisfy the requested >=850 constraint, and the near-minimum 4.5-degree angle to follow the anchor's mild joint slope without repeating round 1's stronger tilt.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.85,
+      "mask_r_high": 3.05,
+      "mask_theta_low": 1.5,
+      "mask_theta_high": 17.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.001
+    },
+    "detecting": {
+      "binary_threshold": 130,
+      "hough_threshold_oblique": 40,
+      "hough_threshold_horizontal": 40,
+      "hough_threshold_vertical": 1650,
+      "maxLineGap_oblique": 30,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": false
+    },
+    "sam": {
+      "segment_width": 1100,
+      "K_height": 900.0,
+      "angle": 4.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T03:26:21.106333",
+  "provenance": {
+    "agent_id": "1c0b5e6b-6a55-48c6-9ff1-22123f0ce57e"
+  }
+}

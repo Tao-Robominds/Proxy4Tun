@@ -1,0 +1,30 @@
+{
+  "observation": "R2 is the best proxy so far (0.563) with ring_count_error=0.0 and fill\u22480.594 on 10 magenta columns, but F1@15 regressed from R1's 0.456 to ~0.312; SC overlay still shows many red unsupported boundaries and orange unexplained joints along the K row, while segmentation is noisy/fragmented bottom-right and green/red tracks keep a downward slope with left-column clutter. The 20.8 cm residual on R2 is the locked-anchor stage-1 copy (full=false), not a new centreline failure.",
+  "rule": "Once ring count is correct, treat remaining low correspondence as graded SAM/template and distance-pattern mismatch (f_pattern_mismatch / f_template_mismatch): keep hough_threshold_vertical high enough to preserve 10 prompts, restore K/AB-aligned SAM geometry toward T3 priors, and sharpen joints via enhancing/detecting\u2014do not reopen unfolding solely to chase a locked-stage residual readout.",
+  "failure_mode": "f_pattern_mismatch",
+  "rationale": "Round-3 distinct hybrid: full=false (no unfolding). Hold ring count with vertical Hough 2400 (above R2's 2200), return oblique/horizontal/maxLineGap to T3 priors (~30) and loosen pattern_tolerance to 12 so joint spacing can recover F1 without inviting an 11th prompt; add enhancing.curvature_threshold=0.0006 (untouched in R1/R2) to sharpen joints; move SAM opposite R2's narrow/low crop toward slightly wider priors (segment_width 1250, K_height 900, angle 6.5) to re-align boundaries to the sloping K band while staying mid-range.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0006
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 30,
+      "hough_threshold_vertical": 2400,
+      "maxLineGap_oblique": 30,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1250,
+      "K_height": 900.0,
+      "angle": 6.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T06:57:09.144913",
+  "provenance": {
+    "agent_id": "ce41a8ef-d7e8-4b58-b0ad-9161c2caa60e"
+  }
+}

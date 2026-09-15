@@ -1,0 +1,32 @@
+{
+  "observation": "Round 1 increased proxy_scaled from 0.646304 to 0.653752 through a correspondence_f1@15 increase from 0.39509 to 0.40959, while SAM fill stayed essentially flat and depth_nan_ratio rose from 0.14983 to 0.15256. The images still show abundant repeated vertical structure but sparse horizontal and oblique joint support, with many unsupported horizontal label boundaries.",
+  "rule": "After a sensitivity-oriented detector change improves correspondence but not fill, test a distinct precision-balanced overlay: stabilize the depth-edge input, lower thresholds selectively for the underrepresented line orientations, and raise the vertical threshold to prevent dominant vertical texture from consuming detections.",
+  "failure_mode": "The remaining error is an orientation-imbalanced prompt set: fragmented horizontal and oblique joints are under-detected while strong vertical seams are overrepresented, leaving horizontal segmentation boundaries unsupported and region sizes uneven.",
+  "rationale": "Moderate denoising radii, z-step, and gradient threshold provide a cleaner edge field after the slight increase in missing depth. The horizontal and oblique Hough thresholds are moved near their sensitive bounds to recover faint cross-ring joints, while the vertical threshold is raised to 650 to suppress redundant vertical responses. A longer oblique line gap reconnects fragmented joint evidence rather than repeating Round 1's short-gap strategy. The SAM lower bound is raised to 4200 to further exclude the noisy upper fringe. This is a different bounded overlay from Round 1, with no unfolding and full remaining false.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.3,
+      "mask_r_high": 2.8,
+      "z_step": 0.005,
+      "grad_threshold": 0.16
+    },
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 42,
+      "hough_threshold_horizontal": 42,
+      "hough_threshold_vertical": 650,
+      "maxLineGap_oblique": 65
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4200,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T01:35:42.440532",
+  "provenance": {
+    "agent_id": "11340a86-1ed7-4ede-9dfd-963e28ff40ea"
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "selection_rule": "For each family, take the completed trial with the lowest GT mIoU among the 40 calibration trials of that family's development subset (from data/sc-general/stage2/training_table.csv). Use its stage-2..6 parameter overlay (unfolding dropped) applied on top of each evaluation subset's expert-reference configuration. Fallback: if the overlay fails the single-instance gate on the development scan (pipeline ok, GT mIoU < 0.15, four proxy features finite), take the next-lowest calibration trial of that family.",
+  "source": "data/sc-general/stage2/training_table.csv",
+  "families": {
+    "t1&2": {
+      "family_label": "staggered",
+      "dev_subset": "2-1",
+      "trial_id": "2-1-s013",
+      "mIoU": 0.033,
+      "acquisition": "sobol_init",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 2.324678563605994,
+          "mask_r_high": 2.7222637092694644,
+          "z_step": 0.005645884258672595,
+          "grad_threshold": 0.22235293528065087
+        },
+        "enhancing": {
+          "curvature_threshold": 0.00765625985218212,
+          "inter_radius": 0.060128861330449576
+        },
+        "detecting": {
+          "binary_threshold": 105,
+          "hough_threshold_oblique": 45,
+          "hough_threshold_horizontal": 81,
+          "hough_threshold_vertical": 559,
+          "maxLineGap_oblique": 58
+        },
+        "sam": {
+          "processing.y_bounds": [
+            3653,
+            13100
+          ]
+        }
+      },
+      "params_dir": "anchors/unified/params/2-1"
+    },
+    "t3": {
+      "family_label": "continuous",
+      "dev_subset": "3-1",
+      "trial_id": "3-1-s008",
+      "mIoU": 0.044,
+      "acquisition": "sobol_init",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 2.99649525526911,
+          "mask_r_high": 3.091689182538539,
+          "mask_theta_low": 1.1554014445282519,
+          "mask_theta_high": 17.20419166982174
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0013828203009441495
+        },
+        "detecting": {
+          "binary_threshold": 138,
+          "hough_threshold_oblique": 29,
+          "hough_threshold_horizontal": 55,
+          "hough_threshold_vertical": 815,
+          "maxLineGap_oblique": 28,
+          "pattern_tolerance": 12,
+          "uniform_k_snap": false
+        },
+        "sam": {
+          "segment_width": 1354,
+          "K_height": 873.6339656636119,
+          "angle": 6.11882502771914
+        }
+      },
+      "params_dir": "anchors/unified/params/3-1-1"
+    },
+    "t4&5": {
+      "family_label": "complex",
+      "dev_subset": "5-1",
+      "trial_id": "5-1-s011",
+      "mIoU": 0.036,
+      "acquisition": "sobol_init",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 3.77841230193153,
+          "mask_r_high": 3.9259643563069404
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0019088736385107041
+        },
+        "detecting": {
+          "binary_threshold": 135,
+          "hough_threshold_oblique": 50,
+          "hough_threshold_horizontal": 61,
+          "hough_threshold_vertical": 2250,
+          "maxLineGap_oblique": 57,
+          "maxLineGap_horizontal": 29,
+          "pattern_tolerance": 19
+        },
+        "sam": {
+          "segment_width": 1616,
+          "K_height": 1440.5029667541385,
+          "angle": 10.067068625241518
+        }
+      },
+      "params_dir": "anchors/unified/params/5-1"
+    }
+  }
+}

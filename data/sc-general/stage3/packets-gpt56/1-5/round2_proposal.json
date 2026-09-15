@@ -1,0 +1,29 @@
+{
+  "observation": "Round 1 regressed from proxy 0.555111 to 0.527914 because correspondence_f1@15 fell from 0.200763 to 0.149731, despite a small fill-rate increase from 0.729429 to 0.733666 and unchanged zero ring-count error. The new line image contains many additional long oblique detections through the central and lower lining, while the correspondence overlay remains dominated by unsupported label boundaries and unexplained joint lines.",
+  "rule": "When permissive enhancement and low Hough thresholds increase detections but reduce correspondence, prioritize precision: require stronger enhanced structure and stronger line votes, avoid bridging distant fragments, preserve the already-correct vertical ring detector, and expose more of the upper lining to SAM within the allowed crop.",
+  "failure_mode": "Round 1 over-connected weak texture and lining artifacts into long oblique candidates. These low-precision lines shifted prompt intersections without improving physical seam support, so segmentation fill rose slightly while boundary-to-line agreement deteriorated.",
+  "rationale": "This overlay deliberately moves away from Round 1's permissive detector. A higher curvature threshold and smaller interaction radius localize enhancement around stronger seams. Higher binary and transverse Hough thresholds reject weak texture, while a short oblique line gap prevents disconnected fragments from becoming long false joints. Vertical detection remains untouched because ten rings are still recovered exactly. Lowering the SAM crop start to 3600 restores upper lining context that the Round 1 crop may have excluded.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0065,
+      "inter_radius": 0.03
+    },
+    "detecting": {
+      "binary_threshold": 150,
+      "hough_threshold_oblique": 80,
+      "hough_threshold_horizontal": 75,
+      "maxLineGap_oblique": 30
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3600,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T00:57:53.825936",
+  "provenance": {
+    "agent_id": "3ab22798-a0c4-4dbe-8ce9-f0154d1ecb67"
+  }
+}

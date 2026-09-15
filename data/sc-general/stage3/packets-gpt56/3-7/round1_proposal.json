@@ -1,0 +1,29 @@
+{
+  "observation": "The anchor preserves all 10 rings and has adequate SAM fill, but detection is entirely fallback-driven (real detection ratio 0, fallback ratio 1). The diagnostic shows sparse short horizontal/oblique responses concentrated near the central joint, while the propagated prompt row is nearly flat around y=1550 and most label boundaries are unsupported; correspondence F1@15 is only 0.171748.",
+  "rule": "When ring count and orientation are already stable but seam correspondence is limited by fallback-only detection, increase sensitivity and continuity at the enhancement/detection stages, then use uniform K snapping and a conservative high K-height prior to regularize prompts without changing stage 1.",
+  "failure_mode": "Weak and fragmented joint evidence does not survive the current detector strongly enough to form real intersections, so fallback propagation places a regular prompt row that explains only a small fraction of the observed label boundaries.",
+  "rationale": "Lower curvature and binary thresholds retain faint seam evidence; minimum horizontal/oblique Hough thresholds plus a larger oblique gap join fragmented central-joint responses. A moderate pattern tolerance and uniform K snapping preserve the correct ten-ring periodicity, while wider SAM segments improve continuity across damaged columns. K_height remains at 900, above the required 800 floor, and unfolding is omitted because stage1_unlocked is false.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 20,
+      "hough_threshold_horizontal": 20,
+      "maxLineGap_oblique": 60,
+      "pattern_tolerance": 15,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1400,
+      "K_height": 900.0,
+      "angle": 4.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T03:07:09.264953",
+  "provenance": {
+    "agent_id": "ec4c555d-21a6-4e79-99ac-cee8e45bb6ef"
+  }
+}

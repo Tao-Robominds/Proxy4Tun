@@ -1,0 +1,20 @@
+{
+  "observation": "Anchor proxy_scaled=0.555 (refine) with correspondence_f1@15=0.201 despite healthy stage-1 (recentre_residual_max_cm=2.5, |orient_axis_corr|\u22481.0) and ring_count_error=0. SC overlay is dominated by red unsupported label boundaries and orange unexplained joint lines; detected_lines shows sparse short oblique/horizontal segments, left half nearly empty, and det_fallback_ratio=0.2.",
+  "rule": "d7 / r_relax_hough: when oblique line yield is low and horizontal fallback is active, lower binary/Hough thresholds and raise maxLineGap_oblique \u2014 but only after residual/orientation are healthy (both are).",
+  "failure_mode": "f_missing_lines",
+  "rationale": "Stage-1 is locked (residual 2.5 cm \u226a 10 cm gate); vertical ring columns already match (10 rings). The proxy bottleneck is staggered joint recall: more sensitive oblique/horizontal detection should explain physical seams so SAM boundaries can snap within 15 px and lift correspondence F1 without retuning unfolding.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 45,
+      "hough_threshold_vertical": 500,
+      "maxLineGap_oblique": 60
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T07:20:02.676209",
+  "provenance": {
+    "agent_id": "a557f96a-8c1b-4a0e-8157-464fb4954cf0"
+  }
+}

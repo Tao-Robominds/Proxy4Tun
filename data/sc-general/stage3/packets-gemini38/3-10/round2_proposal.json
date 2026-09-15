@@ -1,0 +1,36 @@
+{
+  "observation": "detected_lines shows coherent continuous green (~y\u22481480) and red (~y\u22481650) oblique tracks across later rings, but SC correspondence @15 is poor (F1=0.287): many orange unexplained joints and assumed (x) prompts on the K-row. Intrinsics: det_fallback_ratio=1.0, det_real_detection_ratio=0.0 (expected under continuous snap), sam_fill_rate=0.698, ring_count_error=0. Residual 10.2 cm is only marginal; orientation healthy.",
+  "rule": "ontology d7/f_missing_lines + d8/f_pattern_mismatch; remediation r_relax_hough + r_fix_height_priors. experiences \u00a711: on continuous, prefer uniform_k_snap / row-gate health over det_real_detection_ratio. t3 SAM knobs: segment_width/K_height/angle only (no y_bounds).",
+  "failure_mode": "f_pattern_mismatch / unstable continuous K-row prompts (fallback-dominated detection feeding weak SC alignment)",
+  "rationale": "Relax oblique/horizontal Hough and raise maxLineGap_oblique so continuous joint tracks survive binarisation; keep vertical threshold at T3-like 1500 given ring_count already matches. Enable uniform_k_snap with moderate pattern_tolerance. Nudge SAM angle slightly above T3 prior (6.5\u00b0) and K_height to mid-band 850 (not floor/ceiling) with segment_width\u22481180 to better seat crops on the tracked K strip without empty crops. Leave unfolding frozen (full=false).",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.85,
+      "mask_r_high": 3.0,
+      "mask_theta_low": 1.55,
+      "mask_theta_high": 17.2
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 28,
+      "hough_threshold_horizontal": 28,
+      "hough_threshold_vertical": 1500,
+      "maxLineGap_oblique": 35,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1180,
+      "K_height": 850.0,
+      "angle": 6.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:20:06.003730",
+  "provenance": {
+    "agent_id": "fac28858-a937-4711-aadd-94bfddee5316"
+  }
+}

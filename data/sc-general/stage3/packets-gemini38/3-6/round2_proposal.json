@@ -1,0 +1,36 @@
+{
+  "observation": "Magenta vertical spacing on detected_lines is ~240\u2013245 px (~1200\u20131225 mm at 0.005 m/px). Green\u2013red central bands sit ~170\u2013200 px apart (~850\u20131000 mm), with a consistent shallow downward slant (~5\u20137\u00b0) matching continuous K/B joint geometry. SC correspondence shows assumed magenta x prompts on the central joint with partial orange unexplained segments. sam_fill_rate=0.649, sam_ontology_divergence=0.201, and elevated sam_segment_size_cv=0.462 point to template/crop mismatch more than upstream axis failure (orient |corr|\u22481, residual 3.2 cm).",
+  "rule": "Ontology d10/f_template_mismatch and remediation r_fix_template: after stage-1 health is confirmed, retune segment_width / K_height / taper angle to observed pixel geometry. Experiences \u00a76\u20137: SAM knobs matter only in the graded-coverage regime (fill/CV/ontology divergence), not when rings are missing.",
+  "failure_mode": "f_template_mismatch / f_crop_offset \u2014 SAM crop and K-block height/angle undershoot the observed central joint band, lowering fill and correspondence@15.",
+  "rationale": "Distinct from round 1: keep detection moderately strict (higher oblique threshold, tighter gap) and push SAM geometry toward the measured slant and slightly taller K crop (K_height\u2248880, angle\u22486.8, segment_width\u22481250) while staying clear of empty-crop lows near 700. No unfolding; full=false.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.84,
+      "mask_r_high": 3.02,
+      "mask_theta_low": 1.5,
+      "mask_theta_high": 17.3
+    },
+    "enhancing": {
+      "curvature_threshold": 0.00045
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 35,
+      "hough_threshold_horizontal": 35,
+      "hough_threshold_vertical": 1600,
+      "maxLineGap_oblique": 25,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1250,
+      "K_height": 880.0,
+      "angle": 6.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:43:23.584904",
+  "provenance": {
+    "agent_id": "7f14357f-9200-4631-9b27-64f67a8fe2fd"
+  }
+}

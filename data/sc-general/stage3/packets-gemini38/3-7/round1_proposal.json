@@ -1,0 +1,36 @@
+{
+  "observation": "Anchor proxy_scaled=0.540 (refine). Stage-1 healthy: recentre_residual_max_cm=3.6, |orient_axis_corr|\u22480.999, ring_count_error=0. Depth NaN\u22480.165 and denoise_retained\u22480.80 are family-normal. Primary defect is correspondence_f1@15=0.172 with SC overlay showing many unsupported (red) label boundaries on the K-row while joint-line panel has mixed cyan/orange ticks. detected_lines.png shows magenta verticals consistent with 10 rings, but real green/red oblique segments only in the rightmost columns \u2014 left/centre joints are sparse. Continuous mode with det_fallback_ratio=1.0 / det_real_detection_ratio=0.0 is expected under snap, yet sam_segment_size_cv=0.672 and ontology_divergence=0.248 indicate uneven K crops.",
+  "rule": "experiences \u00a77 tuning order + ontology d7/d8: with orientation and residual healthy, remediate f_missing_lines before blaming SAM; r_relax_hough then r_fix_height_priors. T3 priors (tunnel_priors T3): mask_r\u2248[2.85,3.0], theta\u2248[1.55,17.15], hough oblique/horizontal\u224830, K_height\u2248823.8 mm, segment_width\u22481200, taper\u22486.12\u00b0. Avoid oversized K_height that empty-crops the continuous K band.",
+  "failure_mode": "f_missing_lines (sparse oblique joints) cascading to f_pattern_mismatch / weak SC@15 correspondence; secondary f_template_mismatch risk if SAM stays off T3 K/angle",
+  "rationale": "Round-1 detection-first: lower Hough oblique/horizontal toward T3 notebook priors and widen maxLineGap so more real joint ticks appear across rings; keep uniform_k_snap on for continuous; pin SAM to T3 K\u2248824 / width 1200 / angle\u22486.1 (mid-band, not empty-crop extremes). Mild denoise theta toward T3 prior; leave curvature near default. No unfolding (stage1_unlocked=false).",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.85,
+      "mask_r_high": 3.0,
+      "mask_theta_low": 1.55,
+      "mask_theta_high": 17.15
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 28,
+      "hough_threshold_horizontal": 28,
+      "hough_threshold_vertical": 1500,
+      "maxLineGap_oblique": 35,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 824.0,
+      "angle": 6.1
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T08:57:02.627747",
+  "provenance": {
+    "agent_id": "3694f8b9-54e4-4d8d-9d56-5b39eb77064c"
+  }
+}

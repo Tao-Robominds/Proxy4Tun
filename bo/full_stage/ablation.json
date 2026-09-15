@@ -1,0 +1,275 @@
+{
+  "variants": [
+    {
+      "set": "Evidence",
+      "n_features": 4,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "unfold_residual",
+        "orient_agreement"
+      ],
+      "train_mae": 0.15880982836697216,
+      "train_spearman": 0.6822530058891488,
+      "lolo_mae": 0.404518026081492,
+      "lolo_spearman": 0.4288874262698766
+    },
+    {
+      "set": "Coherence",
+      "n_features": 6,
+      "features": [
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.13321524154499723,
+      "train_spearman": 0.8367150297199858,
+      "lolo_mae": 0.15980326979327217,
+      "lolo_spearman": 0.6426115642264919
+    },
+    {
+      "set": "Evidence+Coherence",
+      "n_features": 10,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "unfold_residual",
+        "orient_agreement",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.12332967943150981,
+      "train_spearman": 0.8757256134116996,
+      "lolo_mae": 0.34580056564268985,
+      "lolo_spearman": 0.5367087957109926
+    },
+    {
+      "set": "no_stage1 (v2 features)",
+      "n_features": 8,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.12763261032411302,
+      "train_spearman": 0.8453589665853535,
+      "lolo_mae": 0.18084285941839215,
+      "lolo_spearman": 0.6221931395594944
+    },
+    {
+      "set": "stage1_only",
+      "n_features": 2,
+      "features": [
+        "unfold_residual",
+        "orient_agreement"
+      ],
+      "train_mae": 0.2745933708193329,
+      "train_spearman": 0.21164613360752166,
+      "lolo_mae": 0.3246695728854295,
+      "lolo_spearman": -0.007161384198824654
+    },
+    {
+      "set": "loo_depth_nan_ratio",
+      "n_features": 9,
+      "features": [
+        "denoise_retained_ratio",
+        "unfold_residual",
+        "orient_agreement",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.12697291948687633,
+      "train_spearman": 0.8619800520966632,
+      "lolo_mae": 0.3338209987612773,
+      "lolo_spearman": 0.540515378257466
+    },
+    {
+      "set": "loo_denoise_retained_ratio",
+      "n_features": 9,
+      "features": [
+        "depth_nan_ratio",
+        "unfold_residual",
+        "orient_agreement",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.1356982918992697,
+      "train_spearman": 0.8389064014202859,
+      "lolo_mae": 0.34883522012449714,
+      "lolo_spearman": 0.5058342414179804
+    },
+    {
+      "set": "loo_unfold_residual",
+      "n_features": 9,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "orient_agreement",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.1279026414217369,
+      "train_spearman": 0.8431467577531963,
+      "lolo_mae": 0.22927575681362958,
+      "lolo_spearman": 0.5687920486423761
+    },
+    {
+      "set": "loo_orient_agreement",
+      "n_features": 9,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "unfold_residual",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.12471348585966444,
+      "train_spearman": 0.8742635413263963,
+      "lolo_mae": 0.1791266952866547,
+      "lolo_spearman": 0.6151306458764613
+    },
+    {
+      "set": "loo_sam_fill_rate",
+      "n_features": 9,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "unfold_residual",
+        "orient_agreement",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.14983305116810072,
+      "train_spearman": 0.7004019859664509,
+      "lolo_mae": 0.4149480936094996,
+      "lolo_spearman": 0.19828496869527767
+    },
+    {
+      "set": "loo_sam_ontology_divergence",
+      "n_features": 9,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "unfold_residual",
+        "orient_agreement",
+        "sam_fill_rate",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.12394922384404498,
+      "train_spearman": 0.8763542002227206,
+      "lolo_mae": 0.3466088126836246,
+      "lolo_spearman": 0.5179412209450781
+    },
+    {
+      "set": "loo_det_row_residual_px",
+      "n_features": 9,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "unfold_residual",
+        "orient_agreement",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_gated",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.12744609108987598,
+      "train_spearman": 0.8596462933286733,
+      "lolo_mae": 0.3414462414070351,
+      "lolo_spearman": 0.5659922059996332
+    },
+    {
+      "set": "loo_det_row_gated",
+      "n_features": 9,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "unfold_residual",
+        "orient_agreement",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_y_std",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.12875192119480885,
+      "train_spearman": 0.843792708840765,
+      "lolo_mae": 0.18818483414379994,
+      "lolo_spearman": 0.576346052953436
+    },
+    {
+      "set": "loo_det_row_y_std",
+      "n_features": 9,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "unfold_residual",
+        "orient_agreement",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "phase_incoherence_deg"
+      ],
+      "train_mae": 0.12317464610071488,
+      "train_spearman": 0.870262812009842,
+      "lolo_mae": 0.36381305135265923,
+      "lolo_spearman": 0.558362031327459
+    },
+    {
+      "set": "loo_phase_incoherence_deg",
+      "n_features": 9,
+      "features": [
+        "depth_nan_ratio",
+        "denoise_retained_ratio",
+        "unfold_residual",
+        "orient_agreement",
+        "sam_fill_rate",
+        "sam_ontology_divergence",
+        "det_row_residual_px",
+        "det_row_gated",
+        "det_row_y_std"
+      ],
+      "train_mae": 0.12354666867975629,
+      "train_spearman": 0.873996131467564,
+      "lolo_mae": 0.3339155850813787,
+      "lolo_spearman": 0.5275443208843084
+    }
+  ],
+  "created_at": "2026-07-25T18:34:33.846390"
+}

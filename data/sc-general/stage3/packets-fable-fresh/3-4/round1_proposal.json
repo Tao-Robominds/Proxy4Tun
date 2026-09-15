@@ -1,0 +1,30 @@
+{
+  "observation": "Anchor proxy 0.520 (refine band). Stage-1: recentre_residual_max_cm = 20.8 cm, twice the 10 cm gate, while orientation is pinned and healthy (orient_axis_corr -0.998, invariant ok). depth_map_viridis shows a full-height void at the first axial ring (x < ~200 px) with a curved inner edge, i.e. one end of the scan falls outside the r-band before recentring; NaN 0.195 is otherwise family-normal and the remaining voids (top band y~250-400, bottom-right y>2400) look physical (fixtures / floor). Ring count is correct (10 synthetic verticals at 245.3 px pitch = 1226 mm, ring_count_error 0, det_fallback_ratio 1.0, det_real_detection_ratio 0 which is expected under uniform_k_snap on continuous). Detection: oblique Hough only fires around the K row (green ~y1440, red ~y1610, one blue at ~y780) and only for x < 1600; the other longitudinal seams at y~780, ~2280 and ~2950 are clearly visible in the depth map (bolt rows + dotted seam pixels in the binary image) but yield no lines because the seam pixels are dotted and fall below the oblique accumulator / are broken by gaps. The SC overlay confirms this: label boundaries at ~98, ~795, ~2260, ~2950 are red (unsupported) and most joint lines near K are orange (offset from label edges), giving correspondence_f1@15 = 0.244. SAM: sam_fill_rate 0.571, ring completeness 0.89, Ring 0 (leftmost) is narrow/partial and ring template edges drift relative to the 1226 mm measured pitch when segment_width is 1200 mm.",
+  "rule": "experiences \u00a77 tuning order + \u00a712: recentre residual >> 10 cm with stage1_unlocked is an ontology trigger to touch unfolding and run stages 1-6 (f_curve_overfit / end-slice ellipse contamination -> off-centre curve at one end). Then ontology d6/d7 -> f_missing_lines: seams visible in the depth map but too few oblique lines and horizontal fallback / propagation only -> r_relax_hough (lower oblique threshold, raise maxLineGap, lower binary threshold) after ruling out gross depth holes (NaN is family-normal, joints are visible). Keep ring count consistent (experiences \u00a75: line count == ring count matters more than more lines) so vertical Hough stays in the synthetic regime. SAM geometry only as a light, measured correction (\u00a76 graded regime): match segment_width to the observed ring pitch. Do not touch denoising geometry (\u00a74: keep r-band at tunnel priors) or orientation (\u00a710).",
+  "failure_mode": "stage_1_centreline.f_curve_overfit / end-slice contamination (residual 20.8 cm, one-end void) -> stage_4_detection.f_missing_lines (only K-row obliques, seams at other label boundaries undetected -> low correspondence F1) -> stage_5_segmentation.f_crop_offset / f_over_under_coverage (template pitch 1200 vs measured 1226 mm, fill rate 0.57).",
+  "rationale": "Round 1 of 3: fix upstream first. (1) Unfolding: tighten ransac_threshold 1.0 -> 0.85 so the deviating end-slice ellipse centre is treated as an outlier of the degree-2 curve instead of bending it, and re-roll random_seed (3) so the stage-1 fit is re-drawn under the tightened threshold; orientation is canonical/pinned so a re-roll cannot flip handedness. Keep polynomial_degree 2 (10 slice centres, cubic would overfit) and leave slice_spacing_factor alone so ring_count stays 10. (2) Detecting: binary_threshold 127 -> 115 keeps the fainter dotted seam pixels at y~780/2280/2950, hough_threshold_oblique 30 -> 24 and maxLineGap_oblique 30 -> 45 let those dotted seams accumulate into oblique segments, hough_threshold_horizontal 30 -> 26 gives the fallback a slightly better chance on the flattest seams; hough_threshold_vertical set high (2200) to remain in the synthetic 10-vertical regime so ring_count_error stays 0; pattern_tolerance 10 and uniform_k_snap true keep the K-row gate strict so the extra lines cannot move the propagated K row. Expected effect: more label boundaries explained by lines -> correspondence_f1@15 up. (3) SAM: segment_width 1200 -> 1225 mm matches the measured 245.3 px ring pitch so per-ring templates stop drifting across the 10 rings, which should lift sam_fill_rate without changing K_height / angle (left at priors). Denoising and enhancing untouched (r-band and theta gate at T3 priors; the confirmed causal depth thresholds are not in bounds). full=true because unfolding changes.",
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 0.85,
+      "polynomial_degree": 2,
+      "random_seed": 3
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 24,
+      "hough_threshold_horizontal": 26,
+      "hough_threshold_vertical": 2200,
+      "maxLineGap_oblique": 45,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1225
+    }
+  },
+  "full": true,
+  "validated_at": "2026-09-15T18:09:55.545513",
+  "provenance": {
+    "agent_id": "dda9350d-e500-4cfd-b2f7-b8afd09ce9d1"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "observation": "SC overlay mixes unexplained orange joints with unsupported red label edges \u2014 both false-negative and false-positive boundary correspondence. det_fallback_ratio=0.1 is small, so vertical ring guides are mostly real; over-detecting horizontals/obliques may be creating spurious intersections that fight the staggered distance pattern. proxy still refine-band (0.676) with fill 0.745.",
+  "rule": "ontology d9/r_tighten_hough + d8 pattern-match: when prompt yield is adequate but spacing/correspondence is noisy, raise Hough thresholds to suppress spurious lines; pair with a mid y_bounds and slightly tighter radial gate so residual background does not feed false joints (experiences \u00a75: consistency with ring pattern > raw line count).",
+  "failure_mode": "f_spurious_lines / f_pattern_mismatch on staggered seams",
+  "rationale": "Round 3 is the tighten-and-stabilize arm, opposite of R1's relax-oblique bet: higher oblique/horizontal thresholds, mid maxLineGap (55) to keep true staggered continuity without fragment spam, binary_threshold 140 to thin noise, reduced inter_radius to limit joint smear, and y_bounds lower=4050 as a compromise crop between R1 and R2.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.45,
+      "mask_r_high": 2.88,
+      "z_step": 0.003,
+      "grad_threshold": 0.22
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0012,
+      "inter_radius": 0.04
+    },
+    "detecting": {
+      "binary_threshold": 140,
+      "hough_threshold_oblique": 75,
+      "hough_threshold_horizontal": 70,
+      "hough_threshold_vertical": 650,
+      "maxLineGap_oblique": 55
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4050,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T08:27:52.604181",
+  "provenance": {
+    "agent_id": "780ecc97-84e8-4c60-b3b8-8255b6a1a475"
+  }
+}

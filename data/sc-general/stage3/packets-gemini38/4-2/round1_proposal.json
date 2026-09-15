@@ -1,0 +1,23 @@
+{
+  "observation": "Proxy 0.544 (refine) with very low correspondence_f1@15=0.213 despite healthy stage-1 (recentre_residual_max_cm=2.0 << 10 cm gate, orient_axis_corr=0.967, ring_count_error=0). Depth NaN ~0.21 is family-normal. Detected_lines show ~10\u201311 verticals with sparse red/green oblique K tapers; SC overlay shows many orange unexplained angled joints on trapezoidal K cells and red unsupported label edges\u2014sam_segment_size_cv=1.09 and fill_rate=0.73 point to SAM crop/template misalignment rather than unroll failure. Vertical column pitch (~350 px \u2248 1750 mm at 5 mm/px) sits slightly under the T4 1800 mm prior.",
+  "rule": "experiences \u00a77: with residual healthy and orientation OK, tune detection/SAM not unfolding; ontology d8/d10 \u2192 f_pattern_mismatch / f_template_mismatch; remediation r_fix_template + mild r_relax_hough. Prefer full=false when stage1_unlocked is false.",
+  "failure_mode": "f_template_mismatch",
+  "rationale": "Round-1 hypothesis: K trapezoid crops are slightly too wide and under-tapered relative to visible oblique joints. Narrow segment_width toward measured column pitch, keep K_height near the T4 prior (1227) but slightly lower to avoid empty-crop padding, raise angle for the observed K wedges, and gently relax oblique Hough so real K joints support the retuned template.",
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 40,
+      "maxLineGap_oblique": 60,
+      "pattern_tolerance": 12
+    },
+    "sam": {
+      "segment_width": 1720,
+      "K_height": 1180.0,
+      "angle": 10.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T10:04:19.588694",
+  "provenance": {
+    "agent_id": "bef98451-28ce-481b-aad2-4b1348adb67b"
+  }
+}

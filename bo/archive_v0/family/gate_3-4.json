@@ -1,0 +1,20 @@
+{
+  "case": "3-4",
+  "config_kind": "anchor",
+  "command": "./venv/bin/python bo/run_holdout.py --gate-subset 3-4 # full pipeline, params from anchors/t3/3-1-1, random_seed=10",
+  "lineage": "sibling anchor params anchors/t3/3-1-1 \u2192 data/bo/3-4-family-proxy/runs/3-4-anchor; stages 1\u20136 via anchors/t3 scripts",
+  "pass_fail_criteria": {
+    "pipeline_ok": true,
+    "miou_finite_and_ge_0.3": true,
+    "intrinsics_tier1_no_nan": true
+  },
+  "measured_mIoU": 0.596,
+  "orient_h_ring_corr": -0.9944846582380535,
+  "orient_invariant_ok": 1.0,
+  "tier1_complete": true,
+  "passed": true,
+  "evidence_path": "/home/boringtao/Projects/Proxy4Tun/bo/family/gate_3-4.json",
+  "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/3-4-family-proxy/runs/3-4-anchor",
+  "log_path": "/home/boringtao/Projects/Proxy4Tun/data/bo/3-4-family-proxy/logs/3-4-anchor.log",
+  "study_root": "/home/boringtao/Projects/Proxy4Tun/data/bo/3-4-family-proxy"
+}

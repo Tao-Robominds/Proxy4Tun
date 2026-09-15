@@ -1,0 +1,23 @@
+{
+  "observation": "Round 1 moved the proxy 0.589 -> 0.619 (still refine band) entirely through correspondence_f1@15 (0.287 -> 0.343); sam_fill_rate was flat (0.698 -> 0.696), ring_count_error stayed 0 and depth_nan_ratio is unchanged because stages 1-3 were not touched. Stages 1-3 remain healthy (orient_axis_corr -0.999 with invariant passing, recentre residual 10.2 cm = 0.2 cm over the gate, retention 0.74, NaN 14% below family-normal), so per experiences.md section 7 the remaining budget belongs to detection/SAM. In the round-1 detected_lines.png the 10 magenta verticals sit at x = 120, 365, ..., 2320 (pitch 244 px = 1.22 m, confirming segment_width 1220), the lower K edge now has red oblique segments in rings 2-10 (y ~1620-1660) and the upper K edge has green obliques for rings 6-9 (y ~1470); rings 1-5 still show only faint dotted upper-K-edge pixels and no line. The two long continuous longitudinal joints at y ~800-825 and y ~2320 are present in the binarised outlier map as dotted rows running across all ten ring columns, but the horizontal Hough produced only three very short blue segments (x 1550-1600 and 2300-2400 at y ~800, x 1850-1900 at y ~2300): the dots are spaced wider than the fixed horizontal maxLineGap (10 px) so runs stay under minLineLength and are dropped. In the SC overlay those two AB label boundaries (~2400 px each, the longest boundaries in the template) are red/unsupported, and the few horizontals present are orange because they are too short to be matched; the K-edge obliques on the right are cyan (explained). Prompt row is pinned at y ~1560 by uniform_k_snap, so ring_count_error and det_row gating are not at risk.",
+  "rule": "ontology d7 (m_line_yield low, horizontal fallback still needed for the AB joints) -> f_missing_lines; remediation r_relax_hough with the precondition already satisfied in round 1 (upstream f_joint_oversmoothed / f_depth_holes ruled out: the joint rows are visibly present in the outlier map, NaN 14%). Because the horizontal maxLineGap/minLineLength are not exposed, the only in-bounds levers that bridge the dotted AB rows are binarisation (more outlier pixels survive -> denser dots after 3x3 dilation -> gaps fall under 10 px) and the horizontal vote threshold. experiences.md section 5: keep vertical count == ring count, so hough_threshold_vertical stays untouched; section 10: do not re-roll stage 1 mid-comparison, so unfolding is left alone despite stage1_unlocked.",
+  "failure_mode": "f_missing_lines (stage_4_detection): long longitudinal AB joints under-detected by the horizontal path and upper K edge under-detected on the left rings; SAM geometry is already consistent (segment_width matches ring pitch, K template edges are explained by the oblique lines).",
+  "rationale": "Round 2 pushes the same detection lever one step further to recover the two long AB joint rows and the missing left-side upper-K-edge obliques. binary_threshold 110 -> 100 (bound floor) keeps the faintest joint outlier pixels so the dotted rows at y~810 and y~2320 densify enough for the fixed 10 px horizontal gap to bridge them; hough_threshold_horizontal 24 -> 20 (floor) lets the resulting runs vote in; hough_threshold_oblique 24 -> 22 (moderate, not floor) targets the faint upper-K-edge dots in rings 1-5 while limiting spurious obliques on the dense bolt-pocket column of ring 10; maxLineGap_oblique 45 -> 60 (ceiling) lets the K-edge segments span the bolt-pocket interruptions so each ring gets one long edge line instead of fragments. Spurious-line risk is contained: bolt pockets are ~30 px squares spaced one ring pitch apart, below minLineLength for both Hough paths and far beyond the 10 px horizontal gap. uniform_k_snap stays true and the vertical accumulator is untouched so the 10 verticals and the pinned prompt row are preserved (ring_count_error 0). segment_width stays 1220 mm (matches the measured 244 px pitch). K_height/angle are not changed because the K template edges already coincide with the detected obliques (cyan in the overlay). Unfolding is deliberately not included again: residual is only 0.2 cm over the gate, orientation is pinned, and a --full rerun would confound attribution of the detection change; if round 2 plateaus, round 3 can revisit.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 100,
+      "hough_threshold_oblique": 22,
+      "hough_threshold_horizontal": 20,
+      "maxLineGap_oblique": 60,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1220
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T20:52:41.281540",
+  "provenance": {
+    "agent_id": "3-10-fable-fresh"
+  }
+}

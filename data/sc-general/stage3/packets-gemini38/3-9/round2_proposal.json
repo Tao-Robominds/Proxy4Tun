@@ -1,0 +1,36 @@
+{
+  "observation": "Same refine-band anchor: correspondence_f1@15 remains the primary deficit while ring geometry is intact. SC overlay shows orange unexplained joint segments and red unsupported boundaries especially off the central K seam; detected_lines has sparse secondary green/red/blue fragments away from the two main continuous tracks. This suggests prompt-row / crop height still slightly oversized or taper-misaligned relative to the dense central band, plus room to strengthen oblique joint yield before SAM.",
+  "rule": "d7/f_missing_lines then d10: raise usable oblique joint evidence (lower binary/Hough gates, slightly looser maxLineGap) so continuous snap anchors on the primary tracks; then use a tighter K_height and slightly reduced segment_width/angle so SAM crops stay filled on the K band (anti empty-crop).",
+  "failure_mode": "f_crop_offset",
+  "rationale": "Distinct from round 1: detection-led recovery of the continuous green/red tracks (binary 115, oblique/horizontal 24, vertical 1200, maxLineGap 40, pattern_tolerance 8) plus a mid-band SAM crop (K_height=820, segment_width=1100, angle=5.2). K_height was raised from 740 after an empty-crop OpenCV resize failure.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.8,
+      "mask_r_high": 3.05,
+      "mask_theta_low": 1.3,
+      "mask_theta_high": 17.5
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 24,
+      "hough_threshold_horizontal": 24,
+      "hough_threshold_vertical": 1200,
+      "maxLineGap_oblique": 40,
+      "pattern_tolerance": 8,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1100,
+      "K_height": 820.0,
+      "angle": 5.2
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:33:42.893369",
+  "provenance": {
+    "agent_id": "4952bb8e-685e-4588-9909-d82b86cbbd48"
+  }
+}

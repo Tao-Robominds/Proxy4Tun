@@ -1,0 +1,36 @@
+{
+  "observation": "Round 2 (frozen anchor stage-1, r-band widened to [2.78, 3.10], binary 112, oblique/horizontal Hough 22/20, maxLineGap 40) recovered from the round-1 collapse but still landed below the anchor: proxy 0.517 vs 0.561. The lean features explain why: depth_nan_ratio improved only marginally (0.182 -> 0.169), sam_fill_rate was flat (0.597 -> 0.593), ring_count_error stayed 0, but correspondence_f1@15 fell 0.302 -> 0.218. The round-2 detected_lines map shows the mechanism: the K-row seam now yields long oblique lines on both K boundaries (green ~y1470, red ~y1630, x 1000-2450), which is the intended gain, but the relaxed thresholds also admitted a scatter of short red/green fragments on the bolt-pocket rows (~y 700, 830, 1130, 1330, 1750, 2200, 2450) and short blue horizontals at ~770 and ~2300 that do not coincide with any SAM label boundary. Those unexplained lines dilute the correspondence precision faster than the extra K-row support raises recall. The round-2 depth map also shows the widened band retaining a broader yellow high-r sliver along the left end (the off-centre ring 0, 24 cm residual) without closing the ring-0 void: the added points are displaced lining that feed the outlier map rather than lining that SAM can fill. The 10 synthetic verticals still match 10 rings, prompts remain propagated at y~1545 on the K row, and the block template heights (K 165 px, AB 669 px from the K prompt) line up with the visible joint rows at ~130/~790/~1470/~1640/~2300/~2950, so the label layout is geometrically sound; the deficit is in the line set, not the prompts.",
+  "rule": "ontology d9 (prompt/line count larger than the structure warrants) -> f_spurious_lines -> r_tighten_hough: raise the oblique Hough threshold and check the upstream f_under_gate precondition; experiences.md section 4: keep denoising geometry knobs at tunnel priors rather than tuning them for one scan, since the widened band bought no fill-rate gain; section 9: a proxy move driven by evidence features (NaN down) while the coherence feature (correspondence) degrades is the suspect pattern, so round 3 reverses it; section 10 anti-pattern: do not re-roll stage 1 mid-comparison (round 1 already showed the degree-3 re-roll is destructive on this 10-ring span), so stage 1 stays frozen and unfolding is omitted (full=false). Section 6/7: SAM geometry left at t3 priors because the remaining fill loss is SAM under-filling around NaN speckle, not template width.",
+  "failure_mode": "stage_4_detection.f_spurious_lines (relaxed binarisation + low oblique/horizontal thresholds turned bolt-pocket edges into short unexplained line fragments -> correspondence precision loss) with upstream stage_2_denoise.f_under_gate contribution (widened r-band retained off-centre ring-0 points and pocket-recess points that populate the outlier map). Residual stage_1 f_curve_overfit (24 cm end residual) is acknowledged but deliberately not re-attacked in the final round.",
+  "rationale": "Round 3 is a precision round on the frozen anchor stage-1 (full=false). Denoising: revert to the t3 priors [2.85, 3.0] and theta [1.55, 17.15], the band the anchor scored 0.561 with; the round-2 widening gained ~1 pt of NaN and nothing in fill, and it fed spurious outlier points, so it fails the r_tighten_hough precondition. Enhancing: curvature_threshold at the default 0.0005. Detecting: binary_threshold back to the default 127 so faint pocket edges do not survive binarisation; hough_threshold_oblique raised to 40 (anchor 30, round 2 22) so a line needs >= 40 collinear votes, which a ~40 px bolt-pocket edge cannot supply but the ~1000 px K-row seam can; maxLineGap_oblique raised to 45 (anchor 30) so the dotted K seam, including its sparser left half (x < 1000) that produced no lines on the anchor, is bridged into long continuous lines that carry more votes and cover more of the K label boundaries within 15 px; 45 stays well below the ~85 px clear gap between adjacent bolt pockets in a row, so pocket rows cannot chain into a line. hough_threshold_horizontal raised to 40 to drop the short unexplained horizontals (the true joint rows at ~770/~2300 are dotted with gaps above the fixed 10 px horizontal maxLineGap, so they only ever produce short fragments that fall outside the 15 px tolerance and cost precision). hough_threshold_vertical kept at 1500 (10 verticals for 10 rings), pattern_tolerance 10 and uniform_k_snap true kept for the continuous K-row snap, which also guarantees prompts even if line yield drops. SAM: t3 priors (1200 mm, 823.8 mm, 6.12 deg) untouched. Expected vs anchor: depth_nan_ratio ~0.18 and sam_fill_rate ~0.60 unchanged (same band, same stage-1), ring_count_error 0, correspondence_f1@15 above the anchor 0.30 from higher precision (fewer unexplained fragments) and higher K-row recall (longer lines), pushing proxy above 0.561 into the upper refine band. If the tightened threshold instead removes the K-row lines entirely, the snap regime keeps the prompts and the run degrades toward, not below, the anchor's line set, so downside is bounded and the anchor remains selectable.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.85,
+      "mask_r_high": 3.0,
+      "mask_theta_low": 1.55,
+      "mask_theta_high": 17.15
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 127,
+      "hough_threshold_oblique": 40,
+      "hough_threshold_horizontal": 40,
+      "hough_threshold_vertical": 1500,
+      "maxLineGap_oblique": 45,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 823.8,
+      "angle": 6.12
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T21:21:06.447541",
+  "provenance": {
+    "agent_id": "3-8-fable-fresh"
+  }
+}

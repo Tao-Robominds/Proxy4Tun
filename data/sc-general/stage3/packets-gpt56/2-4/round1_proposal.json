@@ -1,0 +1,29 @@
+{
+  "observation": "The anchor has the correct 10-ring structure, complete ring coverage, stable orientation, and low recentring residual, but correspondence_f1@15 is only 0.411668. The overlays show many label boundaries without nearby detected joint lines, especially repeated oblique boundaries, while detections are fragmented and one prompt is fallback-derived; SAM fill is 0.745003 with high segment-size variation.",
+  "rule": "When geometry and ring count are stable but boundary correspondence is sparse, preserve unfolding and increase continuity-sensitive feature and line recovery within conservative bounds; constrain SAM to the informative longitudinal span rather than changing the established ring topology.",
+  "failure_mode": "Under-connected oblique and horizontal joint evidence leaves repeated semantic boundaries unsupported, producing uneven segment extents despite complete ring assignment.",
+  "rationale": "A moderately larger enhancement neighborhood should join locally coherent joint evidence, while lower binary and Hough thresholds plus a larger oblique line gap should recover weak, interrupted repeated boundaries. The bounded SAM crop removes peripheral structure that can inflate unequal masks. Stage 1 remains untouched because it is locked and its residual and orientation diagnostics already pass.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0015,
+      "inter_radius": 0.06
+    },
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 50,
+      "maxLineGap_oblique": 70
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4000,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T02:11:04.932402",
+  "provenance": {
+    "agent_id": "0e295c30-1899-49ae-9e58-17616cc7809c"
+  }
+}

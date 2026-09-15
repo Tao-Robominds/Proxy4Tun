@@ -1,0 +1,23 @@
+{
+  "observation": "Round 2 entered the accept band at 0.712355, driven by correspondence F1 increasing from the 0.455 anchor to 0.479636. Ring count stayed exact, depth NaN ratio stayed unchanged, and fill remained close to the anchor at 0.742250, indicating that the horizontal-detection and lower-crop hypothesis improved boundary support without destabilizing geometry.",
+  "rule": "When a bounded proposal improves the target proxy feature while preserving topology and upstream diagnostics, refine locally around that successful mechanism with small parameter steps rather than introducing a new upstream transformation.",
+  "failure_mode": "Some repeated horizontal boundaries remain unsupported in the attached correspondence overlay, but a large sensitivity increase could admit clutter or fragment the stable ten-ring segmentation. The useful operating point therefore appears close to round 2 and should be explored conservatively.",
+  "rationale": "Keep denoising, enhancement, oblique detection, vertical detection, and unfolding untouched. Move the successful binary and horizontal Hough thresholds only slightly toward greater sensitivity, and lower the flat SAM crop by just 100 units to test whether a little more wall support improves correspondence or fill. This provides a distinct local refinement around the accepted round while limiting regression risk.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 122,
+      "hough_threshold_horizontal": 52
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3700,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T02:40:59.128198",
+  "provenance": {
+    "agent_id": "a3de6900-58db-4500-ac0b-e4512b160e78"
+  }
+}

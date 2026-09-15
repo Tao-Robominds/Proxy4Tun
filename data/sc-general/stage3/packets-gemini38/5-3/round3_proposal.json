@@ -1,0 +1,30 @@
+{
+  "observation": "Anchor fill_rate 0.74 with many orange unexplained horizontals on the joint-lines panel and red unsupported circumferential boundaries near the two large white gaps. det_real_detection_ratio=0.7 / fallback=0.3 \u2014 not pure synthetic-vertical fallback, so horizontal Hough and SAM width/height co-matter. Depth NaN and residual already healthy; do not chase denoise cosmetics alone.",
+  "rule": "When unexplained horizontal joints dominate correspondence loss on complex lining, strengthen horizontal/oblique Hough continuity and use a slightly wider segment_width with shallower taper, keeping K_height in the safe mid-upper prior band (not ceiling empty-crop into white seams).",
+  "failure_mode": "f_few_oblique_or_broken_horizontals + mild under-width: fragmented circumferential lines leave SAM boundaries unsupported at ring seams (low correspondence_f1@15).",
+  "rationale": "Third distinct axis: detection-first horizontal recovery (lower horizontal threshold, larger maxLineGap_horizontal) plus wider segment_width 1950 and milder angle 8.0 so A/B blocks cover more seam context. K_height 1280 sits above prior without hitting the 1500 empty-crop ceiling. Tiny denoise outer-band nudge only as support for joint contrast.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.6,
+      "mask_r_high": 3.95
+    },
+    "detecting": {
+      "binary_threshold": 125,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 30,
+      "maxLineGap_oblique": 50,
+      "maxLineGap_horizontal": 20,
+      "pattern_tolerance": 15
+    },
+    "sam": {
+      "segment_width": 1950,
+      "K_height": 1280.0,
+      "angle": 8.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T11:09:46.968232",
+  "provenance": {
+    "agent_id": "60c35b7c-6350-4e5d-9ed7-80a096230cb0"
+  }
+}

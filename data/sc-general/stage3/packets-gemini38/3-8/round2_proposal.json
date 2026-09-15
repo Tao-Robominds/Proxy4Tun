@@ -1,0 +1,36 @@
+{
+  "observation": "Assuming R1 recentre residual is brought under the gate, residual stage-1 should stay frozen. Remaining GT-free pain is weak line\u2194boundary correspondence (F1@15=0.302), moderate fill (\u22480.60), and SC overlay orange unexplained joint segments plus red unsupported label edges along the central seam. Continuous family still shows full Hough fallback under snap; green/red K-row slope suggests taper/angle and crop height matter for template alignment.",
+  "rule": "experiences \u00a75\u2013\u00a76 + ontology f_missing_lines / f_template_mismatch: with healthy ring count and locked stage-1, recover joint yield (lower oblique/horizontal Hough, keep synthetic verticals) then retune SAM segment_width/K_height/angle toward T3 priors; avoid empty-crop K_height floors.",
+  "failure_mode": "f_missing_lines + f_template_mismatch (weak SC support under continuous snap)",
+  "rationale": "No unfolding (full=false). Align denoise r/theta near T3 priors; lower binary and oblique/horizontal Hough with slightly larger maxLineGap to explain more central joint pixels; keep uniform_k_snap and mid vertical threshold. SAM: segment_width=1220, K_height=880 (mid-band, not 700 empty-crop risk), angle=6.2 near T3 taper 6.12\u00b0.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.82,
+      "mask_r_high": 3.05,
+      "mask_theta_low": 1.4,
+      "mask_theta_high": 17.3
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0007
+    },
+    "detecting": {
+      "binary_threshold": 118,
+      "hough_threshold_oblique": 28,
+      "hough_threshold_horizontal": 28,
+      "hough_threshold_vertical": 1600,
+      "maxLineGap_oblique": 42,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1220,
+      "K_height": 880.0,
+      "angle": 6.2
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:10:03.663374",
+  "provenance": {
+    "agent_id": "c490a680-d345-4271-b9a9-49f027f60fea"
+  }
+}

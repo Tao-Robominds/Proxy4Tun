@@ -1,0 +1,20 @@
+{
+  "observation": "Anchor sits in the refine band (proxy_scaled=0.646) with healthy stage-1 (recentre_residual_max_cm=1.9, ring_count=10, ring_count_error=0) but weak SC correspondence (correspondence_f1@15=0.395). The SC overlay shows many red unsupported label boundaries and orange unexplained joint lines across staggered columns; detected_lines has regular magenta verticals (~10 rings) yet sparse blue horizontals and incomplete green/red obliques, with det_fallback_ratio=0.3.",
+  "rule": "On staggered t1&2, when vertical ring count already matches and residual is under the gate, treat low correspondence_f1 as a stage-4 line-yield problem: relax horizontal/oblique Hough (and bridge gaps with maxLineGap) before touching SAM or unfolding (ontology f_missing_lines / r_relax_hough; experiences \u00a75).",
+  "failure_mode": "f_missing_lines",
+  "rationale": "stage1_unlocked=false and residual is fine, so skip unfolding. Vertical structure is already correct; the proxy bottleneck is joint\u2194boundary correspondence under staggered offsets. Lowering binary/horizontal/oblique thresholds and raising maxLineGap_oblique should recover more real joint segments that currently appear as unexplained orange lines, improving prompt loci without inventing extra rings.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 45,
+      "hough_threshold_vertical": 520,
+      "maxLineGap_oblique": 60
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T07:50:11.839930",
+  "provenance": {
+    "agent_id": "5b8495ca-e2e8-4d2e-9d8f-3308d9f62e26"
+  }
+}

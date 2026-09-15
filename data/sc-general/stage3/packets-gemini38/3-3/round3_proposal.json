@@ -1,0 +1,36 @@
+{
+  "observation": "3-3 refine-band proxy with correspondence_f1@15=0.113, sam_ontology_divergence\u22480.25, and sam_segment_size_cv\u22480.59 indicate uneven block coverage despite complete rings. SC overlay shows unsupported red boundaries at band edges and a wide central feature band that may be under-cropped by a mid-height K template; fill_rate\u22480.78 suggests under-coverage more than orientation collapse.",
+  "rule": "d12/d10 (f_over_under_coverage / f_template_mismatch): graded fill and ontology divergence with healthy stage-1 \u2192 enlarge SAM segment geometry (wider/taller/higher taper) and tighten detection to reduce spurious joints; t3 continuous has no y_bounds.",
+  "failure_mode": "f_over_under_coverage",
+  "rationale": "Distinct corner from rounds 1\u20132: coverage-oriented SAM \u2014 segment_width=1350, high K_height=960 (avoids empty crop), angle=7.5 toward upper taper. Detection is tightened (higher binary/Hough, smaller gap, tighter pattern_tolerance=8) to suppress spurious lines after the larger template. Denoise slightly looser on r/theta for more lining retention; curvature raised to 0.0008 to reduce soft surface clutter. stage1_unlocked=false \u2192 omit unfolding; full=false.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.75,
+      "mask_r_high": 3.1,
+      "mask_theta_low": 1.2,
+      "mask_theta_high": 18.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "binary_threshold": 140,
+      "hough_threshold_oblique": 40,
+      "hough_threshold_horizontal": 40,
+      "hough_threshold_vertical": 1800,
+      "maxLineGap_oblique": 20,
+      "pattern_tolerance": 8,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1350,
+      "K_height": 960.0,
+      "angle": 7.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T08:53:32.112361",
+  "provenance": {
+    "agent_id": "676e3969-2d60-471a-922c-8d152904c623"
+  }
+}

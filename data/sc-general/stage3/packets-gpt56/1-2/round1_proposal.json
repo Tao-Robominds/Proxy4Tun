@@ -1,0 +1,29 @@
+{
+  "observation": "The anchor preserves all 10 rings with near-perfect axis orientation, but correspondence_f1@15 is only 0.367509 and fill is 0.722929. The correspondence overlay shows many unsupported label boundaries and multiple orange transverse joints, while the detected-lines image has sparse, fragmented horizontal and oblique detections despite visible staggered-course structure. Ring completeness is 0.888889 and segment-size CV is high at 1.338196.",
+  "rule": "When ring count and orientation are already correct but transverse SC correspondence is weak, preserve vertical detection and increase sensitivity and continuity for faint horizontal/oblique joints; modestly broaden the SAM processing interval to improve coverage without changing unfolding.",
+  "failure_mode": "Under-detection and fragmentation of transverse mortar joints leaves prompts concentrated on a small set of courses, producing unsupported semantic boundaries, incomplete fill, and uneven segment sizes.",
+  "rationale": "Lower curvature and binary thresholds should retain faint joint evidence, while lower horizontal/oblique Hough thresholds and a larger oblique gap allowance should connect the repeated staggered joints visible across rings. Keeping the vertical Hough setting untouched protects the exact ring count. A lower processing bound of 3800 extends promptable coverage while retaining the required upper bound of 13300. Unfolding is omitted because stage1_unlocked is false.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.001,
+      "inter_radius": 0.05
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 45,
+      "maxLineGap_oblique": 65
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3800,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T01:52:36.611028",
+  "provenance": {
+    "agent_id": "7ff936d0-56c3-442a-8710-1d2e205f2116"
+  }
+}

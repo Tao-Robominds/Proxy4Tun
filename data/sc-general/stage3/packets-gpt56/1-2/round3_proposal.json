@@ -1,0 +1,29 @@
+{
+  "observation": "Round 2 recovered the proxy to 0.647402, only 0.000421 below the 0.647823 anchor. Relative to the anchor, it slightly improved fill from 0.722929 to 0.723742 and reduced depth_nan_ratio from 0.101505 to 0.101135, while correspondence_f1@15 remained marginally lower at 0.366194 versus 0.367509. Its precision-first line map removed round 1's crossing clutter and produced an additional real assumed prompt near x=850, but fallback midpoints still dominate.",
+  "rule": "When a conservative regime restores the proxy and improves fill and depth validity but remains just below the anchor on correspondence, preserve strong image and line-quality filtering while selectively admitting short, locally supported oblique joints that can create real intersections.",
+  "failure_mode": "Round 2 is slightly over-conservative for oblique joints: it suppresses false long bridges successfully, yet also misses some short staggered-course evidence needed to replace fallback midpoints and raise boundary correspondence.",
+  "rationale": "The proposal retains a high curvature threshold, small interaction radius, and strong binary threshold to preserve round 2's depth and fill gains. It lowers only the oblique Hough threshold relative to round 2 while setting the oblique gap allowance to its minimum, allowing compact well-supported staggered joints without reconnecting distant fragments. A stricter horizontal threshold limits unrelated transverse clutter. Raising the SAM lower bound modestly to 4300 further avoids the irregular lower fringe. Vertical detection remains untouched because ring count error is zero; unfolding is omitted because stage1_unlocked is false.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.007,
+      "inter_radius": 0.025
+    },
+    "detecting": {
+      "binary_threshold": 155,
+      "hough_threshold_oblique": 70,
+      "hough_threshold_horizontal": 80,
+      "maxLineGap_oblique": 20
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4300,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T02:04:39.537826",
+  "provenance": {
+    "agent_id": "7ff936d0-56c3-442a-8710-1d2e205f2116"
+  }
+}

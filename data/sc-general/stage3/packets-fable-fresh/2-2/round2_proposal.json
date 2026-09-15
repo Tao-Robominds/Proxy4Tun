@@ -1,0 +1,23 @@
+{
+  "observation": "Round 1 moved the proxy 0.699 -> 0.742 (accept) and correspondence_f1@15 0.455 -> 0.535 with depth_nan_ratio (0.1115) and sam_fill_rate (0.743) unchanged, so the gain came entirely from detection. The round-1 detected_lines / initial_prompt_points confirm the mechanism: the x~1327 column is now a real midpoint at y=1635 on the odd staggered row (previously 1430), all nine real midpoints sit within ~2 px of the two K rows (y~1204 / y~1636, det_x_spacing_cv ~0, det_y_std 215 px = exactly the K-row stagger), and no spurious oblique intersections appeared after relaxing binary/oblique thresholds. The one remaining defect is the leftmost ring: x=120.65 still falls back to an assumed centre at y=1123 (det_fallback_ratio 0.1), ~80 px (40 cm) above the even-row K position at ~1204, which shows up in segmentation_results as a shifted K/A stack for ring 0 and as the grey/unsupported patch at the left edge in the label mask. In the outlier map the x=0-240 column has only sparse joint speckle (edge of the scan, lowest point density, outside the n_segment high-density window), so at binary 118 / Hough 46 / minLineLength 100 it never yields an oblique segment. Only a stray horizontal+oblique pair at the very bottom margin (y~2990) appeared, which is not used for prompts.",
+  "rule": "Ontology d7 (m_line_yield low -> f_missing_lines) localised to a single low-density column; r_relax_hough (lower oblique threshold / binary threshold) is the sanctioned remediation once upstream f_joint_oversmoothed / f_depth_holes are ruled out, and round 1 already showed the upstream stages are healthy (NaN 0.11, retention 0.77, residual 1.5 cm). Experiences section 5: consistency with ring count is what matters and round 1 kept 10/10 columns with regular spacing, so there is headroom to relax further without f_spurious_lines. Section 7 tuning order: SAM geometry (y_bounds) is left alone until detection is fully real (fallback 0.0).",
+  "failure_mode": "stage_4_detection.f_missing_lines confined to ring 0 (x~120): the edge column's faint joint trace does not reach the oblique HoughLinesP vote/binarisation thresholds, so the K centre is assumed 80 px off the staggered row, propagating to stage_5_segmentation.f_crop_offset for one ring.",
+  "rationale": "Keep everything that worked in round 1 (maxLineGap_oblique 28 to stay within one column pitch, curvature_threshold 0.0004, unfolding and denoising frozen) and push joint evidence and oblique sensitivity one more step so the sparse left column produces a real intersection: enhancing.inter_radius 0.07 -> 0.08 (bound max; more interpolated joint points along the faint edge-column joints), detecting.binary_threshold 118 -> 108 (let weaker outlier-map pixels survive binarisation before dilation), detecting.hough_threshold_oblique 46 -> 41 (fewer votes needed for a 100 px oblique segment). To offset the extra permissiveness, raise hough_threshold_horizontal 60 -> 70 so the bottom-margin horizontal fallback lines do not multiply. Expected GT-free signals: det_fallback_ratio 0.1 -> 0.0 with det_n_points 10 and the x~120 midpoint landing near y~1204, correspondence_f1@15 rising above 0.535, sam_ontology_divergence falling back toward the anchor's 0.165 as ring 0's K/A stack aligns, fill rate roughly flat. If instead extra oblique intersections appear on other columns (det_y_std drifting away from ~215 or det_n_points > 10), round 3 should restore binary_threshold to 118 and keep only the inter_radius change.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0004,
+      "inter_radius": 0.08
+    },
+    "detecting": {
+      "binary_threshold": 108,
+      "hough_threshold_oblique": 41,
+      "hough_threshold_horizontal": 70,
+      "maxLineGap_oblique": 28
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T20:06:53.265738",
+  "provenance": {
+    "agent_id": "195d9542-296a-45df-b83d-690041e29f75"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "observation": "Anchor proxy_scaled=0.520 (refine) with recentre_residual_max_cm=23.2 (\u226b10 cm gate) while ring_count=10 is correct. SC overlay shows many orange unexplained joints and red unsupported boundaries on trapezoidal panels; detected_lines has clear slanted red/green segments between the 10 verticals. correspondence_f1@15=0.191 and sam_segment_size_cv\u22481.08 indicate template/geometry mismatch on complex t4 lining, not a ring-count failure. depth_nan_ratio\u22480.245 is family-normal; avoid empty-crop K_height into NaN bands.",
+  "rule": "experiences \u00a73/\u00a77/\u00a712 + ontology f_curve_overfit / residual_recentre: when recentre residual \u226b10 cm and stage1_unlocked, modestly retune unfolding before blaming detection; then set t4&5 SAM segment_width/K_height/angle to tunnel priors (no y_bounds).",
+  "failure_mode": "f_curve_overfit + f_template_mismatch",
+  "rationale": "R1 spends the unlocked stage-1 budget on a modest centreline retune (seed + mild RANSAC/spacing) with full=true so residual can drop, then pins SAM crops to T4 priors (segment_width\u22481800, K_height\u22481227, angle\u22489.8) so trapezoidal K/AB blocks match slanted joints without empty-crop heights.",
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 1.05,
+      "slice_spacing_factor": 1.75,
+      "polynomial_degree": 2,
+      "random_seed": 3
+    },
+    "denoising": {
+      "mask_r_low": 3.58,
+      "mask_r_high": 3.95
+    },
+    "sam": {
+      "segment_width": 1800,
+      "K_height": 1227.0,
+      "angle": 9.8
+    }
+  },
+  "full": true,
+  "validated_at": "2026-09-14T09:50:07.474102",
+  "provenance": {
+    "agent_id": "d599ab09-e204-4631-ac42-708b308769ec"
+  }
+}

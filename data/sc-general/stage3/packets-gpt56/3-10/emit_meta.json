@@ -1,0 +1,19 @@
+{
+  "subset": "3-10",
+  "next_round": 3,
+  "stage1_unlocked": true,
+  "context_path": "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gpt56/3-10/context.json",
+  "prompt_path": "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gpt56/3-10/AGENT_PROMPT.md",
+  "image_attachments": [
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gpt56/3-10/images/depth_map_viridis.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gpt56/3-10/images/detected_lines.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gpt56/3-10/images/initial_prompt_points.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gpt56/3-10/images/segmentation_results.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gpt56/3-10/images/sam_depth_input.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gpt56/3-10/images/depth_map.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gpt56/3-10/sc_correspondence_overlay.png"
+  ],
+  "agent_id": "091a3257-f29a-435c-9e1b-33a7af7e329c",
+  "model": "gpt-5.6-sol-medium",
+  "emitted_at": "2026-09-14T03:50:57.263758"
+}

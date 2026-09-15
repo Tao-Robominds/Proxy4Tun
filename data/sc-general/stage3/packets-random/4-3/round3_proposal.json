@@ -1,0 +1,24 @@
+{
+  "observation": "random-uniform-v1 control proposal (non-adaptive)",
+  "rule": "k-matched uniform draw within family search space",
+  "failure_mode": "n/a (control)",
+  "rationale": "random bounded overlay",
+  "overlay": {
+    "sam": {
+      "K_height": 1232.6773435350908
+    }
+  },
+  "full": false,
+  "provenance": {
+    "arm": "random",
+    "proposer": "random-uniform-v1 (k-matched bounded overlay)",
+    "seed_base": 20260915,
+    "panel_index": 14,
+    "round": 3,
+    "k": 1,
+    "chosen": [
+      "sam.K_height"
+    ],
+    "stage1_unlocked": true
+  }
+}

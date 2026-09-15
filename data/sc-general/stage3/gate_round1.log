@@ -1,0 +1,17 @@
+{
+  "subset": "3-4",
+  "round": 1,
+  "status": "ok",
+  "full_pipeline": false,
+  "proxy_scaled": 0.48871343381651045,
+  "band": "reject",
+  "features": {
+    "correspondence_f1@15": 0.16961958482989456,
+    "sam_fill_rate": 0.6026383771651209,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19011647124426917
+  },
+  "recentre_residual_max_cm": 20.8,
+  "elapsed_s": 192.12004685401917,
+  "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/3-4-scgen-refinement/round1"
+}

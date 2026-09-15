@@ -1,0 +1,24 @@
+{
+  "observation": "Stages 1-3 are healthy: recentre residual 3.6 cm (gate 10 cm), orient_axis_corr -0.999 with invariant ok, denoise retention 0.80, depth NaN 0.165 concentrated in the railway/top-theta voids (family-normal). Detection is the weak link: 10 synthetic verticals match the 10 rings (ring_count_error 0), but only ~6 short oblique segments were found, all in the right-most three rings near the K row (y~1460 and y~1630); det_real_detection_ratio 0.0 / det_fallback 1.0 with all 10 prompts 'propagated' along one K row at y~1550. The outlier map behind detected_lines.png is sparse, dotted joint evidence (bolt pockets), so HoughLinesP at the T3 prior (threshold 30, maxLineGap 30) cannot chain it into lines. The SC correspondence overlay confirms: K-band label boundaries are red (unsupported) across ~7/10 rings and only turn green where the few oblique lines exist; correspondence_f1@15 is 0.17 while sam_fill_rate 0.77 and ring completeness 1.0 are acceptable. Proxy 0.54 (refine band) is dominated by the missing-line term.",
+  "rule": "d7 (m_line_yield low, horizontal/synthetic fallback triggered) -> f_missing_lines; remediation r_relax_hough (lower oblique threshold, raise maxLineGap) with precondition that f_joint_oversmoothed / f_depth_holes are ruled out. Depth holes are theta-gate voids not lining holes, and the joint evidence is present but fragmented, so the fix belongs in stage 4 with a mild stage-3 assist (curvature_threshold lowered so more boundary points enter the outlier map). Tuning order (experiences \u00a77): stages 1-3 confirmed healthy, so detection is the right stage to touch first; SAM geometry left untouched this round.",
+  "failure_mode": "f_missing_lines (stage_4_detection), with mild upstream f_joint_oversmoothed contribution from a conservative curvature gate; no orientation, centreline or gating defect.",
+  "rationale": "Relax the oblique HoughLinesP so the fragmented bolt-pocket evidence chains into longitudinal joint lines across all 10 rings: threshold 30->22 and maxLineGap 30->50 (both inside bounds, still above the floor to avoid pure noise). Lower binary_threshold 127->112 so dilated faint outlier pixels survive binarisation, and lower enhancing.curvature_threshold 0.0005->0.0004 so slightly more edge points are labelled as joint candidates. Vertical accumulator kept at prior (10 verticals == 10 rings is already correct; do not disturb). Horizontal threshold trimmed to 26 only as a fallback aid. uniform_k_snap left true and pattern_tolerance at 12 px so extra intersections cannot move the propagated K row. Expected effect: more K-band boundaries supported within 15 px -> correspondence_f1@15 rises; fill rate and ring count should be unchanged. Denoising kept at tunnel priors (experiences \u00a74).",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "binary_threshold": 112,
+      "hough_threshold_oblique": 22,
+      "hough_threshold_horizontal": 26,
+      "maxLineGap_oblique": 50,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T20:14:43.948939",
+  "provenance": {
+    "agent_id": "3-7-fable-fresh"
+  }
+}

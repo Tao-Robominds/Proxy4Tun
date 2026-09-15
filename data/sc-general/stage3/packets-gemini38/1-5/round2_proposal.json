@@ -1,0 +1,23 @@
+{
+  "observation": "Depth map has a mid-height white NaN band plus ragged top/bottom voids (depth_nan_ratio=0.118); denoise_retained_ratio=0.764; detected_lines density is strongly asymmetric (left rings nearly empty, right dense). Joint contrast looks washed in the outlier field before Hough, consistent with upstream under-enhancement rather than ring-count error.",
+  "rule": "d6 / f_joint_oversmoothed (with d5 precondition): sharpen joint candidates via enhancing.inter_radius/curvature and gently widen the radial gate toward the T1 prior (\u22482.7\u20132.8) so the outlier map feeds stronger staggered seams; do not chase NaN% to zero.",
+  "failure_mode": "f_joint_oversmoothed",
+  "rationale": "Experiences flag T1/T2 joint contrast as the causal driver for later detection, but depth_threshold_* are outside this campaign's knobs. Use enhancing (lower curvature_threshold, higher inter_radius) plus a mild denoise widen (mask_r_low\u2193, mask_r_high\u2191, softer grad_threshold) to densify joint points while leaving unfolding frozen.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.35,
+      "mask_r_high": 2.85,
+      "z_step": 0.002,
+      "grad_threshold": 0.15
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0004,
+      "inter_radius": 0.07
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T07:25:04.679284",
+  "provenance": {
+    "agent_id": "a557f96a-8c1b-4a0e-8157-464fb4954cf0"
+  }
+}

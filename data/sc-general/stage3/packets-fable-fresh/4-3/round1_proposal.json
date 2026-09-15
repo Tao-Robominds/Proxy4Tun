@@ -1,0 +1,40 @@
+{
+  "observation": "Anchor proxy 0.520 (refine band). Stage-1 intrinsics: orient_axis_corr 0.986 (orientation healthy, no permutation-style concern), but recentre_residual_max_cm = 23.2, more than 2x the 10 cm residual gate. depth_nan_ratio 0.245 is above the 19-22% family-normal range and the depth map shows the classic off-centre signature: a bright (high-r) vertical stripe along the left edge and wide white bands at two theta positions (y~1000-1150 and y~2150-2500 px) beyond the top-tube exclusion, i.e. points falling out of the narrow 3.65-3.9 m r-band at parts of the circumference. Detection: 10 magenta verticals for 10 rings (ring_count_error 0, good), but oblique joint lines are sparse (det_real_detection_ratio 0.6, 4/10 prompts 'assume'); correspondence_f1@15 is only 0.19 with most label boundaries red (unsupported) in the SC overlay. SAM: fill rate 0.717, segment_size_cv 1.08 (very uneven block sizes), ontology divergence 0.10.",
+  "rule": "experiences.md section 7 tuning order and section 3: a recentre residual >> 10 cm is an ontology trigger for unfolding changes (stage 1-6 rerun) and must be fixed before detection/SAM knobs are meaningful; sam4tun_ontology f_curve_overfit / m_centre_smoothness -> improve centre-curve fit rather than widening the denoise band or hole-filling (section 3 anti-pattern). Section 8 for 4-3: expect gains from coverage/centreline, not orientation flips or Hough sweeps.",
+  "failure_mode": "stage_1_centreline.f_curve_overfit (centre curve under-fits the axis: 23 cm residual) -> stage_2 pseudo f_over_gate -> stage_3 f_depth_holes (NaN 0.245, circumferential void bands) -> stage_4 f_missing_lines (sparse oblique yield, 40% assumed prompts) -> stage_5 f_over_under_coverage / uneven blocks.",
+  "rationale": "Round 1 is spent on the upstream defect only, keeping stages 2-5 at tunnel priors so the proxy delta is attributable. Unfolding: raise polynomial_degree 2 -> 3 so the centre curve can follow a curved/settling T4 axis, and tighten ransac_threshold to 0.9 (lower end of the band) so contaminated ellipse centres near the tube/void slices are excluded from the fit; slice_spacing_factor 1.8 (mid-band) keeps ring_count at 10; random_seed 0 pins reproducibility (not used as a tuning knob). Denoising kept at the T4 prior band 3.65/3.90 (no band widening, per section 3). Enhancing curvature_threshold at the 0.0005 default. Detection: keep hough_threshold_vertical at 5000 to force synthetic ring-centre verticals (10 lines = 10 rings already correct; must not regress to 11), and only mildly relax the oblique/horizontal Hough (threshold 40, maxLineGap_oblique 60, pattern_tolerance 15) because a cleaner recentred map should yield sharper joints and the 40% 'assume' prompts should drop. SAM kept at T4 priors (segment_width 1800, K_height 1226.97, angle 9.8). Success criteria for this round: recentre_residual_max_cm <= 10, depth_nan_ratio in 0.19-0.22, det_real_detection_ratio >= 0.7, ring count still 10, proxy rising above 0.55.",
+  "overlay": {
+    "unfolding": {
+      "polynomial_degree": 3,
+      "ransac_threshold": 0.9,
+      "slice_spacing_factor": 1.8,
+      "random_seed": 0
+    },
+    "denoising": {
+      "mask_r_low": 3.65,
+      "mask_r_high": 3.9
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 127,
+      "hough_threshold_oblique": 40,
+      "hough_threshold_horizontal": 40,
+      "hough_threshold_vertical": 5000,
+      "maxLineGap_oblique": 60,
+      "maxLineGap_horizontal": 10,
+      "pattern_tolerance": 15
+    },
+    "sam": {
+      "segment_width": 1800,
+      "K_height": 1226.97,
+      "angle": 9.8
+    }
+  },
+  "full": true,
+  "validated_at": "2026-09-15T20:59:19.368503",
+  "provenance": {
+    "agent_id": "4-3-fable-fresh"
+  }
+}

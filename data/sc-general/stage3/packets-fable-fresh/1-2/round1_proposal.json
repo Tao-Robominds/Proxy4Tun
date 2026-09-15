@@ -1,0 +1,23 @@
+{
+  "observation": "Stages 1-3 are healthy and must not be disturbed: orient_axis_corr 0.99994, recentre residual 3.5 cm (gate 10 cm), depth_nan_ratio 0.10 (low for t1&2), denoise_retained_ratio 0.76, and the vertical Hough returns exactly 10 verticals for 10 rings (ring_count_error 0) at ~240 px pitch. Prompt stagger is correct too: alternating y ~1180 / ~1605 (offset 425 px vs (K+AB)/2 = 432 px design), so the distance-pattern gate is not the problem. The weak link is oblique-joint line yield: in detected_lines.png every red/green oblique line falls inside the near-scanner column band x~1200-2400 (the 5 right-hand rings) between y~1050-1750, plus two stubs near y~2300-2400; the 4-5 left-hand rings (x<1100) have no oblique lines at all, so two prompts are 'assume' fallbacks and one is a horizontal fallback (det_real_detection_ratio 0.8, det_fallback_ratio 0.2). The horizontal HoughLinesP mostly latches onto void-band edges (y~30, 60, 2130 thick, 2370, 2680), not joints. In sc_correspondence_overlay.png the label boundaries of the left half are almost all red (unsupported) simply because no lines exist there, and several central K-edge obliques are orange (not explained), giving correspondence_f1@15 = 0.37 despite sam_fill_rate 0.72 and full ring completeness 0.89.",
+  "rule": "d6 (joint contrast low in the sparse, far-from-scanner region) -> f_joint_oversmoothed, which by inter_stage_dependencies causes d7 (line yield low, horizontal fallback fired) -> stage_4 f_missing_lines. Remediation r_lower_depth_threshold is outside the bounded key set, so the in-bounds analogue is to densify the enhanced joint cloud (enhancing.inter_radius up) and apply r_relax_hough on the oblique path (lower binary threshold, lower oblique accumulator threshold, larger maxLineGap) while applying r_tighten_hough to the horizontal path, whose lines are void-edge artefacts (f_spurious_lines). Tuning order \u00a77: stages 1-3 validated, so touching enhancing/detection is legitimate; SAM geometry is left alone (no graded-per-class signal available and y_bounds semantics unverified).",
+  "failure_mode": "stage_3_upsample.f_joint_oversmoothed (spatially: sparse joint points on the rings far from the scanner) -> stage_4_detection.f_missing_lines with horizontal/assume fallback on 2-3 of 10 rings; secondary stage_4_detection.f_spurious_lines on the horizontal channel (void-band edges).",
+  "rationale": "The proxy's dominant deficit is correspondence_f1@15 (0.37); fill rate, NaN and ring count are already in healthy range. F1 is limited by recall of joint lines on the left half of the map, so the coordinated move is: (1) enhancing.inter_radius 0.06 -> 0.075 so sparse joint points on the far rings are bridged into continuous lines in the outlier map; (2) detecting.binary_threshold 127 -> 110 so those fainter interpolated joint pixels survive binarisation; (3) detecting.hough_threshold_oblique 50 -> 42 and maxLineGap_oblique 40 -> 60 so fragmented obliques on those rings are accepted, replacing the 'assume' and horizontal fallbacks with real K-edge detections; (4) detecting.hough_threshold_horizontal 50 -> 60 to suppress the void-edge horizontals that currently add spurious intersections without explaining any label boundary; (5) detecting.hough_threshold_vertical raised to 560 as a guard, because extra binarised joint mass from (1)-(3) could otherwise push the vertical accumulator above 10 lines - the 10/10 vertical count is the asset most worth protecting. Denoising is left untouched (band selection healthy, retention 0.76, per experiences \u00a74 keep at tunnel priors) and unfolding is omitted because stage1_unlocked is false. Expected proxy signal: correspondence_f1@15 up via more supported boundaries and more explained lines, det_real_detection_ratio 0.8 -> 1.0, sam_fill_rate roughly unchanged or slightly up as prompts move from assumed to detected positions; ring_count_error must stay 0.",
+  "overlay": {
+    "enhancing": {
+      "inter_radius": 0.075
+    },
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 42,
+      "maxLineGap_oblique": 60,
+      "hough_threshold_horizontal": 60,
+      "hough_threshold_vertical": 560
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T19:06:48.284600",
+  "provenance": {
+    "agent_id": "754241b1-8160-4a02-9e1d-06dad262c162"
+  }
+}

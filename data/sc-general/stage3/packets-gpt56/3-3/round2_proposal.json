@@ -1,0 +1,27 @@
+{
+  "observation": "Round 1 slightly improved the proxy to 0.525481 while preserving the correct ten-ring count, but the anchor remains entirely fallback-driven and correspondence F1@15 remains low at about 0.114. The attempted K_height 700 round failed inside SAM with an empty OpenCV resize, so vertical prompt extent must stay in a safer operating range.",
+  "rule": "For a continuous t3 case with correct ring count but 100% fallback detections, preserve uniform lattice snapping, use moderately permissive pattern matching, lower evidence thresholds and bridge short line gaps to recover real joint segments, while keeping SAM geometry away from the failed low-height boundary.",
+  "failure_mode": "Detector starvation followed by brittle fallback prompting: strict image-line acceptance yields no real detections, and an overly low K_height makes downstream SAM crops empty instead of improving correspondence.",
+  "rationale": "Lower binary and Hough thresholds to admit the visible fragmented horizontal and oblique joint evidence, and increase maxLineGap_oblique so short aligned fragments can form usable lines. Use a mid-range pattern_tolerance of 12 to avoid the previous maximum-permissiveness setting while uniform_k_snap protects the already-correct ten-ring lattice. K_height 900 is safely above the requested 850 floor; segment_width 1000 and angle 4 retain the conservative geometry that improved fill in round 1.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 25,
+      "hough_threshold_horizontal": 25,
+      "hough_threshold_vertical": 1000,
+      "maxLineGap_oblique": 50,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1000,
+      "K_height": 900.0,
+      "angle": 4.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T02:57:21.000181",
+  "provenance": {
+    "agent_id": "c8a692c6-67d9-4d86-a29c-3df0962d614b"
+  }
+}

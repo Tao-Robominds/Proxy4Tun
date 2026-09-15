@@ -1,0 +1,24 @@
+{
+  "observation": "The anchor preserves all 10 rings and has 0.749 SAM fill, but correspondence_f1@15 is only 0.225. Only 40% of detection points are real while 60% are fallback; the diagnostics show many vertical candidates but sparse, fragmented horizontal or oblique boundary support.",
+  "rule": "When ring count and orientation are already stable but prompt generation is fallback-dominated, first increase real joint-line recall and continuity without changing unfolding or aggressively altering SAM geometry.",
+  "failure_mode": "Horizontal and oblique joints are under-detected or broken into short pieces, so assumed prompts substitute for image-supported intersections and label boundaries remain unsupported.",
+  "rationale": "Lower horizontal and oblique Hough thresholds admit weaker visible joints, larger line gaps bridge fragmented evidence, and a moderate binary threshold plus tolerance keeps the change bounded. A slightly narrower SAM segment width then limits propagation across unsupported neighboring boundaries while preserving the established ten-ring structure.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 32,
+      "hough_threshold_horizontal": 30,
+      "maxLineGap_oblique": 68,
+      "maxLineGap_horizontal": 24,
+      "pattern_tolerance": 12
+    },
+    "sam": {
+      "segment_width": 1650
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T04:54:01.163064",
+  "provenance": {
+    "agent_id": "24b5ea2c-fa85-4935-bb4c-cccd0b6b24d7"
+  }
+}

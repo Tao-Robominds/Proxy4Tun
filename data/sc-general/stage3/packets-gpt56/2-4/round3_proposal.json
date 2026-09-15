@@ -1,0 +1,35 @@
+{
+  "observation": "Both prior overlays remained below the 0.676342 anchor. Round 1's permissive settings produced 0.672793 with correspondence_f1@15 of 0.404369, while round 2's strict settings fell further to 0.659489 with correspondence_f1@15 of 0.380001. Fill stayed near 0.745 in both rounds and ring count remained exact, so the useful signal is that neither threshold extreme improved boundary correspondence.",
+  "rule": "When permissive and strict detection regimes both underperform while geometry and fill remain stable, interpolate to moderate line-support settings, apply only mild denoising, and avoid aggressive feature linking or suppression.",
+  "failure_mode": "The repeated staggered joints are sensitive to threshold imbalance: permissive settings bridge clutter, while strict settings discard valid weak segments and increase assumed prompts. The remaining error is primarily correspondence quality rather than ring topology or mask coverage.",
+  "rationale": "This round centers the search between the two failed extremes. Mild denoising should reduce isolated texture without removing weak joints; moderate enhancement preserves local continuity; Hough thresholds of 60 and an intermediate oblique gap balance support and fragmentation. A flat y-bound starting at 4100 focuses SAM near the stable central lining span without the wider 3600 crop or the prior 4000 setting. Unfolding is omitted because stage 1 is locked and its residual, orientation, and ring count are already stable.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.35,
+      "mask_r_high": 2.8,
+      "z_step": 0.002,
+      "grad_threshold": 0.13
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0025,
+      "inter_radius": 0.045
+    },
+    "detecting": {
+      "binary_threshold": 125,
+      "hough_threshold_oblique": 60,
+      "hough_threshold_horizontal": 60,
+      "maxLineGap_oblique": 50
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4100,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T02:22:45.268945",
+  "provenance": {
+    "agent_id": "0e295c30-1899-49ae-9e58-17616cc7809c"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "observation": "Anchor still refine-band with high sam_segment_size_cv and orange K wedges on the rightmost columns of detected_lines/SC overlay. Vertical magenta grid is mostly regular but one orange/pink vertical suggests occasional non-synthetic vertical noise; forcing stronger vertical fallback while exploring the opposite SAM corner (slightly wider column, modestly taller K still \u2264 prior+50, steeper taper) tests whether under-width/under-angle was the wrong direction versus R1.",
+  "rule": "experiences \u00a78 t4&5: prefer detection-pattern + SAM geometry on pinned stage-1; ontology d8/d10 and r_fix_height_priors / r_fix_template; avoid empty-crop K_height (stay near 1227, not upper bound 1500). stage1_unlocked=false \u2192 no unfolding.",
+  "failure_mode": "f_pattern_mismatch",
+  "rationale": "Round-3 hypothesis (distinct corner): K tapers need a steeper angle and a slightly taller but still filled crop, with wider segment_width and stricter pattern_tolerance so distance matching locks onto the taller K. Raise hough_threshold_vertical toward synthetic verticals to stabilize ring columns, nudge denoise band slightly outward for lining retention without chasing NaN cosmetics.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.58,
+      "mask_r_high": 3.95
+    },
+    "detecting": {
+      "hough_threshold_oblique": 45,
+      "hough_threshold_vertical": 2500,
+      "maxLineGap_oblique": 55,
+      "pattern_tolerance": 8
+    },
+    "sam": {
+      "segment_width": 1900,
+      "K_height": 1280.0,
+      "angle": 11.2
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T10:13:10.245645",
+  "provenance": {
+    "agent_id": "bef98451-28ce-481b-aad2-4b1348adb67b"
+  }
+}

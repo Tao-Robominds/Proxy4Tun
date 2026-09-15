@@ -1,0 +1,57 @@
+
+===== launch from-round=1 at 2026-09-13T00:48:51 =====
+=== 5-5 round1 ===
+{
+  "subset": "5-5",
+  "round": 1,
+  "status": "ok",
+  "full_pipeline": false,
+  "proxy_scaled": 0.6421601312957144,
+  "band": "refine",
+  "features": {
+    "correspondence_f1@15": 0.3716875608617067,
+    "sam_fill_rate": 0.7592519801606181,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.18732051853521944
+  },
+  "recentre_residual_max_cm": 1.9,
+  "elapsed_s": 248.72781205177307,
+  "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/5-5-scgen-refinement/round1"
+}
+=== 5-5 round2 ===
+{
+  "subset": "5-5",
+  "round": 2,
+  "status": "ok",
+  "full_pipeline": false,
+  "proxy_scaled": 0.6677460130733144,
+  "band": "refine",
+  "features": {
+    "correspondence_f1@15": 0.42194870431658227,
+    "sam_fill_rate": 0.756322322571687,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19253592453458965
+  },
+  "recentre_residual_max_cm": 1.9,
+  "elapsed_s": 240.4044589996338,
+  "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/5-5-scgen-refinement/round2"
+}
+=== 5-5 round3 ===
+{
+  "subset": "5-5",
+  "round": 3,
+  "status": "ok",
+  "full_pipeline": false,
+  "proxy_scaled": 0.6656632746440505,
+  "band": "refine",
+  "features": {
+    "correspondence_f1@15": 0.41830391761269275,
+    "sam_fill_rate": 0.7527887644900384,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.18835592742465015
+  },
+  "recentre_residual_max_cm": 1.9,
+  "elapsed_s": 252.00002002716064,
+  "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/5-5-scgen-refinement/round3"
+}
+=== select 5-5 ===

@@ -1,0 +1,23 @@
+# gate-check vs stage2 3-4: expected=0.519691175882 delta=0.00e+00
+{
+  "subset": "3-4",
+  "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-4-family-proxy/runs/3-4-anchor",
+  "proxy_raw": 0.5196911758815168,
+  "proxy_scaled": 0.5196911758815168,
+  "proxy": 0.5196911758815168,
+  "band": "refine",
+  "alarm": false,
+  "alarm_threshold": 0.5,
+  "features": {
+    "correspondence_f1@15": 0.24397684368509054,
+    "sam_fill_rate": 0.5707661034176089,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19497856422227988
+  },
+  "ring_count": 10,
+  "ring_count_source": "log:/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-4-family-proxy/logs/3-4-anchor.log",
+  "labelmap_source": "results.pkl",
+  "recentre_residual_max_cm": 20.8,
+  "orient_axis_corr": -0.9984156385609421,
+  "mIoU": null
+}

@@ -1,0 +1,36 @@
+{
+  "observation": "Anchor sits in refine (proxy_scaled=0.641) with healthy stage-1 (recentre_residual_max_cm=2.8, orient_axis_corr\u22480.999, ring_count_error=0) but weak SC correspondence_f1@15=0.364. detected_lines shows two continuous near-horizontal tracks (green ~y\u22481475, red ~y\u22481635) across 10 magenta ring columns with slight negative slope; SC overlay confirms a thin central K band with many red unsupported boundaries and mixed cyan/orange joints around magenta * anchors. sam_fill_rate=0.729 and sam_segment_size_cv=0.562 indicate graded template/crop mismatch rather than missing rings. det_real_detection_ratio=0 with det_fallback_ratio=1 is expected under continuous uniform_k_snap and is not treated as a failure signal.",
+  "rule": "d10/f_template_mismatch + experiences \u00a76\u20137: after orientation/centreline are healthy, tune SAM geometry (segment_width, K_height, taper angle) when fill is partial and correspondence is weak; keep K_height near T3 block_height.K so crops stay on dense lining, not empty margins. T3 priors: segment_width_mm=1200, K\u2248823.8 mm, taper_angle_deg=6.12.",
+  "failure_mode": "f_template_mismatch",
+  "rationale": "Round 1 centres the overlay on T3 SAM priors with a mid-low K_height (820) inside [700,1000] to hug the observed central joint band and avoid empty-crop K_height near the upper bound. Pair with notebook-like Hough (oblique/horizontal 30, vertical 1500) and moderate pattern_tolerance so continuous K-row snap stays on the green/red tracks. Mild curvature and T3-ish r/theta denoise preserve joint contrast without reopening stage-1.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.85,
+      "mask_r_high": 3.0,
+      "mask_theta_low": 1.55,
+      "mask_theta_high": 17.15
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "binary_threshold": 127,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 30,
+      "hough_threshold_vertical": 1500,
+      "maxLineGap_oblique": 30,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 820.0,
+      "angle": 6.12
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:26:40.890617",
+  "provenance": {
+    "agent_id": "4952bb8e-685e-4588-9909-d82b86cbbd48"
+  }
+}

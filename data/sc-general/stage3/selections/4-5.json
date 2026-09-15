@@ -1,0 +1,84 @@
+{
+  "subset": "4-5",
+  "arm": "scgen",
+  "anchor": {
+    "round": "anchor",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/4-5-family-proxy/runs/4-5-anchor",
+    "proxy_raw": 0.6094,
+    "proxy_scaled": 0.6094,
+    "band": "refine",
+    "mIoU": 0.75,
+    "recentre_residual_max_cm": 3.4,
+    "features": {
+      "correspondence_f1@15": 0.33420797163155747,
+      "sam_fill_rate": 0.7353592515275288,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.21552237876528763
+    }
+  },
+  "rounds": [
+    {
+      "round": "round1",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/4-5-scgen-refinement/round1",
+      "proxy_raw": 0.6389,
+      "proxy_scaled": 0.6389,
+      "band": "refine",
+      "mIoU": 0.775,
+      "recentre_residual_max_cm": 3.4,
+      "features": {
+        "correspondence_f1@15": 0.3837964745865173,
+        "sam_fill_rate": 0.7392087316326599,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.2088249228189579
+      }
+    },
+    {
+      "round": "round2",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/4-5-scgen-refinement/round2",
+      "proxy_raw": 0.599,
+      "proxy_scaled": 0.599,
+      "band": "refine",
+      "mIoU": 0.71,
+      "recentre_residual_max_cm": 3.4,
+      "features": {
+        "correspondence_f1@15": 0.3114544763442478,
+        "sam_fill_rate": 0.7402578916134278,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.21191204703236088
+      }
+    },
+    {
+      "round": "round3",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/4-5-scgen-refinement/round3",
+      "proxy_raw": 0.5871,
+      "proxy_scaled": 0.5871,
+      "band": "refine",
+      "mIoU": 0.715,
+      "recentre_residual_max_cm": 3.4,
+      "features": {
+        "correspondence_f1@15": 0.2933260972415493,
+        "sam_fill_rate": 0.7321759291261455,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.21078625585567803
+      }
+    }
+  ],
+  "selected": {
+    "round": "round1",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/4-5-scgen-refinement/round1",
+    "proxy_raw": 0.6389,
+    "proxy_scaled": 0.6389,
+    "band": "refine",
+    "mIoU": 0.775,
+    "recentre_residual_max_cm": 3.4,
+    "features": {
+      "correspondence_f1@15": 0.3837964745865173,
+      "sam_fill_rate": 0.7392087316326599,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.2088249228189579
+    }
+  },
+  "selection_reason": "best proxy 0.6389; 1 within 0.01 margin; residual tiebreak -> round1",
+  "delta_proxy_scaled": 0.0295,
+  "delta_mIoU_offline": 0.025
+}

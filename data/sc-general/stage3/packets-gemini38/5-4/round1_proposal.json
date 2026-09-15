@@ -1,0 +1,23 @@
+{
+  "observation": "Proxy 0.692 (refine band, just below accept). Stage-1 healthy: residual 2.1 cm, |orient_axis_corr| 0.77, ring_count_error 0. Depth NaN ~0.20 is family-normal. Weak SC correspondence_f1@15 (0.467) with many unsupported label boundaries vs joint lines; trapezoidal K/AB joints visible as red/green obliques on detected_lines and orange unexplained joints on the SC overlay. High sam_segment_size_cv (1.11) with fill 0.76 suggests template geometry, not centreline.",
+  "rule": "d10/d8: low label consistency / poor K\u2013AB spacing vs priors \u21d2 f_template_mismatch / f_pattern_mismatch; experiences \u00a76\u20137: only tune SAM geometry after orientation and residual are healthy (they are).",
+  "failure_mode": "f_template_mismatch",
+  "rationale": "Anchor SAM to t4&5 notebook priors (segment_width 1800, K_height \u22481227 mm, angle 9.8\u00b0) so K crops sit on the white-dot clusters rather than empty dark bands. Mildly relax oblique Hough and pattern tolerance so taper joints feed the distance check without touching unfolding (stage1_unlocked=false).",
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 40,
+      "maxLineGap_oblique": 55,
+      "pattern_tolerance": 12
+    },
+    "sam": {
+      "segment_width": 1800,
+      "K_height": 1227.0,
+      "angle": 9.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T11:29:13.248720",
+  "provenance": {
+    "agent_id": "fb30f92e-c658-4b6c-a252-bdeebd78a519"
+  }
+}

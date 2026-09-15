@@ -1,0 +1,28 @@
+{
+  "observation": "Round 2 improved proxy_scaled to 0.558477 and correspondence_f1@15 to 0.203084, above both the anchor and round 1, while fill remained slightly above anchor at 0.736193 and ring-count error stayed zero. This supports the selective-seam direction. However, depth_nan_ratio increased from 0.109033 to 0.116472, and the depth image shows additional small holes in the upper lining band, so keeping curvature enhancement at its absolute minimum is unnecessarily aggressive.",
+  "rule": "Exploit a successful selective-detection regime with a bounded local step rather than reversing it: retain rejection of long weak seam bridges, modestly restore surface enhancement to limit holes, and continue the favorable upward SAM lower-bound trend without moving to the endpoint.",
+  "failure_mode": "Residual weak oblique fragments still compete with coherent staggered seams, while the minimum curvature threshold removes too much surface support and raises depth holes; the SAM interval still includes some weakly supported lower-bound coverage.",
+  "rationale": "An intermediate curvature threshold of 0.0004 should recover some surface continuity while remaining close to round 2's seam-preserving minimum. Slightly stronger binary and Hough thresholds with a shorter line gap continue filtering weak bridged responses visible near the sparse map ends. Raising the flat SAM lower bound from 4000 to 4200 follows the improvement from 3600 to 4000 but leaves margin below the allowed 4400 endpoint. Vertical detection and denoising remain unchanged because ring count is exact and there is no evidence of radial-gate failure.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "binary_threshold": 140,
+      "hough_threshold_oblique": 65,
+      "hough_threshold_horizontal": 65,
+      "maxLineGap_oblique": 30
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4200,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T00:46:03.107833",
+  "provenance": {
+    "agent_id": "2f03d977-b5fe-4a34-8d5c-1ad0dd71de43"
+  }
+}

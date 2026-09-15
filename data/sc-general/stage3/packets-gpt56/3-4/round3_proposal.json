@@ -1,0 +1,36 @@
+{
+  "observation": "Round 2 restored the anchor's ten-ring topology, but its full rerun raised centreline residual to 35.6 cm, depth NaN to 0.310864, and reduced SAM fill to 0.446411; correspondence recovered only to 0.060628 and proxy remained below the 0.519691 anchor at 0.361769. Across rounds, changing unfolding produced a lower-residual eleven-ring map in round 1 and a much higher-residual ten-ring map in round 2. The round-2 image is visibly warped at the sides, while its ten propagated prompts are again near the central seam around y=1550.",
+  "rule": "When repeated full reruns trade ring topology against severe centreline instability, stop perturbing stage 1 and isolate downstream changes on the known ten-ring anchor artifacts. With correct ring count but residual-related peripheral holes, broaden radial/theta retention conservatively; use a low-moderate curvature threshold and balanced Hough settings to preserve coherent seam evidence; retain uniform K snapping and make only small template-geometry changes because large downstream changes are not supported by the fill regression.",
+  "failure_mode": "The dominant round-2 failure is an unstable stage-1 centre fit that creates warped projection and widespread missing depth, which then causes under-coverage and weak boundary correspondence. A secondary risk is over-selective round-2 enhancement/detection suppressing useful seam fragments. Another unfolding attempt would confound the final downstream comparison and could repeat either prior topology or residual failure.",
+  "rationale": "Run stages 2-6 only from the anchor's exact ten-ring unroll. Widen the T3 radial interval by 4 cm on each side and theta modestly to recover points clipped by the anchor's 20.8 cm residual without opening the bounds aggressively. Lower curvature threshold from round 2 and return detection to balanced values between rounds 1 and 2, with enough gap bridging for the curved central seam and moderate pattern tolerance. Keep snapping enabled and adjust SAM width, K height, and taper only slightly around the observed T3 geometry, prioritizing recovery of fill and correspondence over another risky full rerun.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.81,
+      "mask_r_high": 3.04,
+      "mask_theta_low": 1.45,
+      "mask_theta_high": 17.35
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "binary_threshold": 128,
+      "hough_threshold_oblique": 32,
+      "hough_threshold_horizontal": 35,
+      "hough_threshold_vertical": 1500,
+      "maxLineGap_oblique": 35,
+      "pattern_tolerance": 14,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1180,
+      "K_height": 810.0,
+      "angle": 6.4
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T00:29:17.359589",
+  "provenance": {
+    "agent_id": "874c42b3-747e-4646-877c-dc7bd169f07f"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "observation": "Stages 1-3 are healthy: recentre residual 2 cm (<< 10 cm gate), orient_axis_corr 0.967, denoise retention 0.74, depth NaN 20.9% (family-normal 19-22% for complex t4&5), ring_count_error 0 with 10 verticals at ~360 px spacing (= 1800 mm segment width at 5 mm/px). The weak link is detection: detected_lines.png shows only ~8 oblique (red/green) segments across a 10-ring map while many short blue horizontal fallback segments fire; 4 of 10 prompt centres are 'assume' fallbacks (det_real_detection_ratio 0.6, det_fallback_ratio 0.4). The binarised outlier map is dominated by scattered bolt-hole 'V' marks and the circumferential joints are faint/dotted. In sc_correspondence_overlay.png most label boundaries are red (unsupported by a joint line) and several joint lines are orange (not explained by a boundary); correspondence_f1@15 = 0.213 is the lowest lean feature. sam_segment_size_cv = 1.09 indicates block masks of very uneven size, consistent with prompt centres landing off the true K/A/B rows on the fallback rings.",
+  "rule": "Ontology d7 (m_line_yield low AND horizontal fallback triggered) -> f_missing_lines; inter-stage chain f_missing_lines -> f_pattern_mismatch -> stage_5 f_crop_offset. Experiences \u00a77 tuning order: stages 1-3 validated (residual <=10 cm, NaN in family range, retention uniform) so the first actionable stage is detection; do not touch SAM geometry until prompt centres are real rather than assumed. Remediation r_relax_hough (lower oblique threshold / raise maxLineGap toward tunnel prior) with precondition satisfied (no f_joint_oversmoothed / f_depth_holes upstream: joints are present but sparse, NaN normal).",
+  "failure_mode": "stage_4_detection.f_missing_lines (too few oblique joint lines; horizontal fallback and 'assume' prompt centres on 40% of rings), propagating to f_pattern_mismatch and stage_5 f_crop_offset.",
+  "rationale": "Relax the oblique/horizontal Hough gates so the faint, dotted circumferential joints on this complex-family scan accumulate enough votes to be kept as real lines: oblique threshold 50->35 and maxLineGap_oblique 50->65 bridge the gaps between bolt-hole clusters along a joint; horizontal threshold 50->40 with maxLineGap_horizontal 10->15 makes the fallback path produce longer, more consistent segments where oblique still fails. Lower binary_threshold 127->110 so the weaker joint pixels in the outlier map survive binarisation and dilation before Hough. pattern_tolerance 12 px (moderate) lets the K/AB distance-pattern accept slightly irregular intersections instead of dropping them to 'assume'. Vertical accumulator kept at prior (ring count already exact). Denoising, enhancing and SAM geometry left untouched this round so the effect on det_real_detection_ratio and correspondence_f1@15 is attributable to detection alone; SAM template geometry (segment_width/K_height/angle) will be revisited in a later round only if prompts become real and per-block size CV stays high.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 35,
+      "hough_threshold_horizontal": 40,
+      "maxLineGap_oblique": 65,
+      "maxLineGap_horizontal": 15,
+      "pattern_tolerance": 12
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T21:04:14.645328",
+  "provenance": {
+    "agent_id": "4-2-fable-fresh"
+  }
+}

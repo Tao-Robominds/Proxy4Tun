@@ -1,0 +1,34 @@
+{
+  "observation": "The ring count is already exact and the vertical ring layout is visually regular, but correspondence F1 is low (0.316) and the overlay shows many label boundaries without nearby joint-line support. Horizontal and oblique detections are sparse around several stepped boundaries, while SAM coverage is substantial but not complete (fill 0.756).",
+  "rule": "Preserve the reliable ten-ring partition and improve structural correspondence by moderately increasing recovery of horizontal and oblique boundary evidence, then use mid-scale SAM prompts to avoid merging across the recovered joints.",
+  "failure_mode": "Conservative line detection is missing weak or fragmented transverse joints, leaving unsupported label steps and locally oversized or irregular SAM regions.",
+  "rationale": "This proposal makes a balanced sensitivity adjustment: modest denoising and enhancement, lower Hough barriers with bridgeable gaps, and central SAM geometry. It avoids changing the already-correct ring topology while targeting the weakest proxy term.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.55,
+      "mask_r_high": 3.95
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 38,
+      "hough_threshold_horizontal": 32,
+      "hough_threshold_vertical": 2800,
+      "maxLineGap_oblique": 60,
+      "maxLineGap_horizontal": 22,
+      "pattern_tolerance": 12
+    },
+    "sam": {
+      "segment_width": 1750,
+      "K_height": 1250.0,
+      "angle": 9.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T05:22:21.377646",
+  "provenance": {
+    "agent_id": "e3590abc-904b-4887-a0de-b0b195c11007"
+  }
+}

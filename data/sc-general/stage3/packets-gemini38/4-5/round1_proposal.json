@@ -1,0 +1,34 @@
+{
+  "observation": "Anchor proxy_scaled=0.609 (refine) with correspondence_f1@15=0.334 while ring_count_error=0 and residual_max=3.4cm (stage1 locked). SC overlay shows many unsupported horizontal boundaries and orange unexplained angled joints at key blocks; verticals are mostly green. Detected-line panel has regular magenta ring columns (~10) with mixed blue/red/green K templates. sam_fill_rate=0.735 and sam_segment_size_cv\u22481.05 indicate irregular K geometry rather than missing rings. depth_nan\u22480.216 is family-normal.",
+  "rule": "d10 (low SAM coherence / broken label consistency) \u2192 f_template_mismatch; r_fix_template with T4 taper/height priors. Upstream stage-1 residual \u226a residual_gate so omit unfolding (stage1_unlocked=false).",
+  "failure_mode": "f_template_mismatch",
+  "rationale": "Re-anchor SAM to T4 prior taper (~9.8\u00b0) and mid K_height (~1220mm, well below empty-crop risk at the upper bound) with notebook segment_width=1800. Slightly loosen oblique Hough and pattern_tolerance so angled key joints become explainable without retuning stage-1.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.6,
+      "mask_r_high": 3.95
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 40,
+      "hough_threshold_horizontal": 35,
+      "hough_threshold_vertical": 3000,
+      "maxLineGap_oblique": 60,
+      "maxLineGap_horizontal": 12,
+      "pattern_tolerance": 12
+    },
+    "sam": {
+      "segment_width": 1800,
+      "K_height": 1220.0,
+      "angle": 9.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T10:32:20.648213",
+  "provenance": {
+    "agent_id": "bf15119b-b73e-4bea-9f32-8b17487c4c49"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "observation": "Ring completeness is 1.0 and ring-count error is zero, yet segment-size CV is high at 1.060 and the segmentation view contains broad, uneven blocks spanning weakly supported boundaries. The real prompts are concentrated in only a few columns and depths.",
+  "rule": "When topology is correct but segment sizes are highly imbalanced, retune SAM's spatial prior around the observed joint spacing while making only a conservative detector adjustment.",
+  "failure_mode": "The current SAM prompt geometry over-propagates some sparse prompts into oversized regions and leaves other ring sectors governed by fallback points, reducing boundary correspondence despite adequate total fill.",
+  "rationale": "A reduced segment width and K height localize each prompt's influence, while a lower angle better matches the mostly shallow joint slopes visible in the diagnostics. Moderate horizontal sensitivity supplies additional evidence without the broad recall push of round 1.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 125,
+      "hough_threshold_horizontal": 40,
+      "maxLineGap_horizontal": 18,
+      "pattern_tolerance": 9
+    },
+    "sam": {
+      "segment_width": 1525,
+      "K_height": 1100.0,
+      "angle": 8.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T04:58:30.597632",
+  "provenance": {
+    "agent_id": "24b5ea2c-fa85-4935-bb4c-cccd0b6b24d7"
+  }
+}

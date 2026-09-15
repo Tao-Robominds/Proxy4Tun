@@ -1,0 +1,29 @@
+{
+  "observation": "Ring completeness=1.0 and ten verticals are correct, but sam_fill_rate=0.698, sam_ontology_divergence=0.224, sam_segment_size_cv=0.577, and correspondence_f1@15=0.287. SC overlay: central boundary only partly green-supported; label bands look graded rather than collapsed. detected_lines green/red tracks show mild opposing tapers across columns \u2014 consistent with template/crop geometry error more than missing rings.",
+  "rule": "experiences \u00a76: graded fill/coherence with intact ring count \u2192 SAM geometry regime after upstream is plausible. ontology f_template_mismatch / f_crop_offset. t3 continuous: segment_width/K_height/angle only; avoid empty-crop K_height extremes (stay mid-band near prior 823.8).",
+  "failure_mode": "f_template_mismatch (continuous K-row crop width/height/taper misaligned with joint tracks)",
+  "rationale": "Distinct from rounds 1\u20132: hold denoise near defaults and focus on SAM seating. Widen segment_width to 1280 so crops cover the textured K strip; set K_height=880 (mid-high, not 700/1000 empty-crop poles); raise angle to 7.2\u00b0 to match visible oblique taper. Support with slightly stricter binary_threshold and tighter pattern_tolerance plus uniform_k_snap so prompts stay on the continuous K-row. full=false (no unfolding).",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.00035
+    },
+    "detecting": {
+      "binary_threshold": 130,
+      "hough_threshold_oblique": 32,
+      "hough_threshold_horizontal": 30,
+      "maxLineGap_oblique": 30,
+      "pattern_tolerance": 8,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1280,
+      "K_height": 880.0,
+      "angle": 7.2
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:23:20.255589",
+  "provenance": {
+    "agent_id": "fac28858-a937-4711-aadd-94bfddee5316"
+  }
+}

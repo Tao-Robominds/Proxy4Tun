@@ -1,0 +1,27 @@
+{
+  "observation": "Round 1 (oblique Hough 30->22, maxLineGap 30->50, binary 127->112, curvature 0.0005->0.0004) moved the proxy only 0.5397->0.5439 (f1@15 0.172->0.181) and did NOT add any lines: the round-1 detected_lines.png still shows exactly 3 positive and 2 negative oblique segments, all in the right-most three rings (x>1650, y~1465 and y~1625), plus one spurious ~0.3 deg horizontal fragment at (x~2300, y~800) that the correspondence overlay marks orange (unexplained by any label boundary). Measured slopes of the found segments are +5.0/+5.5/+5.5 deg and -5.5 deg, i.e. sitting exactly on the fixed [5,10] deg oblique angle floor; the K-edge evidence in the left seven rings is fragmented bolt-pocket rows (~0 deg) whose chained fits fall below 5 deg and are discarded by the angle filter, not by the accumulator threshold. So further Hough relaxation is evidence-limited. Meanwhile the curvature lowering only raised depth_nan_ratio (0.1645->0.1686) with no line gain, and sam_fill_rate stayed at 0.77 with voids concentrated in the K-row streak (y~1550) and the top band. Vertical count still 10 = ring count, K row still snapped at y~1550 with 10 propagated prompts, recentre residual 3.6 cm, orient invariant ok. Measured K-edge taper (~5.3 deg) is smaller than the T3 template prior angle 6.12 deg; measured K height (~168 px ~ 840 mm) matches the 823.8 mm prior within 3 px.",
+  "rule": "d7 fired again but r_relax_hough is now exhausted (precondition check: the missing lines are an upstream contrast/angle-floor problem, not accumulator gating), so per experiences section 7 fall back to the upstream stage-3 coverage knob and the stage-5 template geometry. Stage 3: curvature_threshold gates which points are surface-upsampled; round 1 showed lowering it costs NaN without sharpening joints (joint evidence comes from the depth-outlier pass, which is not exposed here), so RAISE it to densify the surface (r_increase_window_or_upsample analogue for f_depth_holes) and lift sam_fill_rate. Stage 4: horizontal Hough is fallback-only under uniform_k_snap (m_line_yield satisfied by obliques), so tighten it (r_tighten_hough for the spurious fragment, f_spurious_lines) to remove an unexplained line from the correspondence precision term. Stage 5: experiences section 6 allows SAM geometry tuning only in the graded regime, which this is (all six labels present, K band ragged but placed); calibrate p_taper_angle to the measured K-edge slope (r_fix_template) so template edges sit on the true joints. Denoising kept at tunnel priors (section 4); unfolding untouched (stage1_unlocked false, residual 3.6 cm).",
+  "failure_mode": "f_depth_holes (stage_3_upsample: lining voids in the K-row streak and top band depress sam_fill_rate) + f_spurious_lines (stage_4_detection: one unexplained horizontal fragment) + mild f_template_mismatch (stage_5_segmentation: taper prior 6.12 deg vs measured ~5.3 deg). f_missing_lines in the left seven rings persists but is not addressable within the exposed bounds (angle floor + depth thresholds are fixed).",
+  "rationale": "Pivot away from the saturated Hough path. (1) enhancing.curvature_threshold 0.0004->0.0008 (bounds [0.0002,0.002]): more lining points qualify as flat surface and get the 3-step densification, shrinking voids -> depth_nan_ratio down and sam_fill_rate up; bolt pockets remain depth outliers so the outlier map used for detection is unaffected. (2) detecting.hough_threshold_horizontal 26->45 (bounds [20,60]): suppress the spurious ~0 deg fragment near (2300,800) that counts against correspondence precision; obliques + uniform_k_snap already fix the K row, so horizontals are not needed. (3) sam.angle 6.12->5.3 (bounds [4,9]): match the K template taper to the measured +5.0/+5.5/-5.5 deg joint slopes so the K label boundaries track the detected lines within 15 px along the whole ring width. Keep the round-1 oblique settings (threshold 22, maxLineGap 50, binary 112, pattern_tolerance 12, uniform_k_snap true) so the detected line set is unchanged except for the removed horizontal, isolating the effect of the stage-3/stage-5 change. K_height and segment_width left at priors (measured 168 px / 240 px agree). Expected: depth_nan_ratio ~0.15, sam_fill_rate >0.78, ring_count_error 0 unchanged, f1@15 flat-to-up; a proxy rise driven by NaN alone with fill flat would be treated as cosmetic and reverted in round 3.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "binary_threshold": 112,
+      "hough_threshold_oblique": 22,
+      "hough_threshold_horizontal": 45,
+      "maxLineGap_oblique": 50,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "angle": 5.3
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T20:42:58.456972",
+  "provenance": {
+    "agent_id": "3-7-fable-fresh"
+  }
+}

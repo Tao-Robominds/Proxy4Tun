@@ -1,0 +1,26 @@
+{
+  "observation": "Same frozen stage-1 (residual 2.1 cm, ring_count 10). detected_lines shows dense blue horizontals plus sparse red/green obliques on the complex taper; SC overlay has many orange unexplained joints and red unsupported boundaries, so correspondence_f1@15 0.467 is detection\u2013boundary mismatch more than missing rings. det_real_detection_ratio 0.7 / fallback 0.3 leaves headroom if oblique yield improves.",
+  "rule": "d7 then d8: insufficient coherent oblique support with pattern mismatch \u21d2 f_missing_lines \u2192 f_pattern_mismatch; remediation r_relax_hough then r_fix_height_priors (experiences \u00a75: match ring geometry, do not chase raw line count).",
+  "failure_mode": "f_missing_lines",
+  "rationale": "Detection-led round distinct from prior-anchored SAM: lower oblique/horizontal Hough thresholds, raise maxLineGap_oblique, and open pattern_tolerance so taper joints register before SAM. Pair with slightly wider segment_width and mid\u2013high K_height (still above empty-crop risk) and a modestly steeper angle than notebook 9.8\u00b0 to absorb observed slant.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 35,
+      "maxLineGap_oblique": 70,
+      "maxLineGap_horizontal": 15,
+      "pattern_tolerance": 18
+    },
+    "sam": {
+      "segment_width": 1950,
+      "K_height": 1350.0,
+      "angle": 11.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T11:33:44.270546",
+  "provenance": {
+    "agent_id": "fb30f92e-c658-4b6c-a252-bdeebd78a519"
+  }
+}

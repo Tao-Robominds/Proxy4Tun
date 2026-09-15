@@ -1,0 +1,26 @@
+{
+  "observation": "sam_fill_rate=0.729 with high sam_segment_size_cv=1.30 and sam_ring_completeness=0.889; labeled masks show staggered K/B1 columns but SC correspondence still has many >15 px boundary misses. Vertical ring strips 0\u20139 are coherent \u2014 mismatch looks like axial crop/template placement, not wrong ring count.",
+  "rule": "Tuning order \u00a77: after stages 1\u20133 and ring columns are healthy, adjust SAM geometry (y_bounds) for graded boundary mismatch; pair with mid-range detecting (not max-relax) to stabilize prompt rows on stagger joints.",
+  "failure_mode": "f_crop_offset",
+  "rationale": "t1&2 allows flat sam.processing.y_bounds=[lo, 13300] with lo\u2208[3600,4400]. Raising lo to 4000 trims the noisy upper margin that produces unsupported red boundaries while keeping the full lower extent; modest detecting (binary 130, Hough mid, vertical 550) keeps 10-column prompts without the aggressive recall of round 1.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 130,
+      "hough_threshold_oblique": 55,
+      "hough_threshold_horizontal": 55,
+      "hough_threshold_vertical": 550,
+      "maxLineGap_oblique": 40
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4000,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T07:29:45.598591",
+  "provenance": {
+    "agent_id": "a557f96a-8c1b-4a0e-8157-464fb4954cf0"
+  }
+}

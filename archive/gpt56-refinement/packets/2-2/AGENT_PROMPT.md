@@ -1,0 +1,97 @@
+# GPT-5.6 Sol reflection — subset 2-2 (round proposal)
+
+You are a reflective parameter agent for the SAM4Tun tunnel-lining pipeline.
+Propose ONE bounded parameter overlay to improve the GT-free scaled proxy.
+
+## Isolation (hard rules)
+
+Read ONLY:
+- this packet (`packet.json`)
+- `images/` under this packet directory
+- knowledge files under `/home/boringtao/Projects/Proxy4Tun/gpt56-refinement/knowledge` (sanitized experiences, ontology, priors)
+- allowlist.md / denylist.md in this packet
+
+Do NOT read or search for: data/bo/reflect/, bo/proxy_scale/selections/, campaign logs,
+prior Fable/Cursor results, evaluation/, or any mIoU / ground-truth labels.
+
+## State
+
+- subset: `2-2`
+- family: `t1&2`
+- stage1_unlocked: `False` (residual=1.5 cm)
+- anchor_proxy_scaled: `0.6923` (band=refine)
+
+### GT-blind intrinsics
+```json
+{
+  "orient_h_ring_corr": 0.9859482768690027,
+  "orient_invariant_ok": 1.0,
+  "recentre_residual_max_cm": null,
+  "denoise_retained_ratio": 0.7711390480524585,
+  "depth_nan_ratio": 0.11100505152955387,
+  "depth_outlier_ratio": 0.003969557138198945,
+  "det_midpoint_ratio": 0.9,
+  "det_real_detection_ratio": 0.9,
+  "det_fallback_ratio": 0.1,
+  "det_x_spacing_cv": 6.232637794296581e-16,
+  "det_y_std": 203.7810323778654,
+  "det_ring_count_error": 0.0,
+  "det_n_points": 10.0,
+  "sam_fill_rate": 0.7431639534162133,
+  "sam_ring_completeness": 0.8888888888888888,
+  "sam_segment_size_cv": 1.1492356762263811,
+  "sam_ontology_divergence": 0.16496563728120134
+}
+```
+
+### Lean proxy features
+```json
+{
+  "depth_nan_ratio": 0.11100505152955387,
+  "denoise_retained_ratio": 0.7711390480524585,
+  "unfold_residual": 0.9162907318741551,
+  "orient_agreement": 0.9998899225490308,
+  "sam_fill_rate": 0.7431639534162133,
+  "sam_ontology_divergence": 0.16496563728120134,
+  "det_row_residual_px": 0.0,
+  "det_row_gated": 0.0,
+  "det_row_y_std": 56.634792164531994,
+  "phase_incoherence_deg": 14.5
+}
+```
+
+### Allowed images
+- images/depth_map.png
+- images/depth_map_viridis.png
+- images/detected_lines.png
+- images/initial_prompt_points.png
+- images/segmentation_results.png
+- images/sam_depth_input.png
+
+### Parameter bounds (only these keys)
+- `denoising.mask_r_low` (float): [2.2, 2.5]
+- `denoising.mask_r_high` (float): [2.7, 2.9]
+- `denoising.z_step` (float): [0.001, 0.008]
+- `denoising.grad_threshold` (float): [0.1, 0.25]
+- `enhancing.curvature_threshold` (float): [0.0003, 0.008]
+- `enhancing.inter_radius` (float): [0.02, 0.08]
+- `detecting.binary_threshold` (int): [100, 160]
+- `detecting.hough_threshold_oblique` (int): [40, 90]
+- `detecting.hough_threshold_horizontal` (int): [40, 90]
+- `detecting.hough_threshold_vertical` (int): [400, 800]
+- `detecting.maxLineGap_oblique` (int): [20, 80]
+- `sam.processing.y_bounds` (int): [3600, 4400]
+
+## Task
+
+1. Inspect the images and intrinsics.
+2. Diagnose a failure mode using the ontology / sanitized experiences.
+3. Propose a coordinated overlay within bounds.
+4. Return **only** a single JSON object (no markdown fences) with keys:
+   `observation`, `failure_mode`, `rationale`, `overlay`
+
+`overlay` shape example:
+{"detecting": {"hough_threshold_oblique": 40}, "denoising": {"mask_r_low": 2.8}}
+
+If stage1_unlocked is true and centreline residual is large, you may include
+`unfolding` keys (e.g. random_seed). Otherwise do not touch unfolding.

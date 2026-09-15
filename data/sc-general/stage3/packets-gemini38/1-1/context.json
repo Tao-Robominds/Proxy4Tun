@@ -1,0 +1,310 @@
+{
+  "subset": "1-1",
+  "arm": "gemini38",
+  "proposer": "Gemini-3.8 (fresh per-case agent)",
+  "family": "t1&2",
+  "lining_mode": "staggered",
+  "stage1_unlocked": false,
+  "residual_gate_cm": 10.0,
+  "bands": {
+    "reject": "<0.5",
+    "refine": "[0.5, 0.7)",
+    "accept": ">=0.7"
+  },
+  "anchor": {
+    "proxy_raw": 0.606657,
+    "proxy_scaled": 0.606657,
+    "band": "refine",
+    "features": {
+      "correspondence_f1@15": 0.29438,
+      "sam_fill_rate": 0.722949,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.107366
+    },
+    "recentre_residual_max_cm": 2.8,
+    "orient_axis_corr": -0.999934241125118,
+    "ring_count": 10,
+    "ring_count_error": 0.0,
+    "labelmap_source": "results.pkl",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/anchors/1-1"
+  },
+  "intrinsics_gt_blind": {
+    "orient_axis_corr": -0.999934241125118,
+    "orient_invariant_ok": 1.0,
+    "recentre_residual_max_cm": 2.8,
+    "denoise_retained_ratio": 0.7531270323506135,
+    "depth_nan_ratio": 0.10736613189903915,
+    "depth_outlier_ratio": 0.0032266563656320134,
+    "det_real_detection_ratio": 0.7,
+    "det_fallback_ratio": 0.3,
+    "det_n_points": 10.0,
+    "sam_fill_rate": 0.7229494457484911,
+    "sam_ring_completeness": 0.8888888888888888,
+    "sam_segment_size_cv": 1.2876045298188923,
+    "sam_ontology_divergence": 0.21232044530496946
+  },
+  "history": [
+    {
+      "round": 1,
+      "status": "ok",
+      "overlay": {
+        "detecting": {
+          "binary_threshold": 112,
+          "hough_threshold_oblique": 45,
+          "hough_threshold_horizontal": 45,
+          "hough_threshold_vertical": 500,
+          "maxLineGap_oblique": 70
+        }
+      },
+      "proxy_scaled": 0.604516878900438,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.28997353421679883,
+        "sam_fill_rate": 0.7239358651084491,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.10736613189903915
+      },
+      "recentre_residual_max_cm": 2.8,
+      "full_pipeline": false,
+      "rationale": "Round 1 spends budget on detection-side correspondence. Keep vertical threshold near the T1 prior (500) so the 10-ring lattice stays stable, but relax oblique/horizontal thresholds and raise maxLineGap_oblique so short staggered joint segments connect across columns. Slightly lower binary_threshold to retain fainter joint pixels visible in the depth map without inventing dead knobs (depth_threshold_* is out of bounds).",
+      "proposer": "Gemini-3.8 (fresh per-case agent)"
+    },
+    {
+      "round": 2,
+      "status": "ok",
+      "overlay": {
+        "enhancing": {
+          "curvature_threshold": 0.0005,
+          "inter_radius": 0.07
+        },
+        "sam": {
+          "processing.y_bounds": [
+            4100,
+            13300
+          ]
+        }
+      },
+      "proxy_scaled": 0.6090758919304192,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.2994645509643856,
+        "sam_fill_rate": 0.7256841404304356,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.1126744061218597
+      },
+      "recentre_residual_max_cm": 2.8,
+      "full_pipeline": false,
+      "rationale": "Distinct from round-1 Hough relaxation: leave detecting alone and retarget SAM geometry via y_bounds lower=4100 (mid-upper of allowed lo) with fixed upper 13300, while slightly increasing inter_radius and keeping curvature near the notebook default so joint enhancement still supports boundary correspondence without reopening stage-1.",
+      "proposer": "Gemini-3.8 (fresh per-case agent)"
+    },
+    {
+      "round": 3,
+      "status": "ok",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 2.3,
+          "mask_r_high": 2.88,
+          "z_step": 0.002,
+          "grad_threshold": 0.14
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0008,
+          "inter_radius": 0.075
+        },
+        "detecting": {
+          "binary_threshold": 120,
+          "hough_threshold_oblique": 50,
+          "hough_threshold_horizontal": 50,
+          "hough_threshold_vertical": 550,
+          "maxLineGap_oblique": 55
+        },
+        "sam": {
+          "processing.y_bounds": [
+            3800,
+            13300
+          ]
+        }
+      },
+      "proxy_scaled": 0.6182317099395084,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.30646071453346313,
+        "sam_fill_rate": 0.739080150981285,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.10446936335762802
+      },
+      "recentre_residual_max_cm": 2.8,
+      "full_pipeline": false,
+      "rationale": "Third distinct lever: coverage-first. Soften denoise (slightly lower mask_r_low, widen mask_r_high within bounds, lower grad_threshold, modest z_step) and raise enhancing.inter_radius to rebuild left-half joint pixels. Use mid-relaxed detecting (binary 120, oblique 50, maxLineGap 55) rather than round-1's aggressive Hough, and nudge y_bounds lo to 3800 so the staggered crop still covers the denser recovered band\u2014without touching unfolding.",
+      "proposer": "Gemini-3.8 (fresh per-case agent)"
+    }
+  ],
+  "images": {
+    "depth_map_viridis.png": "/home/boringtao/Projects/Proxy4Tun/data/anchors/1-1/depth_map_viridis.png",
+    "detected_lines.png": "/home/boringtao/Projects/Proxy4Tun/data/anchors/1-1/detected_lines.png",
+    "initial_prompt_points.png": "/home/boringtao/Projects/Proxy4Tun/data/anchors/1-1/initial_prompt_points.png",
+    "segmentation_results.png": "/home/boringtao/Projects/Proxy4Tun/data/anchors/1-1/segmentation_results.png"
+  },
+  "ontology": {
+    "experiences": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/experiences.md",
+    "sam4tun_ontology": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/sam4tun_ontology.yaml",
+    "tunnel_priors": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/tunnel_priors.yaml"
+  },
+  "parameter_bounds": [
+    {
+      "name": "unfolding.ransac_threshold",
+      "stage": "unfolding",
+      "key": "ransac_threshold",
+      "kind": "float",
+      "low": 0.8,
+      "high": 1.2,
+      "special": null
+    },
+    {
+      "name": "unfolding.slice_spacing_factor",
+      "stage": "unfolding",
+      "key": "slice_spacing_factor",
+      "kind": "float",
+      "low": 1.05,
+      "high": 1.35,
+      "special": null
+    },
+    {
+      "name": "unfolding.polynomial_degree",
+      "stage": "unfolding",
+      "key": "polynomial_degree",
+      "kind": "int",
+      "low": 2,
+      "high": 3,
+      "special": null
+    },
+    {
+      "name": "unfolding.random_seed",
+      "stage": "unfolding",
+      "key": "random_seed",
+      "kind": "int",
+      "low": 0,
+      "high": 7,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_low",
+      "stage": "denoising",
+      "key": "mask_r_low",
+      "kind": "float",
+      "low": 2.2,
+      "high": 2.5,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_high",
+      "stage": "denoising",
+      "key": "mask_r_high",
+      "kind": "float",
+      "low": 2.7,
+      "high": 2.9,
+      "special": null
+    },
+    {
+      "name": "denoising.z_step",
+      "stage": "denoising",
+      "key": "z_step",
+      "kind": "float",
+      "low": 0.001,
+      "high": 0.008,
+      "special": null
+    },
+    {
+      "name": "denoising.grad_threshold",
+      "stage": "denoising",
+      "key": "grad_threshold",
+      "kind": "float",
+      "low": 0.1,
+      "high": 0.25,
+      "special": null
+    },
+    {
+      "name": "enhancing.curvature_threshold",
+      "stage": "enhancing",
+      "key": "curvature_threshold",
+      "kind": "float",
+      "low": 0.0003,
+      "high": 0.008,
+      "special": null
+    },
+    {
+      "name": "enhancing.inter_radius",
+      "stage": "enhancing",
+      "key": "inter_radius",
+      "kind": "float",
+      "low": 0.02,
+      "high": 0.08,
+      "special": null
+    },
+    {
+      "name": "detecting.binary_threshold",
+      "stage": "detecting",
+      "key": "binary_threshold",
+      "kind": "int",
+      "low": 100,
+      "high": 160,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_oblique",
+      "stage": "detecting",
+      "key": "hough_threshold_oblique",
+      "kind": "int",
+      "low": 40,
+      "high": 90,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_horizontal",
+      "stage": "detecting",
+      "key": "hough_threshold_horizontal",
+      "kind": "int",
+      "low": 40,
+      "high": 90,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_vertical",
+      "stage": "detecting",
+      "key": "hough_threshold_vertical",
+      "kind": "int",
+      "low": 400,
+      "high": 800,
+      "special": null
+    },
+    {
+      "name": "detecting.maxLineGap_oblique",
+      "stage": "detecting",
+      "key": "maxLineGap_oblique",
+      "kind": "int",
+      "low": 20,
+      "high": 80,
+      "special": null
+    },
+    {
+      "name": "sam.y_bounds_lower",
+      "stage": "sam",
+      "key": "processing.y_bounds",
+      "kind": "int",
+      "low": 3600,
+      "high": 4400,
+      "special": "y_bounds_lower"
+    }
+  ],
+  "instructions": [
+    "Propose ONE coordinated multi-stage overlay within parameter_bounds.",
+    "Use observation -> ontology rule -> failure_mode -> overlay.",
+    "Do NOT read evaluation/, offline_gt.json, performance.md, perf_*, mIoU, or any ground-truth labels / GT-bearing CSVs.",
+    "Do NOT read existing Fable/deterministic selections, campaign logs, or other arms' refinement trees.",
+    "Use the SC-general proxy (proxy_scaled / band / lean features) as the between-round signal.",
+    "If stage1_unlocked is false, do not touch unfolding keys.",
+    "If stage1_unlocked is true and residual remains high, you may include unfolding (e.g. random_seed) and the pilot will auto --full.",
+    "Return JSON with keys: observation, failure_mode, rationale, overlay."
+  ],
+  "created_at": "2026-09-14T07:49:06.760292"
+}

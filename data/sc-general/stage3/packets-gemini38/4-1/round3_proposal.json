@@ -1,0 +1,23 @@
+{
+  "observation": "SC overlay shows staggered block edges with many red unsupported horizontals and assumed prompts (magenta x) sitting on white bands; sam_segment_size_cv=1.06 suggests crop height/width mismatch; fill_rate=0.749 leaves lining gaps. Residual and ring count remain healthy\u2014classic crop-offset / pattern-mismatch regime for complex lining.",
+  "rule": "f_crop_offset from f_pattern_mismatch (inter_stage) \u2192 coordinate wider segment_width, modestly lower K_height (avoid empty-crop), lower taper angle, and tighter pattern_tolerance so prompt spacing and SAM crops land on lining rather than white-band voids (r_fix_height_priors / r_fix_template).",
+  "failure_mode": "f_crop_offset",
+  "rationale": "Distinct from rounds 1\u20132: widen segment_width to 1950 and drop K_height to 1150 (explicitly anti-empty-crop) with angle 8.5 (shallower taper) plus tighter pattern_tolerance=8. Optional slight horizontal Hough relax to stabilize blue joint loci used as crop anchors. full=false; stage1 locked.",
+  "overlay": {
+    "detecting": {
+      "pattern_tolerance": 8,
+      "hough_threshold_horizontal": 40,
+      "maxLineGap_horizontal": 15
+    },
+    "sam": {
+      "segment_width": 1950,
+      "K_height": 1150.0,
+      "angle": 8.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T10:27:14.692231",
+  "provenance": {
+    "agent_id": "8482fc7e-88d6-475f-8787-b32cded5f518"
+  }
+}

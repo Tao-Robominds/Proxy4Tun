@@ -1,0 +1,34 @@
+{
+  "observation": "The depth map has extensive missing bands and noisy edge regions (depth_nan_ratio 0.209361), while the correspondence overlay indicates that numerous mask boundaries are unsupported despite a healthy fill rate of 0.731801.",
+  "rule": "When missing-depth structure and edge clutter coexist with unsupported boundaries, favor precision: narrow the retained radial band, require stronger enhanced and Hough evidence, and allow only limited line bridging.",
+  "failure_mode": "Clutter near void margins and fragmented depth edges can be promoted into spurious structural cues, causing masks to split along visually strong but geometrically unsupported boundaries.",
+  "rationale": "This proposal is precision oriented and deliberately distinct from the recall and SAM-regularization alternatives. A narrower denoising interval and stronger curvature/binary thresholds suppress clutter; higher Hough thresholds and shorter gaps retain only coherent lines, while slightly larger SAM support preserves fill if detections become sparser.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.75,
+      "mask_r_high": 3.82
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0016
+    },
+    "detecting": {
+      "binary_threshold": 148,
+      "hough_threshold_oblique": 62,
+      "hough_threshold_horizontal": 60,
+      "hough_threshold_vertical": 4200,
+      "maxLineGap_oblique": 34,
+      "maxLineGap_horizontal": 7,
+      "pattern_tolerance": 6
+    },
+    "sam": {
+      "segment_width": 2050,
+      "K_height": 1425.0,
+      "angle": 11.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T04:47:10.781566",
+  "provenance": {
+    "agent_id": "8ceea654-0c4a-456f-ba33-8c5455ffc49a"
+  }
+}

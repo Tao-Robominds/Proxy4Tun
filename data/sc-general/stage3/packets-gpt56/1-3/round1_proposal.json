@@ -1,0 +1,27 @@
+{
+  "observation": "Orientation, recentring, and ring localization are healthy (axis correlation 0.99998, residual 1.4 cm, 10 detected points for 10 rings, and only 0.1 fallback), while the weak proxy is dominated by very low correspondence_f1@15 (0.1868). The correspondence overlay shows many red unsupported SAM boundaries and only short cyan seam fragments; segmentation is also incomplete/uneven (fill 0.7325, completeness 0.8889, segment-size CV 1.3403) despite a modest depth NaN ratio of 0.1090.",
+  "rule": "With frozen stage 1, correct ring count, low fallback, and no major depth-hole signal, preserve vertical-ring detection and radial gating. For fragmented joint evidence, modestly increase joint interpolation and relax only oblique seam extraction; for incomplete staggered masks, expand the allowed SAM processing interval at its lower edge.",
+  "failure_mode": "Sparse or fragmented oblique joint support causes SAM label boundaries to be geometrically unsupported, while the lower SAM processing bound clips part of the usable lining and contributes to incomplete, highly unequal segments.",
+  "rationale": "Raising inter_radius should connect nearby joint samples before projection. A slightly lower binary and oblique Hough threshold together with a larger oblique line gap should recover faint, broken staggered seams without changing the vertical threshold that already yields the exact ring count. Setting y_bounds to [3600, 13300] uses the permitted t1&2 lower extent to improve mask coverage. The changes are deliberately moderate to limit spurious intersections.",
+  "overlay": {
+    "enhancing": {
+      "inter_radius": 0.07
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 45,
+      "maxLineGap_oblique": 60
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3600,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T00:34:43.250204",
+  "provenance": {
+    "agent_id": "2f03d977-b5fe-4a34-8d5c-1ad0dd71de43"
+  }
+}

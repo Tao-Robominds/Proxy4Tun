@@ -1,0 +1,48 @@
+{
+  "imputation_means_from_noncomplex": {
+    "det_row_residual_px": 1.0300424690029844,
+    "det_row_gated": 0.2
+  },
+  "frozen_lolo": {
+    "lolo_mae": 0.1434341396869892,
+    "lolo_spearman": 0.6777135662941057
+  },
+  "mean_imputed_refit": {
+    "train_mae": 0.09864348771698497,
+    "train_spearman": 0.8750672873727301,
+    "lolo": {
+      "lolo_mae": 0.19283770320145155,
+      "lolo_spearman": 0.5699596158379637
+    },
+    "holdout_mae": 0.08792214689226806,
+    "holdout_spearman": 0.8195371563629454,
+    "coef": {
+      "depth_nan_ratio": -0.07275987064868572,
+      "denoise_retained_ratio": -0.04872553591390083,
+      "sam_fill_rate": 0.18232866737920372,
+      "det_row_residual_px": -0.1035421538230259,
+      "det_row_gated": 0.0920254603206705
+    },
+    "intercept": 0.350225
+  },
+  "drop_krow_3feat": {
+    "features": [
+      "depth_nan_ratio",
+      "denoise_retained_ratio",
+      "sam_fill_rate"
+    ],
+    "train_mae": 0.10028451205628025,
+    "train_spearman": 0.8729871012264634,
+    "lolo": {
+      "lolo_mae": 0.1396720197995992,
+      "lolo_spearman": 0.6672607333939048
+    },
+    "holdout_mae": 0.1141687083680401,
+    "holdout_spearman": 0.8292980902062931
+  },
+  "note": "Frozen deployment model unchanged. Mean-imputation sets standardised K-row features to 0 for complex runs; drop-krow removes both features.",
+  "frozen_holdout": {
+    "mae": 0.08600501829098277,
+    "spearman": 0.8272391432237121
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "observation": "Proxy refine band with correspondence_f1@15=0.172 as the lean bottleneck. Joint-line panel shows orange unexplained ticks beside assumed prompts; left panel has green matches mainly along the lower central-band edge while the upper edge stays unsupported. Depth NaN and retention are acceptable, so the upstream issue is joint contrast / binary yield more than centreline holes. sam_fill_rate\u22480.77 with ontology_divergence\u22480.25 suggests under-tight templates rather than total coverage collapse.",
+  "rule": "ontology d6\u2192f_joint_oversmoothed then d7\u2192f_missing_lines; remediation r_lower depth contrast via enhancing curvature + r_relax_hough with lower binary_threshold. For continuous t3, experiences \u00a711: do not chase det_real_detection_ratio under snap \u2014 improve gate/joint geometry and keep K_height near prior (~800) to avoid empty crops. Compact segment_width + milder angle as a third distinct axis vs rounds 1\u20132.",
+  "failure_mode": "f_joint_oversmoothed leading to f_missing_lines; residual f_over_under_coverage on K boundaries (unsupported SC edges)",
+  "rationale": "Round-3 joint-enhancement path: lower curvature_threshold and binary_threshold to densify joint pixels; more permissive oblique Hough (threshold 22, maxLineGap 45) with looser pattern_tolerance (16). SAM uses compact segment_width 1080, K_height 780 (near lower filled prior, not empty), milder angle 5.0\u00b0. Slightly tighter theta gate to cut floor clutter. Distinct from round-1 (prior-pinned SAM + mid Hough) and round-2 (wide/tall/strong-taper SAM).",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.88,
+      "mask_r_high": 3.02,
+      "mask_theta_low": 1.8,
+      "mask_theta_high": 16.5
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0003
+    },
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 22,
+      "hough_threshold_horizontal": 24,
+      "hough_threshold_vertical": 1400,
+      "maxLineGap_oblique": 45,
+      "pattern_tolerance": 16,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1080,
+      "K_height": 780.0,
+      "angle": 5.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:03:23.015772",
+  "provenance": {
+    "agent_id": "3694f8b9-54e4-4d8d-9d56-5b39eb77064c"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "observation": "Round 1 (oblique Hough relaxed: threshold 24, gap 50; horizontal raised to 45; vertical pinned 2000; snap on, tolerance 12) moved proxy 0.5216 -> 0.5555 purely through correspondence_f1@15 (0.113 -> 0.175); sam_fill_rate (0.779), ring_count_error (0) and depth_nan_ratio (0.114) were unchanged, as predicted. K-row gate is healthy: y* 1549.1 vs design 1553 (3.9 px), 3 real anchor ys accepted, 10 propagated prompts at 241.7 px pitch. Inspection of the round-1 artifacts shows (a) SAM masks reproduce the template extents almost exactly (K 1469-1629, B1 798-1462, B2 1635-2298, A1 129-797, A3 2301-2968; scores 0.76-0.97), so label boundaries sit at 129/798/1467/1632/2301/2970; (b) the outlier map is extremely sparse (~0.6% of pixels) and its row profile has NO signal at the horizontal A/B joints (~798, ~2301) - only bolt-hole rows at ~730/850, ~1340/1400, ~1560/1680/1740, ~2240/2340 - so those boundaries cannot be supported by any detection setting in bounds; (c) the only line-bearing structure is the K wedge: oblique segments at y~1454-1478 (+5..+8 deg) and ~1620-1640 (+/-7 deg), i.e. within a few px of the template K edges, but still recovered in only ~4 of 10 rings; (d) binary_threshold has no effect on this map in [100,127] (all outlier pixels have r 2.94-3.00, above the mid-band grey level), so it is a dead knob here and is kept at 110 only for continuity.",
+  "rule": "d7 -> f_missing_lines with r_relax_hough still the only in-bounds lever that can add supported joint lines (oblique threshold and maxLineGap not yet at their bounds); experiences 5 (line count must stay consistent with ring count - keep vertical pinned) and 9 (trust the between-round proxy delta; round-1 delta was positive and driven by the coherence feature, not by cosmetic evidence features).",
+  "failure_mode": "stage_4_detection.f_missing_lines (K-edge oblique lines recovered in only ~4/10 rings; A/B joints absent from the outlier map), residual after round 1; stage 5 confirmed template-locked and well aligned (K spacing 164 px vs 165 px prior), so no SAM change is warranted yet.",
+  "rationale": "Finish the detection lever before touching SAM: take hough_threshold_oblique to its lower bound (20) and maxLineGap_oblique to its upper bound (60) so the fragmented K-edge bracket signal in the middle rings (x~1000-1800) can accumulate enough votes and bridge the ~50-60 px bracket gaps to form segments; an offline permissive Hough on the round-1 outlier map at these settings yielded 13 oblique segments (vs ~8 now) of which 11 lie within ~10 px of the template K edges and only 1-2 sit on bolt rows, so expected precision cost is small relative to the recall gain. Keep the round-1 guards (horizontal 45 so bolt rows do not enter as horizontal lines, vertical 2000 so the exact 10/10 ring count is preserved, snap on, tolerance 12 which already accepted 3 real K anchors at 3.9 px residual). Denoising/enhancing stay at anchor (stages 1-3 healthy; theta tightening would only drop partial-A lining). SAM stays at anchor this round so the round-2 delta is attributable to detection alone; round 3 will then either lock in the best detection set and test a minimal SAM width alignment (measured ring pitch 241.7 px = 1208 mm vs 1200 mm template) or revert if precision fell. Expected: correspondence_f1@15 up modestly, other lean features unchanged.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 20,
+      "hough_threshold_horizontal": 45,
+      "hough_threshold_vertical": 2000,
+      "maxLineGap_oblique": 60,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T20:11:26.030324",
+  "provenance": {
+    "agent_id": "8bf61149-a559-4a7b-87a6-25495c5ebfd8"
+  }
+}

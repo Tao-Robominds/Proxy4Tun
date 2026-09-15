@@ -1,0 +1,23 @@
+{
+  "observation": "Proxy 0.681 (refine). Orientation and centreline look healthy (|orient_axis_corr|=0.88, residual 3.5 cm < 10 cm gate; depth_nan\u22480.20 family-normal; ring_count_error=0). Main deficit is correspondence_f1@15=0.459 with sam_fill_rate=0.737 and high sam_segment_size_cv\u22481.01. SC overlay shows many unsupported horizontal label edges (red) and unexplained joint lines (orange) on circumferential seams, while verticals mostly match. Detected-lines view has clear red/green oblique K pairs inside magenta ring columns \u2014 geometry is present but SAM template alignment is off.",
+  "rule": "When stages 1\u20133 are healthy and ring count matches, retune complex-family SAM geometry toward t4&5 priors (segment_width\u22481800, K_height\u22481227 mm, taper\u22489.8\u00b0) and keep K_height away from empty-crop extremes that bite white inter-band gaps (r_fix_template / experiences \u00a76\u20137).",
+  "failure_mode": "f_template_mismatch: K/A trapezoid crops mis-sized vs true joints \u2192 unsupported boundaries and unexplained horizontal lines, low correspondence@15.",
+  "rationale": "Round 1 pins SAM to notebook priors with a mid-band K_height (not floor/ceiling) to avoid empty-crop into the large white horizontal voids. Mild pattern_tolerance and oblique Hough easing help distance-pattern match without touching locked unfolding.",
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 40,
+      "maxLineGap_oblique": 55,
+      "pattern_tolerance": 12
+    },
+    "sam": {
+      "segment_width": 1800,
+      "K_height": 1230.0,
+      "angle": 9.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T11:00:48.236231",
+  "provenance": {
+    "agent_id": "60c35b7c-6350-4e5d-9ed7-80a096230cb0"
+  }
+}

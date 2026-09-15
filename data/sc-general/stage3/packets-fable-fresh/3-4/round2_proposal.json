@@ -1,0 +1,28 @@
+{
+  "observation": "Round 1 moved proxy 0.520 -> 0.533 (still refine). Decomposition: correspondence_f1@15 rose 0.244 -> 0.286 (the relaxed oblique/binary thresholds did add lines: new green/red oblique fragments at y~300, ~680, ~930, ~1290-1330, ~2370 and a longer blue horizontal on the y~780 seam), but sam_fill_rate fell 0.571 -> 0.536 and depth_nan_ratio ticked up 0.195 -> 0.198. The stage-1 change did nothing useful: recentre_residual_max_cm 20.8 -> 21.8 with the same full-height void at the first axial ring (x < ~200 px), i.e. the residual is a structural end-slice effect that residual_recentre already absorbs, not a RANSAC-draw artefact; re-rolling stage 1 only re-rolled the map and confounded the SAM comparison. Ring count still 10 / error 0, K row still propagated at y~1520 with det_n_points 10. Remaining detection gap: the longitudinal seams at y~780 and y~2280 are visible in the depth map (bolt rows + dotted seam pixels) but still do not accumulate into oblique segments; label boundaries at ~98, ~795, ~2260, ~2950 remain unsupported. Many small bolt-hole NaN halos (hundreds across the map) remain unlabeled, which caps fill rate regardless of prompts.",
+  "rule": "experiences \u00a710 / \u00a77: do not re-run stage 1 mid-comparison once orientation is pinned and residual is not responding (confounds attribution) -> freeze stage 1, replay stages 2-6. Proxy reading (\u00a79): a proxy gain carried by a coherence feature (F1) while fill rate drops is only half a win; keep the detection direction that paid off (ontology d7 / f_missing_lines -> r_relax_hough) and recover coverage via stage-3 densification (ontology f_depth_holes -> r_increase_window_or_upsample: the only in-bounds stage-3 knob is curvature_threshold, raising it lets more near-flat lining points be surface-densified so small bolt-hole halos close). Revert the SAM width change whose measured effect was negative (\u00a76: SAM geometry only when graded; segment_width 1225 coincided with the fill drop). Keep ring count synthetic (\u00a75).",
+  "failure_mode": "stage_4_detection.f_missing_lines (seams at ~780/~2280 still under the oblique accumulator; partially remedied in round 1) + stage_3_upsample.f_depth_holes (bolt-hole halo voids -> stage_5 f_over_under_coverage, fill rate 0.54). Stage-1 f_curve_overfit hypothesis from round 1 is rejected (residual unchanged under tighter RANSAC + reseed).",
+  "rationale": "Round 2 of 3, stage 1 frozen (full=false, no unfolding keys). (1) Detecting: continue the direction that raised F1 but with a bounded step: binary_threshold 115 -> 108 and hough_threshold_oblique 24 -> 22 so the dotted y~780 / y~2280 seam pixels reach the accumulator, maxLineGap_oblique 45 -> 55 to bridge the gaps between bolt clusters along those seams, hough_threshold_horizontal 26 -> 24 for the flattest seam; hough_threshold_vertical stays 2200 (synthetic 10 verticals, ring_count_error 0), pattern_tolerance 10 and uniform_k_snap true keep the K-row gate strict so extra lines cannot move the propagated K row. (2) Enhancing: curvature_threshold 0.0005 -> 0.0008 to densify the near-flat lining around the many bolt-hole rims, closing small halos -> lower depth_nan_ratio and higher sam_fill_rate; kept well below the upper bound to avoid smoothing the joint seams the detector needs. (3) SAM: segment_width back to the T3 prior 1200 (1225 coincided with the fill-rate drop and templates are re-anchored per ring at each vertical, so the pitch mismatch is not cumulative); K_height and angle stay at priors since the detected K band (~170 px between green and red lines) and the per-ring oblique slope (~5-6 deg) agree with 823.8 mm / 6.12 deg. Denoising untouched (r-band and theta gate at T3 priors; the remaining voids are physical fixtures / floor).",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "binary_threshold": 108,
+      "hough_threshold_oblique": 22,
+      "hough_threshold_horizontal": 24,
+      "hough_threshold_vertical": 2200,
+      "maxLineGap_oblique": 55,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T18:15:27.686893",
+  "provenance": {
+    "agent_id": "dda9350d-e500-4cfd-b2f7-b8afd09ce9d1"
+  }
+}

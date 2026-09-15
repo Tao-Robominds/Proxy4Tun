@@ -1,0 +1,30 @@
+{
+  "observation": "The ring count is exactly preserved at 10 and SAM ring completeness is 1.0, but correspondence_f1@15 is only 0.467401. The correspondence overlay shows many red unsupported horizontal label boundaries, while detected horizontal and oblique segments are sparse and fragmented; 30% of prompt points are fallbacks.",
+  "rule": "When topology and ring count are already correct but label boundaries are weakly supported, first improve continuity of real horizontal and oblique detections without changing the locked unfolding stage.",
+  "failure_mode": "Under-connected seam evidence causes otherwise plausible SAM regions to place boundaries away from detected joints and forces fallback prompts.",
+  "rationale": "Use a moderately permissive binary threshold, lower horizontal and oblique Hough votes, bridge longer horizontal gaps, and allow modest pattern tolerance. Keep SAM geometry near the middle of the allowed t4&5 range so the proposal primarily tests whether stronger seam continuity improves correspondence.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.00065
+    },
+    "detecting": {
+      "binary_threshold": 118,
+      "hough_threshold_oblique": 34,
+      "hough_threshold_horizontal": 30,
+      "hough_threshold_vertical": 2600,
+      "maxLineGap_oblique": 62,
+      "maxLineGap_horizontal": 24,
+      "pattern_tolerance": 14
+    },
+    "sam": {
+      "segment_width": 1800,
+      "K_height": 1240.0,
+      "angle": 9.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T06:15:34.464852",
+  "provenance": {
+    "agent_id": "868c4de0-e0c1-4d6c-b822-df592e155637"
+  }
+}

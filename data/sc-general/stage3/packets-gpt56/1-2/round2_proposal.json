@@ -1,0 +1,29 @@
+{
+  "observation": "Round 1 lowered the proxy from 0.647823 to 0.628551: correspondence_f1@15 fell from 0.367509 to 0.333641, fill was effectively unchanged at 0.723116, and depth_nan_ratio increased from 0.101505 to 0.105449. The updated line image contains more long and crossing oblique candidates, but the prompt plot remains sparse and nearly unchanged, indicating that the added sensitivity produced detections without useful correspondence or prompt coverage.",
+  "rule": "When a sensitivity-oriented line expansion increases candidate lines but lowers correspondence without improving fill, switch to a precision-first regime: suppress weak curvature responses, require stronger binary and Hough support, limit long-gap oblique bridging, and exclude the noisier lower fringe from SAM processing.",
+  "failure_mode": "Round 1 over-connected weak transverse evidence into unsupported or crossing oblique lines. These candidates did not create useful intersections, increased structural disagreement, and exposed SAM to low-quality lower-boundary content.",
+  "rationale": "This proposal deliberately reverses round 1 rather than making another permissive adjustment. A higher curvature threshold, smaller interaction radius, stronger binary threshold, higher horizontal and oblique Hough thresholds, and shorter oblique gap allowance prioritize repeatable joints over line count. Raising the SAM lower bound to 4200 removes more of the irregular lower fringe while preserving the required upper bound of 13300. Vertical detection remains untouched because ring count error is zero, and unfolding is omitted because stage1_unlocked is false.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.006,
+      "inter_radius": 0.03
+    },
+    "detecting": {
+      "binary_threshold": 150,
+      "hough_threshold_oblique": 80,
+      "hough_threshold_horizontal": 75,
+      "maxLineGap_oblique": 30
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4200,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T01:58:24.161215",
+  "provenance": {
+    "agent_id": "7ff936d0-56c3-442a-8710-1d2e205f2116"
+  }
+}

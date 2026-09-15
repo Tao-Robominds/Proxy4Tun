@@ -1,0 +1,23 @@
+{
+  "observation": "Stages 1-3 are healthy for 2-2: orient_axis_corr -0.9999 with invariant ok, recentre residual 1.5 cm (<< 10 cm gate), depth_nan_ratio 0.111 and denoise_retained_ratio 0.77 are in the t1&2 normal range, and the viridis depth map shows no one-sided voids or ring banding. Ten regular verticals (~240 px pitch = 1200 mm segment width) match ring_count 10 (ring_count_error 0). The deficit is in detection: oblique joint lines are sparse and faint (joints appear only as speckle in the outlier map), one oblique line pair at x~1325 spans two ring columns (a ~450 px green line from x~1000 to ~1450 bridges the x=1085 and x=1325 columns), producing an off-pattern K centre at y~1430 instead of the expected staggered row y~1640, and the leftmost column (x~120) falls back to an assumed prompt at y~1120 (should be ~1205). det_real_detection_ratio 0.9 / fallback 0.1 and correspondence_f1@15 = 0.455 confirm the prompt set is mostly right but two of ten K centres are misplaced, which shows up in segmentation_results as a shifted K/A stack in the x~1325 and x~120 columns and as unsupported (red) label boundaries in the SC overlay.",
+  "rule": "Tuning order (experiences section 7): orientation, centreline, and band selection are validated, so round 1 may move to stage 4. Ontology d6 (m_joint_contrast low -> f_joint_oversmoothed) with inter-stage dependency f_joint_oversmoothed -> f_missing_lines (d7), plus d8 (spacing irregular vs K/AB pattern -> f_pattern_mismatch) for the bridged column. Remediation r_lower_depth_threshold is out of bounds here, so the in-bounds analogue is to sharpen joint evidence via enhancing.inter_radius / curvature_threshold, then r_relax_hough (lower oblique threshold and binary threshold) while tightening maxLineGap so oblique segments stay within a single ring column. Geometry knobs (mask_r_low/high) stay at priors per section 4; y_bounds untouched because SAM geometry is only tuned after detection is consistent (section 6/7).",
+  "failure_mode": "stage_4_detection.f_missing_lines (low oblique yield from faint joints, one column falling back to an assumed centre) compounded by stage_4_detection.f_pattern_mismatch (an over-long oblique line bridging two ring columns yields a K midpoint at y~1430 that breaks the staggered K-row alternation), propagating to stage_5_segmentation.f_crop_offset in two of ten rings.",
+  "rationale": "Keep stages 1-3 frozen (no unfolding since stage1_unlocked is false; no denoising changes because retention and NaN are healthy and radial band should stay at tunnel priors). In enhancing, raise inter_radius 0.06 -> 0.07 so more interpolated joint points populate the outlier map (denser, more continuous oblique joint traces), and lower curvature_threshold 0.0005 -> 0.0004 so fewer discontinuity points are absorbed into the smooth-surface upsampling, preserving joint edges. In detecting, lower binary_threshold 127 -> 118 and hough_threshold_oblique 50 -> 46 to lift oblique line yield in the faint columns (x~120 should get a real detection instead of an assumed centre), and cut maxLineGap_oblique 40 -> 28 so oblique segments are not bridged across the ~240 px column pitch, which is the mechanism behind the mis-paired K centre at x~1325. Raise hough_threshold_horizontal 50 -> 60 so the spurious horizontal fallback lines at the top and bottom margins do not seed false intersections once oblique thresholds are relaxed. Expected GT-free signals: det_fallback_ratio 0.1 -> 0.0, det_n_points stays 10 with all K midpoints on the two staggered rows (~1205 / ~1640), correspondence_f1@15 rising above 0.455 and sam_fill_rate rising as the two shifted K/A stacks align with the joint lines; proxy should move from 0.699 into the accept band. If line yield instead becomes spurious (extra intersections), back off binary_threshold toward 127 in round 2 while keeping the reduced maxLineGap.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0004,
+      "inter_radius": 0.07
+    },
+    "detecting": {
+      "binary_threshold": 118,
+      "hough_threshold_oblique": 46,
+      "hough_threshold_horizontal": 60,
+      "maxLineGap_oblique": 28
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T19:15:03.341717",
+  "provenance": {
+    "agent_id": "195d9542-296a-45df-b83d-690041e29f75"
+  }
+}

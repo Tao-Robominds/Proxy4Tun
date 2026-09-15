@@ -1,0 +1,36 @@
+{
+  "observation": "Same 3-3 anchor: healthy residual/orient and ring count, but correspondence_f1@15 remains very low and SC overlay has orange joint segments not explained by boundaries plus red unsupported edges on the central band. detected_lines joint markers are sparse/tilted relative to the dense white joint texture, suggesting under-yielded oblique lines feeding unstable K-row snaps. sam_fill_rate\u22480.78 leaves headroom if prompt centres improve.",
+  "rule": "d7\u2192d8\u2192f_crop_offset chain (ontology): low oblique line yield / pattern mismatch with healthy depth residual \u2192 relax Hough + widen pattern_tolerance, then give SAM a taller K crop so snapped centres do not land in empty crops; continuous t3 uses segment_width/K_height/angle only (no y_bounds).",
+  "failure_mode": "f_missing_lines",
+  "rationale": "Distinct from round-1 prior-lock: detection-first recovery. Lower binary/Hough thresholds and larger maxLineGap_oblique to raise joint-line yield; looser pattern_tolerance (16) for continuous K-row snap; slightly narrower segment_width (1100) with taller K_height (900) and lower taper angle (5.0) to enlarge the K crop around the central band. Mild denoise widen + lower curvature to preserve joint contrast. No unfolding; full=false.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.78,
+      "mask_r_high": 3.05,
+      "mask_theta_low": 1.3,
+      "mask_theta_high": 17.8
+    },
+    "enhancing": {
+      "curvature_threshold": 0.00035
+    },
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 22,
+      "hough_threshold_horizontal": 25,
+      "hough_threshold_vertical": 1200,
+      "maxLineGap_oblique": 45,
+      "pattern_tolerance": 16,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1100,
+      "K_height": 900.0,
+      "angle": 5.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T08:50:18.085956",
+  "provenance": {
+    "agent_id": "676e3969-2d60-471a-922c-8d152904c623"
+  }
+}

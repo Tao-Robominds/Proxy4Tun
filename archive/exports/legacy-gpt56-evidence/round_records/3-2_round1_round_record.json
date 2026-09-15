@@ -1,0 +1,27 @@
+{
+  "proposal": {
+    "observation": "The orientation invariant is healthy (|corr(h, ring)|=0.996 and orient_invariant_ok=1), but the 16.8 cm recentre residual exceeds the healthy approximately 10 cm scale. The depth images show a concentrated left-edge void and axial depth drift, while denoising retention remains 0.823; detection is entirely fallback despite the expected 10 prompt columns, and SAM completeness is 0.889 with high segment-size variation.",
+    "failure_mode": "Upstream centre-curve underfit or contamination is distorting the unroll and creating spatially concentrated coverage loss; downstream fallback detection and uneven SAM segments are consequences, so Hough and SAM geometry should not be tuned first.",
+    "rationale": "Use the unlocked unfolding stage to fit the curved axis with a cubic model, reject more eccentric slice-centre fits with a moderately tighter RANSAC threshold, and pin the fit for reproducibility. This targets the excessive centreline residual without widening the T3 radial band or cosmetically filling normal depth gaps; downstream parameters remain unchanged until unroll quality is verified.",
+    "overlay": {
+      "unfolding": {
+        "polynomial_degree": 3,
+        "ransac_threshold": 0.9,
+        "random_seed": 0
+      }
+    }
+  },
+  "overlay": {
+    "unfolding": {
+      "polynomial_degree": 3,
+      "ransac_threshold": 0.9,
+      "random_seed": 0
+    }
+  },
+  "feedback_path": "/home/boringtao/Projects/Proxy4Tun/data/3-2-gpt56-refinement/round1/agent_feedback.json",
+  "offline_path": "/home/boringtao/Projects/Proxy4Tun/data/3-2-gpt56-refinement/round1/evaluation_offline.json",
+  "status": "ok",
+  "proxy_scaled": 0.9399494645973382,
+  "mIoU_offline": 0.747,
+  "elapsed_s": 236.56083607673645
+}

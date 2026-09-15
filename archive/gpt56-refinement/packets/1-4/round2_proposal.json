@@ -1,0 +1,10 @@
+{
+  "observation": "Round 1 improved detection evidence (real detections 0.7 to 0.8, fallback 0.3 to 0.2, midpoint ratio 0.1 to 0.3, and lower detection y spread), while retaining the exact 10-ring count. Those gains did not transfer to SAM: fill rate slipped to 0.6980, segment-size CV rose to 1.5684, ontology divergence rose to 0.2765, and the scaled proxy fell by 0.0012. The segmentation image still shows strongly unequal class extents and labeling extending into the degraded lower boundary region.",
+  "failure_mode": "f_over_under_coverage at the SAM processing boundary: the prompt set is now more coherent, but an overly permissive circumferential processing window admits low-quality boundary content and amplifies mask-size imbalance.",
+  "rationale": "The round-1 detection intervention moved its intended intrinsic metrics in the right direction but slightly degraded the final proxy, so further Hough relaxation is not supported. Upstream orientation, denoise retention, depth NaNs, and ring completeness remain healthy. Tightening the allowed SAM lower y boundary is a single downstream lever intended to exclude the fragmented boundary region, reduce oversized masks and ontology divergence, and improve coherent fill without changing unfolding, denoising, or detection.",
+  "overlay": {
+    "sam": {
+      "processing.y_bounds": 4200
+    }
+  }
+}

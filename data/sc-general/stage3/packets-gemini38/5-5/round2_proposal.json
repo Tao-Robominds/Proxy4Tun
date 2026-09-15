@@ -1,0 +1,29 @@
+{
+  "observation": "Detected_lines shows sparse red/green oblique segments with frequent blue horizontal fallbacks; det_fallback_ratio=0.2 and det_real_detection_ratio=0.8. SC right panel has many orange unexplained joints in mid columns while left-panel red unsupported boundaries cluster where prompts (yellow stars) sit off staggered seams. Correspondence_f1@15=0.316 with fill 0.756 \u2014 detection yield, not orientation, is the bottleneck (residual 1.9 cm).",
+  "rule": "d7: low oblique line yield with horizontal fallback \u2192 f_missing_lines; remediation r_relax_hough (lower thresholds / raise maxLineGap). Inter-stage: f_missing_lines \u2192 f_crop_offset downstream. Optionally lower curvature_threshold slightly to preserve joint contrast before Hough.",
+  "failure_mode": "f_missing_lines",
+  "rationale": "Distinct from prior-centered SAM retune: first recover oblique joint yield so unexplained orange seams become prompt-supporting lines. Use lower K_height (1150) and milder angle (8.5\u00b0) to keep crops on textured lining (anti empty-crop) while slightly narrower segment_width (1700) matches denser mid-column stagger.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 35,
+      "maxLineGap_oblique": 70,
+      "maxLineGap_horizontal": 15,
+      "pattern_tolerance": 15
+    },
+    "sam": {
+      "segment_width": 1700,
+      "K_height": 1150.0,
+      "angle": 8.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T10:51:08.705592",
+  "provenance": {
+    "agent_id": "ef99886d-5a91-41b9-a315-f13245073073"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-07-21T07:11:53.839066",
+  "source": "data/bo/<case>-bo-proxy/manifest.json",
+  "justification": "Unified pipeline passed parity gates vs the anchors these trials ran on (|\u0394mIoU| \u2264 0.02 per anchors/unified/verification.md), so (features \u2192 mIoU) pairs remain valid proxy training data.",
+  "n_rows": 225,
+  "counts_per_case": {
+    "1-1": 40,
+    "2-1": 40,
+    "3-1": 35,
+    "3-2": 37,
+    "4-1": 40,
+    "5-1": 33
+  },
+  "training_csv": "/home/boringtao/Projects/Proxy4Tun/bo-unified/family/training_table.csv"
+}

@@ -1,0 +1,19 @@
+{
+  "observation": "Anchor proxy_scaled=0.561 (refine). recentre_residual_max_cm=24 exceeds the 10 cm gate while orient_axis_corr\u22480.9995 (axis OK). correspondence_f1@15=0.302 and sam_fill_rate\u22480.597 with elevated sam_segment_size_cv\u22480.68; ring_count=10 matches the 10 magenta verticals. SC overlay shows mixed green-supported / red-unsupported boundaries on the central K joint; detected_lines green/red K-row has a mild left\u2192right slope. Continuous snap: det_fallback_ratio=1.0 is expected under uniform_k_snap.",
+  "rule": "experiences \u00a77 + ontology f_curve_overfit: when residual \u226b10 cm, repair centreline/unroll before blaming detection or SAM; stage1_unlocked \u2192 modest unfolding probe with full=true.",
+  "failure_mode": "f_curve_overfit (high recentre residual dominating weak SC correspondence)",
+  "rationale": "R1 is a modest stage-1 probe only: alternate random_seed with slightly tighter ransac_threshold and mild slice densification (polynomial_degree stays 2). No denoise widen (residual mimics over-gating). Downstream knobs deferred until residual is addressed; full=true required because unfolding is touched.",
+  "overlay": {
+    "unfolding": {
+      "random_seed": 2,
+      "ransac_threshold": 0.95,
+      "slice_spacing_factor": 1.12,
+      "polynomial_degree": 2
+    }
+  },
+  "full": true,
+  "validated_at": "2026-09-14T09:06:32.645198",
+  "provenance": {
+    "agent_id": "c490a680-d345-4271-b9a9-49f027f60fea"
+  }
+}

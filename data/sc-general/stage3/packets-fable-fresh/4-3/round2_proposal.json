@@ -1,0 +1,34 @@
+{
+  "observation": "Round 1 re-rolled stage 1 (polynomial_degree 3, ransac_threshold 0.9, seed 0) and made every upstream signal worse: recentre_residual_max_cm 23.2 -> 35.6, depth_nan_ratio 0.245 -> 0.307, correspondence_f1@15 0.191 -> 0.092, proxy 0.520 (refine) -> 0.451 (reject); sam_fill_rate was flat (0.717 -> 0.711) and ring_count stayed 10/10. The round-1 depth map shows the off-centre signature amplified (bright high-r stripe at x~350 px on the lower half, wider white bands at the two theta positions, curved map edges). Detection in round 1 still produced 10 synthetic ring-centre verticals (hough_threshold_vertical 5000) with only ~20 short oblique/horizontal Hough segments; 4/10 prompts were 'assume' and one 'midpoint'. The SC overlay shows most label boundaries red because there are almost no detected joint lines to support them, while the outlier map does contain the joints as long dotted lines (vertical ring joints at x~1420/1750/2700 px, oblique block joints e.g. y~1500 px for x 1750-2700) that fall below the 40-50 vote / 50-60 px gap Hough settings. Geometry check on the round-1 map: depth map is 3956 x 4712 px (19.78 m x 23.56 m = pi*7.5 m), so the 10 synthetic ring cells are 395.6 px = 1978 mm wide, whereas the SAM template uses segment_width 1800 mm = 360 px, leaving a ~36 px strip per ring that the template never claims.",
+  "rule": "experiences.md section 10 anti-pattern 'rerunning stage 1 mid-comparison re-rolls the centreline' and section 2 (seeds pin, they do not fix); section 12: for 4-3 the lean proxy does not rise when only residual improves, and no bounded unfolding knob implements residual_recentre, so stage 1 should be frozen at the anchor draw (the better of the two centrelines) and stages 2-6 replayed. Section 3/4: do not widen the denoise band to hide an off-centre centreline; keep mask_r at T4 priors. sam4tun_ontology d7 (m_line_yield low AND horizontal fallback triggered) -> f_missing_lines -> r_relax_hough (lower oblique threshold / raise maxLineGap toward tunnel prior) with the precondition that depth holes are the known, unfixable-here upstream cause; d12 / r_balance_coverage: uncovered lining strips -> adjust template geometry to the actual cell width. Section 8: on 4-3 expect gains from coverage and detection-pattern parameters (pattern_tolerance), never from orientation flips or vertical-line changes (keep 10 = 10, section 5).",
+  "failure_mode": "stage_1_centreline.f_curve_overfit is now confirmed unfixable within bounds (round 1 made it worse) -> freeze anchor stage 1. Active, addressable modes on the frozen map: stage_4_detection.f_missing_lines (dotted joints under Hough vote/gap thresholds, 40% assumed prompts, sparse joint lines -> low correspondence_f1@15) and stage_5_segmentation.f_over_under_coverage (1800 mm template on 1978 mm synthetic ring cells leaves uncovered strips; fill_rate 0.717).",
+  "rationale": "Round 2 abandons unfolding (no 'unfolding' key, full=false) so stages 2-6 replay on the frozen anchor checkpoint whose residual (23.2 cm) beats the round-1 re-roll (35.6 cm); this restores the anchor's depth_nan_ratio 0.245 and isolates the delta to stages 4-5. Denoising stays at the T4 prior band 3.65/3.90 and enhancing at curvature_threshold 0.0005 (no band widening, no unverified curvature effect). Detection: keep hough_threshold_vertical 5000 (synthetic ring-centre verticals, 10 lines = 10 rings, must not regress) and binary_threshold 127; relax the oblique Hough to threshold 30 with maxLineGap_oblique 75 so the long dotted block joints (visible in the outlier map but broken into <50 px runs) accumulate into lines within the [5,10] deg angle filter; relax horizontal to threshold 30 / maxLineGap_horizontal 20 so fallback prompts come from real circumferential joints instead of 'assume'; widen pattern_tolerance 15 -> 18 px because the 23 cm off-centre distortion stretches K/AB spacings by several px across the map (K_height_pixel 245, AB_height_pixel 745). SAM: set segment_width 1975 mm (= 395 px, the actual synthetic ring-cell width on this 3956 px map) so adjacent ring templates meet instead of leaving ~36 px unclaimed strips per ring; keep K_height 1226.97 and angle 9.8 at T4 priors because there is no GT-blind evidence of a block-height or taper mismatch. Expected GT-blind effects: correspondence_f1@15 back above the anchor's 0.19 (more supported boundaries via more detected joint lines and real prompts), det_real_detection_ratio >= 0.7, sam_fill_rate > 0.72, depth_nan_ratio back to 0.245, ring_count 10, proxy back into the refine band and above the anchor 0.520. Risk: extra oblique lines could add spurious intersections; the distance-pattern check with tolerance 18 px and the fixed synthetic verticals bound that risk.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.65,
+      "mask_r_high": 3.9
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 127,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 30,
+      "hough_threshold_vertical": 5000,
+      "maxLineGap_oblique": 75,
+      "maxLineGap_horizontal": 20,
+      "pattern_tolerance": 18
+    },
+    "sam": {
+      "segment_width": 1975,
+      "K_height": 1226.97,
+      "angle": 9.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T21:34:32.194378",
+  "provenance": {
+    "agent_id": "4-3-fable-fresh"
+  }
+}

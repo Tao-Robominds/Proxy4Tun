@@ -1,0 +1,29 @@
+{
+  "observation": "The anchor preserves the expected 10-ring layout, but detection is entirely fallback-driven (real detection ratio 0.0, fallback ratio 1.0). The propagated points form an almost flat row near y=1545 while the strongest central circumferential joint is visibly slanted and locally fragmented; the correspondence overlay consequently shows many assumed prompts and unsupported label boundaries. SAM fill is only 0.597 with high segment-size variation (CV 0.677), and the 24 cm recenter residual exceeds the 10 cm gate despite excellent axis correlation.",
+  "rule": "When ring count is already correct but prompts come entirely from fallback and miss a coherent slanted joint, first improve the unlocked unfolding fit, then make oblique line detection bridge fragmented evidence and let SAM follow the observed joint angle without reducing K_height below 800.",
+  "failure_mode": "A residual unfolding/recentering error leaves the dominant joint sloped in image coordinates; strict or short-gap Hough support then fails to produce real detections, forcing a nearly horizontal synthetic prompt row that cuts across the joint and yields incomplete, uneven masks with weak boundary-to-joint correspondence.",
+  "rationale": "Use a robust cubic unfolding fit with a different deterministic seed because the residual gate is violated, requiring full-stage recomputation. Lower the oblique Hough vote threshold and enlarge its gap tolerance so the strong but interrupted central joint can become a real line, while moderate pattern tolerance and uniform snapping preserve the already-correct count of ten. A 6.5 degree SAM angle follows the visible joint slope, K_height=900 respects the requested floor while covering the joint neighborhood, and segment_width=1200 avoids over-expanding already variable masks.",
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 0.9,
+      "polynomial_degree": 3,
+      "random_seed": 5
+    },
+    "detecting": {
+      "hough_threshold_oblique": 25,
+      "maxLineGap_oblique": 50,
+      "pattern_tolerance": 15,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 900.0,
+      "angle": 6.5
+    }
+  },
+  "full": true,
+  "validated_at": "2026-09-14T03:21:34.223947",
+  "provenance": {
+    "agent_id": "1c0b5e6b-6a55-48c6-9ff1-22123f0ce57e"
+  }
+}

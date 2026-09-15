@@ -1,0 +1,297 @@
+{
+  "subset": "5-5",
+  "arm": "fable_fresh",
+  "proposer": "Fable-5.1 (fresh per-case agent)",
+  "family": "t4&5",
+  "lining_mode": "complex",
+  "stage1_unlocked": false,
+  "residual_gate_cm": 10.0,
+  "bands": {
+    "reject": "<0.5",
+    "refine": "[0.5, 0.7)",
+    "accept": ">=0.7"
+  },
+  "anchor": {
+    "proxy_raw": 0.609798,
+    "proxy_scaled": 0.609798,
+    "band": "refine",
+    "features": {
+      "correspondence_f1@15": 0.316226,
+      "sam_fill_rate": 0.756178,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.193232
+    },
+    "recentre_residual_max_cm": 1.9,
+    "orient_axis_corr": 0.9125884650166897,
+    "ring_count": 10,
+    "ring_count_error": 0.0,
+    "labelmap_source": "only_label.csv",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-5-family-proxy/runs/5-5-anchor"
+  },
+  "intrinsics_gt_blind": {
+    "orient_axis_corr": 0.9125884650166897,
+    "orient_invariant_ok": 1.0,
+    "recentre_residual_max_cm": 1.9,
+    "denoise_retained_ratio": 0.7673354664684634,
+    "depth_nan_ratio": 0.19323166894404062,
+    "depth_outlier_ratio": 0.001291584040276335,
+    "det_real_detection_ratio": 0.8,
+    "det_fallback_ratio": 0.2,
+    "det_n_points": 10.0,
+    "sam_fill_rate": 0.7561778560970978,
+    "sam_ring_completeness": 1.0,
+    "sam_segment_size_cv": 1.0460848905509348,
+    "sam_ontology_divergence": 0.10887649245012132
+  },
+  "history": [
+    {
+      "round": 1,
+      "status": "ok",
+      "overlay": {
+        "enhancing": {
+          "curvature_threshold": 0.0004
+        },
+        "detecting": {
+          "binary_threshold": 110,
+          "hough_threshold_oblique": 35,
+          "maxLineGap_oblique": 70
+        }
+      },
+      "proxy_scaled": 0.6093917466833614,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.3159042898336717,
+        "sam_fill_rate": 0.7561778560970978,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.1943432714072759
+      },
+      "recentre_residual_max_cm": 1.9,
+      "full_pipeline": false,
+      "rationale": "Lower detecting.binary_threshold 127 -> 110 so more faint joint pixels survive binarisation before dilation (the only in-bounds analogue of r_lower_depth_threshold). Relax the oblique HoughLinesP path: hough_threshold_oblique 50 -> 35 (the value that recovered 5-1's detection in past campaigns) and maxLineGap_oblique 50 -> 70 to bridge the dotted joint traces into full K-taper lines, so positive/negative-slope intersections replace horizontal midpoints as prompt centres. Horizontal Hough is left at prior so it still acts as fallback rather than competing. Nudge enhancing.curvature_threshold 0.0005 -> 0.0004 so slightly fewer joint-edge points are treated as flat surface during densification, preserving joint discontinuities in the projected map; the change is small enough to keep depth_nan_ratio in the family-normal band. Vertical Hough, denoising band (tunnel priors, load-bearing for transfer) and SAM geometry (segment_width 1800 mm matches the measured 361 px pitch; K_height/angle at T5 priors) are intentionally unchanged so the proxy delta is attributable to detection. Expected signal: det_real_detection_ratio and oblique yield rise, prompt y-positions follow the K/AB pattern, correspondence_f1@15 increases with sam_fill_rate held near 0.76; a proxy rise driven only by evidence features with fill rate dropping would be treated as suspect.",
+      "proposer": "Fable-5.1 (fresh per-case agent)"
+    },
+    {
+      "round": 2,
+      "status": "ok",
+      "overlay": {
+        "detecting": {
+          "pattern_tolerance": 15
+        }
+      },
+      "proxy_scaled": 0.609798035918693,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.3162260435797977,
+        "sam_fill_rate": 0.7561778560970978,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.19323166894404062
+      },
+      "recentre_residual_max_cm": 1.9,
+      "full_pipeline": false,
+      "rationale": "Set detecting.pattern_tolerance = 15 px. Measured true K pairs deviate 7-10 px from the 245.4 px K prior (four clean rings: 255, 253, 254, 252 px), so 15 keeps every genuine pairing with a 5+ px margin, while the spurious pairings in rings 1620 (208 px) and 2340 (188/202 px) deviate by 37-57 px and are rejected; those rings should then fall back to the true 9-deg edges (centres ~2139 and ~1399 instead of 2118 and 1421), moving all 12 of their block boundaries inside the 15 px tolerance. Everything else stays at the anchor: oblique Hough and binarisation are left at prior because round 1 proved them non-identifiable here and tightening them would remove the genuine 136-173 px single edges of rings 540/3060 before the ~190 px spurious segments; the round-1 curvature nudge is dropped (it only raised NaN); horizontal Hough is untouched so the SC joint-line set is the same as the anchor and any proxy change is attributable to the prompt fix; denoising band and SAM geometry stay at tunnel priors (segment_width 1800 mm = measured 360 px pitch; K/AB heights fit the good rings). full=false (stage1_unlocked is false). Expected signal: prompt y for rings 1620/2340 shifts by about +20/-22 px, det_real_detection_ratio stays 0.8, ring_count 10, sam_fill_rate ~0.756, correspondence_f1@15 rises from 0.316 toward ~0.40-0.45 (up to 12 more supported boundaries of 70 and ~10 more explained joint lines). If the prompt set is again unchanged, the tolerance is not applied to K-pair validation and round 3 should switch to the horizontal joint path / assume-ring coverage rather than the oblique path.",
+      "proposer": "Fable-5.1 (fresh per-case agent)"
+    },
+    {
+      "round": 3,
+      "status": "ok",
+      "overlay": {
+        "detecting": {
+          "hough_threshold_horizontal": 40,
+          "maxLineGap_horizontal": 20
+        },
+        "sam": {
+          "K_height": 1265.0
+        }
+      },
+      "proxy_scaled": 0.6453365765382837,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.3812699030530834,
+        "sam_fill_rate": 0.7561778560970978,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.19323166894404062
+      },
+      "recentre_residual_max_cm": 1.9,
+      "full_pipeline": false,
+      "rationale": "Switch to the horizontal joint path as planned in round 2. detecting.hough_threshold_horizontal 50 -> 40 and detecting.maxLineGap_horizontal 10 -> 20: the joints in the outlier map are dotted traces with gaps of 10-20 px between bolt-pocket-free segments, so doubling the gap lets the existing 105 px minLineLength be met by traces that currently break into sub-threshold pieces, and a moderate threshold drop (40, not 25-35) adds votes for faint joints without letting the rows of bolt-pocket marks (isolated 10-20 px blobs on ~250 px spacing) accumulate into spurious horizontals. Expected: more blue lines at true circumferential joints in rings 180/540/900 and the second half-map of every ring, raising the supported-boundary count in the five already-aligned rings and the explained-line count, so correspondence_f1@15 rises from 0.316 while sam_fill_rate stays ~0.756 and ring_count stays 10 (verticals untouched at prior). Because the horizontal set was never a prompt source here (all 8 real prompts come from oblique pairs), the prompt centres should be unchanged and any proxy delta is attributable to the joint-line set plus the template edit. sam.K_height 1226.97 -> 1265.0 mm (253 px) aligns the K template with the measured 252-255 px K pairs; this moves the K edges and the adjoining B1/B2 outer edges by ~4 px each, small enough not to disturb fill rate but enough to bring boundaries sitting at 12-18 px off a joint inside the 15 px tolerance. segment_width (1800 mm = measured 360 px pitch) and angle (9.8 deg; measured 9.0-9.2 deg differs by <5 px across a ring) stay at priors; denoising band stays at tunnel priors (load-bearing for transfer). full=false; unfolding omitted (stage1_unlocked is false). Suspect-signal check: if the proxy rises while sam_fill_rate drops or the joint-line count explodes with precision falling (mostly orange lines inside blocks), the horizontal relaxation is over-shooting and the anchor should be preferred at selection.",
+      "proposer": "Fable-5.1 (fresh per-case agent)"
+    }
+  ],
+  "images": {
+    "depth_map_viridis.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-5-family-proxy/runs/5-5-anchor/depth_map_viridis.png",
+    "detected_lines.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-5-family-proxy/runs/5-5-anchor/detected_lines.png",
+    "initial_prompt_points.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-5-family-proxy/runs/5-5-anchor/initial_prompt_points.png",
+    "segmentation_results.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-5-family-proxy/runs/5-5-anchor/segmentation_results.png"
+  },
+  "ontology": {
+    "experiences": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/experiences.md",
+    "sam4tun_ontology": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/sam4tun_ontology.yaml",
+    "tunnel_priors": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/tunnel_priors.yaml"
+  },
+  "parameter_bounds": [
+    {
+      "name": "unfolding.ransac_threshold",
+      "stage": "unfolding",
+      "key": "ransac_threshold",
+      "kind": "float",
+      "low": 0.8,
+      "high": 1.2,
+      "special": null
+    },
+    {
+      "name": "unfolding.slice_spacing_factor",
+      "stage": "unfolding",
+      "key": "slice_spacing_factor",
+      "kind": "float",
+      "low": 1.6,
+      "high": 2.0,
+      "special": null
+    },
+    {
+      "name": "unfolding.polynomial_degree",
+      "stage": "unfolding",
+      "key": "polynomial_degree",
+      "kind": "int",
+      "low": 2,
+      "high": 3,
+      "special": null
+    },
+    {
+      "name": "unfolding.random_seed",
+      "stage": "unfolding",
+      "key": "random_seed",
+      "kind": "int",
+      "low": 0,
+      "high": 7,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_low",
+      "stage": "denoising",
+      "key": "mask_r_low",
+      "kind": "float",
+      "low": 3.5,
+      "high": 3.8,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_high",
+      "stage": "denoising",
+      "key": "mask_r_high",
+      "kind": "float",
+      "low": 3.75,
+      "high": 4.05,
+      "special": null
+    },
+    {
+      "name": "enhancing.curvature_threshold",
+      "stage": "enhancing",
+      "key": "curvature_threshold",
+      "kind": "float",
+      "low": 0.0002,
+      "high": 0.002,
+      "special": null
+    },
+    {
+      "name": "detecting.binary_threshold",
+      "stage": "detecting",
+      "key": "binary_threshold",
+      "kind": "int",
+      "low": 100,
+      "high": 160,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_oblique",
+      "stage": "detecting",
+      "key": "hough_threshold_oblique",
+      "kind": "int",
+      "low": 25,
+      "high": 70,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_horizontal",
+      "stage": "detecting",
+      "key": "hough_threshold_horizontal",
+      "kind": "int",
+      "low": 25,
+      "high": 70,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_vertical",
+      "stage": "detecting",
+      "key": "hough_threshold_vertical",
+      "kind": "int",
+      "low": 800,
+      "high": 5000,
+      "special": null
+    },
+    {
+      "name": "detecting.maxLineGap_oblique",
+      "stage": "detecting",
+      "key": "maxLineGap_oblique",
+      "kind": "int",
+      "low": 30,
+      "high": 80,
+      "special": null
+    },
+    {
+      "name": "detecting.maxLineGap_horizontal",
+      "stage": "detecting",
+      "key": "maxLineGap_horizontal",
+      "kind": "int",
+      "low": 5,
+      "high": 30,
+      "special": null
+    },
+    {
+      "name": "detecting.pattern_tolerance",
+      "stage": "detecting",
+      "key": "pattern_tolerance",
+      "kind": "int",
+      "low": 5,
+      "high": 20,
+      "special": null
+    },
+    {
+      "name": "sam.segment_width",
+      "stage": "sam",
+      "key": "segment_width",
+      "kind": "int",
+      "low": 1500,
+      "high": 2100,
+      "special": null
+    },
+    {
+      "name": "sam.K_height",
+      "stage": "sam",
+      "key": "K_height",
+      "kind": "float",
+      "low": 1000.0,
+      "high": 1500.0,
+      "special": null
+    },
+    {
+      "name": "sam.angle",
+      "stage": "sam",
+      "key": "angle",
+      "kind": "float",
+      "low": 7.0,
+      "high": 12.0,
+      "special": null
+    }
+  ],
+  "instructions": [
+    "Propose ONE coordinated multi-stage overlay within parameter_bounds.",
+    "Use observation -> ontology rule -> failure_mode -> overlay.",
+    "Do NOT read evaluation/, offline_gt.json, performance.md, perf_*, mIoU, or any ground-truth labels / GT-bearing CSVs.",
+    "Do NOT read existing Fable/deterministic selections, campaign logs, or other arms' refinement trees.",
+    "Use the SC-general proxy (proxy_scaled / band / lean features) as the between-round signal.",
+    "If stage1_unlocked is false, do not touch unfolding keys.",
+    "If stage1_unlocked is true and residual remains high, you may include unfolding (e.g. random_seed) and the pilot will auto --full.",
+    "Return JSON with keys: observation, failure_mode, rationale, overlay."
+  ],
+  "created_at": "2026-09-16T00:01:40.396576"
+}

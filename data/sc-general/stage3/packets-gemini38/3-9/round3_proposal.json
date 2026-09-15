@@ -1,0 +1,36 @@
+{
+  "observation": "Proxy refine with low correspondence_f1@15 and elevated sam_segment_size_cv=0.562; continuous tracks slope gently across rings while SC boundaries at the central dark band are only partially supported within 15 px. Stage-1 residual and ring count are already healthy, so remaining headroom is SAM taper/width coverage of staggered strip offsets plus joint contrast, not centreline.",
+  "rule": "experiences \u00a76 graded per-class / fill regime: when rings are complete but correspondence and size CV are poor, retune taper angle and segment_width with a mid-range K_height that still covers the observed K band without approaching empty-crop upper bound; pair with stronger enhancing and slightly stricter Hough to reduce orange unexplained fragments.",
+  "failure_mode": "f_over_under_coverage",
+  "rationale": "Third distinct axis: wider segments (1350) and higher taper (7.8\u00b0) to absorb inter-strip vertical offsets visible in the SC overlay, with K_height=880 (still below 1000 empty-crop risk) so the template covers the dual green/red joint tracks without ballooning into empty crop. Detection is stricter (binary 140, oblique/horizontal 40, vertical 1800, pattern_tolerance 16) and curvature higher (0.0012) to sharpen the central seam used for correspondence@15.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.9,
+      "mask_r_high": 3.1,
+      "mask_theta_low": 1.8,
+      "mask_theta_high": 16.5
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0012
+    },
+    "detecting": {
+      "binary_threshold": 140,
+      "hough_threshold_oblique": 40,
+      "hough_threshold_horizontal": 40,
+      "hough_threshold_vertical": 1800,
+      "maxLineGap_oblique": 20,
+      "pattern_tolerance": 16,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1350,
+      "K_height": 880.0,
+      "angle": 7.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:36:56.973643",
+  "provenance": {
+    "agent_id": "4952bb8e-685e-4588-9909-d82b86cbbd48"
+  }
+}

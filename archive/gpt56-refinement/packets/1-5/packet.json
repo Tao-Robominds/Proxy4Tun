@@ -1,0 +1,197 @@
+{
+  "subset": "1-5",
+  "family": "t1&2",
+  "model": "GPT-5.6 Sol",
+  "built_at": "2026-07-29T08:43:15.755026",
+  "anchor_run": "/home/boringtao/Projects/Proxy4Tun/data/bo-unified/1-5-family-proxy/runs/1-5-anchor",
+  "stage1_unlocked": false,
+  "recentre_residual_max_cm": 2.5,
+  "anchor_proxy_scaled": 0.6745466969813717,
+  "anchor_proxy_raw": 0.6745466969813717,
+  "band": "refine",
+  "intrinsics_gt_blind": {
+    "orient_h_ring_corr": 0.985655524300288,
+    "orient_invariant_ok": 1.0,
+    "recentre_residual_max_cm": null,
+    "denoise_retained_ratio": 0.7638200158043973,
+    "depth_nan_ratio": 0.11774456253619453,
+    "depth_outlier_ratio": 0.006866276013199325,
+    "det_midpoint_ratio": 0.8,
+    "det_real_detection_ratio": 0.8,
+    "det_fallback_ratio": 0.2,
+    "det_x_spacing_cv": 3.4512751936690116e-16,
+    "det_y_std": 332.19236555239945,
+    "det_ring_count_error": 0.0,
+    "det_n_points": 10.0,
+    "sam_fill_rate": 0.7294291823548552,
+    "sam_ring_completeness": 0.8888888888888888,
+    "sam_segment_size_cv": 1.303208521951268,
+    "sam_ontology_divergence": 0.19335931650162724
+  },
+  "lean_features": {
+    "depth_nan_ratio": 0.11774456253619453,
+    "denoise_retained_ratio": 0.7638200158043973,
+    "unfold_residual": 1.252762968495368,
+    "orient_agreement": 0.9991614281123364,
+    "sam_fill_rate": 0.7294291823548552,
+    "sam_ontology_divergence": 0.19335931650162724,
+    "det_row_residual_px": 0.0,
+    "det_row_gated": 0.0,
+    "det_row_y_std": 154.64367111801712,
+    "phase_incoherence_deg": 20.6
+  },
+  "parameter_bounds": [
+    {
+      "name": "mask_r_low",
+      "stage": "denoising",
+      "key": "mask_r_low",
+      "kind": "float",
+      "low": 2.2,
+      "high": 2.5,
+      "special": null
+    },
+    {
+      "name": "mask_r_high",
+      "stage": "denoising",
+      "key": "mask_r_high",
+      "kind": "float",
+      "low": 2.7,
+      "high": 2.9,
+      "special": null
+    },
+    {
+      "name": "z_step",
+      "stage": "denoising",
+      "key": "z_step",
+      "kind": "float",
+      "low": 0.001,
+      "high": 0.008,
+      "special": null
+    },
+    {
+      "name": "grad_threshold",
+      "stage": "denoising",
+      "key": "grad_threshold",
+      "kind": "float",
+      "low": 0.1,
+      "high": 0.25,
+      "special": null
+    },
+    {
+      "name": "curvature_threshold",
+      "stage": "enhancing",
+      "key": "curvature_threshold",
+      "kind": "float",
+      "low": 0.0003,
+      "high": 0.008,
+      "special": null
+    },
+    {
+      "name": "inter_radius",
+      "stage": "enhancing",
+      "key": "inter_radius",
+      "kind": "float",
+      "low": 0.02,
+      "high": 0.08,
+      "special": null
+    },
+    {
+      "name": "binary_threshold",
+      "stage": "detecting",
+      "key": "binary_threshold",
+      "kind": "int",
+      "low": 100,
+      "high": 160,
+      "special": null
+    },
+    {
+      "name": "hough_threshold_oblique",
+      "stage": "detecting",
+      "key": "hough_threshold_oblique",
+      "kind": "int",
+      "low": 40,
+      "high": 90,
+      "special": null
+    },
+    {
+      "name": "hough_threshold_horizontal",
+      "stage": "detecting",
+      "key": "hough_threshold_horizontal",
+      "kind": "int",
+      "low": 40,
+      "high": 90,
+      "special": null
+    },
+    {
+      "name": "hough_threshold_vertical",
+      "stage": "detecting",
+      "key": "hough_threshold_vertical",
+      "kind": "int",
+      "low": 400,
+      "high": 800,
+      "special": null
+    },
+    {
+      "name": "maxLineGap_oblique",
+      "stage": "detecting",
+      "key": "maxLineGap_oblique",
+      "kind": "int",
+      "low": 20,
+      "high": 80,
+      "special": null
+    },
+    {
+      "name": "y_bounds_lower",
+      "stage": "sam",
+      "key": "processing.y_bounds",
+      "kind": "int",
+      "low": 3600,
+      "high": 4400,
+      "special": "y_bounds_lower"
+    }
+  ],
+  "images": {
+    "depth_map.png": "5db998639a0e3c074572d48eb142f57a4afe3d02d2bfb6269edb13cb0efe8487",
+    "depth_map_viridis.png": "a61d2d01f1288011ecee1af75bf4db4f50829d6e28c04a47bdb850a34529c08e",
+    "detected_lines.png": "4ab14270f3f8812289d5d9d803d1e4fd0119c602c215b0dd1c50fdf4ea505083",
+    "initial_prompt_points.png": "0ffa4713956528e4944052af4cca6d19b3ae80a3a747c7f98e0694a0f49829ad",
+    "segmentation_results.png": "97133dd6d38de19a54998c53eea3bb59782a05354bb4c2a1b42f8f0a1ac08292",
+    "sam_depth_input.png": "65ac44741807312892e4c28fd6cd4b9c8273e01d2f674d7a02cd898a475af1b3"
+  },
+  "knowledge_hashes": {
+    "sam4tun_ontology.yaml": "481cb71b940ac563f7876032d78b713749bd1ced79ebc2b463bae714f0236311",
+    "tunnel_priors.yaml": "b422087987fe51527d58901319637eefc155f85dc316a4f725f876563ad3ed14",
+    "experiences_sanitized.md": "b6aa5750378d380a13a8063fc42bfe7a5051af3f8b7dbc4351e1e6e6230a4bfd"
+  },
+  "knowledge_dir": "/home/boringtao/Projects/Proxy4Tun/gpt56-refinement/knowledge",
+  "protocol": {
+    "rounds": 3,
+    "selection": "monotone accept on scaled proxy vs anchor; among candidates within 0.01 of best proxy, prefer lowest recentre_residual_max_cm then higher proxy",
+    "output_schema": {
+      "observation": "str",
+      "failure_mode": "str",
+      "rationale": "str",
+      "overlay": "dict[stage -> {param: value}]"
+    },
+    "rules": [
+      "Propose ONE bounded overlay per round.",
+      "Only use keys listed in parameter_bounds.",
+      "Unfolding changes are allowed only when stage1_unlocked is true.",
+      "Never request or use GT mIoU / evaluation metrics.",
+      "Do not read data/reflect, bo-proxy-scale selections, or prior campaign reports.",
+      "Prefer coordinated multi-stage changes when upstream defects are visible."
+    ]
+  },
+  "hashes": {
+    "allowlist.md": "dfef7a69da076ad80207e3a0a68e411d32c4a80848d72391122b701a1df42b97",
+    "denylist.md": "4cd5af8df61a8df98e0012610f74bbd47816cf907df6e2840585d101aa0a35c7",
+    "packet_images": {
+      "depth_map.png": "5db998639a0e3c074572d48eb142f57a4afe3d02d2bfb6269edb13cb0efe8487",
+      "depth_map_viridis.png": "a61d2d01f1288011ecee1af75bf4db4f50829d6e28c04a47bdb850a34529c08e",
+      "detected_lines.png": "4ab14270f3f8812289d5d9d803d1e4fd0119c602c215b0dd1c50fdf4ea505083",
+      "initial_prompt_points.png": "0ffa4713956528e4944052af4cca6d19b3ae80a3a747c7f98e0694a0f49829ad",
+      "segmentation_results.png": "97133dd6d38de19a54998c53eea3bb59782a05354bb4c2a1b42f8f0a1ac08292",
+      "sam_depth_input.png": "65ac44741807312892e4c28fd6cd4b9c8273e01d2f674d7a02cd898a475af1b3"
+    }
+  }
+}

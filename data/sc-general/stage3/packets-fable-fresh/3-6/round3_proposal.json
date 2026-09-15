@@ -1,0 +1,26 @@
+{
+  "observation": "Round 2 (detecting: binary 135, Hough oblique/horizontal 38/34, maxLineGap_oblique 36, pattern_tolerance 10, uniform_k_snap; SAM: width 1200, K_height 760, angle 6.12) lifted the proxy 0.671 -> 0.744 (anchor 0.681), into the accept band, carried entirely by correspondence_f1@15 0.447 -> 0.581 with sam_fill_rate flat (0.649 -> 0.651), depth_nan_ratio 0.105, ring_count_error 0 and recentre residual 3.2 cm unchanged. Stages 1-3 are healthy and stable across all rounds (|orient corr| 0.9998, residual 3.2 cm < 10 cm gate, retention 0.69, NaN 10.5%). The round-2 detected-line map shows 10 magenta verticals == 10 rings, 10 snap prompts on the K row (propagated = regime under uniform_k_snap), a clean upper K-row oblique family (green, y~1445-1480) present in every ring, a lower K-row family (red, y~1620-1640) present in most rings but split by the bolt pockets into 2-3 pieces per ring, a few residual short oblique stubs (e.g. an isolated ~40 px green stub at x~1000/y~1490 and a ~50 px red stub at x~700-750), and short blue horizontals only on the y~800 and y~2300 pocket rows. The label mask still shows the K band extending below the detected lower joint into the bright pocket band, so the lower K-row lines remain the largest set of unexplained joint lines, but a previous attempt to push K_height further (760 -> 720) crashed stage 5 (SAM), so the template-shrink axis is now known to be unsafe below 760 for this case and must not be reused.",
+  "rule": "experiences.md \u00a77 tuning order: orientation, centreline (3.2 cm), band (retention 0.69, NaN 10.5%) all validate and line count == ring count, so only detection precision and SAM geometry are identifiable; \u00a710 anti-patterns: no orientation flips, no seed sweeps, no NaN chasing, no stage-1 rerun (stage1_unlocked=false -> unfolding omitted). \u00a79/\u00a711: on continuous t3 read the proxy delta between rounds and corroborate against artifacts; round 1 falsified r_relax_hough (F1 down with more unexplained fragments) and round 2 confirmed the r_tighten_hough direction (F1 up 0.13, evidence features flat). Ontology d9 -> f_spurious_lines -> r_tighten_hough: raise the oblique HoughLinesP vote threshold to remove residual short fragments while the long, high-vote K-row joints survive. For the last round, when one axis (stage 5 template) is known to be unsafe, take a small conservative step along the stage-4 axis that already moved in the confirmed direction and keep every other knob at the best-known-good (round-2) values so the run cannot regress on execution.",
+  "failure_mode": "stage_4_detection.f_spurious_lines (residual, minor): a handful of short unexplained oblique stubs and pocket-split fragments still dilute correspondence precision; the remaining stage_5_segmentation.f_over_under_coverage (K mask bleeding below the lower K joint) is acknowledged but deliberately NOT retargeted because the smaller K_height template crashed SAM in the prior round-3 attempt.",
+  "rationale": "Hold SAM exactly at the round-2 values (segment_width 1200, K_height 760.0, angle 6.12) because that configuration executed cleanly and produced the best proxy so far, whereas K_height 720 caused a stage-5 SAM failure; no stage-5 change is made this round. Hold binary_threshold 135, hough_threshold_horizontal 34 and pattern_tolerance 10 (K/AB gate at the healthy ~10 px scale, per \u00a75) and keep uniform_k_snap true (continuous-family regime). Make one small, coherent stage-4 precision step: raise hough_threshold_oblique 38 -> 42 (~10%, well inside [20, 60]) so the residual short oblique stubs (~40-50 px, low vote count) drop out, while the true K-row joints, which are 100-250 px per ring and collinear across same-orientation rings, keep far more than 42 accumulator votes and survive; and raise maxLineGap_oblique 36 -> 40 (inside [10, 60], still below round-1's 42 that was paired with a too-low threshold) so the lower K-row segments that are currently split by the ~35-40 px bolt pockets are linked back into single long segments instead of 2-3 fragments per ring. Together these should reduce the count of short unexplained line pieces (precision side of correspondence_f1@15) without removing the upper K-row family that the label boundary already explains, and without disturbing the 10 K-row snap anchors (the snap row is defined by the strong upper/lower joint pair, not the stubs). Expected outcome: correspondence_f1@15 flat-to-up, sam_fill_rate, depth_nan_ratio and ring_count_error unchanged (SAM inputs are identical apart from the prompt-line set). If F1 drops, round 2 remains the selected candidate; the step is small enough that a regression should be minor. Unfolding is omitted (stage 1 locked); denoising and enhancing stay at anchor because retention, NaN and joint contrast are healthy and none of the evidence features moved in rounds 1-2.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 135,
+      "hough_threshold_oblique": 42,
+      "hough_threshold_horizontal": 34,
+      "maxLineGap_oblique": 40,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 760.0,
+      "angle": 6.12
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T22:11:32.392384",
+  "provenance": {
+    "agent_id": "3-6-fable-fresh"
+  }
+}

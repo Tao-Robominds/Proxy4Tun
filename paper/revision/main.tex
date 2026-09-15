@@ -1,0 +1,1368 @@
+\UseRawInputEncoding
+%% R4Tun — Automation in Construction (cas-dc double-column template)
+
+\documentclass[a4paper,fleqn]{cas-dc}
+
+\usepackage[numbers]{natbib}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage[dvipsnames,table]{xcolor}
+% Better line breaks for long URLs (esp. in two-column bibliographies)
+\usepackage{xurl}
+\usepackage{hyperref}
+% Clever cross-references (\cref, \Cref). Must be loaded after hyperref.
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage{placeins}
+\usepackage{caption}
+\usepackage{balance}
+\usepackage[normalem]{ulem}
+\usepackage{float}
+% Highlight review changes with soul \hl (yellow); load after ulem.
+\usepackage{soul}
+\sethlcolor{yellow}
+\soulregister\cite7
+\soulregister\ref7
+\soulregister\pageref7
+\soulregister\cref7
+\soulregister\Cref7
+\soulregister\eqref7
+\usepackage[most]{tcolorbox} % for section-wide / float highlighting
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  columns=fullflexible,
+  frame=single,
+  framesep=4pt,
+  xleftmargin=0.5em,
+  xrightmargin=0.5em,
+  aboveskip=0.6em,
+  belowskip=0.6em,
+}
+% Yellow frame for new tables / appendix blocks (soul \hl cannot wrap floats).
+\newtcolorbox{hlbox}{
+  colback=yellow!25,
+  colframe=yellow!60!orange,
+  boxrule=0.4pt,
+  left=2pt,right=2pt,top=2pt,bottom=2pt,
+  before skip=0.6em,
+  after skip=0.6em,
+}
+
+\providecommand{\printorcid}{}
+\providecommand{\printfacebook}{}
+\providecommand{\printtwitter}{}
+\providecommand{\printlinkedin}{}
+\providecommand{\printgplus}{}
+\providecommand{\printinstagram}{}
+\providecommand{\printemails}{}
+\providecommand{\printurls}{}
+\usepackage{lineno} % line numbers
+% \linenumbers % (enabled below after \maketitle)
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+
+
+% ────────────────────────────── Front matter ──────────────────────────────
+
+{\shorttitle{Proxy4Tun: proxy-driven quality control for point-cloud tunnel-lining segmentation}
+\shortauthors{X.\ Tao et~al.}
+
+\title[mode=title]{\texorpdfstring{Proxy4Tun: proxy-driven quality control for point-cloud tunnel-lining segmentation}{Proxy4Tun: proxy-driven quality control for point-cloud tunnel-lining segmentation}}
+
+\author[1]{Xinghui Tao}
+\credit{Conceptualization, Methodology, Software, Writing -- original draft}
+
+\author[2]{Zehao Ye}
+
+
+\author[1]{Guangming Wang}
+\cormark[1]
+\ead{gw462@cam.ac.uk}
+\credit{Supervision, Writing -- review \& editing}
+
+\author[2]{Jelena Nini\'{c}}
+\credit{Supervision, Writing -- review \& editing}
+
+\author[1]{Brian Sheil}
+\credit{Supervision, Funding acquisition, Project administration, Writing -- review \& editing}
+
+\cortext[cor1]{Corresponding author}
+
+\affiliation[1]{organization={Construction Engineering, University of Cambridge},
+    addressline={Trumpington Street},
+    city={Cambridge},
+    postcode={CB2 1PZ},
+    country={United Kingdom}}
+
+\affiliation[2]{organization={Department of Engineering, Durham University},
+    addressline={Stockton Road},
+    city={Durham},
+    postcode={DH1 3LE},
+    country={United Kingdom}}
+
+% ─── Abstract ─────────────────────────────────────────────────────────────
+
+
+\begin{abstract}
+Tunnel-lining segmentation supports point-cloud inspection, but changing tunnel conditions and scarce reference labels complicate quality assessment. Proxy4Tun estimates segmentation accuracy from intermediate pipeline metrics, using one GT development subset and one expert-tuned setting per lining family. Across three Seg2Tunnel lining families, bounded sampling and uncertainty-guided Bayesian exploration produce 120 calibration runs. Model comparison and feature ablation identify a four-feature ridge-regression proxy that predicts mean intersection-over-union (mIoU) without requiring deployment labels. On 54 paired runs from 27 held-out subsets, the proxy achieves a Spearman correlation of 0.817 and a mean absolute error (MAE) of 0.109; all 27 deliberately degraded runs are detected with no false alarms. For 22 cases selected by a proxy-score interval ([0.5, 0.7]), proxy-guided self-refinement increases mean mIoU from 0.738 to 0.759--0.768 across LLMs. Retrospective analysis shows that cases with intermediate initial GT mIoU gain 0.097 on average, versus 0.005 for the remaining cases. Proxy4Tun demonstrates that limited development supervision can be transferred to deployment quality control and self-refinement. The observed concentration of gains motivate further research into predicting self-refinement benefits without GT, rather than an optimal deployment selection rule.
+\end{abstract}
+
+
+% ─── Highlights ───────────────────────────────────────────────────────────
+
+\begin{highlights}
+\item Proxy4Tun estimates tunnel-segmentation accuracy without deployment labels.
+\item Calibration uses one labelled subset and one expert-tuned settings per lining family.
+\item Frozen four-feature proxy ranks all 27 reference/degraded pairs correctly.
+\item Self-refinement lifts mIoU from 0.738 to 0.759--0.768 across LLMs.
+\item Gains are most frequent and largest at intermediate initial GT mIoU.
+\end{highlights}
+
+% ─── Keywords ─────────────────────────────────────────────────────────────
+\begin{keywords}
+Segmental tunnel lining \sep Point cloud segmentation \sep Deployment quality control \sep Label-free proxy \sep self-refinement \sep LLM
+\end{keywords}
+\date{\today}
+
+\maketitle
+% \linenumbers % disabled for now
+
+\smallskip
+% ─────────────────────────────────────────────────────────────────────────
+
+\section{Introduction}
+\label{sec:intro}
+
+Regular inspection of segmental tunnel linings supports structural health assessment and long-term operational safety. However, large tunnel networks and restricted access make manual inspection resource-intensive, motivating cost-effective data collection and analysis~\cite{attard2018,montero2015,strauss2020sensing}. Laser scanning can quickly capture the lining surface as a 3D point cloud~\cite{huang2021bim,sjolander2023towards,weidner2024generalized}. Many downstream inspection tasks require first assigning each point to its corresponding lining segment. In practice, segmentation accuracy can change with lining geometry, joint layout, occlusion, and scan quality. Manually checking each new output or fine-tuning its parameters imposes a recurring burden. Practitioners therefore need a way to assess whether an output is accurate enough to accept, needs self-refinement, or should be flagged for human review when new GT labels are unavailable (Fig.~\ref{fig:deployment_qc_gap}).
+
+Regular inspection of segmental tunnel linings supports structural health assessment and operational safety, and laser scanning captures the lining surface as a 3D point cloud quickly enough to make network-scale inspection practical~\cite{attard2018,montero2015,strauss2020sensing,huang2021bim,sjolander2023towards,weidner2024generalized}. Most downstream inspection tasks first require assigning each point to its lining block. Segmentation accuracy, however, changes with lining geometry, joint layout, occlusion, and scan quality, and checking every new output against manual labels or re-tuning parameters by hand is a recurring cost. Practitioners need to decide whether an output is accurate enough to accept, should be refined, or must be flagged for human review, without new ground-truth (GT) labels (Fig.~\ref{fig:deployment_qc_gap}).
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.8\textwidth]{figs/motivation.pdf}
+\caption{Deployment quality-control (QC) problem: segmentation methods produce candidate outputs, but practitioners still need to decide whether to accept, refine, or flag each result. Without new GT labels, this decision requires other evidence about segmentation accuracy.}
+\label{fig:deployment_qc_gap}
+\end{figure*}
+
+Existing segmentation approaches can be compared using two practical deployment questions: (i) how they cope with changing tunnel and scanning conditions, and (ii) what evidence they provide that a specific output is accurate (Fig.~\ref{fig:conceptual_positioning}). Engineer-designed geometric pipelines use hand-crafted rules and thresholds with interpretable checks, but changes in geometry or scan quality can require manual tuning or redesign~\cite{huang2021bim,weidner2024generalized,wang2025automated}. Supervised models can be retrained on labelled data and may provide confidence or uncertainty scores, but these scores must be checked against actual accuracy before they can support QC on new scans~\cite{su2024review,cha2024deep}. Foundation-model pipelines can reduce per-project annotation and support adaptation through prompts and preprocessing parameters~\cite{bommasani2021foundation,kirillov2023sam,ye2024sam}. However, the ability to adjust a pipeline does not establish whether the resulting segmentation is better or accurate enough to accept.
+
+Previous studies show that segmentation accuracy can be estimated without GT labels for the new case. In medical imaging, for example, quality estimators learn from labelled development data or assess new outputs through labelled reference collections~\cite{valindria2017rca,robinson2018segmentationQuality,fournel2021segmentationQC}. It remains unclear how well these approaches transfer to tunnel point-cloud pipelines, where annotations are limited and processing depends on engineering reference configurations. This motivates our central research question: \emph{can measurements produced during tunnel segmentation be calibrated using a small labelled subset and an expert-tuned reference configuration per lining family, then used to estimate accuracy and guide parameter self-refinement on unseen scans without new GT labels?}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.9\textwidth]{figs/position.pdf}
+\caption{Conceptual positioning by deployment adaptability and deployment QC strength. Adaptability describes how methods adjust to changing conditions; QC strength describes the evidence they provide for deciding whether to accept, refine, or flag individual outputs without new GT labels. Proxy4Tun investigates the combination of bounded parameter self-refinement and explicit accuracy estimation. Positions illustrate intended capabilities rather than results from a comparative QC benchmark.}
+\label{fig:conceptual_positioning}
+\end{figure*}
+
+Proxy4Tun addresses this question by estimating the accuracy of a candidate segmentation from intermediate pipeline measurements. These measurements describe two aspects of the processing: preprocessing quality (PQ), which reflects the completeness and geometric plausibility of the representation supplied to the segmentation stage, and structure coherence (SC), which reflects whether the resulting label boundaries agree with detected joint evidence, together with segmentation coverage and consistency across rings. During development, we learn how these measurements relate to GT mean mIoU, then freeze the estimator for deployment. Our hypothesis is that parameter changes produce recognisable patterns in these measurements when processing succeeds or fails, and that their relationship with accuracy persists sufficiently on unseen scans from the same lining family.
+
+Within a pipeline adapted from SAM4Tun~\cite{ye2025sam4tun}, we generate calibration runs using one labelled development subset and one expert-tuned reference configuration per lining family (staggered, continuous, and complex). We first sample settings across prescribed parameter ranges, then use uncertainty-guided Bayesian exploration to select further settings for evaluation. All runs reuse the same scan annotations. We test the resulting estimator on held-out scans and deliberately degraded outputs, and investigate whether its scores can help select useful LLM-proposed parameter changes in a limited self-refinement study. The approach is deployment-label-free: labels and expert references are required only during development, but neither are used during scoring or self-refinement. 
+In a conceptual map of adaptability versus QC strength (Fig.~\ref{fig:conceptual_positioning}), we place Proxy4Tun in the high-QC, moderate-adaptability region, as it combines bounded parameter self-refinement with explicit, label-free accuracy estimation. 
+
+This paper makes the following contributions:
+\begin{enumerate}
+\item A deployment-label-free QC framework that learns to estimate tunnel-segmentation accuracy from PQ and SC measurements using limited offline annotations.
+\item An empirical evaluation of which measurements transfer across lining families and whether the estimator distinguishes reference outputs from deliberately degraded counterparts.
+\item A proof-of-concept (PoC) study testing whether proxy scores can guide the selection of bounded parameter adjustments proposed by a LLM.
+\end{enumerate}
+
+The rest of this paper is organised as follows. Section~\ref{sec:related} reviews related work. Section~\ref{sec:methods} presents the methodology and experimental design. Section~\ref{sec:results} reports the results, Section~\ref{sec:discussion} discusses findings and limitations, and Section~\ref{sec:conclusions} concludes.
+
+
+\section{Related work}
+\label{sec:related}
+
+The review follows four connected questions: how segmentation methods adapt to changing conditions, how their outputs can be assessed without new GT labels, how calibration data can be obtained with limited annotations, and how assessment feedback can guide self-refinement.
+
+\subsection{Tunnel segmentation and adaptation}
+
+Tunnel point-cloud segmentation methods differ in how they use geometric knowledge and labelled data, and how they accommodate changing conditions. Engineer-designed pipelines use geometric rules and thresholds to identify lining surfaces and segment boundaries, but their settings may need adjustment when tunnel geometry, joint layout, or scan quality changes~\cite{huang2021bim,weidner2024generalized,wang2025automated}. Supervised methods learn features from labelled point clouds: PointNet++ captures local geometry at multiple spatial scales~\cite{qi2017pointnet}, while RandLA-Net emphasises efficient processing of large point clouds~\cite{hu2020randla}. Instance-segmentation methods such as Mask3D and TD3D additionally distinguish individual objects within a scene~\cite{schult2023mask3d,kolodiazhnyi2024td3d}. Tunnel-specific methods can incorporate engineering knowledge into this learning process; LiningNet, for example, integrates structural geometry into supervised segmentation of tunnel linings~\cite{lin2025liningnet}. However, labelled tunnel data remain limited, and adapting supervised models to substantially different conditions may require additional annotations and retraining~\cite{su2024review, cha2024deep}.
+
+Foundation-model pipelines reduce the need for task-specific training by using models pre-trained on large datasets. One practical approach is to project point clouds into two-dimensional images that can be processed by vision models. Prompt-based segmentation models include SAM~\cite{kirillov2023sam}, SAM2~\cite{ravi2024sam2}, and SEEM~\cite{zou2023segment}; infrastructure applications of such models include crack segmentation~\cite{ge2024cracksam,ye2024sam} and Scan-to-BIM workflows~\cite{wang2024omni,pan2024zero,ye2026maintenance}. For tunnel linings, SAM4Tun unfolds point clouds into panoramic images and generates template-based prompts for SAM to segment lining components without task-specific model training~\cite{ye2025sam4tun}. However, its preprocessing and prompting stages still depend on parameters that reflect assumptions about lining geometry and scanning conditions. Changes in those conditions can therefore require parameter adjustment even when the segmentation model itself remains fixed.
+
+R4Tun addresses this parameter-adaptation problem by using reference information, intermediate pipeline outputs, and engineering knowledge to guide LLM-proposed adjustments to SAM4Tun within prescribed parameter ranges~\cite{taoR4Tun}. Its adaptation proceeds without GT access, while the resulting segmentation accuracy is evaluated against GT offline. This supports the use of structured context to propose adjustments, but leaves a separate assessment task: determining the accuracy of the initial and adjusted outputs when new GT labels are unavailable.
+
+\subsection{Quality estimation without new GT labels}
+
+Existing studies estimate segmentation quality from observable properties of the data and segmentation outputs. In medical imaging, Kohlberger et al. use segmentation features to predict overlap error and Dice scores~\cite{kohlberger2012evaluating}, while Robinson et al. learn to predict quality from image--segmentation pairs~\cite{robinson2018segmentationQuality}. For point clouds, LidarMetaSeg combines input features with network confidence measures to estimate the quality of connected semantic segments in driving scenes~\cite{colling2021lidarmetaseg}. Consistency between processing outputs can also provide evidence, although agreement does not guarantee correctness: different LiDAR processing streams can agree on an incorrect label~\cite{bogdoll2025labelfree}. These studies suggest that data properties and output consistency can help assess quality, provided their relationship with actual accuracy is established.
+
+Reference-based approaches provide another source of assessment evidence. Reverse Classification Accuracy (RCA) treats a new segmentation as provisional labels, trains a reverse classifier, and evaluates that classifier on labelled reference images~\cite{valindria2017rca}. Its performance on those references is used to estimate the quality of the original segmentation. ConfIC-RCA further uses retrieval of relevant reference images and in-context reverse segmentation to estimate quality~\cite{cosarinsky2026conficrca}. These methods avoid requiring GT for the new case, but still use labelled reference cases during assessment.
+
+Together, these approaches motivate combining measurements of processing quality and output consistency with reference information. Proxy4Tun investigates this idea using PQ and SC measurements. \hl{Expert configurations guide offline exploration, but the final scoring features no longer require family-reference information.} The next question is how to learn the relationship between these measurements and accuracy when only limited scans are labelled.
+
+\subsection{Calibration with limited labelled data}
+
+Training a quality estimator requires examples spanning successful and degraded segmentations, but these examples need not require additional scan annotations. Robinson et al. generate multiple segmentations by varying model settings and reuse existing annotations to obtain quality targets~\cite{robinson2018segmentationQuality}. The same labelled input can therefore provide several examples of how processing choices affect accuracy. The challenge is to select useful settings without evaluating every possible combination.
+
+Bayesian optimisation provides ways to use expert knowledge and previous evaluations to guide this selection. BOPrO incorporates user beliefs about promising parameter regions, while $\pi$BO incorporates a probability distribution describing where the optimum is expected to lie~\cite{souza2020prior,hvarfner2022pibo}. These studies support using prior knowledge to inform where evaluations are performed. Space-filling sampling serves a complementary purpose by spreading initial settings across the chosen parameter ranges~\cite{joe2008constructing}. After these settings have been evaluated, a Gaussian-process model can identify where its predictions remain uncertain and guide further evaluations~\cite{gramacy2009adaptive,gramacy2020surrogates}.
+
+Proxy4Tun combines these ideas to collect learning examples around an expert reference. The reference and prescribed bounds define which parameter variations are explored; initial space-filling sampling and then subsequent uncertainty-guided evaluations seek a range of processing outcomes. Each output is assessed using the same existing scan annotations. Here, the aim is to learn from both successful and deliberately degraded segmentations, rather than concentrate the search only on high-accuracy settings.
+
+\subsection{Feedback-guided self-refinement}
+
+LLM-based agents can revise results by proposing changes, evaluating their effects, and using feedback to guide subsequent attempts. Self-Refine asks the model to critique and revise its output, while Reflexion records lessons from task feedback for later attempts~\cite{madaan2023selfrefine,shinn2023reflexion}. AlphaEvolve and the Darwin G\"odel Machine extend it to modifying programs or agent code using automated evaluation~\cite{novikov2025alphaevolve,zhang2025darwin}. However, repeated revision does not guarantee improvement. Self-correction without external feedback can fail, and increasing an imperfect proxy score can reduce performance when assessed separately~\cite{huang2024selfcorrect,gao2023overoptimization}.
+
+Feedback is more useful for proposing changes when it also describes what may be wrong. ReAct demonstrates how observations from the environment can inform subsequent actions~\cite{yao2023react}. \hl{In Proxy4Tun, PQ and SC measurements provide this context: an incomplete depth map or disagreement between detected joints and predicted boundaries can
+indicate which stages warrant inspection.} A compact linear proxy makes each measurement's contribution to the predicted score explicit, following the rationale for interpretable models~\cite{rudin2019stop}. The measurements support diagnosis, while the score provides a common basis for comparing candidate outputs.
+
+We test this combination through a feasibility study on cases whose initial proxy score falls in a deployment-relevant interval ($[0.5,0.7]$). The LLM proposes parameter changes within prescribed bounds, the pipeline produces new segmentations, and proxy feedback guides which candidates are retained. The study asks whether this loop can improve segmentation without GT access during self-refinement. Longer-term self-improvement and changes to the agent itself remain outside its scope.
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Methodology}
+\label{sec:methods}
+
+Proxy4Tun has two phases. During development, we vary pipeline parameters on labelled scans and learn how PQ and SC measurements relate to segmentation accuracy. At deployment, the frozen proxy estimates mIoU without new GT labels. An LLM uses the measurements and engineering context to propose parameter changes within a fixed budget (three candidate runs per case), and the proxy selects the candidate with the highest score. We first define the task and available information, then describe calibration, self-refinement, and experimental evaluation.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/intrinsics.pdf}
+\caption{Development and use of the accuracy proxy. Parameter variations generate segmentation outputs with different accuracies. PQ and SC measurements from each run are paired with GT mIoU to train the proxy. Once fitted, the proxy estimates accuracy on new runs using measurements available without GT. The score is an estimate of segmentation accuracy, not a guarantee of correctness.}
+\label{fig:intrinsic_proxy_scoring}
+\end{figure*}
+
+
+\subsection{Task definition}
+\label{sec:problem-def}
+
+Given a raw point cloud of a tunnel section, the task is to assign each point a structural label: background, key segment (K), adjacent segments (B), and standard segments (A). Seg2Tunnel, the benchmark dataset we use, groups linings into three families (staggered, continuous, and complex). These families differ in ring geometry and acquisition conditions and, most critically for our task, in the key-block (K) layout: ring-to-ring repeating, fixed ring-wise order, and no repeating pattern (Fig.~\ref{fig:task}). 
+
+Proxy4Tun assesses a completed segmentation run. Given its intermediate processing outputs, the proxy estimates the mIoU that would otherwise require comparison with GT labels. The score supports assessment of the current result and comparison with outputs produced by alternative parameter settings. At deployment, the proxy remains fixed and scoring uses the new run's intermediate outputs. GT labels for the new scan are unavailable to both the proxy scoring and the self-refinement process.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.8\textwidth]{figs/task.pdf}
+\caption{Tunnel-lining block types: key block (K), adjacent block (B), and standard block (A), with background labelled separately. A ring contains six or seven individual lining blocks depending on its family.} 
+\label{fig:task}
+\end{figure*}
+
+
+
+
+\subsection{Framework overview}
+\label{sec:method}
+
+The framework connects three components: a parameterised segmentation pipeline, an offline procedure for learning the mIoU proxy, and a deployment-time self-refinement loop. The pipeline produces both segmentations and the measurements used to assess them. Calibration learns the relationship between these measurements and GT mIoU. self-refinement uses the frozen proxy to compare new candidates.
+
+The processing algorithms remain fixed throughout the study. Exploration and self-refinement change only permitted parameter values.
+
+
+\subsubsection{Segmentation pipeline}
+\label{sec:pipeline}
+
+The pipeline is adapted from SAM4Tun~\cite{ye2025sam4tun} for the three Seg2Tunnel lining families~\cite{lin2024seg2tunnel}. Figure~\ref{fig:pipeline} illustrates the processing stages.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.98\textwidth]{figs/pipeline.pdf}
+\caption{Segmentation pipeline adapted from SAM4Tun. Geometric alignment, filtering, and enhancement produce a depth representation for boundary detection and template-based SAM prompting. The resulting masks are reprojected onto the point cloud. Intermediate outputs provide PQ and SC measurements. The stage algorithms remain fixed; exploration and self-refinement adjust their parameters.}
+\label{fig:pipeline}
+\end{figure*}
+
+\begin{enumerate}
+\item \textbf{Unfolding.}
+RANSAC-based cross-sectional ellipse fitting and centreline estimation establish a cylindrical coordinate system~\cite{fischler1981ransac}. The lining surface is represented panoramically, with depth describing radial distance from the centreline. Coordinate orientation is fixed so that block positions retain the same meaning across runs.
+
+\item \textbf{Denoising.}
+Radial masks and grid-based point-density filtering remove points inconsistent with the expected lining surface. The filtering follows the density-based principle underlying DBSCAN~\cite{ester1996dbscan}. Its settings affect both unwanted-point removal and the amount of lining data retained.
+
+\item \textbf{Enhancement.}
+Curvature-guided interpolation and progressive upsampling improve the completeness of the depth representation before detection, while preserving joint boundaries.
+
+\item \textbf{Boundary detection.}
+Orientation-specific Hough transforms identify candidate ring and block boundaries~\cite{duda1972hough}. These detections are organised according to the expected family layout.
+
+\item \textbf{Segmentation and reprojection.}
+The detected layout defines template-based prompts for SAM~\cite{kirillov2023sam}. The resulting image masks are mapped back to the point cloud to obtain three-dimensional block labels.
+\end{enumerate}
+
+The \emph{family reference configuration} (\emph{family reference}) specifies a complete parameter configuration. A candidate update lists only the parameters to change and is applied to an explicitly recorded base configuration. Unchanged parameters retain their base values. Appendix~\ref{app:anchor-parameter} lists the expert family references, and Appendix~\ref{app:search-bounds} provides the exploration bounds.
+
+
+\subsubsection{Generating calibration examples}
+\label{sec:bo-experience}
+
+Calibration requires examples linking observable pipeline measurements
+to segmentation accuracy under successful and degraded parameter
+settings. We generate these examples by varying pipeline parameters
+on one labelled development subset per lining family. All runs on
+that subset are evaluated against the same annotations, so additional
+runs require computation but no additional scan labelling.
+
+We collect the examples in two stages. First, scrambled-Sobol sampling
+provides 32 valid trials spread across the prescribed parameter
+ranges~\cite{joe2008constructing}. Continuous parameters are scaled
+to their bounds, while discrete parameters are mapped to their
+permitted values. This provides broad initial coverage. Second, Bayesian exploration adds eight valid trials at settings
+whose effects on accuracy remain uncertain. A Gaussian-process
+(GP) response model learns from the completed evaluations and
+estimates both GT mIoU and its predictive uncertainty at candidate
+settings. Selecting settings with high uncertainty directs the
+remaining budget toward gaps in the initial
+evidence~\cite{gramacy2009adaptive,gramacy2020surrogates}. The GP uses a Mat\'ern kernel with $\nu=2.5$, a white-noise term,
+and normalised targets. At each iteration, we draw a random pool
+of 2048 candidate settings within the parameter bounds and evaluate
+the candidate with the largest predictive standard deviation.
+The GP is updated after each additional valid evaluation. This
+selection explores uncertainty in the accuracy response; it does
+not directly maximise segmentation accuracy or minimise the final
+proxy's prediction error.
+
+At the end, each family contributes 40 valid runs, giving 120 runs across the
+three families. Each
+valid run records its parameter setting, PQ and SC measurements,
+and GT mIoU. These records serve two distinct purposes: the GP
+uses parameter settings and GT mIoU to guide further exploration,
+while the final accuracy proxy uses PQ and SC measurements to
+estimate GT mIoU.
+
+Algorithm~\ref{alg:bo_exploration} summarises the procedure, and 
+Appendices~\ref{app:bo-config} and~\ref{app:search-bounds}
+provide the sampling configuration and parameter bounds.
+Figure~\ref{fig:b-p} connects this example-generation procedure
+to the subsequent feature comparison.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/b-p.pdf}
+\caption{Calibration-example generation and feature comparison.
+(a) Each lining family contributes 32 valid scrambled-Sobol trials
+and eight valid Bayesian exploration trials selected by GP
+uncertainty. All trials reuse the same development-subset annotations.
+(b) The resulting measurements and GT mIoU values support comparison
+of PQ-only, SC-only, combined, and compact combined feature sets
+for the accuracy proxy.}
+\label{fig:b-p}
+\end{figure*}
+
+\begin{algorithm}[ht]
+\caption{Generating calibration examples through space-filling
+sampling and Bayesian exploration}
+\label{alg:bo_exploration}
+\begin{algorithmic}[1]
+\Require Development subset $D_f$ with GT annotations $Y_f$
+\Require \hl{Reference configuration $P_f^{\mathrm{ref}}$; expected ring count $N_{\mathrm{exp}}=10$}
+\Require Parameter bounds $\Theta_f$;
+         valid-trial budgets $N_0=32$, $N_1=8$;
+         candidate-pool size $M=2048$
+\Ensure Calibration records $\mathcal{T}_f$
+\State $\mathcal{T}_f\gets\emptyset$;
+       $n_0\gets0$; $n_1\gets0$
+\State Initialise a scrambled-Sobol sequence
+\Statex \textit{Stage 1: broad initial coverage}
+\While{$n_0<N_0$}
+    \State Draw the next Sobol point and map it to
+           permitted parameter values $\theta\in\Theta_f$
+    \State $P\gets\operatorname{Apply}
+           (P_f^{\mathrm{ref}},\theta)$
+    \State $R\gets\operatorname{Pipeline}(D_f,P)$
+    \If{$R$ is valid and required measurements are available}
+        \State \hl{$\mathbf{x}\gets\operatorname{Features}(R,N_{\mathrm{exp}})$}
+        \State $y\gets\operatorname{mIoU}(R,Y_f)$
+        \State Append $(\theta,\mathbf{x},y)$
+               to $\mathcal{T}_f$
+        \State $n_0\gets n_0+1$
+    \Else
+        \State Log the failed or incomplete trial
+    \EndIf
+\EndWhile
+\Statex \textit{Stage 2: Bayesian exploration}
+\State Fit GP to the $(\theta,y)$ pairs in $\mathcal{T}_f$
+\While{$n_1<N_1$}
+    \State Draw $M$ random candidate settings
+           $\mathcal{P}_t$ within $\Theta_f$
+    \State $\theta\gets
+           \arg\max_{\vartheta\in\mathcal{P}_t}
+           \sigma_t(\vartheta)$
+    \State $P\gets\operatorname{Apply}
+           (P_f^{\mathrm{ref}},\theta)$
+    \State $R\gets\operatorname{Pipeline}(D_f,P)$
+    \If{$R$ is valid and required measurements are available}
+        \State \hl{$\mathbf{x}\gets\operatorname{Features}(R,N_{\mathrm{exp}})$}
+        \State $y\gets\operatorname{mIoU}(R,Y_f)$
+        \State Append $(\theta,\mathbf{x},y)$
+               to $\mathcal{T}_f$
+        \State Update GP using the expanded $\mathcal{T}_f$
+        \State $n_1\gets n_1+1$
+    \Else
+        \State Log the failed or incomplete trial
+    \EndIf
+\EndWhile
+\State \Return $\mathcal{T}_f$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{PQ and SC measurements}
+\label{sec:features}
+
+For each completed run, we compute ten candidate measurements without using any ground-truth (GT) labels (Table~\ref{tab:candidate-features}). The measurements fall into two groups: preprocessing quality (PQ) and structure coherence (SC).
+
+PQ captures depth-map completeness, point support, geometric alignment, and ring-count plausibility. The ring-count measurement compares the detected number of rings to an expected count $N_{\mathrm{exp}}$ (set to 10 in our experiments), which is typically available from design or acquisition metadata. Using $N_{\mathrm{exp}}$ makes the proxy less sensitive to ambiguous ring evidence.
+
+SC captures internal agreement between pipeline stages: alignment between detected joint evidence and predicted label boundaries, segmentation coverage over the valid-depth region, and consistency of the label ordering across rings. SC is particularly useful for the complex lining family because it does not assume a fixed keystone pattern. However, high SC does not guarantee correctness: the joint detections and the segmentation can share correlated errors (e.g., when joint detections also guide SAM prompting).
+
+\begin{table*}[t]
+\caption{Candidate measurements for the mIoU accuracy proxy. Five PQ and five SC measurements are calculated from each run. All pixel-based denominators are computed over the valid depth-image region (pixels with defined depth after enhancement). Pixel tolerances refer to the depth-image coordinate system used in the feature extraction.}
+\label{tab:candidate-features}
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{0.06\textwidth} p{0.26\textwidth} p{0.40\textwidth} p{0.20\textwidth}}
+\toprule
+Group & Measurement & Meaning & Stage \\
+\midrule
+PQ & Unfolding fit residual & Centreline fit error & Unfolding \\
+ & Orientation agreement & Difference between inferred and expected axes & Unfolding \\
+ & Ring-count error & Difference between detected and expected ring counts & Unfolding+Detection \\
+ & Point retention & Fraction of points kept after denoising & Denoising \\
+ & Missing-depth rate & Fraction of pixels with undefined depth after enhancement & Enhancement \\
+SC & Edge support & Fraction of label-boundary evidence explained by nearby depth edges & Enhancement+Segmentation \\
+ & Correspondence score & Agreement between detected lines and label boundaries & Detection+Segmentation \\
+ & Line--boundary distance & Distance between detected joints and predicted boundaries, in both directions & Detection+Segmentation \\
+ & Fill rate & Fraction of valid-depth pixels assigned a non-background label & Segmentation \\
+ & Phase incoherence & Inconsistency of label ordering across rings & Segmentation \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsubsection{Learning the accuracy proxy}
+\label{sec:ridge-proxy}
+
+The proxy maps PQ and SC measurements to an estimated mIoU. We use Ridge regression to obtain a compact model with an explicit scoring rule. Regularisation stabilises estimation under correlated predictors~\cite{hoerl1970ridge,pedregosa2011sklearn}, and the linear form makes each measurement's contribution directly interpretable.
+
+For a feature vector $\mathbf{x}\in\mathbb{R}^{d}$, the prediction is
+\begin{equation}
+\hat{y}(\mathbf{x})
+=
+b+\sum_{j=1}^{d}
+w_j\frac{x_j-\mu_j}{s_j},
+\label{eq:ridge-proxy}
+\end{equation}
+where $\mu_j$ and $s_j$ are the mean and standard deviation estimated on the training data, $w_j$ is the fitted coefficient, and $b$ is the intercept. The coefficients minimise
+\begin{equation}
+\sum_{i\in\mathcal{T}_{\mathrm{train}}}
+\left(y_i-b-\mathbf{w}^{\top}\mathbf{z}_i\right)^2
++\alpha\|\mathbf{w}\|_2^2,
+\label{eq:ridge-objective}
+\end{equation}
+where $\mathbf{z}_i$ is the standardised feature vector and $\alpha$ controls regularisation.
+
+We compare PQ-only, SC-only, combined, and compact combined models (Table~\ref{tab:proxy-ablation}). The notation $P(q)$ denotes the PQ-only model, $P(c)$ denotes the SC-only model, and $P(q{+}c)$ denotes their combination.
+
+\begin{table}[ht]
+\caption{Proxy feature and model comparisons.}
+\label{tab:proxy-ablation}
+\centering
+\begin{tabular}{p{0.31\columnwidth} p{0.59\columnwidth}}
+\toprule
+Model & Definition \\
+\midrule
+$P(q)$ & Five PQ features \\
+$P(c)$ & Five SC features \\
+$P(q{+}c)$ & All ten candidate features \\
+Lean $P(q{+}c)$ & Five selected features; one pooled model \\
+Lean per-family & The same five features; one model per family \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Feature-removal analysis examines the contribution of individual measurements. Leave-one-family-out (LOFO) validation assesses transfer: models are fitted using calibration runs from two families and evaluated on the third. Feature selection and regularisation tuning are performed using only the training data within each fold, without access to the held-out family's labels.
+
+The compact feature set is chosen using development-time comparisons of prediction, transfer, and feature coverage. Its purpose is to retain PQ and SC information in a small model, rather than to maximise every development metric. The final pooled model is then fitted on all 120 calibration runs and frozen.
+
+The proxy score provides a common basis for comparing outputs. Regression coefficients describe fitted associations with accuracy; they are not causal prescriptions for parameter changes. We therefore evaluate the compact proxy as a practical scoring rule, without claiming superiority over nonlinear alternatives.
+
+Algorithm~\ref{alg:proxy} separates model development from deployment scoring.
+
+\begin{algorithm}[ht]
+\caption{\hl{Proxy calibration and deployment scoring}}
+\label{alg:proxy}
+\begin{algorithmic}[1]
+\Require \hl{Calibration records $\mathcal{T}=\bigcup_f\mathcal{T}_f$; candidate feature sets}
+\Require \hl{Fixed extraction conventions, including $N_{\mathrm{exp}}=10$}
+\Ensure \hl{Frozen proxy package $g$}
+\For{\hl{each candidate feature set $V$}}
+    \For{\hl{each held-out family $f$}}
+        \State \hl{Use the other two families as training data}
+        \State \hl{Fit feature scaling and select $\alpha$ within the training data}
+        \State \hl{Fit the model and predict the held-out family's mIoU}
+    \EndFor
+    \State \hl{Record training and LOFO prediction metrics}
+\EndFor
+\State \hl{Select the compact set by LOFO Spearman, retaining PQ and SC}
+\State \hl{Fit pooled scaling and Ridge regression on all 120 calibration records}
+\State \hl{Freeze feature definitions, order, scaler, coefficients, and intercept}
+\Statex
+\State \hl{Receive a new completed run $r$}
+\State \hl{$\mathbf{x}\gets\operatorname{Features}(r,N_{\mathrm{exp}})$ in the frozen feature order}
+\State \hl{$\hat{y}\gets g(\mathbf{x})$}
+\State \Return \hl{$\hat{y}$}
+\end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Proxy-guided parameter self-refinement}
+\label{sec:agent-design}
+
+The proxy estimates accuracy but does not determine which parameters should change. An LLM agent supplies this proposal step (Fig.~\ref{fig:agent}). Its context includes the family reference configurations, current settings, intermediate outputs, PQ and SC measurements, proxy scores, and engineering knowledge linking observable problems to possible adjustments.
+
+We implement the agent's refinement process as an explicit, inspect/compare/update loop by chain-of-thought (CoT) prompting~\cite{wei2023cot,yao2023react}: the agent first grounds itself in the current evidence, then links observed symptoms to failure modes, and finally proposes a small, bounded edit that can be verified by re-running the pipeline. In our implementation, the agent returns (i) a parameter adjustment constrained to pre-defined ranges and (ii) a brief human-readable rationale summarising the evidence and intended effect. Prompt structure and knowledge excerpts are provided in Appendix~\ref{app:ontology} and Appendix~\ref{app:prompt}.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.8\textwidth]{figs/agent.pdf}
+\caption{LLM-guided parameter proposals. The agent compares the current run with engineering references, inspects intermediate outputs and PQ/SC measurements, and returns a bounded parameter update with a rationale. After execution, the frozen proxy scores the candidate. Candidate retention depends only on the proxy score.}
+\label{fig:agent}
+\end{figure*}
+
+Each self-refinement round has three steps:
+\begin{enumerate}
+\item \textbf{Inspect and propose.}
+The agent (a) compares current intermediate outputs and PQ/SC measurements to the reference configuration, (b) identifies a likely failure mode using the engineering knowledge, and (c) returns a structured update: \emph{symptom} $\rightarrow$ \emph{evidence} $\rightarrow$ \emph{bounded parameter diff} $\rightarrow$ \emph{rationale}.
+
+\item \textbf{Validate and execute.}
+The update is checked for valid parameter names, permitted values, and fixed pipeline conventions. A valid candidate is executed and its PQ and SC measurements are calculated.
+
+\item \textbf{Score and record.}
+The frozen proxy estimates candidate accuracy. The configuration, base settings, proposed changes, execution status, measurements, and score are recorded for subsequent feedback and final selection.
+\end{enumerate}
+
+Each selected subset receives three self-refinement rounds without early stopping. The starting configuration remains eligible throughout. Failed or unscorable attempts are recorded and excluded from selection.
+
+The retained result is the successfully scored candidate with the highest proxy score, including the starting configuration:
+\begin{equation}
+r^\star
+=
+\operatorname*{arg\,max}_{r\in\{0\}\cup\mathcal{V}}
+\hat{y}_r,
+\qquad
+P^\star=P_{r^\star},
+\label{eq:self-refinement-selection}
+\end{equation}
+where $r=0$ denotes the Bayesian-exploration baseline and $\mathcal{V}$ contains the successfully scored self-refinement rounds.
+
+SC measurements contribute to the proxy and inform the agent's diagnosis. They do not impose a separate retention gate. Thus, candidate selection is determined solely by the frozen proxy score, without GT access.
+
+The final score assigns the retained output to a study operating band:
+\begin{equation}
+\operatorname{QC}(\hat{y})=
+\begin{cases}
+\text{flag}, & \hat{y}<0.5,\\
+\text{refine}, & 0.5\leq\hat{y}\leq0.7,\\
+\text{accept}, & \hat{y}>0.7.
+\end{cases}
+\label{eq:qc-bands}
+\end{equation}
+These bands illustrate assessment decisions; they are not validated engineering acceptance criteria. A result may remain in the self-refinement band after the fixed budget is exhausted. Crossing 0.7 during an intermediate round does not stop the experiment.
+
+The LLM, proxy, and processing algorithms remain fixed across rounds. Only permitted pipeline parameters change. Algorithm~\ref{alg:reflective_adaptation} summarises the procedure.
+
+\begin{algorithm}[ht]
+\caption{Proxy-guided parameter self-refinement}
+\label{alg:reflective_adaptation}
+\begin{algorithmic}[1]
+\Require New subset $D$; Bayesian-exploration baseline $P_0$; expected ring count $N_{\mathrm{exp}}$
+\Require Engineering knowledge, parameter bounds, frozen proxy package $g$
+\Require self-refinement budget $R=3$
+\Ensure Retained configuration $P^\star$ and QC status
+\State Execute the starting configuration $P_0$
+\State Extract measurements and compute $\hat{y}_0$
+\State $P^\star\gets P_0$; $\hat{y}^\star\gets\hat{y}_0$
+\State Initialise history with the starting run
+\For{$r=1,\ldots,R$}
+    \State Assemble context from settings, outputs, measurements, scores, and history
+    \State Obtain a bounded parameter overlay from the LLM (applied to the fixed Bayesian-exploration baseline $P_0$)
+    \State Record base configuration $P_0$ and validate the overlay
+    \If{proposal invalid}
+        \State Record failure; \textbf{continue}
+    \EndIf
+    \State Execute candidate configuration $P_r$
+    \If{execution or feature extraction fails}
+        \State Record failure; \textbf{continue}
+    \EndIf
+    \State Extract $\mathbf{x}_r\gets\operatorname{Features}(P_r,N_{\mathrm{exp}})$; compute $\hat{y}_r\gets g(\mathbf{x}_r)$
+    \State Add candidate outputs and score to history
+    \If{$\hat{y}_r>\hat{y}^\star$}
+        \State $P^\star\gets P_r$; $\hat{y}^\star\gets\hat{y}_r$
+    \EndIf
+\EndFor
+\If{$\hat{y}^\star<0.5$}
+    \State $\mathrm{status}\gets\mathrm{flag}$
+\ElsIf{$\hat{y}^\star\leq0.7$}
+    \State $\mathrm{status}\gets\mathrm{refine}$
+\Else
+    \State $\mathrm{status}\gets\mathrm{accept}$
+\EndIf
+\State \Return $P^\star$, $\hat{y}^\star$, $\mathrm{status}$
+\end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Experimental setup}
+\label{sec:exp-setup}
+
+The evaluation addresses three questions: whether PQ and SC support accuracy estimation, whether the frozen proxy distinguishes reference outputs from controlled degradations on unseen scans, and whether highest-score selection produces useful parameter self-refinement.
+
+
+\subsubsection{Dataset and information separation}
+\label{sec:dataset}
+
+We use Seg2Tunnel subsets spanning staggered, continuous, and complex lining families~\cite{lin2024seg2tunnel}. The development subsets are 2-1, 3-1, and 5-1, respectively. Each supplies 40 calibration runs, giving 120 runs from three labelled development subsets.
+
+Held-out evaluation uses 27 other subsets, with nine per family (Table~\ref{tab:dataset}). These subsets are unseen during proxy fitting but come from the represented families and tunnel collection. The evaluation therefore examines transfer to unseen scans within this setting, rather than unrestricted transfer to new projects or lining geometries.
+
+Parameter variation increases the number of observed processing outcomes without increasing the number of independently annotated scans. Development labels are used for calibration, model comparisons, and development-time degradation selection. Held-out GT is used for offline evaluation and retrospective self-refinement-panel construction only.
+
+\begin{table*}[t]
+\caption{Development and held-out subsets. One labelled development subset per family supplies the calibration trials; nine other subsets per family form the held-out panel.}
+\label{tab:dataset}
+\centering
+\begin{tabular}{p{0.22\textwidth} p{0.24\textwidth} p{0.22\textwidth} p{0.22\textwidth}}
+\toprule
+Property & Staggered (T1, T2) & Continuous (T3) & Complex (T4, T5) \\
+\midrule
+Inner diameter & 5.5\,m & 5.9\,m & 7.5\,m \\
+Ring length & 1.2\,m & 1.2\,m & 1.8\,m \\
+Blocks per ring & 6 & 6 & 7 \\
+Key-block layout & Ring-to-ring repeating pattern & Fixed ring-wise order & No repeating pattern \\
+Scanning & Single-station & Multi-station & Single-station, offset \\
+Development subset & 2-1 & 3-1 & 5-1 \\
+Calibration runs & 40 & 40 & 40 \\
+Held-out subsets & 1-1--1-5; 2-2--2-5 & 3-2--3-10 & 4-1--4-5; 5-2--5-5 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+
+\subsubsection{Feature and model comparisons}
+\label{sec:comparators}
+
+The comparisons in Table~\ref{tab:proxy-ablation} use the same calibration trials and segmentation pipeline. We report training fit and LOFO performance separately. LOFO comparisons inform model development; evaluation on the 27 unseen subsets then tests the frozen proxy.
+
+We compare the pooled compact proxy with three family-specific proxies using the same five features. The pooled model uses all 120 calibration runs, while each family-specific model uses its family's 40 runs. Model fitting does not use held-out labels.
+
+A permutation control examines whether the features carry information about accuracy beyond differences between families. GT mIoU values are shuffled among calibration runs within each family, and the compact Ridge fitting procedure is repeated for 20 permutations. The real-label and shuffled-label results are compared to assess feature--accuracy association. This control does not itself establish the absence of leakage; GT isolation and fold-specific fitting are enforced separately.
+
+
+\subsubsection{Paired degradation test}
+\label{sec:stress-test}
+
+Each held-out subset provides an expert-anchor reference output and a deliberately degraded counterpart, giving 54 scored runs. The degradation procedures use parameter overlays and boundary perturbations. Their construction is fixed using development information before held-out evaluation.
+
+Both outputs in each pair are assessed using the same frozen feature definitions and proxy. Feature extraction uses the corresponding processing outputs and the same fixed extraction conventions (including $N_{\mathrm{exp}}$). GT mIoU is calculated separately to measure actual segmentation accuracy.
+
+The test examines whether the proxy ranks the reference above its degraded counterpart and whether the fixed low-quality threshold detects the constructed degradation. These are controlled failure cases, not a sample of naturally occurring deployment failures. Consequently, the panel supports conclusions about discrimination under the tested perturbations, rather than general operational acceptance reliability.
+
+
+\subsubsection{self-refinement feasibility panel}
+\label{sec:poc-protocol}
+
+The self-refinement experiment uses nine retrospectively selected cases. Selection is based on the Bayesian-exploration baseline run:
+\begin{equation}
+0.5\leq\hat{y}_0\leq0.7
+\quad\text{and}\quad
+0.5\leq y_0\leq0.7,
+\label{eq:poc-selection}
+\end{equation}
+where $\hat{y}_0$ is the proxy estimate and $y_0$ is offline GT mIoU.
+
+The proxy condition identifies outputs within the self-refinement band. The GT condition confirms that the selected outputs are below the study accuracy threshold. This second condition is used solely for offline panel construction; GT does not enter the self-refinement loop or candidate selection.
+
+Bayesian exploration is performed only during development, using GT on the development subsets to evaluate candidate configurations and identify a strong per-family baseline. For each selected case, this Bayesian-exploration baseline configuration supplies the start. Three LLM-proposed candidates are attempted, and the highest-scoring valid output is retained together with the option of keeping the start. Offline GT evaluation then compares the starting and retained segmentations.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.9\textwidth]{figs/verification.pdf}
+\caption{Proof-of-concept self-refinement workflow. Proxy scores below 0.5 flag outputs, scores in $[0.5,0.7]$ identify the self-refinement band, and scores above 0.7 identify the acceptance band. Nine cases are retrospectively selected using the proxy band and offline GT mIoU below 0.7. Each receives three self-refinement rounds without early stopping. Selection retains the highest proxy score among the start and successfully scored candidates, without a separate coherence gate or GT access. The thresholds are study-specific rather than validated engineering acceptance criteria.}
+\label{fig:verification}
+\end{figure*}
+
+The principal proposal model is Fable~5, with GPT-5.6 used as a limited secondary comparison. Pipeline execution uses a single NVIDIA RTX~5060 GPU. Table~\ref{tab:poc-config} summarises the configuration. Proposed updates and rationales are recorded alongside execution outcomes and proxy scores.
+
+\begin{table}[ht]
+\caption{self-refinement feasibility-study configuration.}
+\label{tab:poc-config}
+\centering
+\begin{tabular}{p{0.35\columnwidth} p{0.55\columnwidth}}
+\toprule
+Setting & Value \\
+\midrule
+Primary model & Fable 5 \\
+Secondary comparison & GPT-5.6 \\
+Interface & Cursor \\
+Starting configuration & Bayesian-exploration baseline (per family) \\
+Context & Engineering knowledge, outputs, PQ/SC measurements, proxy scores \\
+Budget & Three rounds per subset \\
+Early stopping & None \\
+Output & Structured parameter update and rationale \\
+Failure handling & Failed candidates excluded from selection \\
+Selection & Highest proxy score, including the start \\
+Separate coherence gate & None \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This experiment tests whether deployment-label-free feedback supports bounded self-refinement on the selected panel. It does not estimate success rates for an unfiltered deployment population or establish sustained agent self-improvement.
+
+
+\subsubsection{Evaluation metrics}
+\label{sec:metrics}
+
+Offline segmentation accuracy is measured by mIoU. For evaluated block class $c$,
+\begin{equation}
+\operatorname{IoU}_c
+=
+\frac{\operatorname{TP}_c}
+{\operatorname{TP}_c+\operatorname{FP}_c+\operatorname{FN}_c},
+\qquad
+\operatorname{mIoU}
+=
+\frac{1}{C}\sum_{c=1}^{C}\operatorname{IoU}_c,
+\end{equation}
+where $C=6$ for staggered and continuous rings and $C=7$ for complex rings. The distinction concerns individual blocks rather than the broader K/B/A block types.
+
+Proxy prediction error is measured by mean absolute error:
+\begin{equation}
+\operatorname{MAE}
+=
+\frac{1}{n}\sum_{i=1}^{n}
+|\hat{y}_i-y_i|,
+\end{equation}
+where $\hat{y}_i$ and $y_i$ are predicted and GT mIoU. MAE measures numerical prediction error. Spearman correlation $\rho$ measures whether the proxy orders runs consistently with GT accuracy. We report bootstrap 95\% confidence intervals for the correlation.
+
+For the paired degradation test, ranking accuracy is
+\begin{equation}
+\operatorname{PairRank}
+=
+\frac{1}{M}\sum_{s=1}^{M}
+\mathbb{I}
+\left[
+\hat{y}_{s,\mathrm{ref}}>
+\hat{y}_{s,\mathrm{deg}}
+\right],
+\end{equation}
+where $M=27$. Tied scores do not count as successful rankings. Alarm precision and recall are calculated at the fixed threshold of 0.5 against the reference/degraded construction labels and interpreted within this controlled test.
+
+For the pooled versus family-specific comparison, absolute prediction errors are aggregated within each subset, preserving the reference/degraded pairing. A two-sided Wilcoxon signed-rank test compares the resulting 27 paired subset-level errors.
+
+For self-refinement, we report starting and selected proxy scores and GT mIoU for each case, including cases that retain the start. Mean changes summarise the panel, while per-case results show whether selection improves or worsens actual accuracy. Any $p$-values reported for self-refinement are exploratory and conditional on this retrospectively selected, nine-case panel: we use a two-sided Wilcoxon signed-rank test on the nine paired mIoU differences (baseline versus retained). When summarising the effect on the full $n{=}27$ holdout panel, the remaining 18 unrefined subsets contribute zero change by construction; under the usual Wilcoxon convention these zeros are discarded, yielding the same test as on the nine attempted cases. We report this only as a descriptive check, not as a confirmatory significance claim.
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Results}\label{sec:results}
+
+\subsection{\hl{Proxy calibration and feature ablation}}
+\label{sec:main-results}\label{sec:proxy-ablation-results}
+
+\hl{The selected proxy contains two SC and two PQ measurements: correspondence F1@15, segmentation fill rate, ring-count error, and depth-map missing-pixel fraction. With training-standardised inputs, its fitted equation is}
+
+\begin{equation}
+\colorbox{yellow}{$\displaystyle
+\begin{aligned}
+\hat{y}={}&0.350+0.0823z_{\mathrm{corr}}+0.0798z_{\mathrm{fill}}\\
+&-0.0454z_{\mathrm{ringerr}}-0.0644z_{\mathrm{nan}}.
+\end{aligned}$}
+\label{eq:lean-proxy}
+\end{equation}
+
+\hl{Here, $z_{\mathrm{corr}}$ is correspondence F1@15, $z_{\mathrm{fill}}$ is fill rate (fraction of valid-depth pixels assigned a non-background label), $z_{\mathrm{ringerr}}$ is ring-count error, and $z_{\mathrm{nan}}$ is missing-depth rate (fraction of pixels with undefined depth after enhancement), after standardisation. RidgeCV selects $\alpha=10.0$. Positive correspondence and fill coefficients associate higher scores with segmentations that are populated and supported by detected joint evidence. Negative ring-count and missing-depth coefficients associate lower scores with implausible ring counts and incomplete depth maps. These are conditional associations in a correlated linear model, not independent causal effects.}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figs/ablation_results.pdf}
+\caption{\textbf{Proxy training and validation.}
+(a)~During training, four Ridge proxy variants are fitted to 120 labelled Bayesian-exploration trials (40 per family reference). The five-feature lean $P(q{+}c)$ model preserves strong training fit while improving cross-family transfer relative to its full version. (b)~The frozen lean proxy is then evaluated, without refitting, on a paired stress test of 54 holdout runs from the three lining families: 27 \emph{reference-sibling baseline} runs (matched, unmodified outputs) and 27 \emph{constructed degraded} siblings produced by overlaying controlled boundary/label perturbations.
+The results support deployment of a single, shared proxy that balances robustness and simplicity (Table~\ref{tab:holdout-fidelity}). The yellow region marks the retrospective GT-filtered PoC feasibility panel: nine reference-sibling baseline runs with proxy scores and offline GT mIoU between [$0.5$, $0.7$]. GT is not used in the self-refinement loop.}
+\label{fig:ablation_results}
+\end{figure*}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figs/refinement_results.pdf}
+\caption{\textbf{Proxy-guided self-refinement.}
+(a)~For the nine self-refinement candidates, proxy scores and GT mIoU generally
+change in the same direction from the self-refinement baseline to the
+proxy-selected configuration, supporting the frozen proxy as a deployment-label-free
+selection signal. (b)~Across these nine candidates, self-refinement lifts
+mean mIoU from 0.569 to 0.675. (c)~Across all 27 holdout subsets, directly
+applying the expert-anchor configuration yields mean mIoU of 0.456; applying
+the Bayesian-exploration baseline yields 0.722 (identified using GT on the
+development subsets, then applied unchanged to holdouts); and proxy-guided
+self-refinement further reaches 0.757. Error bars denote 95\% bootstrap
+confidence intervals.}
+  \label{fig:self_self-refinement_results}
+\end{figure*}
+
+
+
+We first calibrated the proxy on the 120 exploration trials
+(Table~\ref{tab:proxy-calibration}; Fig.~\ref{fig:ablation_results}a). The
+frozen lean model achieves a training MAE of 0.098 and a Spearman rank
+correlation of $\rho = 0.877$ (bootstrap 95\% CI $[0.822,\,0.909]$;
+$n = 120$). A permutation control confirms that the learned relationship is
+meaningful: refitting on label-shuffled trials yields an MAE of
+$0.192 \pm 0.006$ over 20 repeats, well above the observed error of the real
+model. LOFO cross-validation yields an MAE of 0.143 and
+$\rho = 0.678$. Overall, LOFO suggests the proxy transfers reasonably to held-out
+families, even though with a drop in accuracy relative to training.
+
+\begin{table}[ht]
+\caption{Results: proxy calibration on the 120 exploration trials (lean model).}\label{tab:proxy-calibration}
+\begin{tabular*}{\tblwidth}{@{} l c c @{}}
+\toprule
+Setting & MAE & Spearman \\
+\midrule
+Training fit ($n = 120$) & 0.098 & 0.877 \\
+Permutation control (20 shuffles) & $0.192 \pm 0.006$ & -- \\
+Leave-one-family-out CV & 0.143 & 0.678 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+
+
+We next tested deployment-time fidelity on 54 runs from 27 held-out subsets
+(Table~\ref{tab:holdout-fidelity}; Fig.~\ref{fig:ablation_results}b). The
+proxy achieves $\rho = 0.827$ (subset-level bootstrap 95\% CI $[0.749,\,0.887]$) and
+predicts absolute mIoU with a mean error of 0.086. The single unified model ranks every paired \emph{reference-sibling baseline} run above its \emph{constructed degraded} sibling and preserves perfect alarm recall on these controlled degradations. This discrimination result is defined against the reference/degraded construction labels; it does not by itself establish that all reference runs are accurate enough to accept under any fixed operating threshold.
+
+\begin{table}[ht]
+\caption{Holdout stress-test fidelity of the lean proxy (54 runs: 27 reference-sibling baseline runs and 27 constructed degraded overlays).}
+\label{tab:holdout-fidelity}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular*}{\tblwidth}{@{\extracolsep{\fill}} l c @{}}
+\toprule
+Metric & Full-stage \\
+\midrule
+\textit{Predictiveness } \\
+Spearman $\rho$ & 0.827 \\
+Bootstrap 95\% CI & $[0.749,\,0.887]$ \\
+\addlinespace
+\textit{Calibration} \\
+MAE (overall) & 0.086 \\
+MAE (stag./cont./compl.) & 0.117 / 0.046 / 0.095 \\
+\addlinespace
+\textit{Gating ($\hat{y}<\tau_{\mathrm{alarm}}$, $\tau_{\mathrm{alarm}}=0.5$)} \\
+Bad-run flagging & 27/27 TP, 0/27 FP \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+We then evaluated proxy-guided self-refinement with the PoC verification loop
+(Fable~5) on the nine retrospective, GT-filtered self-refinement candidates
+(Table~\ref{tab:poc-model-compare}; Fig.~\ref{fig:self_self-refinement_results}a,b).
+Proxy-based selection improves mIoU on seven of the nine subsets, leaves one
+unchanged (3-5), and increases
+mean mIoU from 0.569 to 0.675. The largest gain is $+0.233$ on subset 1-5
+(0.549 $\rightarrow$ 0.782); subset 2-2 shows the only marginal decline
+($-0.005$). Per-round proxy scores and the retained overlay are listed in Appendix~\ref{app:poc-selection}.
+
+As a limited secondary check, we repeated the loop with GPT-5.6 using the same three-round budget and the same selection rule as Fable~5: retain the successfully scored configuration with the highest proxy score among the Bayesian-exploration baseline and valid self-refinement rounds (ties retain the earlier configuration).
+with fresh per-subset contexts (Table~\ref{tab:poc-model-compare}). GPT-5.6
+increases the nine-candidate mean from 0.569 to 0.584 ($+0.016$). On two
+subsets (1-5 and 2-2), its proxy-selected overlay improves the predicted proxy
+score while reducing offline mIoU. Fable~5 remains the primary agent because
+it achieves the higher mean selected mIoU on this panel (0.675 versus 0.584);
+the GPT-5.6 result does not independently confirm robust transfer beyond this
+$n=9$ feasibility scope.
+
+\begin{table}[ht]
+\caption{Results: PoC self-refinement on the same nine retrospective, GT-filtered candidates. The baseline is the mIoU achieved by the Bayesian-exploration baseline configuration. Fable~5 is the primary LLM model; GPT-5.6 provides a secondary check under the same budget.}\label{tab:poc-model-compare}
+{\small
+\begin{tabular*}{\tblwidth}{@{} l c c c c c @{}}
+\toprule
+Subset & Baseline & \textbf{Fable~5} & \boldmath$\Delta$Fable & GPT-5.6 & $\Delta$GPT \\
+\midrule
+4-4 & 0.647 & 0.700 & +0.053 & 0.422 & $-0.225$ \\
+1-5 & 0.549 & 0.782 & +0.233 & 0.437 & $-0.112$ \\
+1-4 & 0.556 & 0.786 & +0.230 & 0.556 & $+0.000$ \\
+3-2 & 0.631 & 0.719 & +0.088 & 0.747 & $+0.116$ \\
+4-3 & 0.516 & 0.544 & +0.028 & 0.516 & $+0.000$ \\
+4-1 & 0.635 & 0.659 & +0.024 & 0.659 & $+0.024$ \\
+3-4 & 0.622 & 0.631 & +0.009 & 0.622 & $+0.000$ \\
+3-5 & 0.588 & 0.588 & +0.000 & 0.713 & $+0.125$ \\
+2-2 & 0.673 & 0.668 & -0.005 & 0.586 & $-0.087$ \\
+\midrule
+Mean & 0.569 & \textbf{0.675} & +0.107 & 0.584 & $+0.016$ \\
+\bottomrule
+\end{tabular*}}
+\end{table}
+
+Overall, across all 27 holdout subsets
+(Fig.~\ref{fig:self_self-refinement_results}c; Table~\ref{tab:panel-miou}), mean mIoU rises from 0.456 under
+the original anchor configuration, to
+0.722 with Bayesian exploration, and then to 0.757 after applying proxy-guided self-refinement overlays to the nine panel candidates. The nine-case mean gain of about $0.107$ raises the 27-subset overall mean by approximately
+$0.107\times 9/27\approx 0.035$ ($0.722\rightarrow 0.757$).
+
+\begin{table}[ht]
+\caption{Overall panel mean mIoU on the $n{=}27$ holdout subsets
+(Fig.~\ref{fig:self_self-refinement_results}c). Bootstrap 95\% CIs use 5000
+subset-level resamples. The self-refinement $p$-value is an \emph{exploratory, conditional} two-sided Wilcoxon signed-rank test on the nine attempted subsets' paired mIoU differences; the other 18 subsets contribute zero change and are discarded under the usual Wilcoxon zero-difference convention.}\label{tab:panel-miou}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular*}{\tblwidth}{@{\extracolsep{\fill}} l c c c @{}}
+\toprule
+Operating point & Mean & 95\% CI & $p$ (vs prior) \\
+\midrule
+Anchor & 0.456 & $[0.363,\,0.553]$ & -- \\
+$+$ Bayesian  & 0.722 & $[0.672,\,0.766]$ & $5.8{\times}10^{-4}$ \\
+$+$ self-refinement & \textbf{0.757} & $[0.726,\,0.787]$ & $0.017$ \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+
+\subsection{Ablation analysis}\label{sec:proxy-ablation-results}
+
+To isolate the contribution of each feature group, Table~\ref{tab:ablation-results}
+reports each ablation condition under two
+regimes: training fit (Spearman $\rho$ on the 120 calibration trials) and
+leave-one-family-out (LOFO) cross-validation, in which the model is fitted on
+two families and evaluated on the third. The LOFO columns are the ones that
+matter for deployment, since they measure transfer to a family the model has
+not seen.
+
+\begin{table*}[t]
+\caption{Results: proxy feature-set ablation. We report Spearman correlation ($\rho$) on the 120 calibration trials (Train) and leave-one-family-out cross-validation (LOFO), where LOFO is summarized by Spearman $\rho$ and mean absolute error (MAE).}\label{tab:ablation-results}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l c cc cc @{}}
+\toprule
+& & \multicolumn{2}{c}{Train} & \multicolumn{2}{c}{LOFO} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6}
+Condition & \#Features & $\rho$ & MAE & $\rho$ & MAE \\
+\midrule
+$P(q)$ (PQ only) & 5 & 0.785 & 0.108 & 0.597 & 0.155 \\
+$P(c)$ (SC only) & 5 & 0.876 & 0.096 & 0.726 & 0.119 \\
+$P(q{+}c)$ (combined) & 10 & 0.884 & 0.096 & 0.614 & 0.152 \\
+Lean $P(q{+}c)$ (deployed) & \textbf{5} & 0.877 & 0.098 & 0.678 & 0.143 \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+Full $P(q{+}c)$ achieves the best in-sample calibration (Train MAE 0.096, $\rho$ 0.884) but transfers more weakly than the pruned set (LOFO MAE 0.152, $\rho$ 0.614). Pruning improves the combined model relative to its full version (Lean LOFO MAE 0.143, $\rho$ 0.678). However, SC alone is the strongest reported transfer signal on LOFO (MAE 0.119, $\rho$ 0.726), while PQ alone is the weakest. We nevertheless deploy the lean combined set to retain both PQ and SC for broader diagnostic and robustness coverage (e.g., ring-plausibility and projection completeness alongside joint-boundary correspondence), rather than because it dominates SC-only on LOFO transfer metrics.
+
+\begin{table*}[t]
+\caption{Results: unified versus per-family lean $P(q{+}c)$ on the holdout panel (same five features; pooled: 120 trials; each family model: 40 trials). Holdout $n=18$ per family; pooled $n=54$.}\label{tab:unified-vs-perfamily}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l c c c c @{}}
+\toprule
+Model & MAE & Spearman $\rho$ & Rank & Alarm P/R \\
+\midrule
+
+Lean (staggered) & 0.081 & 0.748 & 9/9 & 1.00 / 1.00 \\
+Lean (continuous) & 0.101 & 0.860 & 9/9 & 0.90 / 1.00 \\
+Lean (complex) & 0.106 & 0.918 & 9/9 & 0.82 / 1.00 \\
+\textbf{Lean unified} & 0.086 & 0.827 & 27/27 & 1.00 / 1.00 \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+Refitting the same lean features as three family-specific Ridge models versus one pooled model yields Table~\ref{tab:unified-vs-perfamily}. Staggered is easiest to fit locally (MAE 0.081); complex is hardest (MAE 0.106). Continuous and complex lose alarm precision (0.90 and 0.82) while retaining perfect recall. Aggregating the three family scorers does not improve absolute fidelity over the unified model (subset-aggregated MAE 0.096 vs.\ 0.086; Wilcoxon on $n{=}27$ subset-level paired absolute errors $W=133$, two-sided $p=0.19$), and the unified lean model retains perfect alarm precision and recall under a single calibration. We therefore deploy the unified model.
+
+\subsection{PoC verification}\label{sec:poc-verification}
+
+The final experiment tests whether the frozen proxy can drive a deployment-label-free self-refinement loop (Section~\ref{sec:poc-protocol}). Outcomes are reported above (Table~\ref{tab:poc-model-compare}, Fig.~\ref{fig:self_self-refinement_results}): Fable~5 lifts mean mIoU from 0.569 to 0.675; GPT-5.6 provides a limited secondary check under the same budget (0.569 to 0.584). The results support the proxy as a useful self-refinement signal on this retrospective GT-filtered feasibility panel, while motivating broader validation across more tunnels and proposal models. Given the small sample ($n = 9$), we report results per case and draw no statistical conclusions beyond demonstrated feasibility. 
+
+\begin{table*}[t]
+\caption{Positioning Proxy4Tun against representative tunnel-segmentation paradigms. The comparison is on setup cost and deployment capability as well as accuracy: \checkmark{} indicates the requirement (or capability) applies, ``--'' that it does not. \emph{Deep learning training} refers specifically to training (or fine-tuning) a segmentation network; Proxy4Tun does not train a segmentation network in this study (it fits a separate linear proxy using offline labelled development data). mIoU figures are \emph{not} measured under comparable settings (see the ``setting'' column): supervised and expert-tuned figures are taken from~\cite{lin2024seg2tunnel} and~\cite{ye2025sam4tun} under their original, more favourable protocols, whereas the Proxy4Tun figures are from this study on 27 held-out subsets: 0.722 under the Bayesian-exploration baseline, and 0.757 after proxy-guided self-refinement of nine GT-filtered candidates ($\approx{+}0.035$ overall).}\label{tab:sota}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l c c c l @{}}
+\toprule
+Method & \begin{tabular}[t]{@{}c@{}}Deep learning\\training\end{tabular} & \begin{tabular}[t]{@{}c@{}}Per-case\\tuning\end{tabular} & \begin{tabular}[t]{@{}c@{}}Deployment-label-free\\quality signal\end{tabular} & mIoU (setting) \\
+\midrule
+LiningNet/SparseUNet/SCF-Net/FA-ResNet & \checkmark & -- & -- & 0.83--0.90 \\
+SAM4Tun & -- & Expert & -- & above 0.90 \\
+\textbf{Proxy4Tun} (Lean $P(q{+}c)$) & -- & \textbf{Auto} & \checkmark & \textbf{0.757} \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Discussion}\label{sec:discussion}
+% ══════════════════════════════════════════════════════════════════════════
+
+This study supports a mechanism-level claim: a frozen, five-feature linear model over observable intrinsic metrics can serve as a deployment-label-free control signal for a tunnel segmentation pipeline. One labelled anchor per lining family is used during design-time calibration on Bayesian-exploration trials. At deployment, the frozen proxy estimates mIoU from intermediate pipeline artifacts using the same fixed extraction conventions (including $N_{\mathrm{exp}}$); family references may still be provided to the proposal agent (and to choose $P_0$), but are not inputs to the frozen scorer. Its scores support ranking and accept/refine/flag decisions using the study operating thresholds $\tau_{\mathrm{alarm}}=0.5$ and $\tau_{\mathrm{accept}}=0.7$, and selection between self-refinement rounds; the linear coefficients keep this control signal auditable.
+
+\subsection{Key findings}
+
+Three findings follow. First, SC alone provides the strongest reported transfer performance under LOFO (Table~\ref{tab:ablation-results}). Pruning the combined PQ{+}SC set from ten features to five improves transfer relative to the full combined set (LOFO Spearman 0.614$\rightarrow$0.678), with only a negligible increase in training MAE (0.096$\rightarrow$0.098). We still retain PQ features in the deployed lean proxy to preserve robustness and diagnostic coverage beyond SC-only, not because the combined set outperforms SC-only on LOFO.
+Second, the unified proxy provides the best deployment
+balance. Family-specific models raise absolute MAE (0.096 versus 0.086) and
+reduce alarm precision on continuous and complex holdouts, while also requiring
+separate calibrations.
+Third, the proxy makes self-refinement auditable by ranking bounded LLM-proposed overlays using an explicit maximum-proxy rule: retain the highest proxy score among the Bayesian-exploration baseline and successfully scored self-refinement rounds (ties retain the earlier configuration).
+
+Across the nine-case PoC study (27 round-to-round transitions; Table~\ref{tab:poc-selection-rounds}), the proxy score increases in 15 transitions. When the proxy increases, offline mIoU decreases in 3 transitions. This opposite-direction behaviour highlights that the proxy is an imperfect surrogate and should be used for bounded, auditable control decisions rather than treated as a GT mIoU replacement.
+
+In practice, each pipeline release requires one expert-tuned anchor per
+lining family and one offline calibration. Bounded Bayesian exploration turns
+these anchors into labelled experience across healthy and degraded
+configurations; feature ablation then freezes a unified proxy package
+(feature definitions, feature-scaling statistics, coefficients, and operating thresholds, together with the fixed extraction conventions such as $N_{\mathrm{exp}}$). The deployed
+proxy provides each new run with a deployment-label-free mIoU estimate and an accept/refine/flag decision from that package. In the retrospective PoC panel, proxy-guided self-refinement improved seven of nine subsets without deployment label access inside the loop. This calibration-and-self-refinement pattern can extend to other parameterised infrastructure pipelines with observable intermediate artifacts.
+
+\subsection{Comparison with state-of-the-art}\label{sec:positioning}
+
+Comparisons here are about operating points, not accuracy leaderboards. Supervised 3D models on Seg2Tunnel report strong in-distribution accuracy~\cite{lin2024seg2tunnel} but require per-point labels and GPU re-training for each new lining family, and provide no deployment-time accept/refine/flag gate. SAM4Tun reaches high accuracy on curated, per-case-tuned rings~\cite{ye2025sam4tun}, but a single fixed configuration transfers poorly off the reference and the pipeline emits no signal when it degrades. Relative to that static pipeline, Proxy4Tun adds an explicit accept/refine/flag gate without deployment labels. Relative to one-shot LLM parameter adapters, it adds a calibrated numeric proxy, so self-refinement can be \emph{assessed and selected} by an explicit estimated-quality signal rather than merely proposed.
+
+\subsection{Limitations}\label{sec:limitations}
+
+Three limitations define the current scope. First, calibration relies on one
+expert-tuned anchor per lining family. Transfer therefore depends on how
+closely a new tunnel matches its anchor in geometry, lining layout, point
+density, and scanning conditions. Larger within-family variation may require
+multiple anchors or additional exploration before the proxy is frozen.
+
+Second, the deployed proxy is a compact five-feature linear Ridge model. This
+choice provides transparency, auditability, and low deployment cost, but cannot
+fully represent nonlinear interactions among pipeline stages or unfamiliar
+failure patterns. More expressive nonlinear models, such as neural networks,
+could improve performance in these settings, but would require a larger,
+more diverse calibration dataset and would reduce interpretability.
+
+Third, the reported alarm result is a paired \emph{reference-sibling baseline} / \emph{constructed degraded} stress test, and the nine-case self-refinement study is a retrospective, GT-filtered feasibility panel. Neither experiment estimates deployment false-alarm rates on naturally degraded runs, nor does the PoC simulate a deployment-style case-selection gate that admits refine-band cases by the proxy alone without the offline GT filter.
+
+% ══════════════════════════════════════════════════════════════════════════
+\section{Conclusions}\label{sec:conclusions}
+% ══════════════════════════════════════════════════════════════════════════
+
+Proxy4Tun calibrates a deployment-label-free quality proxy for segmental tunnel-lining segmentation from design-time Bayesian exploration and deploys it as an auditable control signal. Exploration around one expert-tuned family reference per lining family produces 120 labelled trials spanning healthy to degraded configurations; feature ablation then distils evidence and coherence metrics into a frozen five-feature Ridge proxy with \emph{study operating thresholds} $\tau_{\mathrm{alarm}}=0.5$ and $\tau_{\mathrm{accept}}=0.7$ used to illustrate accept/refine/flag decisions (not validated engineering acceptance criteria). At deployment, the proxy estimates mIoU from a frozen package of intermediate artifacts and the expected ring count $N_{\mathrm{exp}}$ (ten in our experiments); it does not require family-reference statistics.
+
+\begin{itemize}
+\item On a paired stress test of 54 \emph{reference-sibling baseline} and \emph{constructed degraded} holdout runs, the frozen proxy achieves Spearman 0.827 and MAE 0.086, ranks the baseline run above its degraded sibling on every subset, and flags all 27 constructed degraded runs with no false alarms on the paired baseline runs. This is not a deployment false-alarm estimate on naturally occurring failures.
+\item Coherence provides the strongest standalone signal, while leave-one-out pruning of the combined feature set improves the LOFO coefficient-transfer diagnostic relative to the full ten-feature set (LOFO Spearman 0.678 vs.\ 0.614). The unified proxy retains perfect alarm precision and recall under a single calibration and is therefore the deployment model.
+\item On the 27-subset panel, mean mIoU rises from 0.456 (notebook expert configuration) to 0.722 (Bayesian-exploration baseline) to 0.757 after proxy-guided self-refinement of nine GT-filtered candidates. On the refined nine-case subset, mean mIoU increases from 0.569 to 0.675 ($+0.106667\approx{+}0.107$); when averaged over all 27 subsets this contributes $0.106667\times 9/27=0.035556\approx{+}0.036$ to the full-panel mean (0.722$\rightarrow$0.757).
+\end{itemize}
+
+The current scope is limited by single-anchor calibration and the compact linear model; greater within-family variation or more complex failure modes require broader calibration and potentially nonlinear proxies. Future work should evaluate multi-anchor calibration, uncertainty-aware abstention, larger self-refinement campaigns selected by the proxy gate alone, and external or naturally degraded alarm tests. These results show that intrinsic, stage-observable metrics can provide an auditable control plane for tunnel-segmentation pipelines when GT is unavailable.
+
+% ══════════════════════════════════════════════════════════════════════════
+% Data availability, declarations, etc.
+% ══════════════════════════════════════════════════════════════════════════
+
+\section*{Data availability}
+
+The source code, parameter snapshots, exploration-trial tables, and evaluation scripts will be released upon publication. The Seg2Tunnel dataset is publicly available~\cite{lin2024seg2tunnel}.
+
+\section*{Declaration of competing interest}
+
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\section*{Declaration of generative AI use}
+
+During this study, an LLM agent (Fable 5) was evaluated as the proposal mechanism of the proof-of-concept self-refinement loop. LLMs were also used for language editing and for improving manuscript structure. The authors reviewed and edited all content and take full responsibility for the content of the publication.
+
+%\printcredits  % Uncomment if cas-dc supports it in your version
+
+
+% ══════════════════════════════════════════════════════════════════════════
+% Bibliography
+% ══════════════════════════════════════════════════════════════════════════
+
+% Natbib requires a BibTeX style; without it, citations stay as “?”
+% NOTE: \balance can cause column-balancing artefacts in the reference list (e.g.,
+% lines slipping into the footer area) with this class. Keep it off for the bibliography.
+%\balance
+\bibliographystyle{model1-num-names}
+\bibliography{references}
+
+
+% ══════════════════════════════════════════════════════════════════════════
+% Appendix
+% ══════════════════════════════════════════════════════════════════════════
+
+\appendix
+
+\section{Pipeline anchor parameters}\label{app:anchor-parameter}
+
+This appendix summarises the expert-tuned \emph{anchor} parameter profiles used to warm-start the segmentation pipeline for each lining family (staggered, continuous, complex). Table~\ref{tab:anchor-params} lists the fixed stage algorithms and the corresponding family-specific parameter values that define the reference configurations used throughout the study.
+
+\begin{table*}[t]
+\caption{Pipeline anchor parameters: expert-tuned, family-specific anchor parameter profiles of the segmentation pipeline.}\label{tab:anchor-params}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l l p{0.30\textwidth} l @{}}
+\toprule
+Stage & Parameter & Description & Staggered / Continuous / Complex \\
+\midrule
+Unfolding & \texttt{diameter} & Cylindrical scale. & 5.5 / 5.9 / 7.5\,m \\
+Unfolding & \texttt{slice\_spacing\_factor} & Slice spacing (ring width). & 1.2 / 1.2 / 1.8\,m \\
+Unfolding & \texttt{polynomial\_degree} & Centreline fit degree. & 3 / 2 / 2 \\
+Unfolding & \texttt{residual\_recentre} & Per-bin frame recentring. & off / on / on \\
+\midrule
+Denoising & \texttt{mask\_r\_low} & Inner radial gate. & 2.33 / 2.85 / 3.65\,m \\
+Denoising & \texttt{mask\_r\_high} & Outer radial gate. & 2.78 / 3.0 / 3.9\,m \\
+Denoising & \texttt{y\_step} & Angular bin width. & 0.4 / 0.5 / 0.1\,m \\
+Denoising & \texttt{z\_step} & Radial histogram bin width. & 0.005 / 0.001 / 0.001\,m \\
+Denoising & \texttt{grad\_threshold} & Outer-edge gradient threshold. & 0.15 / 0.2 / 0.2 \\
+Denoising & \texttt{smoothing\_window\_size} & Cutoff-curve smoothing window. & 5 / 3 / 3 \\
+Denoising & \texttt{smoothing\_offset} & Post-smoothing cutoff bias. & $-$0.002 / $-$0.003 / $-$0.005\,m \\
+Denoising & \texttt{default\_cutoff\_z} & Fallback radial cutoff. & 2.75 / 2.85 / 3.65\,m \\
+\midrule
+Enhancing & \texttt{upsampling\_stage1} & Stage-1 upsampling spacing. & 0.06 / 0.08 / 0.09\,m \\
+Enhancing & \texttt{upsampling\_stage2} & Stage-2 upsampling spacing. & 0.03 / 0.04 / 0.045\,m \\
+Enhancing & \texttt{upsampling\_stage3} & Stage-3 upsampling spacing. & 0.015 / 0.02 / 0.0225\,m \\
+Enhancing & \texttt{curvature\_threshold} & Panel--joint curvature threshold. & 0.005 / 0.0005 / 0.0005 \\
+Enhancing & \texttt{depth\_threshold\_low} & Lower interpolation depth tolerance. & 0.005 / 0.01 / 0.0065\,m \\
+Enhancing & \texttt{depth\_threshold\_high} & Upper interpolation depth tolerance. & 0.015 / 0.01 / 0.013\,m \\
+Enhancing & \texttt{inter\_radius} & Interpolation neighbour radius. & 0.03 / 0.06 / 0.06\,m \\
+Enhancing & \texttt{n\_segment\_start/end} & Interpolated ring-index window. & 0--5 / 2--8 / 5--14 \\
+Enhancing & \texttt{ring\_spacing\_factor} & Nominal ring width. & 1.2 / 1.2 / 1.8\,m \\
+\midrule
+Detecting & \texttt{binary\_threshold} & Depth-map binarisation level. & 125 / 127 / 125 \\
+Detecting & \texttt{hough\_thresh\_obliq} & Oblique joint-line vote threshold. & 65 / 30 / 35 \\
+Detecting & \texttt{hough\_thresh\_horiz} & Horizontal joint-line vote threshold. & 65 / 30 / 35 \\
+Detecting & \texttt{hough\_thresh\_vert} & Ring-boundary vote threshold. & 600 / 1500 / 5000 \\
+Detecting & \texttt{minLineLength\_obliq} & Minimum oblique line length. & 100 / 40 /  80\,px \\
+Detecting & \texttt{minLineLength\_horiz} & Minimum horizontal line length. & 100 / 50 /  80\,px \\
+Detecting & \texttt{maxLineGap\_obliq} & Oblique line-merging gap limit. & 45 / 30 /  60\,px \\
+Detecting & \texttt{maxLineGap\_horiz} & Horizontal line-merging gap limit. & 10 / 10 /  15\,px \\
+Detecting & \texttt{angle\_range\_oblique} & Oblique-joint angle band. & $\pm$[6, 9] / $\pm$[4, 10] / $\pm$[5, 10]$^{\circ}$ \\
+\midrule
+Segmenting & \texttt{segment\_per\_ring} & Segments per lining ring. & 6 / 6 / 7 \\
+Segmenting & \texttt{segment\_order} & Circumferential segment order. & \begin{tabular}[t]{@{}l@{}}K,B1,A1--A3,B2 /\\K,B2,A3--A1,B1 /\\K,B1,A1--A4,B2\end{tabular} \\
+Segmenting & \texttt{segment\_width} & Nominal segment width. & 1200 / 1200 / 1800\,mm \\
+Segmenting & \texttt{K\_height} & Key-segment arc height. & 1079.9 / 823.8 / 1227.0\,mm \\
+Segmenting & \texttt{AB\_height} & Standard-segment arc height. & 3239.8 / 3346.8 / 3726.9\,mm \\
+Segmenting & \texttt{angle} & Oblique K-joint inclination. & 7.52 / 6.12 / 9.8$^{\circ}$ \\
+Segmenting & \texttt{processing.y\_bounds} & Valid panorama band. & 3800--13300 / 4500--14000 / 4200--13100\,px \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+\section{Bayesian exploration configuration}\label{app:bo-config}
+
+Table~\ref{tab:bo-config} records the frozen design-time exploration settings
+used to generate the 120 calibration trials. Accepted trials are exactly
+$N_0{=}32$ Sobol $+\,N_{\mathrm{GP}}{=}8$ GP-uncertainty acquisitions per family
+(40 valid trials each).
+
+\begin{table*}[t]
+\caption{Design-time Bayesian exploration configuration (frozen snapshot).}\label{tab:bo-config}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l l @{}}
+\toprule
+Setting & Value \\
+\midrule
+Target accepted trials / family & $N{=}40$ ($N_0{=}32$ Sobol, $N_{\mathrm{GP}}{=}8$ accepted GP) \\
+Sobol & Scrambled QMC in the unit cube \\
+GP kernel & Mat\'{e}rn $\nu{=}2.5$ $+$ white noise; \texttt{normalize\_y=True} \\
+Length-scale bounds & $(10^{-2},10^{2})$ per dimension; noise $(10^{-6},10^{-1})$ \\
+GP optimiser & \texttt{GaussianProcessRegressor}, $n_{\mathrm{restarts\_optimizer}}{=}3$ \\
+Acquisition & Maximise predictive std over random candidate pool $\mathcal{P}_{\mathrm{BO}}$ of size $2048$ \\
+Failure / top-up rule & Status not ok or lean features incomplete $\Rightarrow$ exclude; continue until accepted targets met \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
+\section{Per-family search-space bounds}\label{app:search-bounds}
+
+This appendix reports the full bounded per-family search spaces $B$ used for Bayesian exploration. Table~\ref{tab:bo-bounds} enumerates every optimised parameter and its allowable range (or discrete set) for each family reference case, defining the constraints enforced during the frozen 120-trial campaign.
+
+\begin{table*}[t]
+\caption{Complete per-family search-space bounds $B$ for the frozen 120-trial campaign.}\label{tab:bo-bounds}
+{\small
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} llp{0.28\textwidth} @{}}
+\toprule
+Family (case) & Parameter & Bounds \\
+\midrule
+Staggered (2-1) & \texttt{unfolding.ransac\_threshold} & $[0.8,1.2]$ \\
+ & \texttt{unfolding.slice\_spacing\_factor} & $[1.05,1.35]$ \\
+ & \texttt{unfolding.polynomial\_degree} & $\{2,3\}$ \\
+ & \texttt{unfolding.random\_seed} & $\{0,\ldots,7\}$ \\
+ & \texttt{denoising.mask\_r\_low} & $[2.2,2.5]$ \\
+ & \texttt{denoising.mask\_r\_high} & $[2.7,2.9]$ \\
+ & \texttt{denoising.z\_step} & $[0.001,0.008]$ \\
+ & \texttt{denoising.grad\_threshold} & $[0.1,0.25]$ \\
+ & \texttt{enhancing.curvature\_threshold} & $[3{\times}10^{-4},8{\times}10^{-3}]$ \\
+ & \texttt{enhancing.inter\_radius} & $[0.02,0.08]$ \\
+ & \texttt{detecting.binary\_threshold} & $[100,160]$ \\
+ & \texttt{detecting.hough\_threshold\_oblique} & $[40,90]$ \\
+ & \texttt{detecting.hough\_threshold\_horizontal} & $[40,90]$ \\
+ & \texttt{detecting.hough\_threshold\_vertical} & $[400,800]$ \\
+ & \texttt{detecting.maxLineGap\_oblique} & $[20,80]$ \\
+ & \texttt{sam.y\_bounds\_lower} & $[3600,4400]$ \\
+\addlinespace
+Continuous (3-1) & \texttt{unfolding.ransac\_threshold} & $[0.8,1.2]$ \\
+ & \texttt{unfolding.slice\_spacing\_factor} & $[1.05,1.35]$ \\
+ & \texttt{unfolding.polynomial\_degree} & $\{2,3\}$ \\
+ & \texttt{unfolding.random\_seed} & $\{0,\ldots,7\}$ \\
+ & \texttt{denoising.mask\_r\_low} & $[2.7,3.0]$ \\
+ & \texttt{denoising.mask\_r\_high} & $[2.9,3.15]$ \\
+ & \texttt{denoising.mask\_theta\_low} & $[1.0,2.5]$ \\
+ & \texttt{denoising.mask\_theta\_high} & $[15,19]$ \\
+ & \texttt{enhancing.curvature\_threshold} & $[2{\times}10^{-4},2{\times}10^{-3}]$ \\
+ & \texttt{detecting.binary\_threshold} & $[100,160]$ \\
+ & \texttt{detecting.hough\_threshold\_oblique} & $[20,60]$ \\
+ & \texttt{detecting.hough\_threshold\_horizontal} & $[20,60]$ \\
+ & \texttt{detecting.hough\_threshold\_vertical} & $[800,2500]$ \\
+ & \texttt{detecting.maxLineGap\_oblique} & $[10,60]$ \\
+ & \texttt{detecting.pattern\_tolerance} & $[5,20]$ \\
+ & \texttt{detecting.uniform\_k\_snap} & $\{\mathrm{off},\mathrm{on}\}$ \\
+ & \texttt{sam.segment\_width} & $[1000,1400]$ \\
+ & \texttt{sam.K\_height} & $[700,1000]$ \\
+ & \texttt{sam.angle} & $[4,9]$ \\
+\addlinespace
+Complex (5-1) & \texttt{unfolding.ransac\_threshold} & $[0.8,1.2]$ \\
+ & \texttt{unfolding.slice\_spacing\_factor} & $[1.6,2.0]$ \\
+ & \texttt{unfolding.polynomial\_degree} & $\{2,3\}$ \\
+ & \texttt{unfolding.random\_seed} & $\{0,\ldots,7\}$ \\
+ & \texttt{denoising.mask\_r\_low} & $[3.5,3.8]$ \\
+ & \texttt{denoising.mask\_r\_high} & $[3.75,4.05]$ \\
+ & \texttt{enhancing.curvature\_threshold} & $[2{\times}10^{-4},2{\times}10^{-3}]$ \\
+ & \texttt{detecting.binary\_threshold} & $[100,160]$ \\
+ & \texttt{detecting.hough\_threshold\_oblique} & $[25,70]$ \\
+ & \texttt{detecting.hough\_threshold\_horizontal} & $[25,70]$ \\
+ & \texttt{detecting.hough\_threshold\_vertical} & $[800,5000]$ \\
+ & \texttt{detecting.maxLineGap\_oblique} & $[30,80]$ \\
+ & \texttt{detecting.maxLineGap\_horizontal} & $[5,30]$ \\
+ & \texttt{detecting.pattern\_tolerance} & $[5,20]$ \\
+ & \texttt{sam.segment\_width} & $[1500,2100]$ \\
+ & \texttt{sam.K\_height} & $[1000,1500]$ \\
+ & \texttt{sam.angle} & $[7,12]$ \\
+\bottomrule
+\end{tabular*}}
+\end{table*}
+
+
+\section{Tunnel ontology structure}\label{app:ontology}
+
+The reflective agent consults a staged SAM4Tun ontology that encodes pipeline
+artifacts, per-stage parameters and quality metrics, failure modes, diagnostic
+rules, remediation actions, and inter-stage dependencies. The top-level schema
+is summarised below:
+We omit the complete YAML and show only the structure plus one representative
+stage example.
+
+\begin{lstlisting}[caption={Ontology top-level keys and stage inventory.},label={lst:ontology-structure}]
+meta                  # version, domain, coordinate systems
+artifacts             # data objects (cloud, depth map, masks, ...)
+stages[]              # five pipeline stages:
+  stage_1_centreline
+  stage_2_denoise
+  stage_3_upsample
+  stage_4_detection
+  stage_5_segmentation
+inter_stage_dependencies[]   # upstream cause -> defer local retune
+diagnostic_rules[]           # metric patterns -> failure modes
+remediation_actions[]        # bounded parameter changes
+agent_interface              # {state, diagnosis, proposal}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Example ontology stage: radial denoising failure modes.},label={lst:ontology-example}]
+- id: stage_2_denoise
+  name: Local density-difference-based denoising
+  quality_metrics:
+    - id: m_retained_ratio
+      healthy: "lining kept; background removed"
+    - id: m_bg_leakage
+      healthy: "near zero"
+  failure_modes:
+    - id: f_over_gate
+      name: Radial gate too tight
+      symptom: "lining removed; holes in later depth map"
+    - id: f_under_gate
+      name: Radial gate too loose
+      symptom: "rails/tube/noise retained downstream"
+\end{lstlisting}
+
+\section{Agent prompt structure}\label{app:prompt}
+
+Each reflection round issues a single bounded JSON overlay. The model-facing
+prompt is assembled from a fixed skeleton (role, isolation rules, current
+state, GT-blind intrinsics, lean proxy features, allowed artifact images,
+family parameter bounds, and the required output schema). Listing~\ref{lst:prompt-skeleton}
+summarises the skeleton; Listing~\ref{lst:prompt-example} gives one example
+proposal. GT mIoU and evaluation directories are never included.
+
+\begin{lstlisting}[caption={Concentrated agent-prompt skeleton (per round).},label={lst:prompt-skeleton}]
+Role: reflective parameter agent for SAM4Tun
+Allowed context:
+  - family reference priors / warm-start parameters
+  - GT-blind intrinsics and lean proxy features
+  - stage artifacts (depth map, detections, SAM masks)
+  - ontology + bounded family search space
+State: subset, family, stage-1 unlock?, anchor proxy, band
+Task: diagnose failure mode; propose ONE overlay within bounds
+Output JSON keys (required):
+  observation, failure_mode, rationale, overlay
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Example JSON proposal returned by the agent.},label={lst:prompt-example}]
+{
+  "observation": "Centreline residual is high; unroll shows asymmetric voids.",
+  "failure_mode": "f_curve_underfit (under-fit centre curve)",
+  "rationale": "Raise polynomial degree and tighten RANSAC before retuning SAM.",
+  "overlay": {
+    "unfolding": {
+      "polynomial_degree": 3,
+      "ransac_threshold": 0.9
+    }
+  }
+}
+\end{lstlisting}
+
+\section{PoC selection evidence (Fable~5)}\label{app:poc-selection}
+
+This appendix provides supporting evidence for the proof-of-concept (PoC) subset selection used in the self-refinement study. It reports the Bayesian-exploration baseline proxy/GT gate outcomes and the retained round-by-round trajectories under the Fable~5 agent (Table~\ref{tab:poc-selection-rounds}), so the final PoC panel can be audited independently of the main results.
+
+Table~\ref{tab:poc-selection-rounds} lists every round for the nine PoC cases and marks the retained overlay (the maximum proxy score, with earlier-round ties retained).
+
+\begin{table*}[t]
+\caption{Per-round Fable~5 evidence for the nine PoC cases. Selected marks the retained overlay.}\label{tab:poc-selection-rounds}
+{\footnotesize
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} llccc @{}}
+\toprule
+Subset & Round & $\hat{y}$ & Selected & Offline mIoU \\
+\midrule
+1-4 & warm-start & 0.661 & -- & 0.556 \\
+ & round1 & 0.669 & -- & 0.554 \\
+ & round2 & 0.671 & yes & 0.786 \\
+ & round3 & 0.660 & -- & 0.596 \\
+\addlinespace
+1-5 & warm-start & 0.674 & -- & 0.549 \\
+ & round1 & 0.677 & -- & 0.560 \\
+ & round2 & 0.682 & -- & 0.896 \\
+ & round3 & 0.685 & yes & 0.782 \\
+\addlinespace
+2-2 & warm-start & 0.692 & -- & 0.673 \\
+ & round1 & 0.690 & -- & 0.860 \\
+ & round2 & 0.703 & yes & 0.668 \\
+ & round3 & 0.690 & -- & 0.687 \\
+\addlinespace
+3-2 & warm-start & 0.600 & -- & 0.631 \\
+ & round1 & 0.691 & -- & 0.643 \\
+ & round2 & 0.775 & yes & 0.719 \\
+ & round3 & 0.599 & -- & 0.721 \\
+\addlinespace
+3-4 & warm-start & 0.574 & -- & 0.622 \\
+ & round1 & 0.597 & yes & 0.631 \\
+ & round2 & 0.551 & -- & 0.605 \\
+ & round3 & 0.395 & -- & 0.571 \\
+\addlinespace
+3-5 & warm-start & 0.620 & yes & 0.588 \\
+ & round1 & 0.431 & -- & 0.576 \\
+ & round2 & 0.482 & -- & 0.597 \\
+ & round3 & 0.409 & -- & 0.628 \\
+\addlinespace
+4-1 & warm-start & 0.652 & -- & 0.635 \\
+ & round1 & 0.657 & -- & 0.655 \\
+ & round2 & 0.656 & -- & 0.657 \\
+ & round3 & 0.662 & yes & 0.659 \\
+\addlinespace
+4-3 & warm-start & 0.630 & -- & 0.516 \\
+ & round1 & 0.640 & -- & 0.554 \\
+ & round2 & 0.640 & -- & 0.544 \\
+ & round3 & 0.643 & yes & 0.544 \\
+\addlinespace
+4-4 & warm-start & 0.623 & -- & 0.647 \\
+ & round1 & 0.623 & -- & 0.697 \\
+ & round2 & 0.623 & -- & 0.697 \\
+ & round3 & 0.625 & yes & 0.700 \\
+\bottomrule
+\end{tabular*}}
+\end{table*}
+
+\end{document}

@@ -1,0 +1,23 @@
+{
+  "observation": "Round 1 regressed from 0.699142 to 0.686766 because correspondence F1 fell from 0.455 to 0.431524, while fill changed only from 0.743164 to 0.741692 and ring count remained exact. The attached anchor overlay shows repeated unsupported horizontal label boundaries in addition to the oblique pattern, so further curvature, oblique-Hough, or oblique-gap tuning is not supported by the round signal.",
+  "rule": "After a coordinated line-enhancement change lowers correspondence without improving fill or topology, back away from that parameter family and test a distinct, narrow hypothesis on the missing boundary orientation while preserving stable geometry.",
+  "failure_mode": "The first proposal likely altered or joined oblique evidence without aligning it to segmentation boundaries. The remaining proxy bottleneck may instead be insufficient horizontal-line support and an overly restrictive lower crop, while broad upstream changes risk degrading the near-accept anchor.",
+  "rationale": "Leave denoising, enhancement, oblique detection, and unfolding unchanged. Use a moderately permissive binary threshold with a below-midpoint horizontal Hough threshold to recover faint repeated horizontal joints, and move the SAM lower bound toward the lower half of its allowed range to retain more usable wall area than round 1. This is a different, conservative test aimed directly at correspondence while protecting exact ring count and orientation.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 125,
+      "hough_threshold_horizontal": 55
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3800,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T02:35:05.436924",
+  "provenance": {
+    "agent_id": "a3de6900-58db-4500-ac0b-e4512b160e78"
+  }
+}

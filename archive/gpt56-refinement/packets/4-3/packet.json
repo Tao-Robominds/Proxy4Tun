@@ -1,0 +1,242 @@
+{
+  "subset": "4-3",
+  "family": "t4&5",
+  "model": "GPT-5.6 Sol",
+  "built_at": "2026-07-29T08:43:04.534456",
+  "anchor_run": "/home/boringtao/Projects/Proxy4Tun/data/bo-unified/4-3-family-proxy/runs/4-3-anchor",
+  "stage1_unlocked": true,
+  "recentre_residual_max_cm": 23.2,
+  "anchor_proxy_scaled": 0.6295561181416475,
+  "anchor_proxy_raw": 0.6295561181416475,
+  "band": "refine",
+  "intrinsics_gt_blind": {
+    "orient_h_ring_corr": 0.983067663201833,
+    "orient_invariant_ok": 1.0,
+    "recentre_residual_max_cm": 23.2,
+    "denoise_retained_ratio": 0.7254553472672002,
+    "depth_nan_ratio": 0.2452039067112422,
+    "depth_outlier_ratio": 0.0009887966197817434,
+    "det_midpoint_ratio": 0.4,
+    "det_real_detection_ratio": 0.6,
+    "det_fallback_ratio": 0.4,
+    "det_x_spacing_cv": 0.3333333333333333,
+    "det_y_std": 971.642178958631,
+    "det_ring_count_error": 0.0,
+    "det_n_points": 10.0,
+    "sam_fill_rate": 0.7170697542593042,
+    "sam_ring_completeness": 1.0,
+    "sam_segment_size_cv": 1.0756001699898754,
+    "sam_ontology_divergence": 0.10079588005915159
+  },
+  "lean_features": {
+    "depth_nan_ratio": 0.2452039067112422,
+    "denoise_retained_ratio": 0.7254553472672002,
+    "unfold_residual": 3.186352633162641,
+    "orient_agreement": 0.986044276927073,
+    "sam_fill_rate": 0.7170697542593042,
+    "sam_ontology_divergence": 0.10079588005915159,
+    "det_row_residual_px": 0.0,
+    "det_row_gated": 0.0,
+    "det_row_y_std": 448.63243785664304,
+    "phase_incoherence_deg": 19.0
+  },
+  "parameter_bounds": [
+    {
+      "name": "ransac_threshold",
+      "stage": "unfolding",
+      "key": "ransac_threshold",
+      "kind": "float",
+      "low": 0.8,
+      "high": 1.2,
+      "special": null
+    },
+    {
+      "name": "slice_spacing_factor",
+      "stage": "unfolding",
+      "key": "slice_spacing_factor",
+      "kind": "float",
+      "low": 1.6,
+      "high": 2.0,
+      "special": null
+    },
+    {
+      "name": "polynomial_degree",
+      "stage": "unfolding",
+      "key": "polynomial_degree",
+      "kind": "int",
+      "low": 2,
+      "high": 3,
+      "special": null
+    },
+    {
+      "name": "random_seed",
+      "stage": "unfolding",
+      "key": "random_seed",
+      "kind": "int",
+      "low": 0,
+      "high": 7,
+      "special": null
+    },
+    {
+      "name": "mask_r_low",
+      "stage": "denoising",
+      "key": "mask_r_low",
+      "kind": "float",
+      "low": 3.5,
+      "high": 3.8,
+      "special": null
+    },
+    {
+      "name": "mask_r_high",
+      "stage": "denoising",
+      "key": "mask_r_high",
+      "kind": "float",
+      "low": 3.75,
+      "high": 4.05,
+      "special": null
+    },
+    {
+      "name": "curvature_threshold",
+      "stage": "enhancing",
+      "key": "curvature_threshold",
+      "kind": "float",
+      "low": 0.0002,
+      "high": 0.002,
+      "special": null
+    },
+    {
+      "name": "binary_threshold",
+      "stage": "detecting",
+      "key": "binary_threshold",
+      "kind": "int",
+      "low": 100,
+      "high": 160,
+      "special": null
+    },
+    {
+      "name": "hough_threshold_oblique",
+      "stage": "detecting",
+      "key": "hough_threshold_oblique",
+      "kind": "int",
+      "low": 25,
+      "high": 70,
+      "special": null
+    },
+    {
+      "name": "hough_threshold_horizontal",
+      "stage": "detecting",
+      "key": "hough_threshold_horizontal",
+      "kind": "int",
+      "low": 25,
+      "high": 70,
+      "special": null
+    },
+    {
+      "name": "hough_threshold_vertical",
+      "stage": "detecting",
+      "key": "hough_threshold_vertical",
+      "kind": "int",
+      "low": 800,
+      "high": 5000,
+      "special": null
+    },
+    {
+      "name": "maxLineGap_oblique",
+      "stage": "detecting",
+      "key": "maxLineGap_oblique",
+      "kind": "int",
+      "low": 30,
+      "high": 80,
+      "special": null
+    },
+    {
+      "name": "maxLineGap_horizontal",
+      "stage": "detecting",
+      "key": "maxLineGap_horizontal",
+      "kind": "int",
+      "low": 5,
+      "high": 30,
+      "special": null
+    },
+    {
+      "name": "pattern_tolerance",
+      "stage": "detecting",
+      "key": "pattern_tolerance",
+      "kind": "int",
+      "low": 5,
+      "high": 20,
+      "special": null
+    },
+    {
+      "name": "segment_width",
+      "stage": "sam",
+      "key": "segment_width",
+      "kind": "int",
+      "low": 1500,
+      "high": 2100,
+      "special": null
+    },
+    {
+      "name": "K_height",
+      "stage": "sam",
+      "key": "K_height",
+      "kind": "float",
+      "low": 1000.0,
+      "high": 1500.0,
+      "special": null
+    },
+    {
+      "name": "angle",
+      "stage": "sam",
+      "key": "angle",
+      "kind": "float",
+      "low": 7.0,
+      "high": 12.0,
+      "special": null
+    }
+  ],
+  "images": {
+    "depth_map.png": "770a5ad7fdef1aed44357a5f81f64f30837124405b6c6c8ae5dc118d2656182e",
+    "depth_map_viridis.png": "4ca0494867ad6c7edf48640b50bb64d9c2358f8d6e03a5069f25ac23d23faf3e",
+    "detected_lines.png": "492cebeb6ab70f7de19a09a2baf745793634e84a90d03603c016812633211ac9",
+    "initial_prompt_points.png": "4e40762e99b4c7c2fde7d5815c2950062a83eb3ed782a8203903dced61d07f28",
+    "segmentation_results.png": "96699899ff87c7d7cb45a7589668307999d0d6f4cabb7b21d156b5c0a7671e0b",
+    "sam_depth_input.png": "38767238660b4fe7f2f6717a3a7b620d94b9a2700b680d8bfa2636dfe4258295"
+  },
+  "knowledge_hashes": {
+    "sam4tun_ontology.yaml": "481cb71b940ac563f7876032d78b713749bd1ced79ebc2b463bae714f0236311",
+    "tunnel_priors.yaml": "b422087987fe51527d58901319637eefc155f85dc316a4f725f876563ad3ed14",
+    "experiences_sanitized.md": "b6aa5750378d380a13a8063fc42bfe7a5051af3f8b7dbc4351e1e6e6230a4bfd"
+  },
+  "knowledge_dir": "/home/boringtao/Projects/Proxy4Tun/gpt56-refinement/knowledge",
+  "protocol": {
+    "rounds": 3,
+    "selection": "monotone accept on scaled proxy vs anchor; among candidates within 0.01 of best proxy, prefer lowest recentre_residual_max_cm then higher proxy",
+    "output_schema": {
+      "observation": "str",
+      "failure_mode": "str",
+      "rationale": "str",
+      "overlay": "dict[stage -> {param: value}]"
+    },
+    "rules": [
+      "Propose ONE bounded overlay per round.",
+      "Only use keys listed in parameter_bounds.",
+      "Unfolding changes are allowed only when stage1_unlocked is true.",
+      "Never request or use GT mIoU / evaluation metrics.",
+      "Do not read data/reflect, bo-proxy-scale selections, or prior campaign reports.",
+      "Prefer coordinated multi-stage changes when upstream defects are visible."
+    ]
+  },
+  "hashes": {
+    "allowlist.md": "dfef7a69da076ad80207e3a0a68e411d32c4a80848d72391122b701a1df42b97",
+    "denylist.md": "4cd5af8df61a8df98e0012610f74bbd47816cf907df6e2840585d101aa0a35c7",
+    "packet_images": {
+      "depth_map.png": "770a5ad7fdef1aed44357a5f81f64f30837124405b6c6c8ae5dc118d2656182e",
+      "depth_map_viridis.png": "4ca0494867ad6c7edf48640b50bb64d9c2358f8d6e03a5069f25ac23d23faf3e",
+      "detected_lines.png": "492cebeb6ab70f7de19a09a2baf745793634e84a90d03603c016812633211ac9",
+      "initial_prompt_points.png": "4e40762e99b4c7c2fde7d5815c2950062a83eb3ed782a8203903dced61d07f28",
+      "segmentation_results.png": "96699899ff87c7d7cb45a7589668307999d0d6f4cabb7b21d156b5c0a7671e0b",
+      "sam_depth_input.png": "38767238660b4fe7f2f6717a3a7b620d94b9a2700b680d8bfa2636dfe4258295"
+    }
+  }
+}

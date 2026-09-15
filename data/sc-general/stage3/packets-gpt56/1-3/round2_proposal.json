@@ -1,0 +1,28 @@
+{
+  "observation": "Round 1 lowered proxy_scaled from 0.550144 to 0.546820: fill rose only slightly from 0.732531 to 0.737252, but correspondence_f1@15 fell from 0.186826 to 0.178396 while ring-count error and depth NaN ratio stayed effectively unchanged. The new line image contains extra oblique clutter near the map ends and upper band, and the prompt plot is now dominated by midpoint or assumed points rather than slope-supported intersections. Thus the round-1 relaxation increased detections without improving boundary agreement.",
+  "rule": "When relaxed seam extraction preserves ring count but lowers correspondence, move to a selective-boundary regime: suppress weak or bridged oblique clutter, avoid smoothing across high-curvature seams, and use a moderate SAM lower bound rather than the round-1 extreme.",
+  "failure_mode": "Spurious or over-bridged oblique responses perturb prompt selection and shift SAM boundaries away from physical joints; permissive surface enhancement and the lowest SAM bound add weakly supported coverage rather than coherent segmentation.",
+  "rationale": "This overlay is deliberately different from round 1. The minimum curvature threshold limits surface interpolation across sharp seam structure. Raising the binary and Hough thresholds and shortening the allowed oblique gap rejects the weak fragments introduced by the relaxed detector, while a moderate horizontal threshold retains fallback support. Moving the SAM lower bound to 4000 trades the round-1 marginal fill gain for cleaner, more geometrically supported masks. Vertical detection remains untouched because ring count is already exact.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0003
+    },
+    "detecting": {
+      "binary_threshold": 135,
+      "hough_threshold_oblique": 60,
+      "hough_threshold_horizontal": 60,
+      "maxLineGap_oblique": 35
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4000,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T00:40:39.823979",
+  "provenance": {
+    "agent_id": "2f03d977-b5fe-4a34-8d5c-1ad0dd71de43"
+  }
+}

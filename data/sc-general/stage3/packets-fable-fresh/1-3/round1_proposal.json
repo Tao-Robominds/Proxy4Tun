@@ -1,0 +1,22 @@
+{
+  "observation": "Stages 1-3 are healthy: orient_axis_corr 0.99998, recentre residual 1.4 cm (<10 cm gate), depth_nan_ratio 0.109 (below the 19-22% family-normal range), denoise_retained_ratio 0.77 with spatially uniform discards, 10 Hough verticals for 10 rings (ring_count_error 0). The weak feature is correspondence_f1@15 = 0.187. In detected_lines.png oblique (red/green) joint lines are found almost only around the two K-block rows (y~1090-1300 and y~1510-1730; their ~216 px spacing matches K_height_pixel = 1079.92/5 = 216), and even there mostly in the high-density scanner columns x~1200-1900. The A/B block boundaries at K +/- 648 px (AB_height_pixel) yield no oblique lines, so in sc_correspondence_overlay.png almost every A2/B1, A3/B2 and inter-A label boundary is red (unsupported), while the detector emitted several horizontal fallback lines (blue in detected_lines, orange in the overlay: y~70, 650, 870, 2150, 2400) that explain no label boundary. det_fallback_ratio 0.1 (one 'assume' prompt at x~610), 7/10 prompts are midpoint-derived. In the binarised outlier map the joint pixels outside the scanner region are sparse/dashed rather than continuous.",
+  "rule": "sam4tun_ontology d7 (m_line_yield low AND horizontal fallback triggered -> f_missing_lines) with upstream check d6 (m_joint_contrast low -> f_joint_oversmoothed) via inter_stage_dependency stage_3_upsample.f_joint_oversmoothed -> stage_4_detection.f_missing_lines. Remediations r_relax_hough (lower oblique threshold / raise maxLineGap) and the stage-3 joint-enhancement side (inter_radius, since depth_threshold_low/high are not in the bounded set). experiences.md section 7: stages 1-3 validated as healthy this round, so touching detection is allowed; section 5: keep vertical count == ring count, so hough_threshold_vertical is left untouched.",
+  "failure_mode": "f_missing_lines (stage_4_detection) with partial upstream f_joint_oversmoothed (stage_3_upsample): joint points outside the scanner-dense columns are too sparse to survive the oblique HoughLinesP accumulator, so only K-row wedges are found and the A/B ring-joint boundaries go unsupported; spurious horizontal fallback lines lower correspondence precision.",
+  "rationale": "Coordinated stage-3 + stage-4 move aimed directly at correspondence_f1@15. (1) enhancing.inter_radius 0.06 -> 0.075 (+15 px -> ~15 px interpolation reach) bridges dashed joint points into continuous boundary traces before projection, raising joint contrast in the outlier map. (2) detecting.binary_threshold 127 -> 118 admits slightly fainter joint pixels after dilation. (3) detecting.hough_threshold_oblique -> 44 and detecting.maxLineGap_oblique -> 60 let the [5,10]/[-10,-5] deg accumulator accept the longer but still gapped oblique joints at the A/B boundaries (K +/- 648 px) and in the low-density columns; the angle filter and the K/AB distance-pattern gate limit spurious acceptances. (4) detecting.hough_threshold_horizontal -> 65 suppresses the unexplained horizontal fallback lines (orange in the overlay) that dilute correspondence precision; horizontal is fallback-only and did not rescue the single 'assume' prompt anyway. Vertical threshold untouched (10 lines == 10 rings). Denoising left at tunnel priors (retention healthy; experiences section 4). SAM y_bounds not changed: sam_fill_rate 0.73 losses coincide with the physical void bands at y~250 and y~2500, not with a graded per-class weakness, so SAM geometry is not the identified failure this round. Unfolding omitted (stage1_unlocked false, residual 1.4 cm). Expected signal: more cyan joint lines and more green label boundaries in the overlay, fewer orange horizontals, det_fallback_ratio -> 0, proxy up via correspondence_f1@15 while ring_count_error stays 0.",
+  "overlay": {
+    "enhancing": {
+      "inter_radius": 0.075
+    },
+    "detecting": {
+      "binary_threshold": 118,
+      "hough_threshold_oblique": 44,
+      "hough_threshold_horizontal": 65,
+      "maxLineGap_oblique": 60
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T18:29:25.846936",
+  "provenance": {
+    "agent_id": "e96e1c27-2d59-47ba-855d-bad223982b51"
+  }
+}

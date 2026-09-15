@@ -1,0 +1,35 @@
+{
+  "observation": "Both prior rounds remained below the 0.539694 anchor. Round 2 improved on round 1 and reduced depth NaN ratio to 0.150041 with stable fill and zero ring-count error, but correspondence F1@15 remained low at 0.125829. This indicates that moderate filtering helped data quality, while the stricter Hough threshold and short gap still failed to convert the fragmented central seam into better-aligned prompts.",
+  "rule": "When denoising improves depth retention quality but strict voting leaves correspondence weak, preserve a slightly wider radial band and use intermediate Hough consensus with moderate gap bridging; keep periodic snapping and shift the K prior conservatively rather than destabilizing ring count.",
+  "failure_mode": "The prior detector settings bracketed the useful regime: round 1 over-linked weak fragments, while round 2 required too much local consensus and bridged too little, leaving the regular fallback prompt row misaligned with much of the visible joint structure.",
+  "rationale": "A radial interval of 2.78 to 3.12 retains more usable surface than round 2 while remaining bounded. Hough thresholds of 30, a gap of 45, and pattern tolerance 18 form an intermediate detector that can connect coherent fragments without returning to round-1 permissiveness. Moderate enhancement and binarization avoid both previous extremes. Uniform K snapping preserves the reliable ten-ring periodicity, while K_height 950 tests a higher prompt prior with the requested segment width of 1150.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.78,
+      "mask_r_high": 3.12,
+      "mask_theta_low": 1.5,
+      "mask_theta_high": 17.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0007
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 30,
+      "maxLineGap_oblique": 45,
+      "pattern_tolerance": 18,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1150,
+      "K_height": 950.0,
+      "angle": 5.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T03:16:42.663318",
+  "provenance": {
+    "agent_id": "ec4c555d-21a6-4e79-99ac-cee8e45bb6ef"
+  }
+}

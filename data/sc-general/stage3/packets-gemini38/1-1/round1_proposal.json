@@ -1,0 +1,20 @@
+{
+  "observation": "GT-blind proxy sits in refine (0.607) with ring_count_error=0 and residual 2.8 cm, so stage-1 is frozen and healthy. The SC correspondence overlay is the main pain: correspondence_f1@15\u22480.29 with many red unsupported label boundaries and orange unexplained joint stubs. detected_lines.png shows correct 10 magenta verticals, but oblique/horizontal yield is patchy\u2014dense on the right half, sparse/fragmented on the left\u2014with det_fallback_ratio=0.3. Joint continuity looks gappy rather than systematically over-detected.",
+  "rule": "Ontology d7 (low oblique yield / horizontal fallback) and remediation r_relax_hough: when ring verticals are already correct, recover staggered circumferential joints by lowering Hough acceptance and bridging gaps before blaming SAM templates.",
+  "failure_mode": "f_missing_lines",
+  "rationale": "Round 1 spends budget on detection-side correspondence. Keep vertical threshold near the T1 prior (500) so the 10-ring lattice stays stable, but relax oblique/horizontal thresholds and raise maxLineGap_oblique so short staggered joint segments connect across columns. Slightly lower binary_threshold to retain fainter joint pixels visible in the depth map without inventing dead knobs (depth_threshold_* is out of bounds).",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 112,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 45,
+      "hough_threshold_vertical": 500,
+      "maxLineGap_oblique": 70
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T07:35:10.985817",
+  "provenance": {
+    "agent_id": "fd5301b9-8379-4c9d-965c-62fd7e321d81"
+  }
+}

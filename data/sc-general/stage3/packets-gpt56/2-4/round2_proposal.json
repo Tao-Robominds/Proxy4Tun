@@ -1,0 +1,33 @@
+{
+  "observation": "Round 1 lowered the proxy from 0.676342 to 0.672793: correspondence_f1@15 fell from 0.411668 to 0.404369 and SAM fill remained essentially flat, although depth_nan_ratio improved slightly. The attached overlays retain the correct 10-ring layout but show dense fragmented edge texture and several detected segments not explained by semantic boundaries.",
+  "rule": "When permissive enhancement and line linking reduce correspondence without improving fill, reverse toward local, high-confidence evidence: suppress weak gradients, use a smaller enhancement neighborhood, require stronger line support, and avoid over-bridging oblique fragments.",
+  "failure_mode": "Round 1 likely joined unrelated edge fragments into false or displaced joint lines; those extra detections did not support the repeated label boundaries and may have destabilized prompt placement.",
+  "rationale": "This proposal is deliberately different from round 1. Higher gradient, curvature, binary, and Hough thresholds favor structurally repeated joints over surface texture, while the smaller interaction radius and shorter oblique gap reduce false bridging. Lowering the flat SAM crop start from 4000 to 3600 restores more of the allowed informative span to test whether the nearly unchanged fill was crop-limited. Unfolding remains omitted because stage 1 is locked and its geometry is stable.",
+  "overlay": {
+    "denoising": {
+      "z_step": 0.004,
+      "grad_threshold": 0.2
+    },
+    "enhancing": {
+      "curvature_threshold": 0.005,
+      "inter_radius": 0.03
+    },
+    "detecting": {
+      "binary_threshold": 145,
+      "hough_threshold_oblique": 75,
+      "hough_threshold_horizontal": 70,
+      "maxLineGap_oblique": 35
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3600,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T02:16:44.707731",
+  "provenance": {
+    "agent_id": "0e295c30-1899-49ae-9e58-17616cc7809c"
+  }
+}

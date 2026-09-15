@@ -1,0 +1,36 @@
+{
+  "observation": "Anchor proxy 0.676 (refine). Stage-1 healthy (|orient corr|\u22481.0, residual 1.7 cm) and ring_count=10 with det_real_detection_ratio=0.9, so geometry/unroll is not the bottleneck. correspondence_f1@15=0.412 is the weak lean feature: SC overlay @15 shows many orange unexplained oblique joints in the staggered mid-band while some label edges are unsupported (red). Detected-lines already show red/green staggered pairs, but SAM boundaries fail to explain them. sam_fill_rate=0.745 and segment_size_cv=1.32 fit a staggered crop/template mismatch more than a missing-ring failure.",
+  "rule": "experiences \u00a77 + ontology d7/r_relax_hough: with stages 1\u20133 healthy, prefer relaxing oblique detection (lower hough_threshold_oblique, raise maxLineGap_oblique) and mild joint enhancement before blaming SAM; pair with a mid y_bounds window so staggered K/B prompts stay in-crop.",
+  "failure_mode": "f_missing_lines / staggered joint\u2013boundary correspondence gap (unexplained oblique seams)",
+  "rationale": "Round 1 maximizes explained staggered joints: more permissive oblique Hough + larger maxLineGap to bridge discontinuous staggered seams, slightly lower binary threshold for joint pixels, modest inter_radius bump for joint contrast, and y_bounds lower=3900 to keep the staggered band inside SAM processing without over-trimming the top.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.35,
+      "mask_r_high": 2.82,
+      "z_step": 0.002,
+      "grad_threshold": 0.18
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0008,
+      "inter_radius": 0.07
+    },
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 50,
+      "hough_threshold_vertical": 500,
+      "maxLineGap_oblique": 65
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3900,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T08:18:26.215620",
+  "provenance": {
+    "agent_id": "780ecc97-84e8-4c60-b3b8-8255b6a1a475"
+  }
+}

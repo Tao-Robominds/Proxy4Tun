@@ -1,0 +1,36 @@
+{
+  "observation": "denoise_retained_ratio=0.771 with depth_nan_ratio=0.111 is family-plausible, yet sam_fill_rate=0.74 and F1@15=0.455 still leave unexplained mid-band joints on the SC overlay. A third path couples a slightly wider radial band and denser z sampling (more joint pixels into the depth map) with prior-like oblique Hough, larger maxLineGap, and mid-high y_bounds\u2014orthogonal to R1\u2019s strong Hough relax and R2\u2019s aggressive y=4300/crop focus.",
+  "rule": "Ontology r_widen_band + multi-stage coordination: when residual/orientation are OK but fill and correspondence remain weak, widen [mask_r_low, mask_r_high] modestly and co-tune detecting + y_bounds rather than isolating one stage.",
+  "failure_mode": "f_over_under_coverage with residual f_pattern_mismatch on staggered joints",
+  "rationale": "Round-3 coverage/retention path: widen radial gate toward more lining retention, denser z_step, larger oblique gap (70) at notebook-like oblique threshold (50), vertical slightly softer (450), and y_bounds=4100 between R1 and R2. Distinct multi-stage combination. No unfolding; full=false.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.25,
+      "mask_r_high": 2.88,
+      "z_step": 0.0015,
+      "grad_threshold": 0.12
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0012,
+      "inter_radius": 0.06
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 50,
+      "hough_threshold_horizontal": 60,
+      "hough_threshold_vertical": 450,
+      "maxLineGap_oblique": 70
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4100,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T08:42:03.782593",
+  "provenance": {
+    "agent_id": "4b2a8d23-4630-4076-ba36-ca5df9c81c54"
+  }
+}

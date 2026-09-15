@@ -1,0 +1,36 @@
+{
+  "observation": "Anchor proxy_scaled 0.681 (refine, near accept). correspondence_f1@15=0.467 is weak while ring_count_error=0 and recentre_residual_max_cm=3.2 (healthy). detected_lines shows coherent magenta verticals (~10 rings) with green/red obliqu\u00e9s at roughly \u00b16\u00b0 in the central K band; SC overlay has mixed cyan/orange joint explanations and green/red boundary support along the central joint. det_fallback_ratio=1.0 with det_real_detection_ratio=0 is expected under continuous uniform_k_snap and is not itself a failure. sam_fill_rate=0.649 and sam_segment_size_cv=0.46 leave graded headroom in prompt/template alignment.",
+  "rule": "Ontology d7/d8 (f_missing_lines / f_pattern_mismatch) plus experiences \u00a75\u20136: for continuous t3 prefer oblique yield and K/AB distance-pattern regularity over Type-histogram real-detection ratio; only then retune SAM geometry. Experiences \u00a711: corroborate snap health via geometry/residual, not det_real_detection_ratio.",
+  "failure_mode": "f_pattern_mismatch with residual f_missing_lines \u2014 weak SC correspondence@15 from incompletely explained central joint segments despite correct ring count.",
+  "rationale": "stage1_unlocked=false and residual 3.2 cm \u226a 10 cm gate \u2192 omit unfolding, full=false. Round 1 prioritizes detection: slightly relax oblique Hough and maxLineGap toward T3 prior (30/30), keep vertical high for synthetic consistency, enable uniform_k_snap, and set SAM segment_width/K_height/angle near T3 priors (1200 / ~824 / 6.12) inside bounds. Avoid low empty-crop K_height.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.85,
+      "mask_r_high": 3.0,
+      "mask_theta_low": 1.55,
+      "mask_theta_high": 17.15
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 127,
+      "hough_threshold_oblique": 28,
+      "hough_threshold_horizontal": 30,
+      "hough_threshold_vertical": 1500,
+      "maxLineGap_oblique": 35,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 825.0,
+      "angle": 6.1
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:40:08.418647",
+  "provenance": {
+    "agent_id": "7f14357f-9200-4631-9b27-64f67a8fe2fd"
+  }
+}

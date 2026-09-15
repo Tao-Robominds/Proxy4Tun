@@ -1,0 +1,34 @@
+{
+  "observation": "Same GT-blind state: F1@15=0.334, fill=0.735, fallback_ratio=0.4. SC right panel places real prompts (*) on trapezoidal key segments with orange unexplained slanted joints; left panel red unsupported horizontals concentrate near the bright longitudinal band where oversized K crops can go empty. Distinct hypothesis vs R1: compact K templates and lower taper reduce empty-crop / overhang near that band.",
+  "rule": "f_template_mismatch / f_crop_offset \u2014 oversized K_height near voids yields empty crops and unsupported horizontals; shrink K_height and segment_width while keeping angle inside T4 band. Prefer full=false (residual 3.4cm < 10cm gate).",
+  "failure_mode": "f_crop_offset",
+  "rationale": "Compact SAM geometry (width 1600, K_height 1100, angle 8.0) to avoid empty-crop K boxes around the longitudinal white strip, with looser oblique maxLineGap to reconnect fragmented angled joints that currently stay orange.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.55,
+      "mask_r_high": 4.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 32,
+      "hough_threshold_horizontal": 28,
+      "hough_threshold_vertical": 2500,
+      "maxLineGap_oblique": 75,
+      "maxLineGap_horizontal": 18,
+      "pattern_tolerance": 15
+    },
+    "sam": {
+      "segment_width": 1600,
+      "K_height": 1100.0,
+      "angle": 8.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T10:36:53.720426",
+  "provenance": {
+    "agent_id": "bf15119b-b73e-4bea-9f32-8b17487c4c49"
+  }
+}

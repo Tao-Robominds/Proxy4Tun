@@ -1,0 +1,22 @@
+{
+  "observation": "Round 1 (oblique/horizontal Hough 65, maxLineGap_oblique 25, binary 135, inter_radius 0.07) moved the proxy 0.555 -> 0.596 and correspondence_f1@15 0.201 -> 0.277 while the evidence features stayed flat (depth NaN 0.1177 -> 0.1177, ring_count_error 0, fill rate 0.729 -> 0.727), so the direction was confirmed without collateral damage. Stage-1/2/3 health is unchanged (orient corr -0.999, residual 2.5 cm, retention 0.76). The vertical Hough finds no lines at threshold 600 and the pipeline uses 10 synthetic ring-centre verticals, which is the robust path (line count == ring count), so hough_threshold_vertical is not a lever here. The round-1 prompt centres are now consistent with a two-position K stagger for six rings (rings 0,2,6 at y~1123-1197; rings 1,3,5 at y~1555-1629, alternating by ~432 px) but four rings still carry off-pattern real detections: ring 4 midpoint at 2062, ring 8 midpoint at 1843, rings 7 and 9 negative_slope at ~2275. These come from the dense, speckled right half of the outlier map (x>1200) where bolt-hole rows and scan speckle still produce oblique/horizontal candidates that pass the accumulator. The SC overlay still shows most right-half label boundaries red and most joint lines orange, i.e. the remaining F1 deficit is concentrated in exactly those rings.",
+  "rule": "d9 -> f_spurious_lines persists in the far/sparse-scan half; r_tighten_hough applied again with a larger step (raise oblique/horizontal accumulator thresholds, shorten maxLineGap so a candidate must be a single ring-local joint, raise the binarisation threshold so weak dilated speckle does not vote). Precondition per experiences section 7 satisfied: stages 1-3 healthy, ring count correct. inter_radius raised to the top of its range so genuine joints in the sparse left half retain enough interpolated support under the stricter accumulator (guards against tipping into f_missing_lines). Vertical threshold, denoising, SAM geometry and unfolding (locked) untouched so attribution to the detection axis stays clean.",
+  "failure_mode": "stage_4_detection.f_spurious_lines on rings 4, 7, 8, 9 (off-pattern midpoint/negative_slope prompt centres from speckle and bolt-hole rows) -> stage_5_segmentation.f_crop_offset -> unsupported label boundaries and low correspondence_f1@15.",
+  "rationale": "Round 1 proved that trading weak oblique/horizontal candidates for pattern-consistent centres raises correspondence F1 without touching NaN, ring count or fill rate, so round 2 exploits the same axis with a bigger step: hough_threshold_oblique 65 -> 80 and hough_threshold_horizontal 65 -> 80 require substantially more collinear votes (a true joint spans a full ring width, ~240 px at 0.005 m/px, so it still clears the bar), maxLineGap_oblique 25 -> 20 forbids bridging across bolt-hole gaps, and binary_threshold 135 -> 150 removes the low-intensity dilated speckle that feeds the accumulator in the right half. inter_radius 0.07 -> 0.08 (upper bound) densifies interpolated joint points so real joints, especially in the sparse left half, keep enough support and rings do not fall back to horizontal-only detection. Expected: rings 4/7/8/9 either yield ring-local joints consistent with the ~432 px two-position stagger or drop to pattern-assumed centres that already match it; label boundaries then align with joint lines, correspondence_f1@15 rises again and sam_fill_rate holds or improves. If this over-tightens (det_real_detection_ratio falls sharply and F1 drops), round 3 will step back to intermediate thresholds and instead try the radial gate (mask_r_low toward the 2.7 prior) to remove protruding non-lining points upstream.",
+  "overlay": {
+    "enhancing": {
+      "inter_radius": 0.08
+    },
+    "detecting": {
+      "binary_threshold": 150,
+      "hough_threshold_oblique": 80,
+      "hough_threshold_horizontal": 80,
+      "maxLineGap_oblique": 20
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T19:32:01.343081",
+  "provenance": {
+    "agent_id": "b91e8879-4c42-47f0-9537-376c4ddb1d32"
+  }
+}
