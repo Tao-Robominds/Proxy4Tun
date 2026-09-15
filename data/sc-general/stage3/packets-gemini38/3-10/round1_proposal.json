@@ -1,0 +1,33 @@
+{
+  "observation": "Anchor proxy_scaled=0.589 (refine). recentre_residual_max_cm=10.2 just above the 10 cm gate; depth_nan_ratio=0.142; denoise_retained_ratio=0.740; sam_fill_rate=0.698; correspondence_f1@15=0.287. Orientation is healthy (|orient_axis_corr|\u22481.0) and ring_count=10 matches the ten magenta verticals. SC overlay shows mostly assumed (x) prompts and many red unsupported boundaries along the central K-row despite continuous green/red joint tracks in detected_lines.",
+  "rule": "experiences \u00a77 tuning order + \u00a73/\u00a78 (t3 continuous): residual \u227310 cm \u2192 repair centreline/unroll before detection/SAM; ontology stage_1 f_curve_overfit and inter-stage link to depth holes; do not chase NaN cosmetics.",
+  "failure_mode": "f_curve_overfit (marginal centreline; residual 10.2 cm) cascading into weak SC correspondence",
+  "rationale": "stage1_unlocked with residual just over gate justifies a full stages-1\u20136 replay. Slightly tighten RANSAC, keep degree-2, and change random_seed to re-fit the centre curve; set slice_spacing_factor mid-band. Widen T3 r/theta gates modestly toward prior outer coverage to raise retention without hole-fill. Hold SAM at T3-prior mid values (segment_width=1200, K_height\u2248824, angle\u22486.1) \u2014 avoid empty-crop K_height extremes.",
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 0.95,
+      "slice_spacing_factor": 1.15,
+      "polynomial_degree": 2,
+      "random_seed": 3
+    },
+    "denoising": {
+      "mask_r_low": 2.82,
+      "mask_r_high": 3.05,
+      "mask_theta_low": 1.4,
+      "mask_theta_high": 17.5
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 824.0,
+      "angle": 6.1
+    }
+  },
+  "full": true,
+  "validated_at": "2026-09-14T09:16:37.253164",
+  "provenance": {
+    "agent_id": "fac28858-a937-4711-aadd-94bfddee5316"
+  }
+}

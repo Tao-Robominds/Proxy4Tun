@@ -10,8 +10,8 @@ as calibrated priors when reading a run's artifacts.
 Sources: `reports/orientation-sensitivity.md`,
 `reports/critical-parameters-experiment.md`,
 `reports/t3-3-1-1-corrected-vs-literal.md`, `reports/t45-5-1-depth-improvement.md`,
-`reports/t45-4-1-swap-ab.md`, `reports/unified.md`, `bo-unified/report.md`,
-`bo-unified/ablation.md`, `bo-elegant/report.md`.
+`reports/t45-4-1-swap-ab.md`, `reports/unified.md`, `bo/unified/report.md`,
+`bo/unified/ablation.md`, `bo/elegant/report.md`.
 
 ---
 
@@ -33,7 +33,7 @@ with theta mirrored back scored **0.705** (`t3-3-1-1-corrected-vs-literal.md`).
   orientation bug, not a segmentation bug.
 - Without labels, the proxy analogue is `sam_ontology_divergence` and the
   phase-coherence check: the phase alarm recovered the `1-5-anchor` label
-  rotation that intrinsic features alone missed (`bo-unified/ablation.md`).
+  rotation that intrinsic features alone missed (`bo/unified/ablation.md`).
 - The stage-1 invariant `corr(h, ring)` must match `h_ring_sign` with
   |corr| > 0.5; healthy runs show |corr| ≈ 0.98 on all five tunnels.
 - `segment_order` is **coupled to theta handedness**. Any orientation change
@@ -167,7 +167,7 @@ stages 1–3 are healthy before touching detection/SAM parameters.
 - Prefer the **bo-full-stage** lean proxy (§12) when the reflection loop
   may touch unfolding (stages 1–6). Prefer **bo-elegant v2** (§11) for
   stages-2–6-only overlays on a frozen stage-1. The earlier per-family
-  B1+B2lean (`bo-unified`) still ranks anchor vs bad 24/24 with alarm
+  B1+B2lean (`bo/unified`) still ranks anchor vs bad 24/24 with alarm
   precision 1.00, but absolute calibration varies by family (t1&2 anchor
   MAE 0.095, t4&5 0.074, t3 0.295). In either
   case use the score as a **directional** improvement signal; corroborate
@@ -194,9 +194,9 @@ stages 1–3 are healthy before touching detection/SAM parameters.
 ## 11. bo-elegant: 3-anchor unified lean proxy
 
 Deployment default for label-free control is the **bo-elegant v2** pooled
-Ridge (`bo-elegant/family/models_v2.json`). v1 (`models.json`) is retained
-for side-by-side comparison only. See `bo-elegant/t3_review.md` and
-`bo-elegant/report.md` (Proxy v2 section).
+Ridge (`bo/elegant/family/models_v2.json`). v1 (`models.json`) is retained
+for side-by-side comparison only. See `bo/elegant/t3_review.md` and
+`bo/elegant/report.md` (Proxy v2 section).
 
 ### Regime-mismatch lesson (critical)
 
@@ -233,7 +233,7 @@ post-strategy Type histogram.
 
 Continuous v1 false alarms (`3-4`, `3-5`, `3-6`, `3-8`) are cleared.
 Staggered/complex MAE stays within ~0.02 of v1. Training: artifact-keeping
-trials under `data/bo-elegant/{2-1,3-1,5-1}-trials/` (stage-1 frozen from
+trials under `data/bo/elegant/{2-1,3-1,5-1}-trials/` (stage-1 frozen from
 `data/anchors`, stages 2–6 overlays).
 
 ### How the reflective agent should read v2
@@ -248,7 +248,7 @@ trials under `data/bo-elegant/{2-1,3-1,5-1}-trials/` (stage-1 frozen from
 
 ## 12. bo-full-stage: all stages tunable (40/family)
 
-See `bo-full-stage/report.md`, `gate.md`, `validation_gate.md`.
+See `bo/full_stage/report.md`, `gate.md`, `validation_gate.md`.
 
 ### What changed vs v2
 
@@ -260,7 +260,7 @@ See `bo-full-stage/report.md`, `gate.md`, `validation_gate.md`.
   orientation / residual **gates are not part of the main protocol** —
   deferred to a more advanced reflective agent.
 
-### Frozen lean proxy (`bo-full-stage/models.json`)
+### Frozen lean proxy (`bo/full_stage/models.json`)
 
 Features kept after prune: `depth_nan_ratio`, `denoise_retained_ratio`,
 `sam_fill_rate`, `det_row_residual_px`, `det_row_gated`.
@@ -274,7 +274,7 @@ proxy score alone to rise when only residual improves (4-3 lesson).
 
 ### How the reflective agent should read full-stage
 
-- Prefer `bo-full-stage/models.json` when the campaign spans stages 1–6.
+- Prefer `bo/full_stage/models.json` when the campaign spans stages 1–6.
 - Reflection budget is uniform over stages 1–6 (no special `cursor2_s1`
   carve-out).
 - Still corroborate continuous snap health via `k_row_gate.json`, fill

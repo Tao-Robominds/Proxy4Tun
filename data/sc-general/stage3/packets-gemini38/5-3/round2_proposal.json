@@ -1,0 +1,29 @@
+{
+  "observation": "Same GT-blind anchor: correspondence_f1@15 weak while vertical ring columns look regular. Overlay shows wedge/K blocks (yellow real prompts) with slanted seams; several horizontal joints remain orange/unexplained. sam_segment_size_cv\u22481.01 suggests over-wide crops or shallow taper under-covering K wedges rather than a detection count failure (det_n_points=10, ring_count ok).",
+  "rule": "For complex t4&5, if K wedges look under-covered, narrow segment_width and raise taper angle while keeping K_height near prior mid-band (avoid empty-crop lows that collapse the K row into blank margin).",
+  "failure_mode": "f_template_mismatch / under-tapered K: segment_width too wide and angle too shallow \u2192 SAM masks spill across joints; horizontal correspondence fails at 15 px.",
+  "rationale": "Distinct from prior-pin: deliberately narrower width (1650) and steeper angle (11.0) to tighten trapezoid K templates. K_height 1180 stays above the empty-crop floor. Pair with more sensitive oblique detection and slightly lower binary_threshold to recover faint slanted joints without unlocking stage 1.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 35,
+      "maxLineGap_oblique": 65,
+      "maxLineGap_horizontal": 12,
+      "pattern_tolerance": 8
+    },
+    "sam": {
+      "segment_width": 1650,
+      "K_height": 1180.0,
+      "angle": 11.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T11:05:18.148123",
+  "provenance": {
+    "agent_id": "60c35b7c-6350-4e5d-9ed7-80a096230cb0"
+  }
+}

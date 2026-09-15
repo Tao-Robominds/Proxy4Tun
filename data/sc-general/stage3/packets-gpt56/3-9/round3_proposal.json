@@ -1,0 +1,35 @@
+{
+  "observation": "The anchor's strongest stable properties are its ten complete rings, low recenter residual, and high orientation correlation, while its main weakness is fallback-only detection and moderate correspondence. Round 1 shows that aggressively lowering both Hough thresholds to 25 and bridging 50 pixels is harmful even though fill and NaN metrics improve slightly.",
+  "rule": "For a coherent but interrupted K joint, use an intermediate detector regime between the anchor and the failed permissive trial: retain moderate weak-line evidence, require roughly 40-vote line support, bridge only local gaps, and provide SAM enough vertical context to absorb local interruptions without broadening every segment.",
+  "failure_mode": "The anchor under-detects the joint, but Round 1 over-connects clutter; the useful operating point is likely between fallback-only selectivity and the failed low-threshold configuration, with correspondence rather than raw fill as the limiting signal.",
+  "rationale": "Binary threshold 130, Hough thresholds 38/40, a 35-pixel oblique gap, and pattern tolerance 11 form a distinct intermediate detector intended to recover genuine fragments without recreating Round 1's spurious connectivity. Moderate denoising and curvature settings preserve visible joint evidence. Uniform K snapping is retained only with these stricter line constraints, while K_height=950 and segment_width=1250 give SAM robust context around the disrupted K band; angle 5.5 follows the shallow observed trend.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.85,
+      "mask_r_high": 3.05,
+      "mask_theta_low": 1.8,
+      "mask_theta_high": 17.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0009
+    },
+    "detecting": {
+      "binary_threshold": 130,
+      "hough_threshold_oblique": 38,
+      "hough_threshold_horizontal": 40,
+      "maxLineGap_oblique": 35,
+      "pattern_tolerance": 11,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1250,
+      "K_height": 950.0,
+      "angle": 5.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T03:59:59.905743",
+  "provenance": {
+    "agent_id": "21189194-2a48-480a-8634-d3561dad3452"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "subset": "4-2",
+  "status": "ok",
+  "miou": 0.24,
+  "exit_code": 0,
+  "elapsed_s": 281.3,
+  "profile": "t4&5",
+  "params_dir": "bo/notebook_direct/params/4-1",
+  "out_dir": "data/bo/notebook_direct/4-2",
+  "log": "bo/notebook_direct/logs/4-2.log",
+  "command": "/home/boringtao/Projects/Proxy4Tun/venv/bin/python -m sam4tun.pipeline /home/boringtao/Projects/Proxy4Tun/data/subsets/4-2.txt /home/boringtao/Projects/Proxy4Tun/data/bo/notebook_direct/4-2 --profile t4&5 --params-dir /home/boringtao/Projects/Proxy4Tun/bo/notebook_direct/params/4-1 --overwrite"
+}

@@ -1,0 +1,36 @@
+{
+  "observation": "The anchor preserves all 10 rings, but detection is entirely fallback-driven (0 real detections, 10 fallback points). The correspondence overlay shows that most label boundaries lack nearby joint-line support, while the image contains a strong sloped horizontal joint near the middle. SAM fill is only 0.698 and segment-size variation is high, so the main recoverable error is weak joint evidence and vertically misplaced label prompting rather than ring count.",
+  "rule": "When ring count is already exact but correspondence is low and all prompts are fallback-generated, preserve the ring geometry and make stages 2-5 more permissive to coherent horizontal/oblique joint evidence; then use a taller K prompt band to align segmentation with the dominant lining course without changing unfolding.",
+  "failure_mode": "The vertical ring lattice is stable, but strict detection suppresses real transverse joints and substitutes a uniform fallback row. That row poorly supports the horizontal label boundaries, causing uneven horizontal regions and reduced fill despite complete ring coverage.",
+  "rationale": "This bounded stages-2-to-6 overlay keeps denoising broad enough to retain joint traces, lowers the image and Hough acceptance barriers, bridges fragmented oblique segments, and tolerates the visible transverse-line slope. Uniform K snapping retains the already-correct 10-ring regularity. K_height is raised to 900 (meeting the requested >=850 constraint), with moderate segment width and angle changes to improve horizontal prompt placement. Unfolding is intentionally omitted because the 10.2 cm residual only barely unlocks stage 1 and a full rerun is not preferred.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.75,
+      "mask_r_high": 3.1,
+      "mask_theta_low": 1.25,
+      "mask_theta_high": 18.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0006
+    },
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 25,
+      "hough_threshold_horizontal": 25,
+      "hough_threshold_vertical": 1200,
+      "maxLineGap_oblique": 50,
+      "pattern_tolerance": 16,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 900.0,
+      "angle": 6.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T03:35:49.097099",
+  "provenance": {
+    "agent_id": "091a3257-f29a-435c-9e1b-33a7af7e329c"
+  }
+}

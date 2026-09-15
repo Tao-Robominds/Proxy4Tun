@@ -1,0 +1,12 @@
+{
+  "observation": "Round 1 improved the scaled proxy by 0.0061, raised SAM ring completeness from 0.889 to 1.0, slightly increased fill rate, and reduced phase incoherence from 14.5 to 3.5 degrees. The tradeoff is lower midpoint purity (0.9 to 0.8), a new off-row negative-slope prompt in the image, and worse SAM segment-size CV (1.149 to 1.332) and ontology divergence (0.165 to 0.230), while the 10% fallback rate did not improve.",
+  "failure_mode": "Mild stage-4 spurious-line selection after over-relaxation: the round-1 settings recover complete ring coverage but admit an oblique intersection that perturbs prompt-row consistency and downstream segment proportions.",
+  "rationale": "Retain the lower binary threshold that helped expose weak joint evidence, but partially tighten oblique Hough acceptance and reduce gap bridging relative to round 1. This seeks to preserve the completeness and phase-coherence gains while rejecting the newly admitted off-row line and improving ontology and segment-size coherence. Vertical detection, upstream geometry, locked stage 1, and SAM y-bounds remain untouched.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 50,
+      "maxLineGap_oblique": 50
+    }
+  }
+}

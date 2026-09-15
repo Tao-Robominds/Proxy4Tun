@@ -1,0 +1,27 @@
+{
+  "observation": "SAM fill is only moderate (sam_fill_rate\u22480.699) with high size irregularity (sam_segment_size_cv\u22481.55) and non-trivial ontology divergence (\u22480.275). SC label-boundary panel shows clusters of red unsupported edges especially near column tops/bottoms of the staggered stack, while ring instance strips remain complete (10/10)\u2014suggesting circumferential crop / template framing drift rather than missing rings.",
+  "rule": "When ring_count_error=0 but fill/size-CV and top/bottom unsupported boundaries dominate, adjust sam.processing.y_bounds lower within [3600,4400] (upper fixed at 13300) and lightly tidy the depth field before a small vertical-Hough tighten (ontology f_over_under_coverage / crop-framing; experiences \u00a76\u2013\u00a77 SAM geometry last).",
+  "failure_mode": "f_over_under_coverage",
+  "rationale": "Distinct from rounds 1\u20132: keep detection mostly conservative and move the circumferential window so staggered K/AB templates land on the lining rather than clipping edge joints. y_bounds=[4000,13300] recentres the crop; a slightly stricter vertical Hough (600) suppresses the extra orange mid-column verticals seen in detected_lines; light grad/z_step polish reduces salt-noise that inflates segment-size CV without chasing NaN to zero.",
+  "overlay": {
+    "denoising": {
+      "grad_threshold": 0.18,
+      "z_step": 0.002
+    },
+    "detecting": {
+      "hough_threshold_vertical": 600,
+      "binary_threshold": 130
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4000,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T07:59:14.447882",
+  "provenance": {
+    "agent_id": "5b8495ca-e2e8-4d2e-9d8f-3308d9f62e26"
+  }
+}

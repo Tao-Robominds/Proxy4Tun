@@ -1,0 +1,24 @@
+{
+  "observation": "Round 2 (precision-first: oblique 56, maxLineGap 30, horizontal 90, inter_radius 0.05) is the best run so far: proxy 0.5501 -> 0.5606, correspondence_f1@15 0.187 -> 0.206, fill rate / NaN / ring count unchanged (10 verticals == 10 rings, residual 1.4 cm). detected_lines.png now shows only genuine oblique K-wedge joints (red/green pairs at y~1090/1290 and ~1510/1730, ~216 px = K_height_pixel apart); the round-1 speckle-bridged segments in the dense scanner columns are gone. Prompts are back to two clean staggered rows (~1190 / ~1620) with the x~120 ring recovered as a real positive_slope prompt; only x~610 remains 'assume' (fallback 1/10, and it lands in the correct row). What is left: (a) recall - no oblique lines at the A/B ring-joint boundaries (K +/- 648 px, i.e. y~442, 862, 1948, 2378) in the sparse columns; (b) the horizontal accumulations in the dense columns (blue at y~70, 430, 650, 870, 1950, 2150, 2400, 2700) survive even at the horizontal-threshold bound (90) and still appear orange (unexplained) in the overlay. Their source is the speckle field in the outlier map at x~1200-1900 (scanner-near, high-density columns), not the Hough stage. Oblique precision is already ~100%, so further Hough tightening cannot add F1 and risks the marginal ~100 px x~120 line.",
+  "rule": "sam4tun_ontology tuning order (experiences.md section 7): with detection now pattern-consistent (line count == ring count, prompt spacing == K/AB pattern), the remaining defect is upstream of stage 4 - off-surface noise that stage_2_denoise should remove (stage_2 s2_2 density/gradient filtering, p_grad_threshold). inter_stage_dependency stage_2_denoise.f_under_gate -> stage_4_detection.f_spurious_lines (rule d2 / remediation r_tighten_hough's own precondition: 'check upstream f_under_gate'). Retention 0.77 and NaN 10.9% leave margin for a modest tightening without triggering d3 (f_over_gate). SAM geometry is not touched: experiences section 6 - the fill-rate deficit coincides with the physical void bands (y~250, ~1900-2000, ~2500), not a graded per-class weakness, and y_bounds semantics are not established in this packet.",
+  "failure_mode": "Residual f_under_gate (stage_2_denoise) leaking scanner-range noise into the enhanced joint cloud in the high-density columns, which manifests downstream as spurious horizontal fallback accumulations (f_spurious_lines) that no label boundary explains; primary f_missing_lines in sparse columns is not addressable with the bounded knobs without re-admitting that speckle (round-1 evidence).",
+  "rationale": "Final round keeps the proven round-2 stage-3/stage-4 configuration unchanged (inter_radius 0.05; oblique threshold 56, maxLineGap 30, horizontal 90) so the gain is preserved, and adds exactly one upstream lever: denoising.grad_threshold 0.2 -> 0.16 (bounds [0.1, 0.25]). A stricter density-gradient gate preferentially removes low-density off-surface points adjacent to the dense lining surface - the scanner-near speckle - while leaving the surface and the real joint depth steps (which are handled by the stage-3 depth thresholds, not by this gate). Expected effect: a thinner speckle field in the outlier map so fewer horizontal accumulations reach the 90-vote threshold (fewer orange lines, higher correspondence precision), with the genuine oblique K joints untouched. Modest step (0.04) chosen to stay clear of over-gating: monitor denoise_retained_ratio (should stay >~0.72) and depth_nan_ratio (should stay ~0.11); if either degrades the proposal is rejected in favour of round 2. mask_r_low/high, z_step left at tunnel priors (experiences section 4). Vertical threshold untouched (10 == 10). binary_threshold left at anchor. Unfolding omitted (stage1_unlocked false, residual 1.4 cm). If this round does not beat 0.5606, round 2 should be the selected overlay for 1-3.",
+  "overlay": {
+    "denoising": {
+      "grad_threshold": 0.16
+    },
+    "enhancing": {
+      "inter_radius": 0.05
+    },
+    "detecting": {
+      "hough_threshold_oblique": 56,
+      "hough_threshold_horizontal": 90,
+      "maxLineGap_oblique": 30
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T18:57:05.177478",
+  "provenance": {
+    "agent_id": "e96e1c27-2d59-47ba-855d-bad223982b51"
+  }
+}

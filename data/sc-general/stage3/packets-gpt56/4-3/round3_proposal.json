@@ -1,0 +1,30 @@
+{
+  "observation": "Real detections account for only 6 of 10 prompts, with fallback points concentrated where joint lines are faint or discontinuous. The depth map nevertheless contains long coherent panel structure across the tunnel, suggesting that permissive linking may recover missing joint evidence if SAM is allowed to span the larger irregular regions.",
+  "rule": "When fallback usage remains high despite coherent large-scale panel structure, use a recall-oriented detector with long gap bridging and broad pattern tolerance, then pair it with larger SAM geometry so recovered intersections influence complete panel regions.",
+  "failure_mode": "Weak and interrupted joint traces are missed, forcing assumed or midpoint prompts and leaving broad label boundaries unexplained by detected lines.",
+  "rationale": "This aggressive alternative lowers oblique and horizontal Hough thresholds, extends both line-gap limits, and nearly maximizes pattern tolerance. The vertical threshold stays well above its minimum to avoid destabilizing the already correct ten-ring layout. Larger segment width, K height, and angle accommodate the broad, sloped lower panels, while the denoising radii remain inside a narrow low-side band to retain faint boundary evidence.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.53,
+      "mask_r_high": 3.79
+    },
+    "detecting": {
+      "hough_threshold_oblique": 27,
+      "hough_threshold_horizontal": 29,
+      "hough_threshold_vertical": 2400,
+      "maxLineGap_oblique": 78,
+      "maxLineGap_horizontal": 28,
+      "pattern_tolerance": 19
+    },
+    "sam": {
+      "segment_width": 2040,
+      "K_height": 1440.0,
+      "angle": 11.4
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T04:31:14.475467",
+  "provenance": {
+    "agent_id": "2b121ffc-e3f5-4ff8-990d-3357022ff073"
+  }
+}

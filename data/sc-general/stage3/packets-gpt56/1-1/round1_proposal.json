@@ -1,0 +1,33 @@
+{
+  "observation": "The ring count and orientation are already stable, but the correspondence overlay shows many unsupported label boundaries while detected horizontal and oblique joint evidence is sparse and 30% of prompt points are fallbacks. Segmentation covers most of the surface, yet its high segment-size variation and incomplete ring coverage indicate that weak or fragmented cross-joint evidence is producing oversized regions.",
+  "rule": "When vertical ring structure is reliable but cross-joint correspondence is weak, preserve the vertical geometry and increase sensitivity and continuity for horizontal/oblique joints, with moderate enhancement support and a bounded SAM processing extent.",
+  "failure_mode": "Under-detection and fragmentation of horizontal and oblique joints leave genuine staggered boundaries unexplained, causing fallback prompts, boundary leakage, and uneven segment sizes; making every detector permissive would instead risk texture-driven false joints.",
+  "rationale": "Lower horizontal and oblique Hough thresholds together with a larger oblique line gap should connect the visible staggered seams. A moderately permissive binary threshold and enhancement settings expose faint joint responses without changing the already-correct unfolding or aggressively relaxing the vertical detector. The flat SAM y-bound keeps processing bounded while allowing broader support for prompt-driven segmentation.",
+  "overlay": {
+    "denoising": {
+      "grad_threshold": 0.18
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0015,
+      "inter_radius": 0.05
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 45,
+      "hough_threshold_vertical": 650,
+      "maxLineGap_oblique": 70
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4000,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T01:11:37.316457",
+  "provenance": {
+    "agent_id": "1b70e74c-eb01-475e-95fa-ca42658d99b4"
+  }
+}

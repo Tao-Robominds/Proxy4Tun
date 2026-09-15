@@ -1,0 +1,36 @@
+{
+  "observation": "Subset 3-3 (t3 continuous) sits in the refine band (proxy_scaled=0.52158). Stage-1 looks healthy (orient_axis_corr\u22481.0, recentre_residual_max_cm=2.7, ring_count_error=0). The dominant GT-free pain is correspondence_f1@15=0.113 with SC overlay showing many unsupported (red) label boundaries around the central K band, while pink anchors track that band and several orange joints remain unexplained. detected_lines shows ring-consistent verticals with slightly tilted green/red joint markers. det_fallback_ratio=1.0 with det_real_detection_ratio=0 is expected under continuous snap; sam_fill_rate\u22480.78 and sam_segment_size_cv\u22480.59 point to SAM template geometry rather than unfolding.",
+  "rule": "d10/d8 with experiences \u00a77: when residual/orient are healthy and correspondence/label-boundary support is poor, remediate SAM geometry (segment_width/K_height/angle) and continuous detection pattern_tolerance before touching stage-1; t3 continuous has no y_bounds.",
+  "failure_mode": "f_template_mismatch",
+  "rationale": "Round-1 locks onto T3 notebook priors for SAM (segment_width=1200, K_height\u2248824 near block_height.K, angle\u22486.12) while keeping K_height well above the empty-crop floor. Denoise r/theta gates move toward T3 priors; Hough/binary stay near T3 notebook; uniform_k_snap=true for continuous lining. stage1_unlocked=false \u2192 no unfolding; full=false.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.85,
+      "mask_r_high": 3.0,
+      "mask_theta_low": 1.55,
+      "mask_theta_high": 17.15
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 127,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 30,
+      "hough_threshold_vertical": 1500,
+      "maxLineGap_oblique": 30,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 824.0,
+      "angle": 6.12
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T08:47:00.652952",
+  "provenance": {
+    "agent_id": "676e3969-2d60-471a-922c-8d152904c623"
+  }
+}

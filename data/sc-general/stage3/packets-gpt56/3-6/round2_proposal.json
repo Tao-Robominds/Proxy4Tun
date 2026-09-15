@@ -1,0 +1,29 @@
+{
+  "observation": "Round 1 remained in the refine band but fell below the anchor (0.646 versus 0.681): correspondence declined from 0.467 to 0.401 while fill was effectively unchanged at 0.648 versus 0.649. Ring count stayed correct and the images still show ten evenly propagated prompts across the central joint, so the immediate fill limitation is more consistent with insufficient SAM spatial coverage than missing ring instances.",
+  "rule": "When ring topology is stable and a detector-centered adjustment does not increase fill, test a fill-oriented branch by broadening SAM support while keeping detection permissive enough to bridge fragmented joint traces and preserving uniform ring spacing.",
+  "failure_mode": "SAM support remains too spatially conservative around fallback prompts, leaving broad image regions unlabeled or unevenly covered even though every ring receives a prompt.",
+  "rationale": "Increasing segment_width to 1380 and K_height to 980 expands support near the upper end of the bounded t3 range without changing stage-1 geometry. A slightly lower binary threshold with moderate Hough thresholds and a longer oblique gap favors continuous joint evidence in the visibly fragmented central band. Uniform snapping remains enabled because ring count and spacing are already reliable. This round deliberately prioritizes fill over the correspondence loss seen in round 1.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 30,
+      "maxLineGap_oblique": 48,
+      "pattern_tolerance": 15,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1380,
+      "K_height": 980.0,
+      "angle": 6.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T04:10:47.145313",
+  "provenance": {
+    "agent_id": "9bfbc69c-f5fd-48e4-89fa-fb5477575c5a"
+  }
+}

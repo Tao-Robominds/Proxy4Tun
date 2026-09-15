@@ -1,0 +1,33 @@
+{
+  "observation": "Round 2 nearly recovered the anchor: correspondence F1 is only 0.0038 lower and the depth NaN ratio is better, but fill rate is about 0.0035 lower. The conservative regime removed the round-1 excess while retaining the correct ring count; the remaining gap is therefore small and calls for selective recovery of horizontal seam evidence and processing coverage rather than another broad detector shift.",
+  "rule": "When a conservative correction nearly matches the reference and improves depth validity, preserve its noise rejection, relax only the boundary class still visibly sparse, and widen the bounded SAM extent by one small step.",
+  "failure_mode": "Round 2 is slightly over-conservative: strong filtering suppresses some valid horizontal staggered seams and the 3800 lower processing bound marginally reduces coverage. Relaxing oblique continuity broadly would risk repeating round 1, so oblique evidence should remain highly selective.",
+  "rationale": "The proposal stays close to the successful round-2 regime but separates horizontal from oblique behavior. A slightly lower horizontal Hough threshold can recover strong cross-joints, while a higher oblique threshold and short line gap continue rejecting disconnected texture. Minor enhancement and binary adjustments soften the conservative cutoff without returning to round-1 permissiveness. Keeping the low denoising gradient threshold protects the improved NaN ratio, and moving the flat SAM lower bound to 3600 aims to recover the small fill deficit.",
+  "overlay": {
+    "denoising": {
+      "grad_threshold": 0.115
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0055,
+      "inter_radius": 0.03
+    },
+    "detecting": {
+      "binary_threshold": 148,
+      "hough_threshold_oblique": 88,
+      "hough_threshold_horizontal": 75,
+      "hough_threshold_vertical": 720,
+      "maxLineGap_oblique": 28
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3600,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T01:23:57.759153",
+  "provenance": {
+    "agent_id": "1b70e74c-eb01-475e-95fa-ca42658d99b4"
+  }
+}

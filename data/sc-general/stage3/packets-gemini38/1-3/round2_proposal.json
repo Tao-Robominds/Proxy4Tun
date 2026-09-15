@@ -1,0 +1,36 @@
+{
+  "observation": "Same anchor: proxy 0.550, correspondence_f1@15=0.187, fill 0.73, rings exact. detected_lines shows heavy blue horizontal clusters around the mid white seam (~y 1950\u20132350) and scattered oblique fragments; SC right panel has thick orange unexplained joints along that seam and at map ends. Precision may be hurt by artifact-driven horizontals/spurious intersections more than by missing staggered obliques. Residual 1.4 cm \u2014 unfolding forbidden.",
+  "rule": "ontology d9/r_tighten_hough and experiences \u00a75: when line yield is noisy relative to ring geometry, raise Hough thresholds and binary threshold to suppress spurious seams before blaming SAM; keep radial gate near T1 prior rather than widening aggressively.",
+  "failure_mode": "f_spurious_lines: white-seam and edge artifacts produce unexplained joint segments that pollute distance-pattern matching and drive unsupported label boundaries at staggered interfaces (precision-limited correspondence).",
+  "rationale": "Conservative overlay prioritizes precision: higher binary_threshold and elevated oblique/horizontal Hough thresholds, shorter maxLineGap, slightly higher vertical threshold to avoid extra verticals, tighter denoise (higher grad_threshold, prior-like mask_r_high), and a higher y_bounds lower edge [4200,13300] to shrink SAM crops away from noisy top fringe. Enhancing stays near defaults with modest curvature raise to avoid over-enhancing artifact ridges. Distinct from the balanced round by trading recall for cleaner prompt geometry.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.45,
+      "mask_r_high": 2.8,
+      "z_step": 0.0015,
+      "grad_threshold": 0.22
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0012,
+      "inter_radius": 0.045
+    },
+    "detecting": {
+      "binary_threshold": 140,
+      "hough_threshold_oblique": 65,
+      "hough_threshold_horizontal": 70,
+      "hough_threshold_vertical": 600,
+      "maxLineGap_oblique": 30
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4200,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T07:10:40.358422",
+  "provenance": {
+    "agent_id": "021738d7-0007-4cc5-8d68-387327667dbc"
+  }
+}

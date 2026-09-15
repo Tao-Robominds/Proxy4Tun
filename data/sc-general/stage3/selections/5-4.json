@@ -1,0 +1,84 @@
+{
+  "subset": "5-4",
+  "arm": "scgen",
+  "anchor": {
+    "round": "anchor",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-4-family-proxy/runs/5-4-anchor",
+    "proxy_raw": 0.6923,
+    "proxy_scaled": 0.6923,
+    "band": "refine",
+    "mIoU": 0.76,
+    "recentre_residual_max_cm": 2.1,
+    "features": {
+      "correspondence_f1@15": 0.4674013895086757,
+      "sam_fill_rate": 0.7599389968796842,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.19848996720212705
+    }
+  },
+  "rounds": [
+    {
+      "round": "round1",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/5-4-scgen-refinement/round1",
+      "proxy_raw": 0.6869,
+      "proxy_scaled": 0.6869,
+      "band": "refine",
+      "mIoU": 0.749,
+      "recentre_residual_max_cm": 2.1,
+      "features": {
+        "correspondence_f1@15": 0.4541447935482537,
+        "sam_fill_rate": 0.7632918127687642,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.19393773837010847
+      }
+    },
+    {
+      "round": "round2",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/5-4-scgen-refinement/round2",
+      "proxy_raw": 0.6364,
+      "proxy_scaled": 0.6364,
+      "band": "refine",
+      "mIoU": 0.738,
+      "recentre_residual_max_cm": 2.1,
+      "features": {
+        "correspondence_f1@15": 0.3635743028399152,
+        "sam_fill_rate": 0.761387257660854,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.19665206128136647
+      }
+    },
+    {
+      "round": "round3",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/5-4-scgen-refinement/round3",
+      "proxy_raw": 0.6582,
+      "proxy_scaled": 0.6582,
+      "band": "refine",
+      "mIoU": 0.741,
+      "recentre_residual_max_cm": 2.1,
+      "features": {
+        "correspondence_f1@15": 0.4043257112343963,
+        "sam_fill_rate": 0.7574629216049474,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.19359175959162653
+      }
+    }
+  ],
+  "selected": {
+    "round": "anchor",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-4-family-proxy/runs/5-4-anchor",
+    "proxy_raw": 0.6923,
+    "proxy_scaled": 0.6923,
+    "band": "refine",
+    "mIoU": 0.76,
+    "recentre_residual_max_cm": 2.1,
+    "features": {
+      "correspondence_f1@15": 0.4674013895086757,
+      "sam_fill_rate": 0.7599389968796842,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.19848996720212705
+    }
+  },
+  "selection_reason": "monotone accept: no round beat anchor scaled proxy",
+  "delta_proxy_scaled": 0.0,
+  "delta_mIoU_offline": 0.0
+}

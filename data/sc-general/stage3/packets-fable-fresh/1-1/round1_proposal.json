@@ -1,0 +1,23 @@
+{
+  "observation": "Stages 1-3 are healthy: recentre residual 2.8 cm (<10 cm gate), orient_axis_corr -0.99993 with invariant OK, depth_nan_ratio 0.107 and denoise_retained_ratio 0.75 are in the normal t1&2 range, and the viridis depth map shows no end-concentrated voids or ring banding. Ring count is exact (10 verticals for 10 rings, ~245 px spacing = 1.2 m segment width). The weak link is joint detection: the outlier/binary map in detected_lines.png is dense only on the right half (x > ~1200) and nearly empty on the left half; every oblique (red/green) line lives in the right half, 3 of 10 prompts are 'assume' fallbacks (det_fallback_ratio 0.3, all at x=120/610/1100 on the sparse left side), and correspondence_f1@15 is only 0.294 with most label boundaries red (unsupported) and many joint segments orange (unexplained) in the SC overlay. Joint seams in the depth map are visually faint (low joint contrast) even where the outlier map is dense.",
+  "rule": "d6 (m_joint_contrast low -> f_joint_oversmoothed) feeding d7 (m_line_yield low AND fallback triggered -> f_missing_lines) via inter_stage_dependency stage_3_upsample.f_joint_oversmoothed -> stage_4_detection.f_missing_lines. Remediation r_lower_depth_threshold is out of bounds here, so use the in-bounds stage-3 joint-enhancement knobs (curvature_threshold, inter_radius) plus r_relax_hough (lower oblique/horizontal thresholds, raise maxLineGap, lower binarisation threshold). experiences.md \u00a77 tuning order: stages 1-3 verified healthy, so round 1 may legitimately target detection; \u00a75: keep the vertical count consistent with ring count (already exact) and do not touch it.",
+  "failure_mode": "f_joint_oversmoothed (stage 3) -> f_missing_lines (stage 4): under-enhanced joint points on the left half of the map yield too few oblique Hough lines, forcing 30% assumed prompt centres and producing label boundaries unsupported by any detected joint (low correspondence F1).",
+  "rationale": "Keep denoising at tunnel priors (retention and NaN are healthy; experiences \u00a74 says geometry knobs are load-bearing for transfer, not per-scan tuning). Slightly lower enhancing.curvature_threshold (0.0005 -> 0.0004) so more boundary points qualify as joint candidates, and raise enhancing.inter_radius (0.06 -> 0.07) so joint interpolation bridges the sparse left-half seams into continuous lines. In detection, lower binary_threshold (127 -> 115) so faint enhanced-joint pixels survive binarisation, lower hough_threshold_oblique (50 -> 42) and hough_threshold_horizontal (50 -> 45) to accept shorter/weaker seam evidence, and raise maxLineGap_oblique (40 -> 60) to link fragmented oblique seams. hough_threshold_vertical is left unchanged because vertical count already equals ring count (10/10) and altering it risks the 11-for-10 truncation failure. sam is left unchanged: fill_rate 0.72 and ring_completeness 0.89 are coherence symptoms of the missing prompts, and SAM geometry should only be tuned after detection is real rather than fallback. Expected GT-free signal: det_fallback_ratio 0.3 -> ~0.0-0.1, correspondence_f1@15 up from 0.294, sam_fill_rate up, ring_count_error stays 0. Risk: more spurious lines on the already-dense right half; the moderate deltas (not bound extremes) hedge this, and a rise in det_n_points beyond ~10-12 in the next round would signal f_spurious_lines and call for backing off binary_threshold/oblique threshold.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0004,
+      "inter_radius": 0.07
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 42,
+      "hough_threshold_horizontal": 45,
+      "maxLineGap_oblique": 60
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T18:47:39.024457",
+  "provenance": {
+    "agent_id": "a4946ffe-205e-48ce-8516-cf72bdc3c760"
+  }
+}

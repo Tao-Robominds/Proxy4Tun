@@ -1,0 +1,36 @@
+{
+  "observation": "Same GT-blind anchor: proxy in refine, SC correspondence_f1@15 very low (0.172), fill_rate\u22480.767 with high sam_segment_size_cv (0.672). SC overlay places assumed K prompts along the central textured band; unsupported boundaries concentrate on the upper edge of that band. Detected-line green tracks show a slight positive taper on the upper joint and red tracks a mild opposing taper on the lower joint \u2014 continuous K geometry is angled, not flat. Stage-1 and ring count remain healthy; residual gate not binding.",
+  "rule": "ontology r_fix_template / f_template_mismatch + experiences \u00a76: when graded SAM unevenness (high segment_size_cv) remains after stage-1 is locked, retune continuous SAM geometry (segment_width, K_height, angle) within family priors. Keep K_height inside a filled-crop band (~780\u2013880), away from empty-crop extremes near 1000. Pair with moderate detection so prompts stay on the K-row.",
+  "failure_mode": "f_template_mismatch / f_crop_offset \u2014 SAM K crop height and taper misaligned with continuous joint geometry, inflating segment_size_cv and starving SC@15 matches",
+  "rationale": "Round-2 SAM-geometry focus distinct from round-1: slightly wider segment_width (1280), modestly taller but still filled K_height (880), stronger taper angle (7.5\u00b0) to follow the observed green/red joint slopes. Detection kept stricter than round-1 (higher Hough thresholds, tighter gap) so extra width does not invite spurious lines. Denoise r-band slightly looser on the outer side for coverage; curvature unchanged mid. full=false, no unfolding.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.8,
+      "mask_r_high": 3.05,
+      "mask_theta_low": 1.4,
+      "mask_theta_high": 17.5
+    },
+    "enhancing": {
+      "curvature_threshold": 0.00045
+    },
+    "detecting": {
+      "binary_threshold": 130,
+      "hough_threshold_oblique": 35,
+      "hough_threshold_horizontal": 32,
+      "hough_threshold_vertical": 1600,
+      "maxLineGap_oblique": 28,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1280,
+      "K_height": 880.0,
+      "angle": 7.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:00:13.868190",
+  "provenance": {
+    "agent_id": "3694f8b9-54e4-4d8d-9d56-5b39eb77064c"
+  }
+}

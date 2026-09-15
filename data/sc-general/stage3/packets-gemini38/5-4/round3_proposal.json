@@ -1,0 +1,30 @@
+{
+  "observation": "Fill rate 0.76 with ontology_divergence 0.14 and size CV 1.11: masks incomplete on complex rings while upstream residual/orientation stay healthy. denoise_retained_ratio 0.77 and NaN 0.20 leave slight room to widen the t4&5 r-band and sharpen joint curvature before a taller K crop. Magenta column pitch and clustered bolt patterns argue for a narrower-than-prior segment_width with taller K to avoid empty-crop crops on taper rows.",
+  "rule": "d6/d12 and inter_stage joint_oversmoothed \u2192 missing_lines \u2192 over_under_coverage; remediation r_radial_gate_widen (toward prior 3.65\u20133.9) plus r_fix_template with non-empty K_height (experiences \u00a73\u20134: do not chase NaN to zero; tune coverage then SAM).",
+  "failure_mode": "f_over_under_coverage",
+  "rationale": "Third distinct axis: slight denoise widen + lower curvature_threshold to enrich joint contrast, keep verticals synthetic-friendly (high vertical threshold), and use a tall K_height (1450) with tighter segment_width (1650) and lower angle (8.0\u00b0) so K crops cover the white-dot tiers without empty dark-band crops.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.55,
+      "mask_r_high": 3.95
+    },
+    "enhancing": {
+      "curvature_threshold": 0.00035
+    },
+    "detecting": {
+      "hough_threshold_vertical": 2500,
+      "hough_threshold_oblique": 45,
+      "pattern_tolerance": 10
+    },
+    "sam": {
+      "segment_width": 1650,
+      "K_height": 1450.0,
+      "angle": 8.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T11:38:15.397059",
+  "provenance": {
+    "agent_id": "fb30f92e-c658-4b6c-a252-bdeebd78a519"
+  }
+}

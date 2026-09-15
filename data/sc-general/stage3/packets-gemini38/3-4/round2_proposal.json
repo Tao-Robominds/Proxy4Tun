@@ -1,0 +1,27 @@
+{
+  "observation": "After R1, residual is healthy at 6.3 cm (<10 cm gate) and F1@15 rose to ~0.456, but ring_count_error=1.0 with 11 regularly spaced propagated prompts (y\u22481560) vs the expected 10-ring span; detected green/red tracks still drop out on the right while SC correspondence remains mid with many unsupported boundaries, and sam_fill\u22480.585 is only modestly improved.",
+  "rule": "Once recentre residual is under the gate, freeze stage-1 and fix detection consistency: prompt/vertical count must match ring_count (experiences: 11 Hough verticals for 10 rings \u2192 raise hough_threshold_vertical toward synthetic centres); then nudge continuous SAM geometry for correspondence\u2014do not reopen unfolding without a strong residual justification.",
+  "failure_mode": "f_spurious_lines",
+  "rationale": "Round-2 distinct from R1 unfolding: keep full=false and omit unfolding. Raise hough_threshold_vertical to 2200 (within [800,2500]; experiences used 5000) to suppress the extra vertical/prompt, keep uniform_k_snap on for continuous, modestly tighten pattern_tolerance and ease oblique/horizontal slightly so joint tracks cover the right side; shift SAM from R1 mid-priors toward slightly narrower segment_width and lower K_height/angle to re-align the K band without extreme crops.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 125,
+      "hough_threshold_oblique": 26,
+      "hough_threshold_horizontal": 26,
+      "hough_threshold_vertical": 2200,
+      "maxLineGap_oblique": 40,
+      "pattern_tolerance": 8,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1100,
+      "K_height": 780.0,
+      "angle": 5.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T06:51:59.283819",
+  "provenance": {
+    "agent_id": "ce41a8ef-d7e8-4b58-b0ad-9161c2caa60e"
+  }
+}

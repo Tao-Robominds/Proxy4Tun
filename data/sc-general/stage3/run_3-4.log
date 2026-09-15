@@ -1,0 +1,37 @@
+=== 3-4 round2 ===
+{
+  "subset": "3-4",
+  "round": 2,
+  "status": "ok",
+  "full_pipeline": true,
+  "proxy_scaled": 0.49634989663036005,
+  "band": "reject",
+  "features": {
+    "correspondence_f1@15": 0.20897108296200684,
+    "sam_fill_rate": 0.5558802354635158,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19584187664017405
+  },
+  "recentre_residual_max_cm": 22.8,
+  "elapsed_s": 202.64964199066162,
+  "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/3-4-scgen-refinement/round2"
+}
+=== 3-4 round3 ===
+{
+  "subset": "3-4",
+  "round": 3,
+  "status": "ok",
+  "full_pipeline": true,
+  "proxy_scaled": 0.47275538516173987,
+  "band": "reject",
+  "features": {
+    "correspondence_f1@15": 0.16019891264214672,
+    "sam_fill_rate": 0.554410705967052,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.1791938527897982
+  },
+  "recentre_residual_max_cm": 23.2,
+  "elapsed_s": 193.64131879806519,
+  "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/3-4-scgen-refinement/round3"
+}
+=== select 3-4 ===

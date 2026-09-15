@@ -1,0 +1,36 @@
+{
+  "observation": "Depth map shows family-normal NaN (~0.10) and denoise_retained_ratio\u22480.76, so radial coverage is not collapsed. Joint contrast is uneven across staggered rings; oblique lines remain patchy and sam_segment_size_cv=1.34 with fill_rate=0.723. Experiences mark joint enhancement as the causal upstream of detection misses on T1/T2-like scans; depth_threshold_* are out of this arm's bounds, so in-bounds enhancing.inter_radius / curvature_threshold plus a mild denoise retune are the available levers.",
+  "rule": "d6 \u2192 d7 chain (f_joint_oversmoothed upstream of f_missing_lines): densify joint points via lower curvature_threshold and higher inter_radius, keep moderate Hough (not maximally relaxed), and only then expect pattern-matched prompts.",
+  "failure_mode": "f_joint_oversmoothed",
+  "rationale": "Strengthen the joint cloud first so staggered seams become Hough-visible under mid thresholds; slight mask widening and finer z_step reduce fringe holes that break continuity. Distinct from R1's detection-only relax.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.35,
+      "mask_r_high": 2.85,
+      "z_step": 0.002,
+      "grad_threshold": 0.15
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0004,
+      "inter_radius": 0.07
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 55,
+      "hough_threshold_horizontal": 55,
+      "hough_threshold_vertical": 550,
+      "maxLineGap_oblique": 50
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4000,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T08:09:07.659399",
+  "provenance": {
+    "agent_id": "28a12bfa-1929-4706-9d80-68b56b94c947"
+  }
+}

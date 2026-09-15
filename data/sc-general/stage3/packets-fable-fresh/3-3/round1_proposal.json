@@ -1,0 +1,22 @@
+{
+  "observation": "Stages 1-3 are healthy and should not be touched: recentre residual 2.7 cm (gate 10 cm), orient_axis_corr 0.99997, denoise retention 0.818, depth NaN 11.4% (family-normal; the remaining voids are longitudinal fixtures - a bracketed cable run at the K row and walkway/cable strips at both theta-gate edges - not band over-gating). Ring count is exact (10 evenly spaced verticals for 10 rings, spacing ~240 px = 1200 mm segment width). The weak link is detection: det_fallback_ratio 1.0 with det_real_detection_ratio 0.0 is expected under uniform_k_snap on continuous, but detected_lines.png shows only ~6 short oblique segments, all at the two K edges (~y 1470 green/+angle, ~y 1630 red/-angle, spacing ~160 px vs K prior 165 px) and only in the outermost 2-3 rings on each side; the middle rings and the A/B joints near y~800 and y~2300 yield no lines at all. The propagated K row at y~1550 sits correctly between the K edge pair, and the SAM label layout (A2/B1/K/B2/A1 top-to-bottom) matches the template order, yet correspondence_f1@15 is only 0.113: in sc_correspondence_overlay.png most label boundaries are red (no line within 15 px) and roughly half the detected K-edge lines are orange (no boundary within 15 px). Low F1 is therefore driven by line recall (almost no supported joint lines outside the K band, none in mid-image rings), not by orientation or ring-count problems.",
+  "rule": "d7: m_line_yield low AND fallback triggered -> f_missing_lines; remediation r_relax_hough (lower oblique threshold / raise maxLineGap toward tunnel prior) with precondition that upstream f_joint_oversmoothed / f_depth_holes are ruled out (satisfied: NaN ratio family-normal, joints visible as bands, residual 2.7 cm). Experiences 7 tuning order: confirm stages 1-3 healthy, then fix detection before SAM geometry; 5: line count must stay consistent with ring count; 11: under snap, judge continuous health by the K-row gate residual, not det_real_detection_ratio.",
+  "failure_mode": "stage_4_detection.f_missing_lines (oblique joint line yield too low; K-edge lines only at image margins, no A/B joint lines; correspondence F1 starved of supported lines) with a guard against stage_4_detection.f_spurious_lines when thresholds are relaxed.",
+  "rationale": "Relax the oblique Hough path so the K-edge joints are traced across all 10 rings and the fainter A/B joints get a chance to appear: lower binary_threshold 127->110 so faint outlier pixels along joints survive binarisation, lower hough_threshold_oblique to 24 so shorter tapered joint segments in the mid-image rings pass the accumulator, and raise maxLineGap_oblique to 50 so segments bridge the ~40-60 px cable brackets and bolt-hole gaps that currently fragment the K edges (minLineLength is left at anchor so isolated bolt-blob pairs 240 px apart still cannot merge into a false line). To protect precision, raise hough_threshold_horizontal to 45 so horizontal bolt-hole rows (which are not label boundaries) do not enter the joint-line set now that the binary map is denser, and pin hough_threshold_vertical at 2000 so the denser binary map cannot admit extra real verticals and break the currently exact 10-for-10 ring count (synthetic ring-centre verticals remain). Keep uniform_k_snap true (continuous strategy) and set pattern_tolerance 12 px so the recovered K-edge pairs (measured ~160 px vs 165 px prior) are accepted as real K-row anchors, tightening the gate residual instead of relying purely on propagation. Denoising, enhancing and SAM are intentionally left at anchor this round: the theta/r band is at tunnel priors and tightening theta would only remove partial-A lining (cosmetic NaN gain, real coverage loss); curvature_threshold up would over-smooth joints; SAM geometry (segment_width 240 px, K_height 165 px, taper) already agrees with the observed line spacing and should be revisited only after the correspondence delta from detection is known. Expected proxy effect: correspondence_f1@15 up via more supported joint lines; ring_count_error stays 0; depth_nan_ratio unchanged; sam_fill_rate roughly unchanged.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 24,
+      "hough_threshold_horizontal": 45,
+      "hough_threshold_vertical": 2000,
+      "maxLineGap_oblique": 50,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T19:11:43.860554",
+  "provenance": {
+    "agent_id": "8bf61149-a559-4a7b-87a6-25495c5ebfd8"
+  }
+}

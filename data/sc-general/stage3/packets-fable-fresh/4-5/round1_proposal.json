@@ -1,0 +1,21 @@
+{
+  "observation": "Stages 1-3 are healthy for a complex-family scan: orient_axis_corr 0.981, recentre residual 3.4 cm (< 10 cm gate), depth_nan_ratio 0.216 (family-normal 19-22%), denoise_retained_ratio 0.744, 10 Hough verticals for 10 rings (ring_count_error 0). The weak link is detection/correspondence: correspondence_f1@15 is only 0.334, det_real_detection_ratio 0.6 with 40% fallback (4 of 10 prompt points 'assumed'), and detected_lines.png shows only ~4 positive-slope and ~6 negative-slope oblique segments plus ~10 short horizontals over a 10-ring map. The outlier map itself is sparse and dotted: joint pixels between blocks are faint, broken into short runs, and dominated by the bolt-pocket 'V' texture, so Hough at the T4 prior (threshold 50, gap 50/10) under-recovers real joints. In sc_correspondence_overlay.png most label boundaries are red (unsupported) simply because too few lines exist to support them, while the visible block seams in the depth map are regular and consistent with the K/AB pattern.",
+  "rule": "d7 (m_line_yield low AND horizontal fallback triggered) -> f_missing_lines; precondition (rule out f_depth_holes / f_joint_oversmoothed upstream) is satisfied by family-normal NaN and healthy residual, so r_relax_hough applies: lower oblique/horizontal accumulator thresholds and raise maxLineGap toward bridging the dotted joint runs; lower the binarisation threshold so faint joint pixels survive into the Hough input. Per experiences \u00a77, do not touch orientation, unfolding (locked), or the denoising band (keep tunnel priors); per \u00a75 keep vertical count == ring count (leave hough_threshold_vertical alone).",
+  "failure_mode": "stage_4_detection.f_missing_lines (too few oblique joint lines -> horizontal/assumed fallback -> unsupported label boundaries, low correspondence_f1)",
+  "rationale": "Round 1 targets the single lowest lean feature (correspondence_f1@15 = 0.334) with a detection-only overlay so the effect is attributable. Lowering binary_threshold 127->110 keeps more faint joint pixels; oblique threshold 50->35 and maxLineGap 50->65 let broken joint runs vote as one line; horizontal threshold 50->40 and gap 10->20 recover the short horizontal block seams visible in the map; pattern_tolerance 15 gives the K/AB distance check room to accept real intersections instead of falling back. SAM geometry is left untouched this round (stage-5 tuning is only meaningful once detection is consistent, experiences \u00a77), and denoising stays at the T4/T5 prior band since the residual and retention are healthy. Expected: more real prompt points (det_real_detection_ratio up), more label boundaries supported by lines (F1 up), ring count unchanged, NaN unchanged.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 35,
+      "hough_threshold_horizontal": 40,
+      "maxLineGap_oblique": 65,
+      "maxLineGap_horizontal": 20,
+      "pattern_tolerance": 15
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T21:13:25.304560",
+  "provenance": {
+    "agent_id": "4-5-fable-fresh"
+  }
+}

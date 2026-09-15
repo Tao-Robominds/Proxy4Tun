@@ -1,0 +1,27 @@
+{
+  "proposal": {
+    "observation": "Round 2's partial Hough tightening erased the round-1 gain: proxy returned to 0.6923, ring completeness fell from 1.0 to 0.889, fill rate fell, phase incoherence rose from 3.5 to 29 degrees, and the prompt image gained a severe midpoint-row outlier near y=2010. Round 1 remains the strongest GT-blind direction, with proxy 0.6984, complete rings, and much better phase coherence, although its ontology divergence and segment-size CV remained elevated.",
+    "failure_mode": "Stage-4 pattern mismatch from insufficient oblique-line continuity: the round-2 threshold/gap pair selects a catastrophically displaced midpoint, whereas round 1's more permissive Hough geometry restores coherent complete-ring prompting. Residual round-1 unevenness may come from excess weak pixels admitted during binarization.",
+    "rationale": "Return to the successful round-1 oblique Hough threshold and gap, while making only the binary threshold slightly more selective. This preserves the empirically necessary line continuity that produced complete rings and low phase incoherence, but tests whether suppressing marginal pixels can reduce the round-1 ontology and segment-size penalties. SAM y-bounds are left untouched because their interval semantics are not safely identified, and stage 1 remains locked.",
+    "overlay": {
+      "detecting": {
+        "binary_threshold": 125,
+        "hough_threshold_oblique": 45,
+        "maxLineGap_oblique": 55
+      }
+    }
+  },
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 125,
+      "hough_threshold_oblique": 45,
+      "maxLineGap_oblique": 55
+    }
+  },
+  "feedback_path": "/home/boringtao/Projects/Proxy4Tun/data/2-2-gpt56-refinement/round3/agent_feedback.json",
+  "offline_path": "/home/boringtao/Projects/Proxy4Tun/data/2-2-gpt56-refinement/round3/evaluation_offline.json",
+  "status": "ok",
+  "proxy_scaled": 0.6984216974068218,
+  "mIoU_offline": 0.586,
+  "elapsed_s": 303.14461398124695
+}

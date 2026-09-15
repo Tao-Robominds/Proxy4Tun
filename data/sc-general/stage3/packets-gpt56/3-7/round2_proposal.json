@@ -1,0 +1,35 @@
+{
+  "observation": "Round 1 reduced the proxy from 0.539694 to 0.510609 and correspondence F1@15 from 0.171748 to 0.121239, while fill stayed nearly unchanged and depth NaN ratio rose from 0.164506 to 0.168578. Ring count remained correct at 10, so the aggressive low-threshold enhancement/detection settings added weak fragmented evidence without improving the stable ring structure.",
+  "rule": "When a sensitivity-heavy detector change lowers correspondence while ring count and fill remain stable, suppress marginal clutter with mild denoising and return Hough voting to a mid-range consensus threshold; retain uniform K snapping to preserve periodicity.",
+  "failure_mode": "Round 1 over-admitted sparse noisy seam fragments and linked them too permissively, reducing prompt-to-boundary correspondence despite preserving all rings.",
+  "rationale": "Mild radial and angular masking limits damaged-edge and grazing-angle clutter without aggressively reducing the retained surface. Mid-range horizontal and oblique Hough thresholds require stronger consensus than round 1, while a moderate binary threshold, shorter line-gap bridge, and pattern tolerance of 12 avoid over-joining isolated responses. Uniform K snapping keeps the reliable ten-ring spacing; K_height is conservatively set to 875, and moderate SAM width and angle avoid repeating the round-1 extremes.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.85,
+      "mask_r_high": 3.05,
+      "mask_theta_low": 1.5,
+      "mask_theta_high": 17.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.001
+    },
+    "detecting": {
+      "binary_threshold": 130,
+      "hough_threshold_oblique": 40,
+      "hough_threshold_horizontal": 40,
+      "maxLineGap_oblique": 35,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 875.0,
+      "angle": 6.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T03:11:43.475779",
+  "provenance": {
+    "agent_id": "ec4c555d-21a6-4e79-99ac-cee8e45bb6ef"
+  }
+}

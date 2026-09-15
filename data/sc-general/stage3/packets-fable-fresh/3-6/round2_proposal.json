@@ -1,0 +1,26 @@
+{
+  "observation": "Round 1 (relaxed detection: binary 110, oblique/horizontal Hough 24, maxLineGap 42; SAM pinned to T3 priors K_height 823.8 / angle 6.12 / width 1200) moved the proxy DOWN 0.681 -> 0.671, driven entirely by correspondence_f1@15 0.467 -> 0.447; sam_fill_rate (0.649), depth_nan_ratio (0.105), ring_count_error (0) and recentre residual (3.2 cm) were unchanged, so stages 1-3 are still healthy and the round-1 SAM values were almost certainly already the anchor's T3 priors (no-op). The detected-line picture is the same as the anchor: 10 magenta verticals == 10 rings, all 10 prompts 'propagated' at y~1550 (snap regime, det_fallback_ratio 1.0 is expected, not a fault), an upper K-row oblique family at y~1445-1480 (green, mostly cyan/explained in the SC overlay) and a lower K-row family at y~1620-1640 (red, mostly orange/UNEXPLAINED) plus short blue horizontals at y~800 and y~2300 on the bolt-pocket rows. The detected K joint pair is ~165 px apart at matched x (= ~825 mm, i.e. the 823.8 mm prior is right), yet the K label spans ~1475-1675 (~200 px): the SAM K mask bleeds ~40 px down into the bright bolt-pocket band (y~1600-1690), so the lower K boundary and, by stacking, the B2/A3 boundary (~2350 vs detected row ~2300) both miss their lines by >15 px. Relaxing Hough added more short, unexplained oblique/horizontal fragments (precision loss) without giving SAM any new boundary to agree with.",
+  "rule": "experiences.md \u00a77/\u00a75: stages 1-3 validate (residual 3.2 cm < 10 cm gate, |orient corr| 0.9998, NaN 10.5%, retention 0.69), line count == ring count, so only detection precision and SAM geometry are identifiable; \u00a711 continuous-family: under uniform_k_snap the Type histogram is regime, judge snap health by the K-row residual, so do not chase det_real_detection_ratio. Between-round signal (\u00a79): proxy delta fell with F1 while evidence features were flat -> the round-1 direction (r_relax_hough) is falsified; ontology d9/r_tighten_hough (raise oblique/horizontal thresholds to cut spurious fragments) is the complementary move. For the boundary side, ontology d10/r_fix_template + f_over_under_coverage: when the SAM block mask systematically over-extends past the detected joint into a high-contrast pocket band, undersize the K template height (within bounds) so the neighbouring B2 template/prompts claim the band and the K/B2 boundary is pulled back onto the detected lower joint line.",
+  "failure_mode": "stage_4_detection.f_spurious_lines (round-1 relaxation produced extra unexplained oblique/horizontal fragments -> correspondence precision drop) compounded by stage_5_segmentation.f_over_under_coverage / f_template_mismatch (K mask bleeds ~40 px into the bolt-pocket band below the detected K joint, displacing the K/B2 and B2/A3 label boundaries off their joint lines).",
+  "rationale": "Reverse the detection direction relative to the anchor instead of merely reverting: binary_threshold 127 -> 135 and hough_threshold_oblique/horizontal 30 -> 38/34 suppress the weak pocket-edge fragments that were unexplained in the overlay, while maxLineGap_oblique 36 (slightly above the 30 anchor, below round-1's 42) keeps the strong K-row joints bridged across the bolt pockets as long segments rather than splitting them; the two K-row families are the highest-contrast lines in the map and survive the higher vote count, so the 10 real K-row anchors for the snap gate are retained. pattern_tolerance 10 px keeps the K/AB distance check at single-digit-to-10 px scale (healthy per \u00a75) so only pattern-consistent intersections feed the gate. On SAM, keep segment_width 1200 and angle 6.12 (vertical spacing ~240 px = 1200 mm matches, taper only affects x-boundaries) but reduce K_height 823.8 -> 760 mm (152 px): the template becomes ~13 px shorter on each side than the detected pair, so the B2 template starts inside the pocket band and its prompts compete for it, pulling the K/B2 label boundary up from ~1675 toward the detected ~1630 line and shifting the B2/A3 boundary from ~2350 toward the detected ~2300 row. Both moves target correspondence_f1@15 (the only feature that moved in round 1) without touching the healthy evidence features; unfolding is untouched (stage 1 locked) and denoising/enhancing stay at anchor because retention, NaN and joint contrast are all healthy.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 135,
+      "hough_threshold_oblique": 38,
+      "hough_threshold_horizontal": 34,
+      "maxLineGap_oblique": 36,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 760.0,
+      "angle": 6.12
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T21:31:09.232405",
+  "provenance": {
+    "agent_id": "3-6-fable-fresh"
+  }
+}

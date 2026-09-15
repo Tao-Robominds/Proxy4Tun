@@ -1,0 +1,36 @@
+{
+  "observation": "Round 2 strongly increased proxy_scaled to 0.68827, with correspondence_f1@15 rising to 0.45214 and SAM fill rising to 0.74043 while ring count remained exact. The updated detections contain substantially more joint candidates, but the prompt plot is now dominated by negative-slope and midpoint prompts with only one horizontal and one positive-slope prompt, indicating that remaining gains depend on prompt-orientation balance rather than uniformly increasing sensitivity.",
+  "rule": "When a coordinated denoising and detection overlay improves both correspondence and fill without disturbing ring count, retain its operating regime but rebalance orientation-specific evidence: become more selective for abundant obliques, favor scarce horizontals, and suppress redundant vertical texture.",
+  "failure_mode": "The strong Round 2 detector still produces an oblique-heavy prompt set, so some repeated horizontal label boundaries remain unsupported while multiple prompts encode similar sloped evidence.",
+  "rationale": "Round 3 locally refines the successful Round 2 neighborhood with slightly stronger gradient rejection and centered mask radii. A moderate enhancement radius preserves continuity without repeating Round 1's exact settings. Raising the oblique Hough threshold and shortening its line gap reduces duplicate or over-bridged sloped candidates, while setting the horizontal threshold to its lower bound favors the scarce horizontal joints. A higher vertical threshold further limits dominant seam texture. Moving the flat SAM lower bound to 4400 continues the crop trend that accompanied the Round 2 fill gain. Every value is bounded; unfolding is absent and full is false.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.35,
+      "mask_r_high": 2.85,
+      "z_step": 0.0045,
+      "grad_threshold": 0.18
+    },
+    "enhancing": {
+      "curvature_threshold": 0.003,
+      "inter_radius": 0.07
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 55,
+      "hough_threshold_horizontal": 40,
+      "hough_threshold_vertical": 720,
+      "maxLineGap_oblique": 50
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4400,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T01:45:33.656845",
+  "provenance": {
+    "agent_id": "11340a86-1ed7-4ede-9dfd-963e28ff40ea"
+  }
+}

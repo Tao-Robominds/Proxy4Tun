@@ -1,0 +1,41 @@
+{
+  "observation": "3-8 (t3, continuous, 10 rings, ring_count_error 0) sits in the refine band (proxy 0.561). recentre_residual_max is 24 cm, well above the 10 cm gate, and the depth map shows the classic off-centre signature: a full-height void along the left end (x<200 px) with a yellow/dark high-r sliver at the far left, plus structured NaN bands along the longitudinal joint rows (~y=300, ~800, ~1500 K-row with bolt pockets, ~2300, ~2900). depth_nan_ratio 0.18 and denoise_retained_ratio 0.73 are only moderate, and sam_fill_rate is 0.60. Detection runs entirely on synthetic verticals (det_fallback_ratio 1.0, 10 propagated K-row prompts at y~1540); real oblique Hough segments exist only in the right half of the K row (x>1000), and only two short horizontal segments were found at the ~800 and ~2300 joint rows. The SC overlay confirms this: nearly every SAM label boundary is red (unsupported) except along the K row, so correspondence_f1@15 is 0.30 even though the label layout itself (A1/B2/K/A2/A3 rows) is plausible.",
+  "rule": "experiences.md section 7 tuning order and section 3: with residual >> 10 cm, fix centreline/unroll quality first (ontology f_curve_overfit -> polynomial degree / pinned RANSAC), do not chase NaN with hole-filling; ontology d6/d7 -> r_lower_depth_threshold/r_relax_hough: faint joint rows with only short line fragments imply f_joint_oversmoothed feeding f_missing_lines, remedied by relaxing the oblique/horizontal Hough thresholds and increasing maxLineGap once stages 1-3 are healthier.",
+  "failure_mode": "stage_1_centreline.f_curve_overfit (24 cm recentre residual -> left-end coverage loss, f_over_gate mimic) feeding stage_3 f_depth_holes; stage_4 f_missing_lines (low oblique/horizontal line yield along the joint rows -> unsupported label boundaries, low correspondence_f1).",
+  "rationale": "Round 1 spends the budget on stages 1-4 per the empirical tuning order. Unfolding: raise the centre-curve polynomial degree to 3 with a pinned seed (0) and a slightly tighter RANSAC threshold so the fitted curve can follow the end-of-span bend that leaves a 24 cm residual; stage1 is unlocked so the pilot will run --full. Denoising: keep the t3 prior inner radius (2.85) but open the outer gate a little (3.0 -> 3.05) so bolt-pocket/joint-row points and any remaining mildly off-centre end points are retained instead of punched out as NaN; theta gates stay at the t3 prior. Enhancing: keep curvature at the notebook default. Detecting: lower the binary threshold (127 -> 118) and the oblique/horizontal Hough thresholds (30 -> 24 / 22), raise oblique maxLineGap (30 -> 42) so the fragmented joint rows at ~800/~2300 and the left half of the K row yield continuous lines that the SAM boundaries can be matched against; pattern_tolerance 10 px and uniform_k_snap kept on because continuous lining needs the snapped K row. SAM geometry is left at the t3 priors (1200 mm, 823.8 mm, 6.12 deg) because per section 6 SAM knobs are only worth tuning once coverage and detection are healthy. Expected: lower depth_nan_ratio and higher sam_fill_rate from the recentred left end, higher correspondence_f1@15 from denser joint lines; residual itself should drop toward the 10 cm gate.",
+  "overlay": {
+    "unfolding": {
+      "polynomial_degree": 3,
+      "random_seed": 0,
+      "ransac_threshold": 0.9
+    },
+    "denoising": {
+      "mask_r_low": 2.85,
+      "mask_r_high": 3.05,
+      "mask_theta_low": 1.55,
+      "mask_theta_high": 17.15
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 118,
+      "hough_threshold_oblique": 24,
+      "hough_threshold_horizontal": 22,
+      "hough_threshold_vertical": 1500,
+      "maxLineGap_oblique": 42,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 823.8,
+      "angle": 6.12
+    }
+  },
+  "full": true,
+  "validated_at": "2026-09-15T20:17:54.666898",
+  "provenance": {
+    "agent_id": "3-8-fable-fresh"
+  }
+}

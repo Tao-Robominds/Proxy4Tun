@@ -1,0 +1,35 @@
+{
+  "proposal": {
+    "observation": "Canonical orientation is healthy (h-ring correlation 0.983 and invariant pass), but the centreline residual is 23.2 cm, above the approximately 10 cm healthy scale. The depth map has broad, spatially structured voids and a 24.5% NaN ratio, while denoising still retains 72.5% of points. Detection recovers the expected ring count, so the dominant round-1 defect is upstream of Hough and SAM.",
+    "failure_mode": "stage_1_centreline.f_curve_overfit: a marginal centre-curve/unroll fit is producing radial displacement and structured coverage loss, which then propagates as depth holes. The evidence does not support an orientation failure or a primary radial over-gate.",
+    "rationale": "Use denser centreline slicing and a cubic curve to represent the tunnel trajectory, while tightening the RANSAC inlier threshold to reject contaminated slice centres. Keep the T4 radial gate at its tunnel prior instead of widening it to conceal centreline error. This coordinated stage-1/stage-2 overlay targets the large residual without changing detection or SAM parameters whose effects would be confounded by the upstream defect.",
+    "overlay": {
+      "unfolding": {
+        "ransac_threshold": 0.8,
+        "slice_spacing_factor": 1.6,
+        "polynomial_degree": 3
+      },
+      "denoising": {
+        "mask_r_low": 3.65,
+        "mask_r_high": 3.9
+      }
+    }
+  },
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 0.8,
+      "slice_spacing_factor": 1.6,
+      "polynomial_degree": 3
+    },
+    "denoising": {
+      "mask_r_low": 3.65,
+      "mask_r_high": 3.9
+    }
+  },
+  "feedback_path": "/home/boringtao/Projects/Proxy4Tun/data/4-3-gpt56-refinement/round1/agent_feedback.json",
+  "offline_path": "/home/boringtao/Projects/Proxy4Tun/data/4-3-gpt56-refinement/round1/evaluation_offline.json",
+  "status": "ok",
+  "proxy_scaled": 0.43357847396083143,
+  "mIoU_offline": 0.198,
+  "elapsed_s": 340.3911373615265
+}

@@ -1,0 +1,44 @@
+{
+  "2-1": {
+    "path": "data/anchors/2-1",
+    "complete": true,
+    "orient_invariant_ok": 1.0,
+    "orient_h_ring_corr": 0.9862262594301413,
+    "features": {
+      "depth_nan_ratio": 0.12822247900508313,
+      "denoise_retained_ratio": 0.7516762466955618,
+      "det_real_detection_ratio": 1.0,
+      "sam_fill_rate": 0.7225310498347522,
+      "sam_ring_completeness": 0.8888888888888888,
+      "sam_ontology_divergence": 0.23690818188124552
+    }
+  },
+  "3-1": {
+    "path": "data/anchors/3-1",
+    "complete": true,
+    "orient_invariant_ok": 1.0,
+    "orient_h_ring_corr": -0.9939473188361857,
+    "features": {
+      "depth_nan_ratio": 0.16229315232751773,
+      "denoise_retained_ratio": 0.7266268101170488,
+      "det_real_detection_ratio": 0.0,
+      "sam_fill_rate": 0.6735175946644923,
+      "sam_ring_completeness": 0.8888888888888888,
+      "sam_ontology_divergence": 0.2026786621937583
+    }
+  },
+  "5-1": {
+    "path": "data/anchors/5-1",
+    "complete": true,
+    "orient_invariant_ok": 1.0,
+    "orient_h_ring_corr": 0.9824365204289642,
+    "features": {
+      "depth_nan_ratio": 0.20528068220449924,
+      "denoise_retained_ratio": 0.7633638444754262,
+      "det_real_detection_ratio": 0.7,
+      "sam_fill_rate": 0.7529205431415833,
+      "sam_ring_completeness": 1.0,
+      "sam_ontology_divergence": 0.12519108935008927
+    }
+  }
+}

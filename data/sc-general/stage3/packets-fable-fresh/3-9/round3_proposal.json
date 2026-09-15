@@ -1,0 +1,25 @@
+{
+  "observation": "Round 2 (binary 135, oblique Hough 40, horizontal 35, maxLineGap_oblique 40, segment_width 1225, K_height 823.8) is the best point so far: proxy 0.641 (anchor) -> 0.621 (r1) -> 0.647 (r2), driven by correspondence_f1@15 0.364 -> 0.326 -> 0.375, while sam_fill_rate stayed flat within noise (0.729 / 0.728 / 0.727), ring_count_error 0 and depth_nan_ratio 0.131 unchanged. Stages 1-3 remain healthy (residual 2.8 cm < 10 cm gate, orient_axis_corr 0.999, retention 0.77, no banding); all 10 prompts still snap to the K row (y~1553; det_fallback_ratio 1.0 is the expected uniform_k_snap regime, not a failure). The round-2 detected_lines.png shows the two K-edge obliques (green ~y1450-1480, red ~y1620-1640) now dominate the line set, but each is still broken into ~8 segments with 20-40 px gaps between x~60 and x~1900, and the K edges vanish beyond x~1900 where the outlier map is too sparse (this right-end limit was identical at threshold 30 in the anchor overlay, so it is a data limit, not a threshold effect). A handful of unexplained short fragments survive only in the dense bolt-hole strip x<150 (y~1100, ~1300, ~1560, ~1750, ~1950) and as horizontal stubs at y~780 / ~2300 on the left edge. The long A/B joint rows at y~785 and ~2300 appear as dotted rows with ~30 px spacing; with the fixed horizontal minLineLength 50 / maxLineGap 10 priors they cannot form long lines, so those red SAM boundaries are not reachable through the available keys. SAM K boundaries follow the depth discontinuity and did not move with the K_height 840 nudge, so remaining F1 headroom is on the detection side: gap-free K-edge lines (recall along the two K boundaries) and removal of the residual left-edge fragments (precision).",
+  "rule": "Experiences sec.7 tuning order: stages 1-3 validated, so the round may act on detection; sec.5: line consistency with structure, not line count, is the target; sec.9: use the round-to-round proxy delta directionally and continue the move that improved coherence. Ontology d9 -> f_spurious_lines with remediation r_tighten_hough (raise oblique threshold; f_under_gate ruled out because retention/NaN are unchanged and the fragments come from real bolt-hole texture at x<150). Ontology r_relax_hough's maxLineGap component (raise maxLineGap so fragmented true lines join) is applied only to the oblique K-edge lines, whose upstream preconditions are satisfied (no f_joint_oversmoothed: K edges are bright in the outlier map; no f_depth_holes on the K row). Experiences sec.4/sec.6: keep denoising, enhancing and SAM geometry at the round-2 / T3-prior values so the round-3 delta is attributable to detection.",
+  "failure_mode": "stage_4_detection.f_spurious_lines (residual bolt-hole fragments at x<150 that are unexplained by any label boundary) combined with fragmented true K-edge lines (gap-broken obliques reduce boundary recall at the 15 px correspondence tolerance). No upstream failure mode active.",
+  "rationale": "Take one further, smaller step in the round-2 direction and pair it with line continuity: hough_threshold_oblique 40->45 so the 40-60 px bolt-hole fragments at x<150 fall below the accumulator while the multi-hundred-px K-edge segments (which survived 30->40 without losing right-end coverage) keep their votes; maxLineGap_oblique 40->50 so the ~20-40 px gaps between consecutive K-edge segments are bridged into continuous lines along both K boundaries, raising explained boundary length without adding new line loci (the higher threshold prevents the gap bridging from stitching bolt-hole texture into tilted false lines as in round 1). binary_threshold held at 135 (the 110->135 move already removed faint bolt-hole pixels; pushing higher risks thinning the sparse right-end K edges) and hough_threshold_horizontal held at 35 (the A/B rows cannot become long lines under the fixed horizontal minLineLength/maxLineGap priors, so moving it only trades left-edge stubs). hough_threshold_vertical and uniform_k_snap untouched to keep the 10 synthetic verticals and K-row gate identical; pattern_tolerance omitted because it is inert under the snap regime. SAM held at round-2 values: segment_width 1225 (matches the ~245 px ring pitch), K_height 823.8 (T3 prior; SAM K boundary follows the depth step, not the template), angle 6.12. Denoising and enhancing untouched. Expected: fewer orange fragments and longer cyan K-edge lines -> correspondence_f1@15 above 0.375; fill rate, NaN ratio and ring count unchanged; proxy above 0.647.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 135,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 35,
+      "maxLineGap_oblique": 50,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1225,
+      "K_height": 823.8,
+      "angle": 6.12
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T21:45:15.389723",
+  "provenance": {
+    "agent_id": "3-9-fable-fresh"
+  }
+}

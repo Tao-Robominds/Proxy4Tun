@@ -1,0 +1,26 @@
+{
+  "observation": "Subset 1-2 (t1&2 staggered) sits in refine (proxy_scaled=0.648). Stage-1 is healthy (orient_axis_corr\u22481.0, recentre_residual_max_cm=3.5, ring_count=10 exact) so unfolding stays frozen. detected_lines shows clean magenta verticals but sparse/fragmented red/green oblique joints outside the central rings; det_fallback_ratio=0.2. SC correspondence @15 has many red unsupported label edges and orange unexplained joints, with correspondence_f1@15=0.368. Staggered seams produce short discontinuous oblique segments that the current Hough settings under-detect.",
+  "rule": "d7 / r_relax_hough: when m_line_yield is low and horizontal/synthetic fallback fires, lower hough_threshold_oblique and raise maxLineGap_oblique before retuning SAM templates; stage1_unlocked=false so omit unfolding.",
+  "failure_mode": "f_missing_lines",
+  "rationale": "Relax oblique Hough and widen maxLineGap to reconnect staggered joint fragments, lightly drop binary_threshold for more joint pixels, and set y_bounds lower mid-band so K/AB crops stay on lining. Goal: raise real detections and F1@15 without changing stage-1 geometry.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 50,
+      "hough_threshold_vertical": 500,
+      "maxLineGap_oblique": 70
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3900,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T08:04:15.015412",
+  "provenance": {
+    "agent_id": "28a12bfa-1929-4706-9d80-68b56b94c947"
+  }
+}

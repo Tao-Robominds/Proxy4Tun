@@ -1,0 +1,36 @@
+{
+  "observation": "denoise_retained_ratio=0.695 with depth_nan_ratio=0.105 (family-normal) but SC left panel shows red unsupported boundary stretches near top/bottom and along parts of the central joint. detected_lines blue horizontals mark sparse outer bands while primary green/red obliqu\u00e9s concentrate mid-map; correspondence_f1@15=0.467 and fill_rate=0.649 suggest joint enhancement + slightly wider lining retention could feed cleaner oblique prompts before a tighter SAM angle near the T3 prior.",
+  "rule": "Ontology d3/d6 cascade: mild f_over_gate or f_joint_oversmoothed upstream of f_missing_lines \u2014 widen radial/theta gates toward T3 prior and lower curvature_threshold to preserve joint contrast, then r_relax_hough. Experiences \u00a73\u20134: do not chase NaN cosmetics; adjust band retention when discards hurt joint visibility.",
+  "failure_mode": "f_joint_oversmoothed with mild f_over_gate \u2014 incomplete joint support on SC overlay and moderate fill from under-retained/enhanced lining near the continuous K row.",
+  "rationale": "Third distinct axis: retention/enhancement first (wider r/theta, lower curvature), aggressive oblique recovery (low Hough oblique, larger maxLineGap, lower binary threshold), then SAM with slightly narrower width, mid K_height\u2248800 (avoid empty-crop extremes), and angle\u22485.5. stage1 locked \u2192 no unfolding, full=false.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.8,
+      "mask_r_high": 3.05,
+      "mask_theta_low": 1.4,
+      "mask_theta_high": 17.5
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0003
+    },
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 22,
+      "hough_threshold_horizontal": 25,
+      "hough_threshold_vertical": 1400,
+      "maxLineGap_oblique": 45,
+      "pattern_tolerance": 15,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1150,
+      "K_height": 800.0,
+      "angle": 5.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:46:38.590114",
+  "provenance": {
+    "agent_id": "7f14357f-9200-4631-9b27-64f67a8fe2fd"
+  }
+}

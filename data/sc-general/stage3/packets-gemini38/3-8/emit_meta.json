@@ -1,0 +1,19 @@
+{
+  "subset": "3-8",
+  "next_round": 3,
+  "stage1_unlocked": true,
+  "context_path": "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gemini38/3-8/context.json",
+  "prompt_path": "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gemini38/3-8/AGENT_PROMPT.md",
+  "image_attachments": [
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gemini38/3-8/images/depth_map_viridis.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gemini38/3-8/images/detected_lines.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gemini38/3-8/images/initial_prompt_points.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gemini38/3-8/images/segmentation_results.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gemini38/3-8/images/sam_depth_input.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gemini38/3-8/images/depth_map.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-gemini38/3-8/sc_correspondence_overlay.png"
+  ],
+  "agent_id": "c490a680-d345-4271-b9a9-49f027f60fea",
+  "model": "inherit",
+  "emitted_at": "2026-09-14T09:16:24.933913"
+}

@@ -17,14 +17,22 @@ Requires Python ≥ 3.11. SAM weights are local
 
 | Path | Purpose |
 |---|---|
+| [`final_package/`](final_package/README.md) | **Intact research package** — calibration + four-feature proxy + 3 LLM arms + random control |
 | [`anchors/`](anchors/README.md) | **Reference profiles** — stage scripts + `parameters_*.json` per tunnel family |
 | [`data/anchors/`](data/anchors/README.md) | **Frozen anchor runs** — full artifacts for 1-1 … 5-1 (do not overwrite) |
+| [`bo/`](bo/README.md) | Consolidated Bayesian-optimization package (proxy, campaigns, plots) |
+| [`bo/sc_general/`](bo/sc_general/) | Frozen four-feature proxy + refinement campaign runners |
+| [`data/bo/`](data/bo/MANIFEST.md) | **Frozen BO artifacts** — all phases under `data/bo/<phase>/` (do not overwrite) |
+| `data/refinement/<arm>/<case>/` | LLM / random refinement run trees (fable, gpt56, gemini38, random) |
+| `data/sc-general/` | Stage-2 holdout scores and stage-3 selections / packets |
 | `data/subsets/` | Labelled point-cloud inputs (`*.txt`) |
-| `data/<experiment>/` | New experiment outputs |
+| `exports/sc-general-*-evaluation/` | Manuscript evaluation bundles |
+| [`archive/`](archive/MANIFEST.md) | Legacy campaigns and evidence moved out of the live tree |
 | [`agents/ontology/`](agents/ontology/) | Segment schema and tunnel priors |
 | `sam4tun/` | CLI, helpers, modular stages, SAM vendor tree |
 | [`reports/`](reports/anchors-summary.md) | Experiment reports and winner manifests |
 | `logs/` | Pipeline logs for anchor and key experiment runs |
+| `paper/Proxy4Tun_manuscript/` | Active manuscript |
 
 ## Anchor quick reference
 
@@ -65,8 +73,10 @@ export PROXY4TUN_PARAMS_DIR="$PWD/anchors/t1&2/1-1"
 ./venv/bin/python anchors/t1\&2/1_unfolding.py my-tunnel-id
 ```
 
-**Protected paths:** `data/baseline`, `data/bo`, and `data/anchors/` must not
-be overwritten by routine experiments.
+**Protected paths:** `data/baseline`, `data/bo/` (all consolidated BO phases),
+and `data/anchors/` must not be overwritten by routine experiments. See
+[`bo/REPORT.md`](bo/REPORT.md) for the BO lineage and how to start a new
+campaign under `data/<experiment-id>/`.
 
 ## Environment variables
 
@@ -80,6 +90,7 @@ be overwritten by routine experiments.
 ## Documentation
 
 - Anchors: [`anchors/README.md`](anchors/README.md), [`data/anchors/README.md`](data/anchors/README.md)
+- BO experiments: [`bo/README.md`](bo/README.md), [`bo/REPORT.md`](bo/REPORT.md), [`data/bo/MANIFEST.md`](data/bo/MANIFEST.md)
 - Summary metrics: [`reports/anchors-summary.md`](reports/anchors-summary.md)
 - Orientation / cleanup lessons: [`reports/orientation-sensitivity.md`](reports/orientation-sensitivity.md)
 - Historical ablations (pre-canonical): [`reports/critical-parameters-experiment.md`](reports/critical-parameters-experiment.md), [`reports/t3-3-1-1-corrected-vs-literal.md`](reports/t3-3-1-1-corrected-vs-literal.md), [`reports/t45-5-1-depth-improvement.md`](reports/t45-5-1-depth-improvement.md)
@@ -90,3 +101,25 @@ be overwritten by routine experiments.
 ```bash
 ./venv/bin/python -m pytest tests/test_pipeline_runtime.py tests/test_t3_runtime.py tests/test_t45_runtime.py -q
 ```
+
+## Reproducing the paper (SC-general)
+
+Frozen artefacts live under `final_package/` (symlinks/copies into `data/`). Core scripts:
+
+```bash
+./venv/bin/python bo/sc_general/build_tables.py --split both
+./venv/bin/python bo/sc_general/score_holdouts.py
+./venv/bin/python bo/sc_general/selector_policies.py --arms fable_fresh,gpt56,gemini38,random
+./venv/bin/python bo/sc_general/plot_publish_figures.py
+./venv/bin/python bo/sc_general/error_analysis_publish.py
+./venv/bin/python scripts/drawing/plot_concept_figures.py
+```
+
+Refinement campaign (fresh Fable 5.1 arm):
+
+```bash
+./venv/bin/python bo/sc_general/run_fable_fresh_campaign.py --status
+# proposals come from fresh per-case agents; apply/finish via the same script
+```
+
+Manuscript: `paper/revision/main_publish.tex`. Tag: `v1.0-aic-submission`.

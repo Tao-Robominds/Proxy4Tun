@@ -1,0 +1,345 @@
+{
+  "subset": "3-6",
+  "arm": "gpt56",
+  "proposer": "GPT-5.6 (fresh per-case agent)",
+  "family": "t3",
+  "lining_mode": "continuous",
+  "stage1_unlocked": false,
+  "residual_gate_cm": 10.0,
+  "bands": {
+    "reject": "<0.5",
+    "refine": "[0.5, 0.7)",
+    "accept": ">=0.7"
+  },
+  "anchor": {
+    "proxy_raw": 0.681391,
+    "proxy_scaled": 0.681391,
+    "band": "refine",
+    "features": {
+      "correspondence_f1@15": 0.467009,
+      "sam_fill_rate": 0.649052,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.105203
+    },
+    "recentre_residual_max_cm": 3.2,
+    "orient_axis_corr": -0.9998273166785221,
+    "ring_count": 10,
+    "ring_count_error": 0.0,
+    "labelmap_source": "results.pkl",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-6-family-proxy/runs/3-6-anchor"
+  },
+  "intrinsics_gt_blind": {
+    "orient_axis_corr": -0.9998273166785221,
+    "orient_invariant_ok": 1.0,
+    "recentre_residual_max_cm": 3.2,
+    "denoise_retained_ratio": 0.6947482510592177,
+    "depth_nan_ratio": 0.1052027439356335,
+    "depth_outlier_ratio": 0.0011429524394758353,
+    "det_real_detection_ratio": 0.0,
+    "det_fallback_ratio": 1.0,
+    "det_n_points": 10.0,
+    "sam_fill_rate": 0.6490524518014911,
+    "sam_ring_completeness": 1.0,
+    "sam_segment_size_cv": 0.4615271364828772,
+    "sam_ontology_divergence": 0.20053605374706296
+  },
+  "history": [
+    {
+      "round": 1,
+      "status": "ok",
+      "overlay": {
+        "enhancing": {
+          "curvature_threshold": 0.001
+        },
+        "detecting": {
+          "binary_threshold": 125,
+          "hough_threshold_oblique": 35,
+          "hough_threshold_horizontal": 35,
+          "maxLineGap_oblique": 35,
+          "pattern_tolerance": 12,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1200,
+          "K_height": 900.0,
+          "angle": 6.5
+        }
+      },
+      "proxy_scaled": 0.6459959132190084,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.4006494399120485,
+        "sam_fill_rate": 0.6477189870923243,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.09930129596572843
+      },
+      "recentre_residual_max_cm": 3.2,
+      "full_pipeline": false,
+      "rationale": "A mid-range binary threshold and moderate Hough/gap settings should recover fragmented joint-line evidence visible in the diagnostic images without chasing the broad unsupported horizontal structures. Uniform snapping preserves the already-correct ten-ring spacing. K_height 900 satisfies the requested conservative lower bound and, with segment_width 1200 and angle 6.5, keeps prompt influence broad enough to improve fill while remaining centered within the allowed t3 ranges. Unfolding is omitted because stage1_unlocked is false.",
+      "proposer": "GPT-5.6 (fresh per-case agent)"
+    },
+    {
+      "round": 2,
+      "status": "ok",
+      "overlay": {
+        "enhancing": {
+          "curvature_threshold": 0.0008
+        },
+        "detecting": {
+          "binary_threshold": 115,
+          "hough_threshold_oblique": 30,
+          "hough_threshold_horizontal": 30,
+          "maxLineGap_oblique": 48,
+          "pattern_tolerance": 15,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1380,
+          "K_height": 980.0,
+          "angle": 6.0
+        }
+      },
+      "proxy_scaled": 0.5357153324148753,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.20280170339127093,
+        "sam_fill_rate": 0.6409826912339475,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.10101121017525094
+      },
+      "recentre_residual_max_cm": 3.2,
+      "full_pipeline": false,
+      "rationale": "Increasing segment_width to 1380 and K_height to 980 expands support near the upper end of the bounded t3 range without changing stage-1 geometry. A slightly lower binary threshold with moderate Hough thresholds and a longer oblique gap favors continuous joint evidence in the visibly fragmented central band. Uniform snapping remains enabled because ring count and spacing are already reliable. This round deliberately prioritizes fill over the correspondence loss seen in round 1.",
+      "proposer": "GPT-5.6 (fresh per-case agent)"
+    },
+    {
+      "round": 3,
+      "status": "ok",
+      "overlay": {
+        "enhancing": {
+          "curvature_threshold": 0.0014
+        },
+        "detecting": {
+          "binary_threshold": 145,
+          "hough_threshold_oblique": 50,
+          "hough_threshold_horizontal": 50,
+          "maxLineGap_oblique": 22,
+          "pattern_tolerance": 7,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1060,
+          "K_height": 850.0,
+          "angle": 7.0
+        }
+      },
+      "proxy_scaled": 0.7068472097300434,
+      "band": "accept",
+      "features": {
+        "correspondence_f1@15": 0.5088625939621159,
+        "sam_fill_rate": 0.6521693434492725,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.09679630749881961
+      },
+      "recentre_residual_max_cm": 3.2,
+      "full_pipeline": false,
+      "rationale": "Higher binary and Hough thresholds select stronger joint traces, while maxLineGap_oblique 22 and pattern_tolerance 7 reduce bridging and snapping to loosely aligned texture. K_height 850 meets the required floor but constrains vertical prompt influence, and segment_width 1060 limits cross-ring spill. Uniform snapping remains enabled to protect the exact ten-ring topology; angle 7.0 follows the visible joint inclination. This branch explicitly trades potential fill for improved line-to-boundary correspondence.",
+      "proposer": "GPT-5.6 (fresh per-case agent)"
+    }
+  ],
+  "images": {
+    "depth_map_viridis.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-6-family-proxy/runs/3-6-anchor/depth_map_viridis.png",
+    "detected_lines.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-6-family-proxy/runs/3-6-anchor/detected_lines.png",
+    "initial_prompt_points.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-6-family-proxy/runs/3-6-anchor/initial_prompt_points.png",
+    "segmentation_results.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-6-family-proxy/runs/3-6-anchor/segmentation_results.png"
+  },
+  "ontology": {
+    "experiences": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/experiences.md",
+    "sam4tun_ontology": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/sam4tun_ontology.yaml",
+    "tunnel_priors": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/tunnel_priors.yaml"
+  },
+  "parameter_bounds": [
+    {
+      "name": "unfolding.ransac_threshold",
+      "stage": "unfolding",
+      "key": "ransac_threshold",
+      "kind": "float",
+      "low": 0.8,
+      "high": 1.2,
+      "special": null
+    },
+    {
+      "name": "unfolding.slice_spacing_factor",
+      "stage": "unfolding",
+      "key": "slice_spacing_factor",
+      "kind": "float",
+      "low": 1.05,
+      "high": 1.35,
+      "special": null
+    },
+    {
+      "name": "unfolding.polynomial_degree",
+      "stage": "unfolding",
+      "key": "polynomial_degree",
+      "kind": "int",
+      "low": 2,
+      "high": 3,
+      "special": null
+    },
+    {
+      "name": "unfolding.random_seed",
+      "stage": "unfolding",
+      "key": "random_seed",
+      "kind": "int",
+      "low": 0,
+      "high": 7,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_low",
+      "stage": "denoising",
+      "key": "mask_r_low",
+      "kind": "float",
+      "low": 2.7,
+      "high": 3.0,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_high",
+      "stage": "denoising",
+      "key": "mask_r_high",
+      "kind": "float",
+      "low": 2.9,
+      "high": 3.15,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_theta_low",
+      "stage": "denoising",
+      "key": "mask_theta_low",
+      "kind": "float",
+      "low": 1.0,
+      "high": 2.5,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_theta_high",
+      "stage": "denoising",
+      "key": "mask_theta_high",
+      "kind": "float",
+      "low": 15.0,
+      "high": 19.0,
+      "special": null
+    },
+    {
+      "name": "enhancing.curvature_threshold",
+      "stage": "enhancing",
+      "key": "curvature_threshold",
+      "kind": "float",
+      "low": 0.0002,
+      "high": 0.002,
+      "special": null
+    },
+    {
+      "name": "detecting.binary_threshold",
+      "stage": "detecting",
+      "key": "binary_threshold",
+      "kind": "int",
+      "low": 100,
+      "high": 160,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_oblique",
+      "stage": "detecting",
+      "key": "hough_threshold_oblique",
+      "kind": "int",
+      "low": 20,
+      "high": 60,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_horizontal",
+      "stage": "detecting",
+      "key": "hough_threshold_horizontal",
+      "kind": "int",
+      "low": 20,
+      "high": 60,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_vertical",
+      "stage": "detecting",
+      "key": "hough_threshold_vertical",
+      "kind": "int",
+      "low": 800,
+      "high": 2500,
+      "special": null
+    },
+    {
+      "name": "detecting.maxLineGap_oblique",
+      "stage": "detecting",
+      "key": "maxLineGap_oblique",
+      "kind": "int",
+      "low": 10,
+      "high": 60,
+      "special": null
+    },
+    {
+      "name": "detecting.pattern_tolerance",
+      "stage": "detecting",
+      "key": "pattern_tolerance",
+      "kind": "int",
+      "low": 5,
+      "high": 20,
+      "special": null
+    },
+    {
+      "name": "detecting.uniform_k_snap",
+      "stage": "detecting",
+      "key": "uniform_k_snap",
+      "kind": "bool",
+      "low": 0.0,
+      "high": 1.0,
+      "special": null
+    },
+    {
+      "name": "sam.segment_width",
+      "stage": "sam",
+      "key": "segment_width",
+      "kind": "int",
+      "low": 1000,
+      "high": 1400,
+      "special": null
+    },
+    {
+      "name": "sam.K_height",
+      "stage": "sam",
+      "key": "K_height",
+      "kind": "float",
+      "low": 700.0,
+      "high": 1000.0,
+      "special": null
+    },
+    {
+      "name": "sam.angle",
+      "stage": "sam",
+      "key": "angle",
+      "kind": "float",
+      "low": 4.0,
+      "high": 9.0,
+      "special": null
+    }
+  ],
+  "instructions": [
+    "Propose ONE coordinated multi-stage overlay within parameter_bounds.",
+    "Use observation -> ontology rule -> failure_mode -> overlay.",
+    "Do NOT read evaluation/, offline_gt.json, performance.md, perf_*, mIoU, or any ground-truth labels / GT-bearing CSVs.",
+    "Do NOT read existing Fable/deterministic selections, campaign logs, or other arms' refinement trees.",
+    "Use the SC-general proxy (proxy_scaled / band / lean features) as the between-round signal.",
+    "If stage1_unlocked is false, do not touch unfolding keys.",
+    "If stage1_unlocked is true and residual remains high, you may include unfolding (e.g. random_seed) and the pilot will auto --full.",
+    "Return JSON with keys: observation, failure_mode, rationale, overlay."
+  ],
+  "created_at": "2026-09-14T04:17:22.823614"
+}

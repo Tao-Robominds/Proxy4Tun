@@ -1,0 +1,54 @@
+{
+  "subset": "4-1",
+  "arm": "cursor3",
+  "anchor": {
+    "round": "anchor",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo-unified/4-1-family-proxy/runs/4-1-anchor",
+    "proxy_raw": 0.6516,
+    "proxy_scaled": 0.6516,
+    "band": "refine",
+    "mIoU": 0.635,
+    "recentre_residual_max_cm": 2.4
+  },
+  "rounds": [
+    {
+      "round": "round1",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/reflect/4-1/cursor3/round1",
+      "proxy_raw": 0.657,
+      "proxy_scaled": 0.657,
+      "band": "refine",
+      "mIoU": 0.655,
+      "recentre_residual_max_cm": 2.4
+    },
+    {
+      "round": "round2",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/reflect/4-1/cursor3/round2",
+      "proxy_raw": 0.6556,
+      "proxy_scaled": 0.6556,
+      "band": "refine",
+      "mIoU": 0.657,
+      "recentre_residual_max_cm": 2.4
+    },
+    {
+      "round": "round3",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/reflect/4-1/cursor3/round3",
+      "proxy_raw": 0.6623,
+      "proxy_scaled": 0.6623,
+      "band": "refine",
+      "mIoU": 0.659,
+      "recentre_residual_max_cm": 2.4
+    }
+  ],
+  "selected": {
+    "round": "round3",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/reflect/4-1/cursor3/round3",
+    "proxy_raw": 0.6623,
+    "proxy_scaled": 0.6623,
+    "band": "refine",
+    "mIoU": 0.659,
+    "recentre_residual_max_cm": 2.4
+  },
+  "selection_reason": "best proxy 0.6623; 3 within 0.01 margin; residual tiebreak -> round3",
+  "delta_proxy_scaled": 0.0107,
+  "delta_mIoU_offline": 0.024
+}

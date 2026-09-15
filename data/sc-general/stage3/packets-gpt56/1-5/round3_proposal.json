@@ -1,0 +1,29 @@
+{
+  "observation": "Round 2 improved proxy_scaled to 0.571055, above the 0.555111 anchor, chiefly because correspondence_f1@15 rose to 0.230135 while fill rate remained essentially stable at 0.728694 and ring-count error stayed zero. The stricter detector removed the dense long oblique clutter seen in Round 1, but the current prompt plot still contains two assumed points and only two explicit negative-slope intersections; many transverse label boundaries remain unsupported.",
+  "rule": "After a precision-oriented detector improves correspondence without harming coverage or ring topology, refine locally around that regime: tighten oblique structure and fragment bridging slightly, but relax horizontal voting modestly to recover strong transverse seams needed by the staggered layout.",
+  "failure_mode": "The remaining error is an imbalance rather than global over-detection: weak oblique fragments can still form unsupported joints, while an overly strict horizontal threshold can suppress genuine transverse seams and leave fallback prompts.",
+  "rationale": "The proposal stays close to the successful Round 2 settings rather than reversing direction. Raising curvature and binary selectivity slightly, shrinking the interaction radius, increasing the oblique vote threshold, and shortening the line gap should further suppress textured false positives. Reducing only the horizontal Hough threshold from 75 to 70 provides a controlled recovery path for physical transverse seams. A lower crop of 3700 retains nearly all of Round 2's useful upper context while excluding a small amount of damaged margin. Vertical detection and unfolding remain untouched because orientation and ten-ring topology are already stable.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0075,
+      "inter_radius": 0.025
+    },
+    "detecting": {
+      "binary_threshold": 155,
+      "hough_threshold_oblique": 85,
+      "hough_threshold_horizontal": 70,
+      "maxLineGap_oblique": 25
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3700,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T01:04:13.756744",
+  "provenance": {
+    "agent_id": "3ab22798-a0c4-4dbe-8ce9-f0154d1ecb67"
+  }
+}

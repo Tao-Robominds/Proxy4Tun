@@ -1,0 +1,36 @@
+{
+  "observation": "Round 1 increased SAM fill from 0.698 to 0.712 and preserved zero ring-count error, but correspondence_f1@15 fell from 0.287 to 0.155 and depth NaNs rose from 0.142 to 0.149, producing a proxy regression from 0.589 to 0.519. The updated imagery still shows a stable 10-ring vertical lattice, sparse fragmented transverse detections, and a fallback-like prompt row near the central joint.",
+  "rule": "When a permissive detector improves fill but sharply degrades boundary correspondence, retain the useful K-height placement while moving Hough acceptance and line bridging back to moderate values. Tighten denoising and enhancement relative to the regressed round so only coherent transverse evidence influences prompts.",
+  "failure_mode": "Round 1 over-connected weak edge fragments with Hough thresholds of 25 and an oblique gap of 50. This admitted scattered or displaced transverse segments, reducing agreement between predicted label boundaries and visible joints even though total mask coverage increased.",
+  "rationale": "This proposal is deliberately different from round 1: horizontal and oblique Hough thresholds move to 38, maxLineGap_oblique drops to 28, and binary threshold rises to 130. Denoising is narrowed and curvature filtering strengthened to reduce noisy fragments, while moderate pattern tolerance and uniform snapping preserve the correct 10-ring structure. K_height remains 900 as requested; segment width and angle are reduced moderately to avoid compounding the detector regression. No unfolding keys are included and full remains false.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.9,
+      "mask_r_high": 3.0,
+      "mask_theta_low": 2.0,
+      "mask_theta_high": 17.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0012
+    },
+    "detecting": {
+      "binary_threshold": 130,
+      "hough_threshold_oblique": 38,
+      "hough_threshold_horizontal": 38,
+      "hough_threshold_vertical": 1800,
+      "maxLineGap_oblique": 28,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1100,
+      "K_height": 900.0,
+      "angle": 5.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T03:42:52.048338",
+  "provenance": {
+    "agent_id": "091a3257-f29a-435c-9e1b-33a7af7e329c"
+  }
+}

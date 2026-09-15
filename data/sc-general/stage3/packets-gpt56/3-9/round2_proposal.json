@@ -1,0 +1,35 @@
+{
+  "observation": "Round 1 raised fill rate slightly (0.728989 to 0.735204) and reduced the NaN ratio, but correspondence F1@15 collapsed from 0.363678 to 0.154825, driving the proxy from 0.641294 to 0.529508 while ring count remained correct. The permissive 25/25 Hough thresholds, low binary threshold, long line gap, and broad pattern tolerance therefore admitted or connected evidence that displaced the K-aligned boundary prompts.",
+  "rule": "When a sensitivity increase preserves completeness but sharply degrades boundary correspondence, reverse the permissive detector changes: require mid-to-strong Hough support, shorten gap bridging, tighten pattern tolerance, and use a compact SAM context while preserving the already-stable geometry.",
+  "failure_mode": "Round 1 over-connected fragmented texture near the K joint, causing the propagated prompt line to follow weak or competing structures rather than the locally supported boundary; extra fill did not compensate for this correspondence loss.",
+  "rationale": "Hough thresholds of 45 restore selectivity without reaching the extreme upper bound, while binary_threshold=145, maxLineGap_oblique=25, and pattern_tolerance=8 explicitly reverse Round 1's permissive detector. Tighter denoising and a higher curvature threshold suppress weak clutter. Disabling uniform snapping avoids forcing all ring prompts onto a potentially biased inferred line, and segment_width=1100 with the minimum allowed K_height=850 limits propagation from unsupported joint regions.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.9,
+      "mask_r_high": 3.0,
+      "mask_theta_low": 2.0,
+      "mask_theta_high": 16.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0012
+    },
+    "detecting": {
+      "binary_threshold": 145,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 45,
+      "maxLineGap_oblique": 25,
+      "pattern_tolerance": 8,
+      "uniform_k_snap": false
+    },
+    "sam": {
+      "segment_width": 1100,
+      "K_height": 850.0,
+      "angle": 5.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T03:57:01.608440",
+  "provenance": {
+    "agent_id": "21189194-2a48-480a-8634-d3561dad3452"
+  }
+}

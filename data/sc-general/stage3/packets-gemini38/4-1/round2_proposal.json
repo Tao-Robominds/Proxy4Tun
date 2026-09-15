@@ -1,0 +1,23 @@
+{
+  "observation": "Same anchor: correspondence_f1@15=0.225 and SC orange/unexplained joints; detected_lines is dominated by short blue horizontals with only a few slanted red/green obliques; det_fallback_ratio=0.6. Residual 2.4 cm and ring_count OK, so upstream unroll is not the bottleneck\u2014oblique yield and taper alignment are.",
+  "rule": "Low oblique line yield with horizontal/synthetic fallback (d7 / f_missing_lines) \u2192 relax oblique Hough (lower threshold, raise maxLineGap) once depth/residual are healthy; then nudge SAM angle/width so crops follow recovered slanted joints (r_relax_hough + modest r_fix_template).",
+  "failure_mode": "f_missing_lines",
+  "rationale": "Distinct from round 1: prioritize recovering real oblique joints that can explain SC boundaries, then slightly raise angle (10.5) and keep K_height at 1200 (below prior) to reduce empty-crop risk on white bands. Mild pattern_tolerance widen helps distance-pattern match. full=false; no unfolding.",
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 35,
+      "maxLineGap_oblique": 65,
+      "pattern_tolerance": 12
+    },
+    "sam": {
+      "segment_width": 1750,
+      "K_height": 1200.0,
+      "angle": 10.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T10:22:46.394893",
+  "provenance": {
+    "agent_id": "8482fc7e-88d6-475f-8787-b32cded5f518"
+  }
+}

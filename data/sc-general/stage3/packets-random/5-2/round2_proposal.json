@@ -1,0 +1,54 @@
+{
+  "observation": "random-uniform-v1 control proposal (non-adaptive)",
+  "rule": "k-matched uniform draw within family search space",
+  "failure_mode": "n/a (control)",
+  "rationale": "random bounded overlay",
+  "overlay": {
+    "detecting": {
+      "maxLineGap_horizontal": 27,
+      "hough_threshold_horizontal": 28,
+      "maxLineGap_oblique": 68,
+      "binary_threshold": 101,
+      "pattern_tolerance": 9,
+      "hough_threshold_vertical": 3411,
+      "hough_threshold_oblique": 62
+    },
+    "sam": {
+      "segment_width": 1917,
+      "angle": 10.400349535569484,
+      "K_height": 1413.534317781758
+    },
+    "denoising": {
+      "mask_r_high": 3.9042504971342042,
+      "mask_r_low": 3.5282457281791366
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0012077998067363514
+    }
+  },
+  "full": false,
+  "provenance": {
+    "arm": "random",
+    "proposer": "random-uniform-v1 (k-matched bounded overlay)",
+    "seed_base": 20260915,
+    "panel_index": 20,
+    "round": 2,
+    "k": 13,
+    "chosen": [
+      "detecting.maxLineGap_horizontal",
+      "detecting.hough_threshold_horizontal",
+      "sam.segment_width",
+      "sam.angle",
+      "detecting.maxLineGap_oblique",
+      "sam.K_height",
+      "detecting.binary_threshold",
+      "detecting.pattern_tolerance",
+      "denoising.mask_r_high",
+      "denoising.mask_r_low",
+      "enhancing.curvature_threshold",
+      "detecting.hough_threshold_vertical",
+      "detecting.hough_threshold_oblique"
+    ],
+    "stage1_unlocked": false
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "observation": "Round 1 remains best at 0.525481, with correct ring count and improved fill, while round 2 regressed to 0.504084 because correspondence F1@15 fell from 0.113695 to 0.075966. The anchor is still 100% fallback-driven, and the images show fragmented but repeated line evidence around a nearly horizontal joint row.",
+  "rule": "After aggressive detector relaxation regresses a continuous t3 case, return toward the best conservative SAM geometry and use only mild upstream cleanup plus mid-strength Hough acceptance; preserve uniform snapping and a moderately permissive pattern tolerance to protect the correct ring lattice.",
+  "failure_mode": "Noisy detector substitution: round 2's low thresholds admitted weak fragments that displaced fallback prompts without producing better boundary correspondence, while the underlying depth image still contains clutter and fragmented joint responses.",
+  "rationale": "Apply mild radial and angular denoising within the bounded interior, then use a low-interior curvature threshold to retain coherent joint structure without aggressively amplifying speckle. Move binary and Hough thresholds back to moderate values, shorten the oblique gap bridge, and use pattern_tolerance 16 as a compromise between round 1's permissive 20 and round 2's 12. Keep uniform_k_snap true and use conservative SAM settings with K_height 850, the nearest safe height to round 1's successful geometry.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.8,
+      "mask_r_high": 3.05,
+      "mask_theta_low": 1.5,
+      "mask_theta_high": 17.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "binary_threshold": 130,
+      "hough_threshold_oblique": 35,
+      "hough_threshold_horizontal": 35,
+      "hough_threshold_vertical": 1500,
+      "maxLineGap_oblique": 30,
+      "pattern_tolerance": 16,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1000,
+      "K_height": 850.0,
+      "angle": 4.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T03:01:55.308172",
+  "provenance": {
+    "agent_id": "c8a692c6-67d9-4d86-a29c-3df0962d614b"
+  }
+}

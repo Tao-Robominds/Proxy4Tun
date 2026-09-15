@@ -1,0 +1,341 @@
+{
+  "subset": "5-4",
+  "arm": "fable",
+  "proposer": "fable-5 (cursor agent, live)",
+  "family": "t4&5",
+  "lining_mode": "complex",
+  "stage1_unlocked": false,
+  "residual_gate_cm": 10.0,
+  "bands": {
+    "reject": "<0.5",
+    "refine": "[0.5, 0.7)",
+    "accept": ">=0.7"
+  },
+  "anchor": {
+    "proxy_raw": 0.692326,
+    "proxy_scaled": 0.692326,
+    "band": "refine",
+    "features": {
+      "correspondence_f1@15": 0.467401,
+      "sam_fill_rate": 0.759939,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.19849
+    },
+    "recentre_residual_max_cm": 2.1,
+    "orient_axis_corr": -0.7738736413768053,
+    "ring_count": 10,
+    "ring_count_error": 0.0,
+    "labelmap_source": "only_label.csv",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-4-family-proxy/runs/5-4-anchor"
+  },
+  "intrinsics_gt_blind": {
+    "orient_axis_corr": -0.7738736413768053,
+    "orient_invariant_ok": 1.0,
+    "recentre_residual_max_cm": 2.1,
+    "denoise_retained_ratio": 0.771714565621628,
+    "depth_nan_ratio": 0.19848996720212705,
+    "depth_outlier_ratio": 0.00134290457193032,
+    "det_real_detection_ratio": 0.7,
+    "det_fallback_ratio": 0.3,
+    "det_n_points": 10.0,
+    "sam_fill_rate": 0.7599389968796842,
+    "sam_ring_completeness": 1.0,
+    "sam_segment_size_cv": 1.1070596715680279,
+    "sam_ontology_divergence": 0.14195278326436073
+  },
+  "history": [
+    {
+      "round": 1,
+      "status": "ok",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 3.55,
+          "mask_r_high": 3.95
+        },
+        "enhancing": {
+          "curvature_threshold": 0.001
+        },
+        "detecting": {
+          "binary_threshold": 120,
+          "hough_threshold_oblique": 40,
+          "hough_threshold_horizontal": 30,
+          "hough_threshold_vertical": 3500,
+          "maxLineGap_oblique": 70,
+          "maxLineGap_horizontal": 20,
+          "pattern_tolerance": 12
+        },
+        "sam": {
+          "K_height": 1150,
+          "segment_width": 1700,
+          "angle": 9.5
+        }
+      },
+      "proxy_scaled": 0.6869361703375827,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.4541447935482537,
+        "sam_fill_rate": 0.7632918127687642,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.19393773837010847
+      },
+      "recentre_residual_max_cm": 2.1,
+      "full_pipeline": false,
+      "rationale": "4-4 cursor2 coordinated: widen mask, hard vertical, live SAM sizes.",
+      "proposer": "fable-5 (cursor agent, live)"
+    },
+    {
+      "round": 2,
+      "status": "ok",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 3.6,
+          "mask_r_high": 4.0
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0008
+        },
+        "detecting": {
+          "binary_threshold": 110,
+          "hough_threshold_oblique": 35,
+          "hough_threshold_horizontal": 35,
+          "hough_threshold_vertical": 2500,
+          "maxLineGap_oblique": 60,
+          "maxLineGap_horizontal": 15,
+          "pattern_tolerance": 14
+        },
+        "sam": {
+          "K_height": 1300,
+          "segment_width": 1900,
+          "angle": 10.0
+        }
+      },
+      "proxy_scaled": 0.6828935293547586,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.4481813676153624,
+        "sam_fill_rate": 0.761387257660854,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.19523018648121218
+      },
+      "recentre_residual_max_cm": 2.1,
+      "full_pipeline": false,
+      "rationale": "Milder vertical 2500 + larger SAM window.",
+      "proposer": "fable-5 (cursor agent, live)"
+    },
+    {
+      "round": 3,
+      "status": "ok",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 3.5,
+          "mask_r_high": 4.05
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0015
+        },
+        "detecting": {
+          "binary_threshold": 130,
+          "hough_threshold_oblique": 45,
+          "hough_threshold_horizontal": 40,
+          "hough_threshold_vertical": 4000,
+          "maxLineGap_oblique": 75,
+          "maxLineGap_horizontal": 25,
+          "pattern_tolerance": 10
+        },
+        "sam": {
+          "K_height": 1400,
+          "segment_width": 2000,
+          "angle": 8.5
+        }
+      },
+      "proxy_scaled": 0.5505661264600892,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.203217839520067,
+        "sam_fill_rate": 0.7646325294325205,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.19216560185933232
+      },
+      "recentre_residual_max_cm": 2.1,
+      "full_pipeline": false,
+      "rationale": "Aggressive vertical 4000 + edge-widen mask + larger K_height.",
+      "proposer": "fable-5 (cursor agent, live)"
+    }
+  ],
+  "images": {
+    "depth_map_viridis.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-4-family-proxy/runs/5-4-anchor/depth_map_viridis.png",
+    "detected_lines.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-4-family-proxy/runs/5-4-anchor/detected_lines.png",
+    "initial_prompt_points.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-4-family-proxy/runs/5-4-anchor/initial_prompt_points.png",
+    "segmentation_results.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-4-family-proxy/runs/5-4-anchor/segmentation_results.png"
+  },
+  "ontology": {
+    "experiences": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/experiences.md",
+    "sam4tun_ontology": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/sam4tun_ontology.yaml",
+    "tunnel_priors": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/tunnel_priors.yaml"
+  },
+  "parameter_bounds": [
+    {
+      "name": "unfolding.ransac_threshold",
+      "stage": "unfolding",
+      "key": "ransac_threshold",
+      "kind": "float",
+      "low": 0.8,
+      "high": 1.2,
+      "special": null
+    },
+    {
+      "name": "unfolding.slice_spacing_factor",
+      "stage": "unfolding",
+      "key": "slice_spacing_factor",
+      "kind": "float",
+      "low": 1.6,
+      "high": 2.0,
+      "special": null
+    },
+    {
+      "name": "unfolding.polynomial_degree",
+      "stage": "unfolding",
+      "key": "polynomial_degree",
+      "kind": "int",
+      "low": 2,
+      "high": 3,
+      "special": null
+    },
+    {
+      "name": "unfolding.random_seed",
+      "stage": "unfolding",
+      "key": "random_seed",
+      "kind": "int",
+      "low": 0,
+      "high": 7,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_low",
+      "stage": "denoising",
+      "key": "mask_r_low",
+      "kind": "float",
+      "low": 3.5,
+      "high": 3.8,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_high",
+      "stage": "denoising",
+      "key": "mask_r_high",
+      "kind": "float",
+      "low": 3.75,
+      "high": 4.05,
+      "special": null
+    },
+    {
+      "name": "enhancing.curvature_threshold",
+      "stage": "enhancing",
+      "key": "curvature_threshold",
+      "kind": "float",
+      "low": 0.0002,
+      "high": 0.002,
+      "special": null
+    },
+    {
+      "name": "detecting.binary_threshold",
+      "stage": "detecting",
+      "key": "binary_threshold",
+      "kind": "int",
+      "low": 100,
+      "high": 160,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_oblique",
+      "stage": "detecting",
+      "key": "hough_threshold_oblique",
+      "kind": "int",
+      "low": 25,
+      "high": 70,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_horizontal",
+      "stage": "detecting",
+      "key": "hough_threshold_horizontal",
+      "kind": "int",
+      "low": 25,
+      "high": 70,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_vertical",
+      "stage": "detecting",
+      "key": "hough_threshold_vertical",
+      "kind": "int",
+      "low": 800,
+      "high": 5000,
+      "special": null
+    },
+    {
+      "name": "detecting.maxLineGap_oblique",
+      "stage": "detecting",
+      "key": "maxLineGap_oblique",
+      "kind": "int",
+      "low": 30,
+      "high": 80,
+      "special": null
+    },
+    {
+      "name": "detecting.maxLineGap_horizontal",
+      "stage": "detecting",
+      "key": "maxLineGap_horizontal",
+      "kind": "int",
+      "low": 5,
+      "high": 30,
+      "special": null
+    },
+    {
+      "name": "detecting.pattern_tolerance",
+      "stage": "detecting",
+      "key": "pattern_tolerance",
+      "kind": "int",
+      "low": 5,
+      "high": 20,
+      "special": null
+    },
+    {
+      "name": "sam.segment_width",
+      "stage": "sam",
+      "key": "segment_width",
+      "kind": "int",
+      "low": 1500,
+      "high": 2100,
+      "special": null
+    },
+    {
+      "name": "sam.K_height",
+      "stage": "sam",
+      "key": "K_height",
+      "kind": "float",
+      "low": 1000.0,
+      "high": 1500.0,
+      "special": null
+    },
+    {
+      "name": "sam.angle",
+      "stage": "sam",
+      "key": "angle",
+      "kind": "float",
+      "low": 7.0,
+      "high": 12.0,
+      "special": null
+    }
+  ],
+  "instructions": [
+    "Propose ONE coordinated multi-stage overlay within parameter_bounds.",
+    "Use observation -> ontology rule -> failure_mode -> overlay.",
+    "Do NOT read evaluation/, perf_*, mIoU, or any ground-truth labels.",
+    "Use the SC-general proxy (proxy_scaled / band / lean features) as the between-round signal.",
+    "If stage1_unlocked is false, do not touch unfolding keys.",
+    "If stage1_unlocked is true and residual remains high, you may include unfolding (e.g. random_seed) and the pilot will auto --full.",
+    "Return JSON with keys: observation, failure_mode, rationale, overlay."
+  ],
+  "created_at": "2026-09-13T15:38:22.138585"
+}

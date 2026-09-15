@@ -1,0 +1,23 @@
+{
+  "observation": "Proxy 0.610 (refine) with correspondence_f1@15=0.316 and sam_fill_rate=0.756; SC overlay shows many unsupported (red) label boundaries vs sparse green matches, plus orange unexplained joints near yellow real-prompt stars. Ring_count=10, residual 1.9 cm, orient_axis_corr\u22480.91 \u2014 stage-1 healthy. Detected_lines has ten purple verticals but incomplete red/green oblique coverage on staggered keystone joints. High sam_segment_size_cv=1.046 indicates template/block-size mismatch on complex t4&5 lining.",
+  "rule": "d10/d8: broken label consistency with poor K/AB spacing \u2192 f_template_mismatch / f_pattern_mismatch; remediations r_fix_template and r_fix_height_priors. Experiences \u00a77: after stages 1\u20133 healthy (residual\u226a10 cm, NaN~19% family-normal), retune SAM geometry (segment_width / K_height / angle).",
+  "failure_mode": "f_template_mismatch",
+  "rationale": "Primary t4&5 move: retune SAM toward T5 priors (segment_width\u22481800, K\u22481227 mm, angle\u22489.8\u00b0) so keystone crops cover textured blocks without empty-crop K into white-band gaps. Pair with modest pattern_tolerance and slightly relaxed oblique Hough so prompt spacing matches tapered K blocks.",
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 40,
+      "maxLineGap_oblique": 55,
+      "pattern_tolerance": 12
+    },
+    "sam": {
+      "segment_width": 1800,
+      "K_height": 1220.0,
+      "angle": 9.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T10:46:37.845074",
+  "provenance": {
+    "agent_id": "ef99886d-5a91-41b9-a315-f13245073073"
+  }
+}

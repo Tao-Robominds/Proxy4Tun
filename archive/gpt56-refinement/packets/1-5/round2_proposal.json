@@ -1,0 +1,12 @@
+{
+  "observation": "Round 1 improved the scaled proxy by 0.008 and raised real detections from 0.8 to 0.9 while preserving 10 prompts and regular x spacing. The gain came with degraded coherence: prompt y standard deviation rose from 332 to 433 px, row y spread from 155 to 194 px, phase incoherence from 20.6 to 29.6 degrees, SAM segment-size CV from 1.30 to 1.61, and ontology divergence from 0.193 to 0.260. The round-1 line image also contains more long competing oblique candidates, with prompt rows visibly jumping between distant seams.",
+  "failure_mode": "Stage-4 f_spurious_lines / f_pattern_mismatch: the round-1 Hough relaxation recovered one additional real prompt but became too permissive, allowing long fragmented features to form competing oblique lines and selecting geometrically inconsistent prompt rows.",
+  "rationale": "Retain part of round 1's sensitivity gain but move all three detection controls back toward the T1 prior. A slightly higher binary and Hough threshold should reject weak clutter, while reducing maxLineGap from 60 to 45 should prevent distant fragments from being joined into misleading long candidates. This coordinated partial rollback targets coherence without returning fully to the anchor's 20% fallback rate; upstream depth and denoising metrics are unchanged and healthy enough to leave untouched.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 118,
+      "hough_threshold_oblique": 46,
+      "maxLineGap_oblique": 45
+    }
+  }
+}

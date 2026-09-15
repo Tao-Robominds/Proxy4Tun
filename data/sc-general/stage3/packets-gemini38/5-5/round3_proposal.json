@@ -1,0 +1,28 @@
+{
+  "observation": "SC overlay and depth texture show thick white occluder bands and dark gaps between lining blocks; unsupported red boundaries often overshoot into those empties. sam_segment_size_cv=1.046 and correspondence_f1@15=0.316 with prompts (yellow stars) inside short keystone cells \u2014 K_height that is too tall empties the crop. Vertical purple spacing is regular (ring_count_error=0) but column widths look slightly wide of a narrow prior.",
+  "rule": "d8/d12 chain: pattern mismatch and over/under coverage \u2192 f_crop_offset / f_pattern_mismatch; remediation r_fix_height_priors with conservative K_height (avoid empty-crop) plus wider segment_width and steeper taper_angle for complex stagger. Experiences \u00a75: force synthetic verticals (high hough_threshold_vertical) when ring count is already correct.",
+  "failure_mode": "f_crop_offset",
+  "rationale": "Third distinct axis: anti empty-crop K_height=1080 (lower third of [1000,1500]), wider segment_width=1950 and angle=11.0 for tapered keystones, light denoise band toward T5 radius prior, and elevated vertical Hough to keep the ten-ring grid stable while oblique pattern_tolerance stays moderate.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.6,
+      "mask_r_high": 3.95
+    },
+    "detecting": {
+      "hough_threshold_vertical": 2000,
+      "hough_threshold_oblique": 45,
+      "maxLineGap_oblique": 50,
+      "pattern_tolerance": 10
+    },
+    "sam": {
+      "segment_width": 1950,
+      "K_height": 1080.0,
+      "angle": 11.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T10:55:37.984363",
+  "provenance": {
+    "agent_id": "ef99886d-5a91-41b9-a315-f13245073073"
+  }
+}

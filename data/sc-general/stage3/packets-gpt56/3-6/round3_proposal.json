@@ -1,0 +1,29 @@
+{
+  "observation": "The anchor correspondence overlay shows that only the central joint-adjacent label boundaries are consistently supported, while outer horizontal boundaries are unsupported and most prompts are assumed. Round 1's broad mid-range detector/SAM settings reduced correspondence to 0.401 without improving fill, indicating that added spatial support was not sufficiently aligned with real boundary evidence.",
+  "rule": "When broader support lowers boundary correspondence, use a correspondence-oriented branch: suppress weak line fragments, require tighter pattern agreement, limit oblique bridging, and reduce SAM extent while retaining the known-correct ring count.",
+  "failure_mode": "Weak or disconnected texture is being accepted as joint evidence, shifting fallback-centered segmentation away from the strongest central boundaries and increasing unsupported label boundaries.",
+  "rationale": "Higher binary and Hough thresholds select stronger joint traces, while maxLineGap_oblique 22 and pattern_tolerance 7 reduce bridging and snapping to loosely aligned texture. K_height 850 meets the required floor but constrains vertical prompt influence, and segment_width 1060 limits cross-ring spill. Uniform snapping remains enabled to protect the exact ten-ring topology; angle 7.0 follows the visible joint inclination. This branch explicitly trades potential fill for improved line-to-boundary correspondence.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0014
+    },
+    "detecting": {
+      "binary_threshold": 145,
+      "hough_threshold_oblique": 50,
+      "hough_threshold_horizontal": 50,
+      "maxLineGap_oblique": 22,
+      "pattern_tolerance": 7,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1060,
+      "K_height": 850.0,
+      "angle": 7.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T04:14:05.028740",
+  "provenance": {
+    "agent_id": "9bfbc69c-f5fd-48e4-89fa-fb5477575c5a"
+  }
+}

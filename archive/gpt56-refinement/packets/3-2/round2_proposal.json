@@ -1,0 +1,15 @@
+{
+  "observation": "Round 1 produced a strong GT-blind improvement: the centreline residual fell from 16.8 cm to 9.4 cm, depth NaNs fell to 0.151, fill rose to 0.772, all 10 rings became complete, and the prompt row residual tightened to 0.69 px. Orientation and phase coherence remain healthy. Detection is still entirely fallback, but its count, spacing, and row geometry are internally coherent; the remaining weaker signals are segment-size CV 0.648 and ontology divergence 0.267.",
+  "failure_mode": "The major upstream centreline defect is resolved and should be preserved. The residual proxy headroom is more consistent with a mild SAM template-proportion mismatch than with detection failure: synthetic prompts already have the correct count and highly regular placement, while segmentation is complete but uneven across block classes.",
+  "rationale": "Retain the successful cubic, tightly gated, reproducible unfolding configuration and make one conservative downstream calibration: set K_height to the sanitized T3 prior of 823.8 mm. This isolates the narrow K-block template geometry as the next test while avoiding risky Hough changes in an all-fallback regime and leaving segment width and taper angle unchanged.",
+  "overlay": {
+    "unfolding": {
+      "polynomial_degree": 3,
+      "ransac_threshold": 0.9,
+      "random_seed": 0
+    },
+    "sam": {
+      "K_height": 823.8
+    }
+  }
+}

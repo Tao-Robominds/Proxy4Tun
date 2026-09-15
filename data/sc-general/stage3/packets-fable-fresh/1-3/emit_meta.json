@@ -1,0 +1,19 @@
+{
+  "subset": "1-3",
+  "next_round": 3,
+  "stage1_unlocked": false,
+  "context_path": "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-fable-fresh/1-3/context.json",
+  "prompt_path": "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-fable-fresh/1-3/AGENT_PROMPT.md",
+  "image_attachments": [
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-fable-fresh/1-3/images/depth_map_viridis.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-fable-fresh/1-3/images/detected_lines.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-fable-fresh/1-3/images/initial_prompt_points.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-fable-fresh/1-3/images/segmentation_results.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-fable-fresh/1-3/images/sam_depth_input.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-fable-fresh/1-3/images/depth_map.png",
+    "/home/boringtao/Projects/Proxy4Tun/data/sc-general/stage3/packets-fable-fresh/1-3/sc_correspondence_overlay.png"
+  ],
+  "agent_id": "e96e1c27-2d59-47ba-855d-bad223982b51",
+  "model": "claude-fable-5-1-thinking-high",
+  "emitted_at": "2026-09-15T19:02:01.292424"
+}

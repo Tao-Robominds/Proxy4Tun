@@ -1,0 +1,18 @@
+{
+  "observation": "proxy_scaled=0.552 (refine); correspondence_f1@15=0.225 with many red unsupported label boundaries and orange unexplained joints on the SC overlay; sam_segment_size_cv=1.06 and sam_fill_rate=0.749; ring_count_error=0 and recentre_residual_max_cm=2.4 (well under 10 cm). detected_lines shows 10 verticals matching ring_count but sparse real oblique (red/green) lines (det_real=0.4, fallback=0.6). Depth NaN\u22480.223 is family-normal for complex.",
+  "rule": "When stage-1 residual and ring count are healthy and the residual defect is graded SAM/boundary mismatch (not orientation or coverage collapse), retune SAM template geometry (segment_width, K_height, angle) toward t4&5 priors before Hough sweeps (experiences \u00a76\u20137; ontology f_template_mismatch / r_fix_template).",
+  "failure_mode": "f_template_mismatch",
+  "rationale": "Round 1 pins SAM crops to T4 notebook priors (segment_width=1800, K_height\u22481227, angle=9.8). Keep K_height at prior\u2014not high\u2014to avoid empty-crop into white bands. Omit unfolding (stage1_unlocked=false); full=false.",
+  "overlay": {
+    "sam": {
+      "segment_width": 1800,
+      "K_height": 1227.0,
+      "angle": 9.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T10:18:17.919034",
+  "provenance": {
+    "agent_id": "8482fc7e-88d6-475f-8787-b32cded5f518"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "subset": "1-4",
+  "arm": "fable",
+  "proposer": "fable-5 (cursor agent, live)",
+  "round": 2,
+  "status": "ok",
+  "full_pipeline": false,
+  "proxy_scaled": 0.7224282262735959,
+  "band": "accept",
+  "features": {
+    "correspondence_f1@15": 0.5098677999522518,
+    "sam_fill_rate": 0.7391995398180708,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.1380987466612863
+  },
+  "recentre_residual_max_cm": 1.9,
+  "elapsed_s": 269.99278807640076,
+  "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/1-4-scgen-fable-refinement/round2"
+}

@@ -1,0 +1,23 @@
+{
+  "observation": "Depth map shows a clear staggered grid but joint contrast is uneven (white NaN band across lower third; depth_nan_ratio\u22480.15). Detection still leans on fallback (det_real_detection_ratio=0.7 / det_fallback_ratio=0.3), and experiences mark joint enhancement as the usual upstream cause of faint staggered seams on t1&2 when depth_threshold knobs are unavailable in-bounds.",
+  "rule": "If oblique/horizontal yield is thin, first strengthen the enhanced joint cloud (curvature_threshold / inter_radius) then apply a mild detection relax\u2014do not blame Hough alone while joints may be oversmoothed (ontology f_joint_oversmoothed \u2192 f_missing_lines; inter_stage_dependencies; remediation chain before r_relax_hough).",
+  "failure_mode": "f_joint_oversmoothed",
+  "rationale": "Depth_threshold_low/high are the empirically strongest t1&2 knobs but are outside this packet's writable bounds, so use the available enhancing pair to densify joint support. Slightly lower curvature_threshold keeps more high-curvature seam points; a modestly larger inter_radius fills staggered joint gaps. Mild Hough relax then harvests the improved outlier map without flooding spurious lines.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.00035,
+      "inter_radius": 0.07
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 50,
+      "hough_threshold_horizontal": 48,
+      "maxLineGap_oblique": 50
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T07:54:55.758161",
+  "provenance": {
+    "agent_id": "5b8495ca-e2e8-4d2e-9d8f-3308d9f62e26"
+  }
+}

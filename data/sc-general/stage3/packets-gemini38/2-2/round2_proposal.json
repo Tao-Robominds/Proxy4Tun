@@ -1,0 +1,35 @@
+{
+  "observation": "Same anchor: F1@15=0.455 and high sam_segment_size_cv=1.15 with unsupported top/bottom horizontals on the SC overlay suggest prompt/crop y-window misalignment on the staggered K/AB stack, not a ring-count failure. Fill rate 0.74 and ontology_divergence 0.165 leave graded SAM-geometry headroom once detection is only mid-tuned. Depth NaN 0.111 and residual 1.5 cm argue against chasing denoise cosmetics.",
+  "rule": "Experiences \u00a76\u2013\u00a77 and remediation for f_crop_offset: after orientation/centreline are healthy, graded coverage and boundary mismatch warrant SAM y_bounds_lower plus enhancing joint-contrast retune rather than further stage-1 or aggressive Hough sweeps.",
+  "failure_mode": "f_crop_offset / f_template_mismatch (staggered K-row y-window) with residual unsupported horizontals",
+  "rationale": "Round-2 SAM-geometry path: raise processing.y_bounds lower to 4300 to recentre the staggered template stack, sensitize curvature enhancement, and keep Hough near mid-prior (not the R1 relax). Mild radial mask retune only. Distinct from R1\u2019s detection-first relax. No unfolding; full=false.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.35,
+      "mask_r_high": 2.85,
+      "grad_threshold": 0.18
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0004,
+      "inter_radius": 0.04
+    },
+    "detecting": {
+      "binary_threshold": 130,
+      "hough_threshold_oblique": 55,
+      "hough_threshold_horizontal": 50,
+      "hough_threshold_vertical": 550,
+      "maxLineGap_oblique": 45
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4300,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T08:37:30.865579",
+  "provenance": {
+    "agent_id": "4b2a8d23-4630-4076-ba36-ca5df9c81c54"
+  }
+}

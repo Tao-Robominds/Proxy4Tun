@@ -1,0 +1,28 @@
+{
+  "observation": "Round 1 (enhancing 0.0004 + relaxed oblique/horizontal Hough, pattern_tolerance 15) was a null move: proxy 0.6807 -> 0.6794, correspondence_f1@15 0.4586 -> 0.4568, sam_fill_rate identical to 7 decimals (0.7367757), depth_nan_ratio +0.001. Identical fill rate means the 10 prompt centres did not change at all: initial_prompt_points.png still shows 5 'midpoint', 2 'positive_slope', 3 'assume' rows. Pixel analysis of the round-1 detected_lines.png (line-fit on the red/green/blue segments) shows detection itself is clean: 29 oblique segments at -8.1..-9.2 deg (red) and +8.6..+9.5 deg (green), all forming K-edge pairs on rings 3,4,5,7,8 with pair separation 242-256 px (design K 245 px) and two single positive edges on rings 2 and 6; zero spurious obliques. The 3 'assume' rows are the edge rings 0 (x~170), 1 (x~545) and 9 (x~3430), which have no oblique trace at all. The 63 horizontal segments sit on a ~250 px lattice (row spacings 246-259 px, 505 = 2 units, 754 = 3 units), i.e. the real joint unit is ~250-252 px rather than the 245 px design K unit (+2%), so template boundaries 2-3 units away from the K prompt drift 20-40 px from the detected joint rows and show up red/unsupported in sc_correspondence_overlay.png. Stages 1-3 remain healthy (residual 3.5 cm, |orient corr| 0.88, retention 0.75, NaN 20% = family-normal, ring_count_error 0 with 10 verticals). Stage-1 is locked.",
+  "rule": "experiences.md section 7: stages 1-3 pass their gates, so stay on stage 4 with a bounded stage-5 geometry correction. sam4tun_ontology d7 (m_line_yield low on 3 rings AND assume fallback) -> f_missing_lines -> r_relax_hough, precondition satisfied (no f_joint_oversmoothed/f_depth_holes: K pairs are crisp where the K block lies in a scanned zone). d8 (m_spacing_regularity: measured unit 250-252 px vs 245 px prior) -> f_pattern_mismatch -> r_fix_height_priors via p_pattern_tolerance and K_height (pixel priors derive from resolution, which is unchanged). experiences section 5: more lines is not better, consistency with the ring count is - hough_threshold_vertical is untouched (10 == 10). Section 6/experiences 5: SAM geometry may be tuned only after detection is healthy and only from measured evidence; K_height and angle are set from the measured K-edge separation and slopes, not swept. Section 4/experiences 3: no denoising mask_r changes (retention and NaN healthy, do not chase NaN).",
+  "failure_mode": "stage_4_detection.f_missing_lines on the three edge rings (assume fallback, det_fallback_ratio 0.30) plus a mild stage_4_detection.f_pattern_mismatch (real joint lattice ~250-252 px vs 245 px K prior) propagating to stage_5_segmentation.f_crop_offset for boundaries 2+ blocks from each K prompt.",
+  "rationale": "Round 1 relaxed Hough moderately (35/70, binary 110) and gained clean K pairs but did not change a single prompt row, so the same knobs are pushed to the evidence-safe edge to reach the edge rings: detecting.hough_threshold_oblique 35 -> 28 and maxLineGap_oblique 70 -> 80 so the short dashed K-edge traces on rings 0/1/9 can accumulate enough votes and be stitched; detecting.binary_threshold 110 -> 100 admits the fainter joint pixels on the partially covered edge rings. Round 1 produced zero spurious obliques at 35/70/110, so there is headroom before f_spurious_lines; the [5,10] deg window and the pattern check remain as guards. detecting.pattern_tolerance 15 -> 20 because the measured joint lattice (250-252 px/unit) differs from the 245 px design by 5-7 px per unit, i.e. 15-20 px over an AB block - a 15 px tolerance can reject genuine K/AB intersections into the 'assume' path, which is exactly the observed fallback pattern. Horizontal Hough stays at the round-1 values (45/15) and enhancing.curvature_threshold stays at 0.0004 so the only detection deltas are the oblique push and the tolerance. Stage 5: sam.K_height 1226.97 -> 1250 mm (=250 px) matches the measured K-edge pair separation (242-256 px, lattice unit 250-252) and shifts the B1/B2 template boundaries onto the detected joint rows; sam.angle 9.8 -> 9.0 deg matches the fitted oblique slopes (8.1-9.5 deg, mean ~8.9) so the K trapezoid edges align with the red/green lines. segment_width stays 1800 (measured ring pitch 362 px = 1810 mm). Expected GT-blind signal: det_fallback_ratio 0.30 -> <=0.20 if any edge ring converts, correspondence_f1@15 up via more green K/B boundaries, sam_fill_rate held or up, proxy moving from 0.68 toward the 0.70 accept band. If prompts are again unchanged, round 3 should treat rings 1 and 9 as K-in-void cases and stop tuning Hough. Unfolding omitted (stage1_unlocked false).",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "binary_threshold": 100,
+      "hough_threshold_oblique": 28,
+      "maxLineGap_oblique": 80,
+      "hough_threshold_horizontal": 45,
+      "maxLineGap_horizontal": 15,
+      "pattern_tolerance": 20
+    },
+    "sam": {
+      "K_height": 1250.0,
+      "angle": 9.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T23:36:44.671077",
+  "provenance": {
+    "agent_id": null
+  }
+}

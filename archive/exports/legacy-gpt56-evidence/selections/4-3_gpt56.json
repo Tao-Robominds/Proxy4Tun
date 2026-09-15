@@ -1,0 +1,54 @@
+{
+  "subset": "4-3",
+  "arm": "gpt56",
+  "anchor": {
+    "round": "anchor",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo-unified/4-3-family-proxy/runs/4-3-anchor",
+    "proxy_raw": 0.6296,
+    "proxy_scaled": 0.6296,
+    "band": "refine",
+    "recentre_residual_max_cm": 23.2,
+    "mIoU_offline": 0.516
+  },
+  "rounds": [
+    {
+      "round": "round1",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/4-3-gpt56-refinement/round1",
+      "proxy_raw": 0.4336,
+      "proxy_scaled": 0.4336,
+      "band": "reject",
+      "recentre_residual_max_cm": 47.0,
+      "mIoU_offline": 0.198
+    },
+    {
+      "round": "round2",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/4-3-gpt56-refinement/round2",
+      "proxy_raw": 0.6296,
+      "proxy_scaled": 0.6296,
+      "band": "refine",
+      "recentre_residual_max_cm": 23.2,
+      "mIoU_offline": 0.516
+    },
+    {
+      "round": "round3",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/4-3-gpt56-refinement/round3",
+      "proxy_raw": 0.6296,
+      "proxy_scaled": 0.6296,
+      "band": "refine",
+      "recentre_residual_max_cm": 23.2,
+      "mIoU_offline": 0.516
+    }
+  ],
+  "selected": {
+    "round": "anchor",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo-unified/4-3-family-proxy/runs/4-3-anchor",
+    "proxy_raw": 0.6296,
+    "proxy_scaled": 0.6296,
+    "band": "refine",
+    "recentre_residual_max_cm": 23.2,
+    "mIoU_offline": 0.516
+  },
+  "selection_reason": "monotone accept: no round beat anchor scaled proxy",
+  "delta_proxy_scaled": 0.0,
+  "delta_mIoU_offline": 0.0
+}

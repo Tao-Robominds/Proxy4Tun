@@ -1,0 +1,29 @@
+{
+  "observation": "The canonical orientation and ten-ring count are already stable, but correspondence_f1@15 is only 0.200763. The overlay shows many label boundaries unsupported by detected lines and many proposed joint lines unexplained by boundaries, especially across the central and lower lining. Only 8 of 10 prompt points are real detections, while two are assumed; segmentation fill is moderate at 0.729429 and segment-size variation is high at 1.303209.",
+  "rule": "When longitudinal ring structure is correct but transverse staggered-joint correspondence is sparse, preserve the locked unfolding and vertical-ring detector, enhance weak local curvature, admit weaker horizontal and oblique evidence, bridge short fragmented oblique joints, and keep SAM focused on the bounded lining region.",
+  "failure_mode": "Weak and fragmented transverse joint evidence produces fallback prompts and boundaries that drift away from physical seams; changing vertical detection or unfolding would risk degrading the already-correct ring topology.",
+  "rationale": "A moderate curvature threshold and neighborhood radius should consolidate faint joint responses without changing geometry. Lower horizontal and oblique Hough thresholds plus a larger oblique line gap target the missing and fragmented staggered seams visible in the diagnostics. The binary threshold is lowered conservatively to expose weak seams, while the vertical threshold is left untouched because ring count is exact. A central in-bounds SAM lower crop avoids spending prompt support on the damaged upper margin while retaining the full lower extent.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.002,
+      "inter_radius": 0.05
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 45,
+      "maxLineGap_oblique": 70
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4000,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T00:51:54.995664",
+  "provenance": {
+    "agent_id": "3ab22798-a0c4-4dbe-8ce9-f0154d1ecb67"
+  }
+}

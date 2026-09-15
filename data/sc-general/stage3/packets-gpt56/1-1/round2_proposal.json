@@ -1,0 +1,33 @@
+{
+  "observation": "Round 1 preserved ring count and fill rate but reduced correspondence F1 from 0.294 to 0.229 while slightly increasing the depth NaN ratio. The new diagnostics show additional short oblique detections and a positive-slope prompt without a corresponding improvement in segmentation coverage, so the permissive detector and long line-gap policy added poorly supported prompts rather than useful boundaries.",
+  "rule": "After correspondence regresses while fill remains flat, reverse the permissive line-search direction: retain only strong, local cross-joint evidence, avoid bridging separated texture responses, and make a small independent SAM-bound adjustment.",
+  "failure_mode": "Low Hough thresholds and a large oblique line gap merge weak texture fragments into false joint candidates. Those candidates shift prompts away from supported label boundaries, reducing correspondence even though the segmented area stays nearly unchanged.",
+  "rationale": "This overlay tests the opposite detection regime from round 1. Higher binary and Hough thresholds reject weak texture responses, while a short oblique gap prevents disconnected marks from becoming joint lines. A higher curvature threshold and smaller interaction radius restrict enhancement to sharper local seams. The denoising gradient threshold is reduced to suppress residual fine texture, and the lower SAM bound is moved modestly from 4000 to 3800 without changing the fixed upper bound.",
+  "overlay": {
+    "denoising": {
+      "grad_threshold": 0.12
+    },
+    "enhancing": {
+      "curvature_threshold": 0.006,
+      "inter_radius": 0.025
+    },
+    "detecting": {
+      "binary_threshold": 150,
+      "hough_threshold_oblique": 85,
+      "hough_threshold_horizontal": 80,
+      "hough_threshold_vertical": 700,
+      "maxLineGap_oblique": 25
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3800,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T01:17:36.621638",
+  "provenance": {
+    "agent_id": "1b70e74c-eb01-475e-95fa-ca42658d99b4"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "observation": "Depth map is globally usable (depth_nan_ratio\u22480.11, residual 2.8 cm) but the left edge is ragged with white voids, and detected_lines are conspicuously sparse for x\u22721100 while the right half is structured. denoise_retained_ratio\u22480.75 with high sam_segment_size_cv suggests uneven lining retention feeding weak left-side joint evidence\u2014upstream of the SC mismatch\u2014without an orientation or ring-count failure.",
+  "rule": "Ontology chain f_over_gate \u2192 f_depth_holes \u2192 f_missing_lines (d3/d5/d7): if discards are spatially biased, lightly widen the radial/gradient gate and densify joints (inter_radius) before only retuning Hough; then apply a moderate detecting bridge so recovered left-side joints can enter correspondence.",
+  "failure_mode": "f_depth_holes",
+  "rationale": "Third distinct lever: coverage-first. Soften denoise (slightly lower mask_r_low, widen mask_r_high within bounds, lower grad_threshold, modest z_step) and raise enhancing.inter_radius to rebuild left-half joint pixels. Use mid-relaxed detecting (binary 120, oblique 50, maxLineGap 55) rather than round-1's aggressive Hough, and nudge y_bounds lo to 3800 so the staggered crop still covers the denser recovered band\u2014without touching unfolding.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.3,
+      "mask_r_high": 2.88,
+      "z_step": 0.002,
+      "grad_threshold": 0.14
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0008,
+      "inter_radius": 0.075
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 50,
+      "hough_threshold_horizontal": 50,
+      "hough_threshold_vertical": 550,
+      "maxLineGap_oblique": 55
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3800,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T07:44:36.415337",
+  "provenance": {
+    "agent_id": "fd5301b9-8379-4c9d-965c-62fd7e321d81"
+  }
+}

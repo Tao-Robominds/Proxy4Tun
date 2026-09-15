@@ -1,0 +1,22 @@
+{
+  "observation": "Stages 1-3 are healthy: orient_axis_corr -0.999, recentre residual 2.5 cm (gate 10 cm), depth NaN 11.8% (below the 19-22% family norm), denoise retention 0.76, and exactly 10 Hough verticals at ~240 px spacing for 10 rings (ring_count_error 0). The weak link is stage 4: the outlier map is sparse on the left half (x<1200) and dense/noisy on the right half (x 1200-2300), and the oblique Hough output there contains long lines spanning 2-3 ring widths (e.g. red line x~1200-1850 at y~1500-1550, green lines x~1550-1900 at y~2350-2450) that cannot be single segment joints (a joint is at most one ring width, ~240 px). Many blue horizontal fallback lines run along bolt-hole rows and void edges (y~450, 660, 1970, 2150) rather than joints. The resulting prompt centres are staggered consistently for rings 0-3 (y 1120/1555/1195/1630, alternating +-435 px, two of them pattern-assumed) but drift for rings 4-9 (1400, 1630, 1920, 1890, 2060, 2270), i.e. the midpoints computed in the dense region are corrupted. The SC overlay confirms this: most label boundaries are red (unsupported) and most joint lines are orange (not explained), correspondence_f1@15 = 0.20 while sam_fill_rate is a moderate 0.73.",
+  "rule": "d9 (spurious lines -> f_spurious_lines) with d7 partially firing (horizontal fallback used on the sparse half); inter-stage chain f_spurious_lines/f_pattern_mismatch -> stage_5 f_crop_offset. Remediation r_tighten_hough (raise oblique threshold, shorten maxLineGap so lines stay ring-local, raise horizontal threshold to suppress bolt-hole-row fallbacks, raise binary threshold slightly to drop dilated speckle) paired with a mild inter_radius increase so genuine joint segments in the sparse half gain enough interpolated support to survive the stricter accumulator. Experiences section 7: stages 1-3 validated, so detection is the correct stage to touch this round; do not touch vertical threshold (line count already equals ring count) or stage-1 keys (locked).",
+  "failure_mode": "stage_4_detection.f_spurious_lines (multi-ring oblique lines and bolt-hole-row horizontals in the dense right half) producing drifting prompt centres for rings 4-9 -> stage_5_segmentation.f_crop_offset -> label boundaries misaligned with joint lines (low correspondence F1).",
+  "rationale": "Correspondence F1 is the feature dragging the proxy into the refine band while evidence features (NaN, retention, ring count) are already healthy, so the round-1 budget goes to prompt-centre quality. Raising hough_threshold_oblique 50->65 and cutting maxLineGap_oblique 40->25 demands more collinear support and prevents bridging across ring joints and bolt-hole gaps, so the long multi-ring oblique lines are rejected while ring-local joints (~240 px, 7.5 deg taper) remain detectable. Raising hough_threshold_horizontal 50->65 suppresses the horizontal fallbacks that lock onto bolt-hole rows and void edges. binary_threshold 127->135 removes weak dilated speckle from the noise cloud around x~1600, y~1450 before Hough. inter_radius 0.06->0.07 mildly densifies interpolated joint points so the sparse left half still yields real detections under the stricter thresholds; it is kept small to avoid re-amplifying noise on the right half. Vertical threshold, denoising geometry (kept at priors per experiences section 4) and unfolding (stage1_unlocked=false) are left untouched. Expected effect: fewer spurious oblique/horizontal lines, prompt centres for rings 4-9 return to the +-435 px stagger seen in rings 0-3, label boundaries align with joint lines, correspondence_f1@15 and sam_fill_rate rise. Risk: det_real_detection_ratio may dip slightly if more rings fall to pattern-assumed centres, but the assumed centres on rings 0-1 were already more consistent than the corrupted midpoints.",
+  "overlay": {
+    "enhancing": {
+      "inter_radius": 0.07
+    },
+    "detecting": {
+      "binary_threshold": 135,
+      "hough_threshold_oblique": 65,
+      "hough_threshold_horizontal": 65,
+      "maxLineGap_oblique": 25
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T18:42:30.893856",
+  "provenance": {
+    "agent_id": "b91e8879-4c42-47f0-9537-376c4ddb1d32"
+  }
+}

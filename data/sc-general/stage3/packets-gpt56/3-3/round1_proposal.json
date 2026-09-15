@@ -1,0 +1,22 @@
+{
+  "observation": "The 10-ring count is correct and complete, but correspondence F1@15 is only 0.112841. Detection is entirely fallback-driven (real_detection_ratio 0, fallback_ratio 1), with uniformly spaced prompts concentrated near one horizontal joint while the correspondence overlay shows most prompts assumed rather than explained and several label boundaries unsupported. The SAM result also has broad, uneven horizontal regions (segment_size_cv 0.594) despite a high fill rate of 0.780.",
+  "rule": "For a continuous t3 lining with correct ring count but fallback-only joint localization, preserve uniform ring spacing, widen the admissible pattern match, and make the SAM prompt geometry conservative so masks follow the repeated narrow joint evidence instead of propagating broad tilted regions.",
+  "failure_mode": "Prompt-to-boundary misregistration under fallback detection: the ring lattice is structurally correct, but weak real-line support and over-broad SAM propagation place label transitions away from the visible joint row, depressing correspondence while retaining complete rings.",
+  "rationale": "Raise pattern_tolerance to recover imperfect repeated joint evidence while retaining uniform_k_snap because the ten-column lattice and ring count are already correct. Use the minimum segment_width and angle to limit horizontal leakage and tilt, with a mid-low K_height to reduce oversized vertical propagation without aggressively sacrificing the currently strong fill rate.",
+  "overlay": {
+    "detecting": {
+      "pattern_tolerance": 20,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1000,
+      "K_height": 800.0,
+      "angle": 4.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T02:47:04.558282",
+  "provenance": {
+    "agent_id": "c8a692c6-67d9-4d86-a29c-3df0962d614b"
+  }
+}

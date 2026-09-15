@@ -1,0 +1,29 @@
+{
+  "observation": "The anchor preserves all 10 rings with perfect ring-count agreement and complete ring coverage, but real line detection is absent (real_detection_ratio 0.0, fallback_ratio 1.0). The correspondence overlay shows that the central joint boundaries are largely traceable, while many propagated prompts remain assumed rather than boundary-explained; fill is only 0.649 and segment-size variation is high (CV 0.462).",
+  "rule": "When ring count and orientation are already stable but prompts are entirely fallback-generated, retain the stage-1 geometry and make modest mid-range detector changes that improve continuity of oblique and horizontal evidence; pair them with a conservative SAM prompt height and width so stronger joint evidence increases fill without merging neighboring rings.",
+  "failure_mode": "Detector starvation at the central lining joint causes propagation to substitute regularly spaced prompts for image-supported intersections, producing incomplete or uneven label regions despite the correct number of rings.",
+  "rationale": "A mid-range binary threshold and moderate Hough/gap settings should recover fragmented joint-line evidence visible in the diagnostic images without chasing the broad unsupported horizontal structures. Uniform snapping preserves the already-correct ten-ring spacing. K_height 900 satisfies the requested conservative lower bound and, with segment_width 1200 and angle 6.5, keeps prompt influence broad enough to improve fill while remaining centered within the allowed t3 ranges. Unfolding is omitted because stage1_unlocked is false.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.001
+    },
+    "detecting": {
+      "binary_threshold": 125,
+      "hough_threshold_oblique": 35,
+      "hough_threshold_horizontal": 35,
+      "maxLineGap_oblique": 35,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 900.0,
+      "angle": 6.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T04:04:24.802173",
+  "provenance": {
+    "agent_id": "9bfbc69c-f5fd-48e4-89fa-fb5477575c5a"
+  }
+}

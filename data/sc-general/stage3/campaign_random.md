@@ -1,0 +1,167 @@
+## Design written 2026-09-15T05:33:04.915178
+- n LLM panel records: 198
+- k histogram: {'0': 1, '1': 7, '2': 1, '3': 5, '4': 6, '5': 9, '6': 12, '7': 13, '8': 10, '9': 15, '10': 14, '11': 31, '12': 37, '13': 21, '14': 15, '15': 1}
+- usable k PMF: {1: 0.036, 2: 0.005, 3: 0.025, 4: 0.03, 5: 0.046, 6: 0.061, 7: 0.066, 8: 0.051, 9: 0.076, 10: 0.071, 11: 0.157, 12: 0.188, 13: 0.107, 14: 0.076, 15: 0.005}
+
+## run_all start 2026-09-15T05:33:05.825793 gate_only=True
+- emit 1-5 R1: k=6 keys=['denoising.grad_threshold', 'detecting.binary_threshold', 'detecting.hough_threshold_vertical', 'denoising.z_step', 'enhancing.inter_radius', 'detecting.hough_threshold_horizontal']
+- emit 1-5 R2: k=12 keys=['enhancing.inter_radius', 'sam.y_bounds_lower', 'enhancing.curvature_threshold', 'detecting.hough_threshold_horizontal', 'denoising.mask_r_low', 'denoising.z_step', 'denoising.grad_threshold', 'detecting.maxLineGap_oblique', 'detecting.hough_threshold_vertical', 'detecting.binary_threshold', 'denoising.mask_r_high', 'detecting.hough_threshold_oblique']
+- emit 1-5 R3: k=8 keys=['detecting.hough_threshold_horizontal', 'enhancing.inter_radius', 'denoising.mask_r_high', 'denoising.mask_r_low', 'detecting.hough_threshold_oblique', 'detecting.binary_threshold', 'detecting.hough_threshold_vertical', 'denoising.grad_threshold']
+- apply 1-5 R1: status=ok proxy=0.63384023065052 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-5/round1
+
+## run_all start 2026-09-15T05:38:25.525434 gate_only=False
+- emit 1-3 R1: k=12 keys=['denoising.grad_threshold', 'denoising.z_step', 'detecting.binary_threshold', 'denoising.mask_r_low', 'sam.y_bounds_lower', 'denoising.mask_r_high', 'detecting.hough_threshold_oblique', 'detecting.hough_threshold_vertical', 'enhancing.inter_radius', 'detecting.hough_threshold_horizontal', 'detecting.maxLineGap_oblique', 'enhancing.curvature_threshold']
+- emit 1-3 R2: k=10 keys=['detecting.hough_threshold_horizontal', 'detecting.hough_threshold_vertical', 'enhancing.curvature_threshold', 'detecting.hough_threshold_oblique', 'denoising.mask_r_low', 'sam.y_bounds_lower', 'detecting.binary_threshold', 'denoising.z_step', 'detecting.maxLineGap_oblique', 'denoising.mask_r_high']
+- emit 1-3 R3: k=10 keys=['detecting.maxLineGap_oblique', 'detecting.hough_threshold_oblique', 'denoising.mask_r_low', 'sam.y_bounds_lower', 'detecting.hough_threshold_vertical', 'denoising.mask_r_high', 'detecting.binary_threshold', 'denoising.grad_threshold', 'detecting.hough_threshold_horizontal', 'enhancing.curvature_threshold']
+- apply 1-3 R1: status=ok proxy=0.5875317618884298 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-3/round1
+- apply 1-3 R2: status=ok proxy=0.10160519617623764 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-3/round2
+- apply 1-3 R3: status=ok proxy=0.09834727272391547 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-3/round3
+- finish 1-3: selected=round1 ΔmIoU=0.007
+- emit 1-5 R1: k=6 keys=['denoising.grad_threshold', 'detecting.binary_threshold', 'detecting.hough_threshold_vertical', 'denoising.z_step', 'enhancing.inter_radius', 'detecting.hough_threshold_horizontal']
+- emit 1-5 R2: k=12 keys=['enhancing.inter_radius', 'sam.y_bounds_lower', 'enhancing.curvature_threshold', 'detecting.hough_threshold_horizontal', 'denoising.mask_r_low', 'denoising.z_step', 'denoising.grad_threshold', 'detecting.maxLineGap_oblique', 'detecting.hough_threshold_vertical', 'detecting.binary_threshold', 'denoising.mask_r_high', 'detecting.hough_threshold_oblique']
+- emit 1-5 R3: k=8 keys=['detecting.hough_threshold_horizontal', 'enhancing.inter_radius', 'denoising.mask_r_high', 'denoising.mask_r_low', 'detecting.hough_threshold_oblique', 'detecting.binary_threshold', 'detecting.hough_threshold_vertical', 'denoising.grad_threshold']
+- skip 1-5 R1 (already ok)
+- apply 1-5 R2: status=ok proxy=0.6155255219395739 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-5/round2
+- apply 1-5 R3: status=ok proxy=0.6389759577301244 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-5/round3
+- finish 1-5: selected=round3 ΔmIoU=0.318
+- emit 1-1 R1: k=12 keys=['denoising.z_step', 'detecting.hough_threshold_oblique', 'denoising.grad_threshold', 'enhancing.inter_radius', 'enhancing.curvature_threshold', 'denoising.mask_r_low', 'detecting.hough_threshold_vertical', 'sam.y_bounds_lower', 'denoising.mask_r_high', 'detecting.binary_threshold', 'detecting.maxLineGap_oblique', 'detecting.hough_threshold_horizontal']
+- emit 1-1 R2: k=12 keys=['enhancing.inter_radius', 'detecting.hough_threshold_vertical', 'detecting.hough_threshold_horizontal', 'detecting.maxLineGap_oblique', 'detecting.binary_threshold', 'denoising.grad_threshold', 'denoising.mask_r_high', 'denoising.z_step', 'denoising.mask_r_low', 'enhancing.curvature_threshold', 'detecting.hough_threshold_oblique', 'sam.y_bounds_lower']
+- emit 1-1 R3: k=11 keys=['denoising.mask_r_low', 'enhancing.curvature_threshold', 'detecting.maxLineGap_oblique', 'detecting.hough_threshold_oblique', 'sam.y_bounds_lower', 'detecting.hough_threshold_horizontal', 'denoising.mask_r_high', 'denoising.z_step', 'detecting.hough_threshold_vertical', 'denoising.grad_threshold', 'detecting.binary_threshold']
+- apply 1-1 R1: status=ok proxy=0.18741075891130676 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-1/round1
+- apply 1-1 R2: status=ok proxy=0.5901280915100761 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-1/round2
+- apply 1-1 R3: status=ok proxy=0.6361799340122194 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-1/round3
+- finish 1-1: selected=round3 ΔmIoU=0.004
+- emit 1-4 R1: k=12 keys=['detecting.hough_threshold_vertical', 'detecting.binary_threshold', 'denoising.grad_threshold', 'enhancing.inter_radius', 'denoising.mask_r_high', 'detecting.hough_threshold_horizontal', 'detecting.maxLineGap_oblique', 'detecting.hough_threshold_oblique', 'denoising.mask_r_low', 'denoising.z_step', 'enhancing.curvature_threshold', 'sam.y_bounds_lower']
+- emit 1-4 R2: k=12 keys=['detecting.maxLineGap_oblique', 'detecting.binary_threshold', 'enhancing.inter_radius', 'denoising.mask_r_high', 'denoising.grad_threshold', 'denoising.z_step', 'detecting.hough_threshold_vertical', 'sam.y_bounds_lower', 'denoising.mask_r_low', 'detecting.hough_threshold_horizontal', 'detecting.hough_threshold_oblique', 'enhancing.curvature_threshold']
+- emit 1-4 R3: k=12 keys=['detecting.binary_threshold', 'enhancing.curvature_threshold', 'detecting.hough_threshold_horizontal', 'detecting.hough_threshold_vertical', 'denoising.z_step', 'denoising.grad_threshold', 'detecting.hough_threshold_oblique', 'enhancing.inter_radius', 'denoising.mask_r_high', 'denoising.mask_r_low', 'sam.y_bounds_lower', 'detecting.maxLineGap_oblique']
+- apply 1-4 R1: status=ok proxy=0.16741029946713148 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-4/round1
+- apply 1-4 R2: status=ok proxy=0.6993531163893543 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-4/round2
+- apply 1-4 R3: status=ok proxy=0.6816756108980271 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-4/round3
+- finish 1-4: selected=round2 ΔmIoU=0.255
+- emit 1-2 R1: k=7 keys=['detecting.hough_threshold_vertical', 'detecting.binary_threshold', 'detecting.hough_threshold_horizontal', 'detecting.maxLineGap_oblique', 'denoising.mask_r_low', 'enhancing.curvature_threshold', 'sam.y_bounds_lower']
+- emit 1-2 R2: k=10 keys=['denoising.grad_threshold', 'detecting.binary_threshold', 'detecting.maxLineGap_oblique', 'enhancing.inter_radius', 'denoising.z_step', 'denoising.mask_r_high', 'detecting.hough_threshold_horizontal', 'enhancing.curvature_threshold', 'detecting.hough_threshold_oblique', 'detecting.hough_threshold_vertical']
+- emit 1-2 R3: k=11 keys=['detecting.hough_threshold_horizontal', 'denoising.grad_threshold', 'denoising.mask_r_high', 'enhancing.inter_radius', 'sam.y_bounds_lower', 'detecting.hough_threshold_oblique', 'detecting.binary_threshold', 'detecting.hough_threshold_vertical', 'denoising.mask_r_low', 'enhancing.curvature_threshold', 'detecting.maxLineGap_oblique']
+- apply 1-2 R1: status=ok proxy=0.6535512055124302 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-2/round1
+- apply 1-2 R2: status=ok proxy=0.6494562232544095 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-2/round2
+- apply 1-2 R3: status=ok proxy=0.11307394636940293 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/1-2/round3
+- finish 1-2: selected=round1 ΔmIoU=0.004
+- emit 2-4 R1: k=3 keys=['detecting.hough_threshold_vertical', 'sam.y_bounds_lower', 'denoising.mask_r_high']
+- emit 2-4 R2: k=7 keys=['denoising.grad_threshold', 'detecting.hough_threshold_oblique', 'denoising.z_step', 'detecting.maxLineGap_oblique', 'enhancing.curvature_threshold', 'detecting.binary_threshold', 'detecting.hough_threshold_horizontal']
+- emit 2-4 R3: k=12 keys=['detecting.hough_threshold_oblique', 'detecting.maxLineGap_oblique', 'detecting.hough_threshold_vertical', 'enhancing.inter_radius', 'detecting.binary_threshold', 'denoising.mask_r_low', 'denoising.z_step', 'detecting.hough_threshold_horizontal', 'sam.y_bounds_lower', 'denoising.grad_threshold', 'enhancing.curvature_threshold', 'denoising.mask_r_high']
+- apply 2-4 R1: status=ok proxy=0.6961530631334896 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/2-4/round1
+- apply 2-4 R2: status=ok proxy=0.628838771572189 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/2-4/round2
+- apply 2-4 R3: status=ok proxy=0.700862878258147 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/2-4/round3
+- finish 2-4: selected=round3 ΔmIoU=-0.051
+- emit 2-2 R1: k=12 keys=['denoising.mask_r_low', 'denoising.z_step', 'denoising.grad_threshold', 'detecting.hough_threshold_oblique', 'enhancing.inter_radius', 'denoising.mask_r_high', 'detecting.hough_threshold_horizontal', 'detecting.hough_threshold_vertical', 'detecting.binary_threshold', 'detecting.maxLineGap_oblique', 'enhancing.curvature_threshold', 'sam.y_bounds_lower']
+- emit 2-2 R2: k=12 keys=['detecting.maxLineGap_oblique', 'sam.y_bounds_lower', 'enhancing.inter_radius', 'detecting.binary_threshold', 'denoising.mask_r_high', 'enhancing.curvature_threshold', 'detecting.hough_threshold_vertical', 'denoising.grad_threshold', 'detecting.hough_threshold_oblique', 'detecting.hough_threshold_horizontal', 'denoising.z_step', 'denoising.mask_r_low']
+- emit 2-2 R3: k=12 keys=['denoising.mask_r_high', 'enhancing.inter_radius', 'sam.y_bounds_lower', 'detecting.hough_threshold_horizontal', 'detecting.hough_threshold_vertical', 'detecting.maxLineGap_oblique', 'detecting.binary_threshold', 'denoising.grad_threshold', 'enhancing.curvature_threshold', 'denoising.z_step', 'detecting.hough_threshold_oblique', 'denoising.mask_r_low']
+- apply 2-2 R1: status=ok proxy=0.7089607331429141 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/2-2/round1
+- apply 2-2 R2: status=ok proxy=0.24495855821965196 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/2-2/round2
+- apply 2-2 R3: status=ok proxy=0.2156445405700879 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/2-2/round3
+- finish 2-2: selected=round1 ΔmIoU=-0.081
+- emit 3-4 R1: k=14 keys=['denoising.mask_r_low', 'denoising.mask_r_high', 'detecting.hough_threshold_horizontal', 'detecting.hough_threshold_oblique', 'detecting.maxLineGap_oblique', 'sam.segment_width', 'denoising.mask_theta_low', 'detecting.binary_threshold', 'detecting.hough_threshold_vertical', 'sam.angle', 'unfolding.random_seed', 'denoising.mask_theta_high', 'enhancing.curvature_threshold', 'sam.K_height']
+- emit 3-4 R2: k=13 keys=['denoising.mask_theta_high', 'detecting.maxLineGap_oblique', 'detecting.binary_threshold', 'unfolding.slice_spacing_factor', 'sam.segment_width', 'detecting.hough_threshold_oblique', 'denoising.mask_theta_low', 'sam.angle', 'unfolding.random_seed', 'detecting.hough_threshold_horizontal', 'unfolding.polynomial_degree', 'detecting.uniform_k_snap', 'detecting.pattern_tolerance']
+- emit 3-4 R3: k=6 keys=['unfolding.polynomial_degree', 'detecting.uniform_k_snap', 'enhancing.curvature_threshold', 'unfolding.ransac_threshold', 'sam.segment_width', 'unfolding.random_seed']
+- apply 3-4 R1: status=ok proxy=0.08429669573307036 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-4/round1
+- apply 3-4 R2: status=ok proxy=0.355414988703515 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-4/round2
+- apply 3-4 R3: status=ok proxy=0.4993260188291771 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-4/round3
+- finish 3-4: selected=anchor ΔmIoU=0.0
+- emit 3-3 R1: k=14 keys=['denoising.mask_r_high', 'denoising.mask_theta_high', 'denoising.mask_r_low', 'detecting.hough_threshold_oblique', 'detecting.binary_threshold', 'sam.segment_width', 'denoising.mask_theta_low', 'detecting.hough_threshold_vertical', 'detecting.hough_threshold_horizontal', 'detecting.uniform_k_snap', 'detecting.maxLineGap_oblique', 'detecting.pattern_tolerance', 'sam.angle', 'enhancing.curvature_threshold']
+- emit 3-3 R2: k=11 keys=['denoising.mask_r_low', 'denoising.mask_theta_high', 'enhancing.curvature_threshold', 'sam.segment_width', 'denoising.mask_r_high', 'detecting.uniform_k_snap', 'detecting.pattern_tolerance', 'sam.angle', 'detecting.binary_threshold', 'denoising.mask_theta_low', 'detecting.hough_threshold_oblique']
+- emit 3-3 R3: k=12 keys=['sam.angle', 'detecting.pattern_tolerance', 'denoising.mask_theta_low', 'enhancing.curvature_threshold', 'denoising.mask_theta_high', 'denoising.mask_r_low', 'detecting.binary_threshold', 'detecting.hough_threshold_horizontal', 'detecting.hough_threshold_vertical', 'detecting.hough_threshold_oblique', 'denoising.mask_r_high', 'detecting.uniform_k_snap']
+- apply 3-3 R1: status=ok proxy=0.460901733268053 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-3/round1
+- apply 3-3 R2: status=ok proxy=0.5228739619243205 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-3/round2
+- apply 3-3 R3: status=ok proxy=0.5093843335515018 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-3/round3
+- finish 3-3: selected=round2 ΔmIoU=-0.117
+- emit 3-7 R1: k=3 keys=['denoising.mask_r_low', 'detecting.hough_threshold_vertical', 'denoising.mask_theta_low']
+- emit 3-7 R2: k=12 keys=['detecting.pattern_tolerance', 'sam.segment_width', 'denoising.mask_theta_low', 'denoising.mask_r_high', 'detecting.binary_threshold', 'detecting.uniform_k_snap', 'sam.K_height', 'detecting.maxLineGap_oblique', 'detecting.hough_threshold_vertical', 'detecting.hough_threshold_horizontal', 'enhancing.curvature_threshold', 'sam.angle']
+- emit 3-7 R3: k=11 keys=['sam.segment_width', 'denoising.mask_r_high', 'detecting.hough_threshold_oblique', 'denoising.mask_r_low', 'detecting.hough_threshold_vertical', 'denoising.mask_theta_low', 'detecting.uniform_k_snap', 'detecting.binary_threshold', 'detecting.hough_threshold_horizontal', 'detecting.pattern_tolerance', 'sam.K_height']
+- apply 3-7 R1: status=ok proxy=0.541831245251641 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-7/round1
+- apply 3-7 R2: status=ok proxy=0.5154165475841375 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-7/round2
+- apply 3-7 R3: status=ok proxy=0.07069816308328192 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-7/round3
+- finish 3-7: selected=round1 ΔmIoU=-0.031
+- emit 3-8 R1: k=6 keys=['sam.angle', 'sam.K_height', 'sam.segment_width', 'enhancing.curvature_threshold', 'denoising.mask_r_high', 'unfolding.polynomial_degree']
+- emit 3-8 R2: k=7 keys=['sam.segment_width', 'denoising.mask_theta_low', 'detecting.hough_threshold_horizontal', 'unfolding.polynomial_degree', 'unfolding.slice_spacing_factor', 'detecting.uniform_k_snap', 'detecting.pattern_tolerance']
+- emit 3-8 R3: k=3 keys=['detecting.hough_threshold_oblique', 'detecting.uniform_k_snap', 'sam.angle']
+- apply 3-8 R1: status=ok proxy=0.48969288652774545 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-8/round1
+- apply 3-8 R2: status=ok proxy=0.3493426914292963 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-8/round2
+- apply 3-8 R3: status=ok proxy=0.5424650273790756 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-8/round3
+- finish 3-8: selected=anchor ΔmIoU=0.0
+- emit 3-10 R1: k=13 keys=['denoising.mask_theta_low', 'detecting.hough_threshold_oblique', 'unfolding.polynomial_degree', 'sam.K_height', 'unfolding.ransac_threshold', 'detecting.maxLineGap_oblique', 'unfolding.slice_spacing_factor', 'enhancing.curvature_threshold', 'detecting.hough_threshold_horizontal', 'detecting.binary_threshold', 'denoising.mask_r_low', 'detecting.hough_threshold_vertical', 'denoising.mask_theta_high']
+- emit 3-10 R2: k=6 keys=['detecting.hough_threshold_vertical', 'sam.K_height', 'enhancing.curvature_threshold', 'unfolding.slice_spacing_factor', 'sam.angle', 'unfolding.polynomial_degree']
+- emit 3-10 R3: k=11 keys=['detecting.pattern_tolerance', 'detecting.hough_threshold_oblique', 'detecting.uniform_k_snap', 'denoising.mask_theta_low', 'detecting.binary_threshold', 'enhancing.curvature_threshold', 'sam.angle', 'detecting.hough_threshold_vertical', 'sam.K_height', 'unfolding.polynomial_degree', 'unfolding.slice_spacing_factor']
+- apply 3-10 R1: status=ok proxy=0.48258603385324184 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-10/round1
+- apply 3-10 R2: status=ok proxy=0.5227310288367587 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-10/round2
+- apply 3-10 R3: status=ok proxy=0.33857844620097 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-10/round3
+- finish 3-10: selected=anchor ΔmIoU=0.0
+- emit 3-9 R1: k=5 keys=['denoising.mask_theta_high', 'detecting.uniform_k_snap', 'denoising.mask_r_low', 'enhancing.curvature_threshold', 'sam.angle']
+- emit 3-9 R2: k=14 keys=['detecting.uniform_k_snap', 'detecting.hough_threshold_oblique', 'denoising.mask_r_low', 'detecting.hough_threshold_vertical', 'denoising.mask_r_high', 'enhancing.curvature_threshold', 'detecting.binary_threshold', 'sam.angle', 'detecting.hough_threshold_horizontal', 'detecting.pattern_tolerance', 'detecting.maxLineGap_oblique', 'denoising.mask_theta_high', 'denoising.mask_theta_low', 'sam.K_height']
+- emit 3-9 R3: k=13 keys=['detecting.hough_threshold_oblique', 'detecting.maxLineGap_oblique', 'sam.segment_width', 'sam.angle', 'enhancing.curvature_threshold', 'detecting.hough_threshold_horizontal', 'denoising.mask_theta_low', 'detecting.hough_threshold_vertical', 'detecting.binary_threshold', 'denoising.mask_r_low', 'denoising.mask_r_high', 'detecting.pattern_tolerance', 'denoising.mask_theta_high']
+- apply 3-9 R1: status=ok proxy=0.146484900132695 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-9/round1
+- apply 3-9 R2: status=ok proxy=0.6387809647127436 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-9/round2
+- apply 3-9 R3: status=ok proxy=0.08068450339844552 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-9/round3
+- finish 3-9: selected=anchor ΔmIoU=0.0
+- emit 3-6 R1: k=11 keys=['sam.segment_width', 'denoising.mask_theta_low', 'detecting.pattern_tolerance', 'detecting.uniform_k_snap', 'sam.K_height', 'detecting.hough_threshold_oblique', 'denoising.mask_r_low', 'detecting.hough_threshold_vertical', 'detecting.maxLineGap_oblique', 'denoising.mask_theta_high', 'enhancing.curvature_threshold']
+- emit 3-6 R2: k=12 keys=['enhancing.curvature_threshold', 'detecting.hough_threshold_oblique', 'detecting.hough_threshold_vertical', 'denoising.mask_r_low', 'detecting.maxLineGap_oblique', 'detecting.uniform_k_snap', 'denoising.mask_theta_high', 'sam.K_height', 'detecting.pattern_tolerance', 'sam.angle', 'detecting.hough_threshold_horizontal', 'sam.segment_width']
+- emit 3-6 R3: k=11 keys=['detecting.hough_threshold_vertical', 'denoising.mask_theta_low', 'detecting.pattern_tolerance', 'detecting.hough_threshold_oblique', 'denoising.mask_theta_high', 'denoising.mask_r_low', 'detecting.binary_threshold', 'detecting.uniform_k_snap', 'detecting.maxLineGap_oblique', 'sam.K_height', 'detecting.hough_threshold_horizontal']
+- apply 3-6 R1: status=ok proxy=0.13425051466001042 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-6/round1
+- apply 3-6 R2: status=ok proxy=0.711848697834504 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-6/round2
+- apply 3-6 R3: status=ok proxy=0.27049104629257587 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/3-6/round3
+- finish 3-6: selected=round2 ΔmIoU=-0.031
+- emit 4-3 R1: k=9 keys=['denoising.mask_r_low', 'sam.angle', 'sam.segment_width', 'unfolding.ransac_threshold', 'unfolding.slice_spacing_factor', 'enhancing.curvature_threshold', 'detecting.hough_threshold_horizontal', 'detecting.binary_threshold', 'detecting.maxLineGap_horizontal']
+- emit 4-3 R2: k=9 keys=['detecting.hough_threshold_horizontal', 'unfolding.polynomial_degree', 'unfolding.ransac_threshold', 'detecting.maxLineGap_horizontal', 'denoising.mask_r_low', 'unfolding.slice_spacing_factor', 'sam.angle', 'sam.segment_width', 'detecting.maxLineGap_oblique']
+- emit 4-3 R3: k=1 keys=['sam.K_height']
+- apply 4-3 R1: status=ok proxy=0.31472158736630007 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/4-3/round1
+- apply 4-3 R2: status=ok proxy=0.26947285164566637 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/4-3/round2
+- apply 4-3 R3: status=ok proxy=0.5183696112983714 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/4-3/round3
+- finish 4-3: selected=anchor ΔmIoU=0.0
+- emit 4-2 R1: k=10 keys=['denoising.mask_r_high', 'enhancing.curvature_threshold', 'detecting.hough_threshold_oblique', 'detecting.hough_threshold_horizontal', 'sam.K_height', 'detecting.hough_threshold_vertical', 'sam.segment_width', 'sam.angle', 'detecting.binary_threshold', 'detecting.maxLineGap_horizontal']
+- emit 4-2 R2: k=10 keys=['detecting.maxLineGap_horizontal', 'detecting.pattern_tolerance', 'denoising.mask_r_high', 'sam.K_height', 'detecting.binary_threshold', 'sam.angle', 'detecting.hough_threshold_oblique', 'sam.segment_width', 'enhancing.curvature_threshold', 'detecting.maxLineGap_oblique']
+- emit 4-2 R3: k=11 keys=['sam.segment_width', 'detecting.hough_threshold_oblique', 'enhancing.curvature_threshold', 'detecting.binary_threshold', 'detecting.maxLineGap_oblique', 'sam.K_height', 'denoising.mask_r_low', 'detecting.hough_threshold_vertical', 'detecting.hough_threshold_horizontal', 'sam.angle', 'denoising.mask_r_high']
+- apply 4-2 R1: status=ok proxy=0.6336382081271354 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/4-2/round1
+- apply 4-2 R2: status=ok proxy=0.4972132445170083 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/4-2/round2
+- apply 4-2 R3: status=ok proxy=0.6253407914421032 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/4-2/round3
+- finish 4-2: selected=round1 ΔmIoU=0.004
+- emit 4-1 R1: k=10 keys=['detecting.hough_threshold_oblique', 'enhancing.curvature_threshold', 'sam.angle', 'detecting.binary_threshold', 'sam.segment_width', 'detecting.hough_threshold_horizontal', 'detecting.maxLineGap_oblique', 'denoising.mask_r_high', 'sam.K_height', 'denoising.mask_r_low']
+- emit 4-1 R2: k=6 keys=['detecting.hough_threshold_horizontal', 'detecting.maxLineGap_horizontal', 'denoising.mask_r_low', 'detecting.hough_threshold_oblique', 'sam.segment_width', 'detecting.hough_threshold_vertical']
+- emit 4-1 R3: k=7 keys=['detecting.hough_threshold_horizontal', 'detecting.maxLineGap_oblique', 'enhancing.curvature_threshold', 'detecting.pattern_tolerance', 'detecting.hough_threshold_oblique', 'sam.angle', 'denoising.mask_r_low']
+- apply 4-1 R1: status=ok proxy=0.5596749813739831 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/4-1/round1
+- apply 4-1 R2: status=ok proxy=0.5927601802576397 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/4-1/round2
+- apply 4-1 R3: status=ok proxy=0.5662514674219083 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/4-1/round3
+- finish 4-1: selected=round2 ΔmIoU=0.025
+- emit 4-5 R1: k=13 keys=['detecting.pattern_tolerance', 'sam.K_height', 'detecting.maxLineGap_horizontal', 'detecting.hough_threshold_vertical', 'denoising.mask_r_high', 'sam.angle', 'detecting.binary_threshold', 'detecting.hough_threshold_horizontal', 'sam.segment_width', 'detecting.hough_threshold_oblique', 'detecting.maxLineGap_oblique', 'enhancing.curvature_threshold', 'denoising.mask_r_low']
+- emit 4-5 R2: k=5 keys=['detecting.pattern_tolerance', 'sam.angle', 'sam.K_height', 'detecting.hough_threshold_oblique', 'detecting.hough_threshold_horizontal']
+- emit 4-5 R3: k=12 keys=['denoising.mask_r_high', 'detecting.maxLineGap_oblique', 'detecting.binary_threshold', 'detecting.hough_threshold_horizontal', 'detecting.hough_threshold_oblique', 'detecting.hough_threshold_vertical', 'detecting.maxLineGap_horizontal', 'denoising.mask_r_low', 'enhancing.curvature_threshold', 'detecting.pattern_tolerance', 'sam.segment_width', 'sam.angle']
+- apply 4-5 R1: status=ok proxy=0.24574498079913482 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/4-5/round1
+- apply 4-5 R2: status=ok proxy=0.5362470781619693 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/4-5/round2
+- apply 4-5 R3: status=ok proxy=0.552823765940814 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/4-5/round3
+- finish 4-5: selected=anchor ΔmIoU=0.0
+- emit 5-5 R1: k=9 keys=['denoising.mask_r_low', 'enhancing.curvature_threshold', 'detecting.maxLineGap_horizontal', 'sam.angle', 'sam.segment_width', 'detecting.hough_threshold_oblique', 'detecting.hough_threshold_horizontal', 'detecting.pattern_tolerance', 'detecting.hough_threshold_vertical']
+- emit 5-5 R2: k=13 keys=['denoising.mask_r_low', 'sam.K_height', 'detecting.pattern_tolerance', 'detecting.hough_threshold_horizontal', 'denoising.mask_r_high', 'detecting.hough_threshold_oblique', 'sam.angle', 'sam.segment_width', 'detecting.maxLineGap_horizontal', 'detecting.hough_threshold_vertical', 'detecting.binary_threshold', 'detecting.maxLineGap_oblique', 'enhancing.curvature_threshold']
+- emit 5-5 R3: k=4 keys=['denoising.mask_r_low', 'detecting.maxLineGap_oblique', 'detecting.hough_threshold_vertical', 'sam.angle']
+- apply 5-5 R1: status=ok proxy=0.4846101374604734 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/5-5/round1
+- apply 5-5 R2: status=ok proxy=0.5335094020232738 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/5-5/round2
+- apply 5-5 R3: status=ok proxy=0.6669920594094221 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/5-5/round3
+- finish 5-5: selected=round3 ΔmIoU=0.019
+- emit 5-3 R1: k=11 keys=['detecting.hough_threshold_horizontal', 'sam.K_height', 'sam.segment_width', 'detecting.binary_threshold', 'detecting.hough_threshold_oblique', 'detecting.maxLineGap_horizontal', 'enhancing.curvature_threshold', 'detecting.maxLineGap_oblique', 'detecting.hough_threshold_vertical', 'sam.angle', 'detecting.pattern_tolerance']
+- emit 5-3 R2: k=13 keys=['sam.K_height', 'detecting.hough_threshold_horizontal', 'detecting.maxLineGap_oblique', 'denoising.mask_r_low', 'detecting.binary_threshold', 'detecting.pattern_tolerance', 'enhancing.curvature_threshold', 'sam.angle', 'detecting.maxLineGap_horizontal', 'sam.segment_width', 'detecting.hough_threshold_oblique', 'detecting.hough_threshold_vertical', 'denoising.mask_r_high']
+- emit 5-3 R3: k=13 keys=['detecting.binary_threshold', 'detecting.hough_threshold_vertical', 'detecting.hough_threshold_horizontal', 'sam.segment_width', 'sam.K_height', 'denoising.mask_r_low', 'detecting.hough_threshold_oblique', 'enhancing.curvature_threshold', 'denoising.mask_r_high', 'detecting.maxLineGap_oblique', 'detecting.pattern_tolerance', 'sam.angle', 'detecting.maxLineGap_horizontal']
+- apply 5-3 R1: status=ok proxy=0.520606810839084 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/5-3/round1
+- apply 5-3 R2: status=ok proxy=0.6807962511394672 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/5-3/round2
+- apply 5-3 R3: status=ok proxy=0.42317591602289484 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/5-3/round3
+- finish 5-3: selected=round2 ΔmIoU=0.0
+- emit 5-2 R1: k=10 keys=['denoising.mask_r_high', 'detecting.binary_threshold', 'enhancing.curvature_threshold', 'denoising.mask_r_low', 'sam.K_height', 'sam.angle', 'detecting.hough_threshold_oblique', 'detecting.maxLineGap_oblique', 'detecting.hough_threshold_vertical', 'detecting.pattern_tolerance']
+- emit 5-2 R2: k=13 keys=['detecting.maxLineGap_horizontal', 'detecting.hough_threshold_horizontal', 'sam.segment_width', 'sam.angle', 'detecting.maxLineGap_oblique', 'sam.K_height', 'detecting.binary_threshold', 'detecting.pattern_tolerance', 'denoising.mask_r_high', 'denoising.mask_r_low', 'enhancing.curvature_threshold', 'detecting.hough_threshold_vertical', 'detecting.hough_threshold_oblique']
+- emit 5-2 R3: k=8 keys=['sam.angle', 'detecting.binary_threshold', 'detecting.maxLineGap_oblique', 'sam.segment_width', 'detecting.pattern_tolerance', 'detecting.maxLineGap_horizontal', 'enhancing.curvature_threshold', 'detecting.hough_threshold_oblique']
+- apply 5-2 R1: status=ok proxy=0.6855314542686822 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/5-2/round1
+- apply 5-2 R2: status=ok proxy=0.5091566423698581 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/5-2/round2
+- apply 5-2 R3: status=ok proxy=0.6830247239339697 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/5-2/round3
+- finish 5-2: selected=round1 ΔmIoU=0.0
+- emit 5-4 R1: k=7 keys=['detecting.pattern_tolerance', 'detecting.binary_threshold', 'detecting.hough_threshold_vertical', 'detecting.hough_threshold_oblique', 'detecting.maxLineGap_horizontal', 'sam.K_height', 'denoising.mask_r_low']
+- emit 5-4 R2: k=8 keys=['detecting.hough_threshold_horizontal', 'detecting.binary_threshold', 'enhancing.curvature_threshold', 'detecting.pattern_tolerance', 'sam.segment_width', 'detecting.maxLineGap_oblique', 'sam.K_height', 'denoising.mask_r_low']
+- emit 5-4 R3: k=11 keys=['sam.K_height', 'sam.angle', 'detecting.hough_threshold_oblique', 'enhancing.curvature_threshold', 'detecting.maxLineGap_horizontal', 'detecting.maxLineGap_oblique', 'sam.segment_width', 'detecting.pattern_tolerance', 'detecting.hough_threshold_horizontal', 'denoising.mask_r_low', 'detecting.binary_threshold']
+- apply 5-4 R1: status=ok proxy=0.7148701922113456 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/5-4/round1
+- apply 5-4 R2: status=ok proxy=0.47005173511940596 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/5-4/round2
+- apply 5-4 R3: status=ok proxy=0.5464610850354263 dir=/home/boringtao/Projects/Proxy4Tun/data/refinement/random/5-4/round3
+- finish 5-4: selected=round1 ΔmIoU=-0.008
+## run_all done 2026-09-15T09:57:10.240931

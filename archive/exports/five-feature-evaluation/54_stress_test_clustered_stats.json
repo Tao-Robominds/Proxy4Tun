@@ -1,0 +1,27 @@
+{
+  "holdout_mae": 0.08600501829098274,
+  "bootstrap": {
+    "spearman": 0.8272391432237121,
+    "ci95": [
+      0.7493139601585445,
+      0.886562204895819
+    ],
+    "n_boot": 2000,
+    "unit": "subset (good/bad pair preserved; stratified by family)"
+  },
+  "wilcoxon": {
+    "n_subsets": 27,
+    "unified_subset_mae": 0.08600501829098274,
+    "perfamily_subset_mae": 0.09600081508981531,
+    "wilcoxon_W": 133.0,
+    "wilcoxon_p": 0.1854744255542755,
+    "unit": "subset-aggregated mean abs error (n=27)"
+  },
+  "lean_features": [
+    "depth_nan_ratio",
+    "denoise_retained_ratio",
+    "sam_fill_rate",
+    "det_row_residual_px",
+    "det_row_gated"
+  ]
+}

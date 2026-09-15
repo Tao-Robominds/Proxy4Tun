@@ -1,0 +1,36 @@
+{
+  "observation": "Same GT-blind anchor: F1@15=0.412, fill=0.745, size_cv=1.32, ontology_divergence=0.226. Segmentation shows clean ring strips 0\u20139 and stratified K/B1/A*/B2 bands, but the staggered mid-teeth are where SC correspondence breaks. Depth NaN\u22480.11 and denoise retention\u22480.77 are family-normal, so the residual risk is SAM vertical framing of the staggered K-row rather than under-detection alone.",
+  "rule": "ontology f_crop_offset / f_template_mismatch + experiences \u00a76: when rings are complete but segment sizes vary and correspondence fails on staggered teeth, retarget sam.processing.y_bounds (lower\u2208[3600,4400], upper fixed 13300) and keep Hough near T1/T2 priors instead of aggressive relaxation.",
+  "failure_mode": "f_crop_offset / staggered K-row window mismatch",
+  "rationale": "Round 2 is SAM-window\u2013led and distinct from R1's permissive Hough: raise y_bounds lower to 4300 to trim soft top clutter and centre the staggered band, hold oblique Hough near notebook prior (55/45), use denser z_step for cleaner depth cues, and slightly raise curvature_threshold to reduce surface-noise false joints that create unsupported (red) boundaries.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.4,
+      "mask_r_high": 2.85,
+      "z_step": 0.0015,
+      "grad_threshold": 0.2
+    },
+    "enhancing": {
+      "curvature_threshold": 0.002,
+      "inter_radius": 0.055
+    },
+    "detecting": {
+      "binary_threshold": 127,
+      "hough_threshold_oblique": 55,
+      "hough_threshold_horizontal": 55,
+      "hough_threshold_vertical": 550,
+      "maxLineGap_oblique": 45
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4300,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T08:23:05.243999",
+  "provenance": {
+    "agent_id": "780ecc97-84e8-4c60-b3b8-8255b6a1a475"
+  }
+}

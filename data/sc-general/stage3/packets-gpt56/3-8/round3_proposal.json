@@ -1,0 +1,36 @@
+{
+  "observation": "Round 2 recovered the proxy to 0.535 on the anchor geometry, retained the correct ten-ring count, improved SAM fill from the anchor's 0.597 to 0.638, and reduced depth missingness from 0.182 to 0.161. Its remaining deficit is correspondence F1 at 0.225 versus the anchor's 0.302. The diagnostics show a coherent but fragmented slanted central joint, only sparse accepted line support, and a mixed prompt row containing assumed, midpoint, and negative-slope points.",
+  "rule": "When conservative downstream tuning improves fill and depth support but loses boundary-to-joint correspondence, preserve the successful mild denoising and fixed anchor geometry, then lower Hough votes moderately, bridge local joint fragments, snap the regular ten-ring prompt pattern, and enlarge SAM support without changing ring count.",
+  "failure_mode": "Round 2's Hough thresholds of 40 and 30-pixel oblique gap leave too much of the central joint disconnected, so several prompts remain assumed or inconsistently typed. The narrower SAM window raises fill but does not align enough label boundaries with detected joint evidence, keeping correspondence below the anchor.",
+  "rationale": "Use full=false with no unfolding keys because round 2 demonstrated that anchor geometry is substantially safer than the failed full rerun. Keep its mild denoising, which improved both depth missingness and fill. Set oblique and horizontal Hough thresholds to 30 with a 45-pixel oblique gap to recover more continuous joint support without returning to the extreme low-threshold setting of round 1; binary threshold 125 and curvature threshold 0.0008 make the same moderate sensitivity shift. Enable uniform_k_snap because the ring count is already exactly ten and the prompt row remains partly assumed. The requested fill-oriented SAM settings (width 1250, K_height 950, angle 5.5) expand coverage while following the observed mild slope.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.85,
+      "mask_r_high": 3.05,
+      "mask_theta_low": 1.5,
+      "mask_theta_high": 17.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "binary_threshold": 125,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 30,
+      "hough_threshold_vertical": 1400,
+      "maxLineGap_oblique": 45,
+      "pattern_tolerance": 14,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1250,
+      "K_height": 950.0,
+      "angle": 5.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T03:31:06.606715",
+  "provenance": {
+    "agent_id": "1c0b5e6b-6a55-48c6-9ff1-22123f0ce57e"
+  }
+}

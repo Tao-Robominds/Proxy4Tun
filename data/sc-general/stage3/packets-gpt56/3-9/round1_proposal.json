@@ -1,0 +1,35 @@
+{
+  "observation": "The anchor preserves all 10 rings and has good orientation/recentring, but detection is entirely fallback-driven (real detection ratio 0, fallback ratio 1). The visible K joint is coherent yet locally interrupted, while propagated prompts lie along it; correspondence F1@15 is only 0.363678 and segment-size CV is high at 0.562287 despite complete rings.",
+  "rule": "When ring count and geometry are already stable but a fragmented structural joint produces only fallback detections, preserve the stage-1 geometry, increase weak-line connectivity and detector sensitivity, then use a sufficiently tall K band and moderate segment width to stabilize SAM around the recovered joint.",
+  "failure_mode": "The current detector misses the discontinuous K boundary and substitutes uniformly propagated points; those prompts cross locally unsupported or cluttered portions of the joint, producing uneven label extents and weak boundary correspondence.",
+  "rationale": "A slightly broader denoising mask and lower curvature cutoff retain weak joint evidence. Lower binary and horizontal/oblique Hough thresholds, a larger oblique line gap, and moderate pattern tolerance should reconnect the fragmented K trace; uniform K snapping keeps the ten prompts aligned. K_height=900 satisfies the requested minimum while covering the disturbed joint neighborhood, and segment_width=1200 with a 6-degree angle matches the observed shallow joint trend without changing the already-valid ring count or locked unfolding.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.8,
+      "mask_r_high": 3.1,
+      "mask_theta_low": 1.5,
+      "mask_theta_high": 18.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 25,
+      "hough_threshold_horizontal": 25,
+      "maxLineGap_oblique": 50,
+      "pattern_tolerance": 15,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 900.0,
+      "angle": 6.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T03:52:13.255317",
+  "provenance": {
+    "agent_id": "21189194-2a48-480a-8634-d3561dad3452"
+  }
+}

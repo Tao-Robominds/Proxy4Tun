@@ -1,0 +1,30 @@
+{
+  "observation": "Proxy 0.683 is in refine; correspondence_f1@15 is only 0.453 with many red unsupported boundaries and orange unexplained joints on the SC overlay, while ring_count_error=0 and recentre_residual_max_cm=2.1 are healthy. detected_lines shows ten coherent vertical ring columns with oblique red/green pairs mainly in textured mid/bottom bands; sam_segment_size_cv=1.09 and fill_rate=0.75 indicate graded SAM template mismatch, not upstream collapse.",
+  "rule": "experiences \u00a76\u20137 and ontology d8/d10: after orientation and centreline pass, weak correspondence plus high segment-size CV \u2192 retarget SAM geometry (segment_width/K_height/angle) to T4/T5 priors and relax distance-pattern detection; keep K_height on speckled lining bands and avoid empty-crop into the bright mid-map void.",
+  "failure_mode": "f_template_mismatch + f_pattern_mismatch",
+  "rationale": "Set SAM to T4/T5 notebook priors (segment_width=1800, K_height=1227, angle=9.8) so K crops sit on textured chevron bands visible in detected_lines. Force synthetic verticals (complex-family stable) while moderately relaxing oblique Hough and raising pattern_tolerance so joint loci better support boundaries at @15px. Leave unfolding untouched (stage1_unlocked=false).",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 40,
+      "hough_threshold_horizontal": 45,
+      "hough_threshold_vertical": 5000,
+      "maxLineGap_oblique": 55,
+      "maxLineGap_horizontal": 12,
+      "pattern_tolerance": 14
+    },
+    "sam": {
+      "segment_width": 1800,
+      "K_height": 1227.0,
+      "angle": 9.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T11:14:56.897178",
+  "provenance": {
+    "agent_id": "daae5e0d-f390-4eb2-ae0c-7e4888b68ea0"
+  }
+}

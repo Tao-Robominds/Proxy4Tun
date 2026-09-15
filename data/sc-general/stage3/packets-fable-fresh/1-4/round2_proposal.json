@@ -1,0 +1,23 @@
+{
+  "observation": "Round 1 (relax oblique Hough + lower binarisation + inter_radius 0.08) moved the proxy the wrong way: 0.646 -> 0.627, correspondence_f1@15 0.395 -> 0.360, sam_fill_rate flat (0.699 -> 0.698), ring_count_error still 0, NaN and residual unchanged. The updated detected_lines.png shows the extra oblique segments are mostly spurious: a red segment on the bolt row at y~960 px (x 1750-1900), a green segment on the bottom margin at y~2640 px, and the left-edge red at x<110 px, while real joints still appear as dotted traces. initial_prompt_points.png now has only 4 real intersections (2 negative-slope at y~1185, 2 positive-slope at y~1615), 4 'assume' and 2 midpoints, one of which sits off-row at y~1560 px. So relaxing detection traded a few real joints for noise lines and shifted prompts off the K-row lattice, which is exactly what depressed the correspondence proxy. Upstream health is unchanged (residual 1.9 cm, corr -0.995, NaN 0.15, retention 0.72), so stages 1-3 remain non-suspects.",
+  "rule": "d9 (spurious lines / off-lattice prompts after relaxation) -> f_spurious_lines; remediation r_tighten_hough (raise oblique threshold, shorten maxLineGap) and restore the default binarisation. Because f_joint_oversmoothed (d6) is still the plausible root cause and depth_threshold_low/high are not exposed, use the remaining stage-3 lever in the opposite sense to round 1: lower enhancing.curvature_threshold so high-curvature joint neighbourhoods are not treated as flat surface and smoothed by enhance_segment_surface, preserving joint contrast in the outlier map. Tuning-order rule: do not touch denoise geometry (retention healthy, transfer prior) or the vertical accumulator (10/10 rings).",
+  "failure_mode": "stage_4_detection.f_spurious_lines (induced by round-1 relaxation) on top of residual stage_3_upsample.f_joint_oversmoothed",
+  "rationale": "Round 1 is a clean negative result: more oblique lines were not better, consistent with experiences sec.5 (consistency beats count). Round 2 therefore explicitly reverts the relaxation (inter_radius back to 0.06, binary_threshold back to 127, hough_threshold_horizontal back to 50) and moves the oblique detector to the conservative side: hough_threshold_oblique 60 and maxLineGap_oblique 30 so only well-supported +-5-10 deg traces survive, suppressing the bolt-row and margin false positives that produced off-lattice midpoints. Fewer but truer intersections should keep every prompt on the two K-row loci (y~1185 / y~1615 px) and let the 'assume' fill-in reproduce the staggered pattern faithfully. In parallel, curvature_threshold is lowered from the 0.0005 default to 0.0003 so fewer near-joint points are densified as surface, sharpening joint traces without changing the depth map coverage (NaN should stay ~0.15). Expected GT-free effect: correspondence_f1@15 back above the anchor 0.395, det_fallback_ratio <= 0.3 with no off-row midpoints, ring_count_error 0, sam_fill_rate >= 0.70. If f1 does not recover, round 3 should treat detection as saturated and hold the anchor detection while probing the SAM row geometry.",
+  "overlay": {
+    "enhancing": {
+      "inter_radius": 0.06,
+      "curvature_threshold": 0.0003
+    },
+    "detecting": {
+      "binary_threshold": 127,
+      "hough_threshold_oblique": 60,
+      "maxLineGap_oblique": 30,
+      "hough_threshold_horizontal": 50
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T19:19:35.561438",
+  "provenance": {
+    "agent_id": "0e3bff9b-1e8b-416e-891c-e7c0f9a108b1"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "observation": "Canonical orientation is healthy (|corr(h, ring)|=0.992 and invariant passes), but the 56.6 cm recentring residual is far above the healthy scale. The depth map shows broad circumferential warping and asymmetric edge voids, while denoising still retains 67.4% of points. Detection is entirely fallback-driven, so its regular ten-point spacing does not establish that the upstream geometry is sound.",
+  "failure_mode": "Stage-1 centre-curve underfit is distorting the cylindrical unroll and creating spatially structured coverage loss; the downstream fallback prompts and incomplete, uneven SAM masks are consequences rather than primary detection or SAM failures.",
+  "rationale": "Use a cubic centre curve to represent the visible smooth non-quadratic bend, paired with denser slicing to provide enough local centre samples and constrain that extra degree of freedom. This targets the earliest active defect while preserving the T3 radial/theta priors; widening denoising gates could merely hide the off-centre fit, and Hough/SAM tuning is not identifiable while real-detection ratio is zero.",
+  "overlay": {
+    "unfolding": {
+      "slice_spacing_factor": 1.05,
+      "polynomial_degree": 3
+    }
+  }
+}

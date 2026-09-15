@@ -1,0 +1,36 @@
+{
+  "observation": "SC overlay shows red unsupported boundaries concentrated at block tops/bottoms and left rings using assumed (x) prompts while right rings keep real (*). sam_ring_completeness=0.889 and ontology_divergence=0.24 with correct ring partition \u2014 axial crop / fringe orange joints likely pull templates off staggered K/AB rows more than missing verticals (ring_count_error=0).",
+  "rule": "d11 / y_bounds_lower special + r_tighten_hough: with healthy ring_count, raise sam.processing.y_bounds lower within [3600,4400] (upper fixed 13300) and tighten oblique Hough to suppress fringe orange lines that create unsupported edges.",
+  "failure_mode": "f_boundary_rings_missing",
+  "rationale": "Shift the SAM axial window upward into the lining band and suppress spurious fringe joints so edge rings receive real prompts and supported (green/cyan) boundaries rise. Opposite detection polarity from R1; stronger y_bounds move than R2.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.4,
+      "mask_r_high": 2.8,
+      "z_step": 0.0015,
+      "grad_threshold": 0.18
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0006,
+      "inter_radius": 0.05
+    },
+    "detecting": {
+      "binary_threshold": 135,
+      "hough_threshold_oblique": 70,
+      "hough_threshold_horizontal": 65,
+      "hough_threshold_vertical": 650,
+      "maxLineGap_oblique": 30
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4300,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T08:13:35.815064",
+  "provenance": {
+    "agent_id": "28a12bfa-1929-4706-9d80-68b56b94c947"
+  }
+}

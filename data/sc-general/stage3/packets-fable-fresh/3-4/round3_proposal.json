@@ -1,0 +1,31 @@
+{
+  "observation": "Round 2 (stage 1 frozen on the anchor map, residual back to 20.8) scored 0.530: correspondence_f1@15 0.269 (above anchor 0.244, below round-1's 0.286 which was measured on a different, re-rolled map), sam_fill_rate 0.554 (below anchor 0.571 on the same map), depth_nan_ratio 0.190 (best so far). Like-for-like against the anchor, the detection relaxation is worth about +0.025 F1, while curvature_threshold 0.0008 produced exactly the suspect pattern from the experiences: NaN down but fill rate down, i.e. the newly densified pixels sit in bolt-hole halos / seam grooves that the SAM block masks do not cover. Round-2 detected_lines shows the more aggressive thresholds (108/22/55) only added short red/green fragments in the noisy left columns (x < 350 at y~150, ~930, ~1290, ~2150, ~2200, ~2320, ~2440) and still no oblique on the y~780 / y~2280 seams, so the Hough relaxation is saturated and further steps only cost precision. The dominant remaining coverage defect is visible in depth_map_viridis: every bolt pocket is a yellow (deep) rim around a white hole, the K-row joint groove at y~1480 is a white band, and the bottom-right patch is a fractal white region, all consistent with points whose radius exceeds the T3 r_outer = 3.0 m gate being discarded (f_over_gate on recessed lining), not with centreline error. Ring count 10 / error 0, K row propagated at y~1515, labels in correct ring order (A2|A1|B1|K|B2|A3|A2), orientation pinned.",
+  "rule": "experiences \u00a79: a NaN-driven proxy move with falling fill rate is cosmetic -> revert curvature_threshold to the prior. Ontology d3/f_over_gate -> r_radial_gate_widen: when holes coincide with recessed lining features (bolt pockets, joint groove) widen [r_inner, r_outer] toward the prior radius_range, here only r_outer, staying inside the given bound. \u00a74: geometry knobs have small isolated effects, so keep the step small and leave r_inner / theta gates at T3 priors (the top fixture band and floor edge are physical, and lowering r_inner would leak brackets = f_under_gate). \u00a710: do not re-roll stage 1 (residual is structural and recentred; round 1 proved reseeding does nothing) -> full=false. \u00a75: keep verticals synthetic so ring_count_error stays 0. Consolidate the detection settings that were validated (round-1 values) rather than the saturated round-2 ones.",
+  "failure_mode": "stage_2_denoise.f_over_gate on recessed lining (bolt pockets, K-row groove, bottom-right patch) -> stage_3_upsample.f_depth_holes -> stage_5_segmentation.f_over_under_coverage (fill rate 0.55-0.57); secondary stage_4_detection.f_missing_lines on the ~780/~2280 seams, partially remedied and now saturated.",
+  "rationale": "Final round, stage 1 frozen (full=false). (1) Denoising: mask_r_high 3.0 -> 3.06 m to retain the deeper bolt-pocket and joint-groove points that currently become NaN halos; these pixels lie inside the SAM block templates, so recovering them should raise sam_fill_rate and denoise_retained_ratio and lower depth_nan_ratio together (the healthy, non-cosmetic pattern), and the extra depth contrast at groove bottoms feeds the joint-outlier enhancement rather than washing it out. mask_r_low and theta gates untouched. (2) Enhancing: curvature_threshold back to the 0.0005 prior (round-2 evidence: cosmetic). (3) Detecting: consolidate the round-1 settings that produced the best F1 (binary_threshold 115, hough_threshold_oblique 24, maxLineGap_oblique 45, hough_threshold_horizontal 26) instead of the saturated round-2 values that only added left-edge fragments; hough_threshold_vertical 2200 keeps the synthetic 10 verticals (ring_count_error 0); pattern_tolerance 10 and uniform_k_snap true keep the K-row gate strict. (4) SAM: segment_width 1200 (prior), K_height and angle at priors since the detected K band (~170 px) and per-ring oblique slope (~5-6 deg) match 823.8 mm / 6.12 deg. Expected: fill rate back above the anchor with F1 retained near the round-1 level, i.e. the first round where both coherence features move up on the same map.",
+  "overlay": {
+    "denoising": {
+      "mask_r_high": 3.06
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 24,
+      "hough_threshold_horizontal": 26,
+      "hough_threshold_vertical": 2200,
+      "maxLineGap_oblique": 45,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T18:20:55.638064",
+  "provenance": {
+    "agent_id": "dda9350d-e500-4cfd-b2f7-b8afd09ce9d1"
+  }
+}

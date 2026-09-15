@@ -1,0 +1,30 @@
+{
+  "observation": "The correspondence overlay contains many unsupported label edges, but the detected-line image also shows scattered weak fragments and structural clutter near the wide white gaps. Because ring completeness and ring count are already exact, an indiscriminate recall increase could connect unrelated fragments and degrade prompt placement.",
+  "rule": "For a complete ring partition with noisy local edge fragments, test a precision-oriented overlay: demand stronger oblique and horizontal support, limit gap bridging, and use tighter pattern agreement while retaining the existing vertical cadence.",
+  "failure_mode": "False or over-bridged joint lines can create geometrically plausible but unsupported intersections, propagating incorrect prompts into oversized or misplaced SAM masks.",
+  "rationale": "This proposal deliberately contrasts with the balanced round by raising line thresholds, shortening both gap limits, and tightening pattern tolerance. A smaller segment width and lower K height localize mask growth around reliable prompts, while a lower permitted angle favors the mostly shallow joint slopes visible in the overlay. The slightly tighter denoising band suppresses peripheral clutter without changing unfolding.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.74,
+      "mask_r_high": 4.01
+    },
+    "detecting": {
+      "hough_threshold_oblique": 58,
+      "hough_threshold_horizontal": 55,
+      "hough_threshold_vertical": 3600,
+      "maxLineGap_oblique": 41,
+      "maxLineGap_horizontal": 10,
+      "pattern_tolerance": 8
+    },
+    "sam": {
+      "segment_width": 1560,
+      "K_height": 1080.0,
+      "angle": 7.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T04:26:59.864271",
+  "provenance": {
+    "agent_id": "2b121ffc-e3f5-4ff8-990d-3357022ff073"
+  }
+}

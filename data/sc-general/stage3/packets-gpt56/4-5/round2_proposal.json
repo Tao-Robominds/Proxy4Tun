@@ -1,0 +1,34 @@
+{
+  "observation": "The correspondence overlay contains many unsupported horizontal label boundaries, especially near the top and bottom structural bands, while several detected short segments do explain interior joints. The depth map also contains strong clutter at the image margins and service-band edges.",
+  "rule": "When strong structural clutter can create spurious seam evidence, favor precision: retain more central-radius signal, require stronger enhanced responses, and demand more coherent horizontal/oblique detections before changing segment labels.",
+  "failure_mode": "Clutter-driven short lines and permissive pattern matching introduce label transitions that do not correspond to stable joints, reducing boundary precision despite complete ring coverage.",
+  "rationale": "This is a precision-oriented alternative to round 1. Higher binary and Hough thresholds, shorter allowed gaps, and tighter pattern tolerance reject isolated clutter. A slightly larger SAM segment width and lower angle encourage fewer, more stable subdivisions without changing the correct ten-ring topology.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.72,
+      "mask_r_high": 4.02
+    },
+    "enhancing": {
+      "curvature_threshold": 0.00145
+    },
+    "detecting": {
+      "binary_threshold": 148,
+      "hough_threshold_oblique": 58,
+      "hough_threshold_horizontal": 55,
+      "hough_threshold_vertical": 4100,
+      "maxLineGap_oblique": 42,
+      "maxLineGap_horizontal": 10,
+      "pattern_tolerance": 7
+    },
+    "sam": {
+      "segment_width": 1980,
+      "K_height": 1380.0,
+      "angle": 7.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T05:12:32.902000",
+  "provenance": {
+    "agent_id": "6e7de673-f869-496f-8ec6-7d652b326c5c"
+  }
+}

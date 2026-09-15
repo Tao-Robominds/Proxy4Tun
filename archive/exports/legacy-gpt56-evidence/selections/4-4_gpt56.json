@@ -1,0 +1,54 @@
+{
+  "subset": "4-4",
+  "arm": "gpt56",
+  "anchor": {
+    "round": "anchor",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo-unified/4-4-family-proxy/runs/4-4-anchor",
+    "proxy_raw": 0.6225,
+    "proxy_scaled": 0.6225,
+    "band": "refine",
+    "recentre_residual_max_cm": 35.0,
+    "mIoU_offline": 0.347
+  },
+  "rounds": [
+    {
+      "round": "round1",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/4-4-gpt56-refinement/round1",
+      "proxy_raw": 0.6531,
+      "proxy_scaled": 0.6531,
+      "band": "refine",
+      "recentre_residual_max_cm": 1.5,
+      "mIoU_offline": 0.422
+    },
+    {
+      "round": "round2",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/4-4-gpt56-refinement/round2",
+      "proxy_raw": 0.6531,
+      "proxy_scaled": 0.6531,
+      "band": "refine",
+      "recentre_residual_max_cm": 1.5,
+      "mIoU_offline": 0.422
+    },
+    {
+      "round": "round3",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/4-4-gpt56-refinement/round3",
+      "proxy_raw": 0.6499,
+      "proxy_scaled": 0.6499,
+      "band": "refine",
+      "recentre_residual_max_cm": 1.5,
+      "mIoU_offline": 0.42
+    }
+  ],
+  "selected": {
+    "round": "round1",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/4-4-gpt56-refinement/round1",
+    "proxy_raw": 0.6531,
+    "proxy_scaled": 0.6531,
+    "band": "refine",
+    "recentre_residual_max_cm": 1.5,
+    "mIoU_offline": 0.422
+  },
+  "selection_reason": "best proxy 0.6531; 3 within 0.01; residual tiebreak -> round1",
+  "delta_proxy_scaled": 0.0306,
+  "delta_mIoU_offline": 0.075
+}

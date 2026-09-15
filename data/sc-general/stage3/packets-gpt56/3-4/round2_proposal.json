@@ -1,0 +1,42 @@
+{
+  "observation": "Round 1 lowered the centreline residual from 20.8 cm to 12.8 cm and slightly raised SAM fill from 0.570766 to 0.588172, but the proxy fell to 0.295880: ring_count_error became 1.0, depth NaN rose to 0.209642, and correspondence_f1@15 collapsed to 0.0. The new images show eleven ring columns/prompts instead of the anchor's ten, with propagated prompts near y=1000 even though the long coherent oblique joint pair lies much lower, around y=1450-1650; short fragments around the upper row can therefore capture the detector.",
+  "rule": "Retain the part of the unlocked fit that reduced residual, but correct topology before downstream tuning: increase slice spacing when a rerun creates one extra ring. When permissive Hough settings select a short, unsupported row, raise binarization and line-vote thresholds, shorten the allowed bridge gap, and tighten pattern tolerance so long coherent central seams dominate uniform K snapping. Widen the T3 radial and theta gates only slightly while residual remains above gate, rather than chasing NaNs aggressively.",
+  "failure_mode": "Round 1 caused slice over-segmentation (eleven inferred rings) and a wrong-row pattern match from spurious upper line fragments. These jointly explain the unit ring-count error and zero boundary correspondence; the remaining 12.8 cm centreline residual contributes moderate peripheral depth loss but is no longer the largest observed regression.",
+  "rationale": "Keep the cubic, seeded unfolding behavior that reduced residual, but move slice_spacing_factor upward from 1.08 to 1.18 to target the original ten-ring topology and relax RANSAC threshold modestly to 1.0. Slightly broaden the T3 gates to limit residual-induced clipping. Reverse round 1's permissive detector by using stronger binary and Hough thresholds, a 22 px oblique gap, and 6 px pattern tolerance; this suppresses short upper fragments while preserving the long central red/green lines visible in the diagnostic. Keep uniform snapping and the T3 SAM geometry because fill improved and the dominant failures are ring topology and prompt-row selection.",
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 1.0,
+      "slice_spacing_factor": 1.18,
+      "polynomial_degree": 3,
+      "random_seed": 0
+    },
+    "denoising": {
+      "mask_r_low": 2.82,
+      "mask_r_high": 3.04,
+      "mask_theta_low": 1.4,
+      "mask_theta_high": 17.4
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "binary_threshold": 140,
+      "hough_threshold_oblique": 45,
+      "hough_threshold_horizontal": 50,
+      "hough_threshold_vertical": 1800,
+      "maxLineGap_oblique": 22,
+      "pattern_tolerance": 6,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 823.8,
+      "angle": 6.12
+    }
+  },
+  "full": true,
+  "validated_at": "2026-09-14T00:24:17.087249",
+  "provenance": {
+    "agent_id": "874c42b3-747e-4646-877c-dc7bd169f07f"
+  }
+}

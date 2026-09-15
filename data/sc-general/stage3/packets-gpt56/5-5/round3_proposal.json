@@ -1,0 +1,34 @@
+{
+  "observation": "Large portions of the upper and central lining show label boundaries with little detected horizontal support, and only ten prompt points are available across the full image. The depth map has broad valid surfaces but a 0.193 NaN ratio, suggesting that true joints may be fragmented by missing or weak depth evidence.",
+  "rule": "When genuine boundaries are fragmented across otherwise coherent lining surfaces, increase detection recall and permit longer gap closure, then use larger SAM spatial scales so sparse prompts can cover the valid surface without altering ring count.",
+  "failure_mode": "Fragmented depth support breaks true transverse and oblique joints into sub-threshold pieces, causing too few effective prompts and incomplete segmentation fill.",
+  "rationale": "This is the recall-focused alternative. Lower thresholds, permissive gap bridging, and wider pattern tolerance seek continuous joint hypotheses through missing-depth intervals; larger SAM width and height scales compensate for sparse prompts. The settings remain bounded and stage 1 stays locked.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.5,
+      "mask_r_high": 4.05
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0003
+    },
+    "detecting": {
+      "binary_threshold": 104,
+      "hough_threshold_oblique": 27,
+      "hough_threshold_horizontal": 27,
+      "hough_threshold_vertical": 1800,
+      "maxLineGap_oblique": 78,
+      "maxLineGap_horizontal": 29,
+      "pattern_tolerance": 19
+    },
+    "sam": {
+      "segment_width": 2050,
+      "K_height": 1450.0,
+      "angle": 11.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T05:31:43.202113",
+  "provenance": {
+    "agent_id": "e3590abc-904b-4887-a0de-b0b195c11007"
+  }
+}

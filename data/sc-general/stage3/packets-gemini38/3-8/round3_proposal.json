@@ -1,0 +1,36 @@
+{
+  "observation": "Distinct from R2: if looser Hough still leaves unsupported central boundaries and high segment_size_cv, the crop/taper geometry may be the limiter rather than line yield. detected_lines already has a coherent sloping K-row; SC overlay still shows patchy boundary support. Prefer a cleaner edge map plus a wider, slightly taller SAM window with a bit more taper to match the observed left\u2192right K-row tilt\u2014still no y_bounds on continuous t3.",
+  "rule": "ontology f_crop_offset / f_over_under_coverage + experiences \u00a76: when ring geometry is regular but fill/F1 stay weak, retune SAM crop geometry (segment_width, mid-high K_height, angle) and tighten spurious-line risk rather than further relaxing Hough.",
+  "failure_mode": "f_crop_offset / f_over_under_coverage (SAM window mismatch on continuous K row)",
+  "rationale": "Stages 2\u20136 only (full=false). Slightly tighter denoise and higher binary/Hough than R2 to cut orange unexplained clutter; pattern_tolerance a bit looser for continuous snap. SAM alternative: wider segment_width=1300, K_height=940 (still inside bounds, away from empty-crop floor), angle=7.0 to follow the observed K-row slope.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.88,
+      "mask_r_high": 3.08,
+      "mask_theta_low": 1.55,
+      "mask_theta_high": 17.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.00045
+    },
+    "detecting": {
+      "binary_threshold": 135,
+      "hough_threshold_oblique": 40,
+      "hough_threshold_horizontal": 38,
+      "hough_threshold_vertical": 1800,
+      "maxLineGap_oblique": 30,
+      "pattern_tolerance": 15,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1300,
+      "K_height": 940.0,
+      "angle": 7.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:13:17.663698",
+  "provenance": {
+    "agent_id": "c490a680-d345-4271-b9a9-49f027f60fea"
+  }
+}

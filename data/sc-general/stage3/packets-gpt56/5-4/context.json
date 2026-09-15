@@ -1,0 +1,338 @@
+{
+  "subset": "5-4",
+  "arm": "gpt56",
+  "proposer": "GPT-5.6 (fresh per-case agent)",
+  "family": "t4&5",
+  "lining_mode": "complex",
+  "stage1_unlocked": false,
+  "residual_gate_cm": 10.0,
+  "bands": {
+    "reject": "<0.5",
+    "refine": "[0.5, 0.7)",
+    "accept": ">=0.7"
+  },
+  "anchor": {
+    "proxy_raw": 0.692326,
+    "proxy_scaled": 0.692326,
+    "band": "refine",
+    "features": {
+      "correspondence_f1@15": 0.467401,
+      "sam_fill_rate": 0.759939,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.19849
+    },
+    "recentre_residual_max_cm": 2.1,
+    "orient_axis_corr": -0.7738736413768053,
+    "ring_count": 10,
+    "ring_count_error": 0.0,
+    "labelmap_source": "only_label.csv",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-4-family-proxy/runs/5-4-anchor"
+  },
+  "intrinsics_gt_blind": {
+    "orient_axis_corr": -0.7738736413768053,
+    "orient_invariant_ok": 1.0,
+    "recentre_residual_max_cm": 2.1,
+    "denoise_retained_ratio": 0.771714565621628,
+    "depth_nan_ratio": 0.19848996720212705,
+    "depth_outlier_ratio": 0.00134290457193032,
+    "det_real_detection_ratio": 0.7,
+    "det_fallback_ratio": 0.3,
+    "det_n_points": 10.0,
+    "sam_fill_rate": 0.7599389968796842,
+    "sam_ring_completeness": 1.0,
+    "sam_segment_size_cv": 1.1070596715680279,
+    "sam_ontology_divergence": 0.14195278326436073
+  },
+  "history": [
+    {
+      "round": 1,
+      "status": "ok",
+      "overlay": {
+        "enhancing": {
+          "curvature_threshold": 0.00065
+        },
+        "detecting": {
+          "binary_threshold": 118,
+          "hough_threshold_oblique": 34,
+          "hough_threshold_horizontal": 30,
+          "hough_threshold_vertical": 2600,
+          "maxLineGap_oblique": 62,
+          "maxLineGap_horizontal": 24,
+          "pattern_tolerance": 14
+        },
+        "sam": {
+          "segment_width": 1800,
+          "K_height": 1240.0,
+          "angle": 9.0
+        }
+      },
+      "proxy_scaled": 0.7103465872845497,
+      "band": "accept",
+      "features": {
+        "correspondence_f1@15": 0.49993812702760826,
+        "sam_fill_rate": 0.7599389968796842,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.19731867326731048
+      },
+      "recentre_residual_max_cm": 2.1,
+      "full_pipeline": false,
+      "rationale": "Use a moderately permissive binary threshold, lower horizontal and oblique Hough votes, bridge longer horizontal gaps, and allow modest pattern tolerance. Keep SAM geometry near the middle of the allowed t4&5 range so the proposal primarily tests whether stronger seam continuity improves correspondence.",
+      "proposer": "GPT-5.6 (fresh per-case agent)"
+    },
+    {
+      "round": 2,
+      "status": "ok",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 3.62,
+          "mask_r_high": 3.92
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0011
+        },
+        "detecting": {
+          "binary_threshold": 138,
+          "hough_threshold_oblique": 46,
+          "hough_threshold_horizontal": 42,
+          "hough_threshold_vertical": 3400,
+          "maxLineGap_oblique": 48,
+          "maxLineGap_horizontal": 17,
+          "pattern_tolerance": 10
+        },
+        "sam": {
+          "segment_width": 1580,
+          "K_height": 1080.0,
+          "angle": 10.8
+        }
+      },
+      "proxy_scaled": 0.6419482336213735,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.37487533888998537,
+        "sam_fill_rate": 0.7578080870103606,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.19485446185896388
+      },
+      "recentre_residual_max_cm": 2.1,
+      "full_pipeline": false,
+      "rationale": "A narrower segment width and lower K_height impose a denser, more regular partition, while a slightly steeper angle follows the visible oblique seam family. Detection is kept selective enough to avoid turning the dense surface texture into prompts.",
+      "proposer": "GPT-5.6 (fresh per-case agent)"
+    },
+    {
+      "round": 3,
+      "status": "ok",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 3.72,
+          "mask_r_high": 4.02
+        },
+        "enhancing": {
+          "curvature_threshold": 0.00175
+        },
+        "detecting": {
+          "binary_threshold": 154,
+          "hough_threshold_oblique": 61,
+          "hough_threshold_horizontal": 57,
+          "hough_threshold_vertical": 4550,
+          "maxLineGap_oblique": 72,
+          "maxLineGap_horizontal": 28,
+          "pattern_tolerance": 7
+        },
+        "sam": {
+          "segment_width": 2040,
+          "K_height": 1430.0,
+          "angle": 7.6
+        }
+      },
+      "proxy_scaled": 0.5168667205300026,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.1490354478696714,
+        "sam_fill_rate": 0.754090645351764,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.19813231303329107
+      },
+      "recentre_residual_max_cm": 2.1,
+      "full_pipeline": false,
+      "rationale": "This conservative alternative raises binary and Hough thresholds, uses a higher curvature cutoff, and requires coherent gap-bridged oblique structure. A wider SAM segment width tests whether fewer, cleaner prompts reduce fragmentation and ontology divergence.",
+      "proposer": "GPT-5.6 (fresh per-case agent)"
+    }
+  ],
+  "images": {
+    "depth_map_viridis.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-4-family-proxy/runs/5-4-anchor/depth_map_viridis.png",
+    "detected_lines.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-4-family-proxy/runs/5-4-anchor/detected_lines.png",
+    "initial_prompt_points.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-4-family-proxy/runs/5-4-anchor/initial_prompt_points.png",
+    "segmentation_results.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/5-4-family-proxy/runs/5-4-anchor/segmentation_results.png"
+  },
+  "ontology": {
+    "experiences": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/experiences.md",
+    "sam4tun_ontology": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/sam4tun_ontology.yaml",
+    "tunnel_priors": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/tunnel_priors.yaml"
+  },
+  "parameter_bounds": [
+    {
+      "name": "unfolding.ransac_threshold",
+      "stage": "unfolding",
+      "key": "ransac_threshold",
+      "kind": "float",
+      "low": 0.8,
+      "high": 1.2,
+      "special": null
+    },
+    {
+      "name": "unfolding.slice_spacing_factor",
+      "stage": "unfolding",
+      "key": "slice_spacing_factor",
+      "kind": "float",
+      "low": 1.6,
+      "high": 2.0,
+      "special": null
+    },
+    {
+      "name": "unfolding.polynomial_degree",
+      "stage": "unfolding",
+      "key": "polynomial_degree",
+      "kind": "int",
+      "low": 2,
+      "high": 3,
+      "special": null
+    },
+    {
+      "name": "unfolding.random_seed",
+      "stage": "unfolding",
+      "key": "random_seed",
+      "kind": "int",
+      "low": 0,
+      "high": 7,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_low",
+      "stage": "denoising",
+      "key": "mask_r_low",
+      "kind": "float",
+      "low": 3.5,
+      "high": 3.8,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_high",
+      "stage": "denoising",
+      "key": "mask_r_high",
+      "kind": "float",
+      "low": 3.75,
+      "high": 4.05,
+      "special": null
+    },
+    {
+      "name": "enhancing.curvature_threshold",
+      "stage": "enhancing",
+      "key": "curvature_threshold",
+      "kind": "float",
+      "low": 0.0002,
+      "high": 0.002,
+      "special": null
+    },
+    {
+      "name": "detecting.binary_threshold",
+      "stage": "detecting",
+      "key": "binary_threshold",
+      "kind": "int",
+      "low": 100,
+      "high": 160,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_oblique",
+      "stage": "detecting",
+      "key": "hough_threshold_oblique",
+      "kind": "int",
+      "low": 25,
+      "high": 70,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_horizontal",
+      "stage": "detecting",
+      "key": "hough_threshold_horizontal",
+      "kind": "int",
+      "low": 25,
+      "high": 70,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_vertical",
+      "stage": "detecting",
+      "key": "hough_threshold_vertical",
+      "kind": "int",
+      "low": 800,
+      "high": 5000,
+      "special": null
+    },
+    {
+      "name": "detecting.maxLineGap_oblique",
+      "stage": "detecting",
+      "key": "maxLineGap_oblique",
+      "kind": "int",
+      "low": 30,
+      "high": 80,
+      "special": null
+    },
+    {
+      "name": "detecting.maxLineGap_horizontal",
+      "stage": "detecting",
+      "key": "maxLineGap_horizontal",
+      "kind": "int",
+      "low": 5,
+      "high": 30,
+      "special": null
+    },
+    {
+      "name": "detecting.pattern_tolerance",
+      "stage": "detecting",
+      "key": "pattern_tolerance",
+      "kind": "int",
+      "low": 5,
+      "high": 20,
+      "special": null
+    },
+    {
+      "name": "sam.segment_width",
+      "stage": "sam",
+      "key": "segment_width",
+      "kind": "int",
+      "low": 1500,
+      "high": 2100,
+      "special": null
+    },
+    {
+      "name": "sam.K_height",
+      "stage": "sam",
+      "key": "K_height",
+      "kind": "float",
+      "low": 1000.0,
+      "high": 1500.0,
+      "special": null
+    },
+    {
+      "name": "sam.angle",
+      "stage": "sam",
+      "key": "angle",
+      "kind": "float",
+      "low": 7.0,
+      "high": 12.0,
+      "special": null
+    }
+  ],
+  "instructions": [
+    "Propose ONE coordinated multi-stage overlay within parameter_bounds.",
+    "Use observation -> ontology rule -> failure_mode -> overlay.",
+    "Do NOT read evaluation/, offline_gt.json, performance.md, perf_*, mIoU, or any ground-truth labels / GT-bearing CSVs.",
+    "Do NOT read existing Fable/deterministic selections, campaign logs, or other arms' refinement trees.",
+    "Use the SC-general proxy (proxy_scaled / band / lean features) as the between-round signal.",
+    "If stage1_unlocked is false, do not touch unfolding keys.",
+    "If stage1_unlocked is true and residual remains high, you may include unfolding (e.g. random_seed) and the pilot will auto --full.",
+    "Return JSON with keys: observation, failure_mode, rationale, overlay."
+  ],
+  "created_at": "2026-09-14T06:29:19.499629"
+}

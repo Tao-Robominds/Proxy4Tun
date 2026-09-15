@@ -1,0 +1,24 @@
+{
+  "observation": "Recentre residual is 20.8 cm (gate 10 cm) with a left-edge yellow/NaN seam on the depth map and discontinuous green/red oblique tracks across magenta ring boundaries; orientation is healthy (|corr|\u22480.998), ring_count=10 matches det_n_points, and depth_nan\u224819.5% is family-normal, but SC correspondence@15 is only 0.244 with many unsupported boundaries and wavy ring instance edges.",
+  "rule": "When recentre_residual_max_cm \u226b 10 cm and orientation is already invariant-OK, treat centreline/unroll quality (f_curve_overfit) before detection or SAM; stage1_unlocked permits a full-pipeline unfolding overlay, and residual is fixed by re-fitting the centreline\u2014not by widening the denoise band.",
+  "failure_mode": "f_curve_overfit",
+  "rationale": "Round-1 modest move: denser ellipse sampling (slice_spacing_factor 1.10), slightly more permissive RANSAC (1.05), cubic centreline (polynomial_degree 3), and a fresh seed (3) to shrink the 20.8 cm residual under --full; keep SAM at T3 mid-priors (segment_width 1200, K_height 850, angle 6.12) so geometry stays mid-range and is not the lever while stage-1 is reopened.",
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 1.05,
+      "slice_spacing_factor": 1.1,
+      "polynomial_degree": 3,
+      "random_seed": 3
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 850.0,
+      "angle": 6.12
+    }
+  },
+  "full": true,
+  "validated_at": "2026-09-14T06:46:17.926141",
+  "provenance": {
+    "agent_id": "ce41a8ef-d7e8-4b58-b0ad-9161c2caa60e"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "observation": "The ten ring columns are stable, but the detected joint evidence is sparse: only 60% of prompts are real detections, several are assumed or midpoint fallbacks, and many visible label boundaries are unsupported. SAM still fills 71.7% of the map, yet segment-size CV is 1.076, indicating uneven regions around sparse prompts.",
+  "rule": "When ring count is already correct but cross-stage correspondence is low, preserve the established vertical partition and moderately increase horizontal/oblique line continuity so more prompts arise from measured joints; use mid-range SAM geometry to reduce fragmentation without forcing a full rerun.",
+  "failure_mode": "Moderate under-detection and short line fragments leave too few measured intersections, causing fallback prompts and uneven SAM regions.",
+  "rationale": "This balanced overlay lowers the oblique and horizontal Hough thresholds, bridges moderate gaps, and widens pattern tolerance while keeping the vertical detector comparatively selective. Mid-range segment width, K height, and angle should make prompts cover the large panels more evenly. Denoising remains central in its allowed band to avoid trading the current low outlier ratio for extra clutter.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.62,
+      "mask_r_high": 3.92
+    },
+    "detecting": {
+      "hough_threshold_oblique": 38,
+      "hough_threshold_horizontal": 36,
+      "hough_threshold_vertical": 3000,
+      "maxLineGap_oblique": 62,
+      "maxLineGap_horizontal": 19,
+      "pattern_tolerance": 14
+    },
+    "sam": {
+      "segment_width": 1780,
+      "K_height": 1240.0,
+      "angle": 9.4
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T04:22:32.389448",
+  "provenance": {
+    "agent_id": "2b121ffc-e3f5-4ff8-990d-3357022ff073"
+  }
+}

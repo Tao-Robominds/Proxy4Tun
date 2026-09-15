@@ -1,0 +1,30 @@
+{
+  "observation": "Four of ten detections are fallback-derived, and the prompt plot leaves broad vertical intervals represented by assumed or midpoint prompts. The depth map has a substantial 0.193998 NaN ratio, but orientation and recentring remain stable and ring count is exact.",
+  "rule": "When global geometry is stable but prompt evidence is incomplete, test a recall-oriented detector with tolerant pattern matching and broader SAM support rather than modifying stage 1.",
+  "failure_mode": "Missing or disconnected seam evidence can leave large regions dependent on synthetic prompts, limiting boundary-to-line correspondence despite full ring completeness.",
+  "rationale": "This recall-focused alternative uses permissive line thresholds, long gap bridging, and larger, steeper SAM support. The proposal deliberately leaves denoising unchanged so the test isolates evidence recovery and prompt propagation under the existing depth retention.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.00035
+    },
+    "detecting": {
+      "binary_threshold": 105,
+      "hough_threshold_oblique": 27,
+      "hough_threshold_horizontal": 28,
+      "hough_threshold_vertical": 1450,
+      "maxLineGap_oblique": 78,
+      "maxLineGap_horizontal": 28,
+      "pattern_tolerance": 19
+    },
+    "sam": {
+      "segment_width": 2050,
+      "K_height": 1450.0,
+      "angle": 11.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T06:10:27.426880",
+  "provenance": {
+    "agent_id": "7f2acae5-57e4-48e7-aa7a-99a919bf3a65"
+  }
+}

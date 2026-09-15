@@ -1,0 +1,42 @@
+{
+  "observation": "The GT-blind anchor has the correct 10-ring count and a valid axis invariant, but its 20.8 cm recentre residual is well above the 10 cm gate. The depth map has structured peripheral voids, detected oblique/horizontal joint evidence is fragmented, all ten prompts are fallback-propagated, correspondence_f1@15 is only 0.243977, and SAM fill is 0.570766 with high segment-size variation (CV 0.660679).",
+  "rule": "Apply the pipeline in causal order: when centreline residual is high, correct the unfolding fit before interpreting holes or tuning downstream geometry; keep T3 radial/theta gates at their family priors; when joint fragments do not form stable lines, relax the bounded Hough evidence thresholds and bridge gap while retaining exact-count uniform K snapping; only then use T3 template dimensions.",
+  "failure_mode": "Primary: stage-1 centre-curve underfit or contaminated-fit residual distorts the unroll and weakens boundary correspondence. Secondary: fragmented joint evidence causes missing-lines/pattern-mismatch behavior, leaving fallback prompts and uneven SAM coverage. The exact ring count argues against changing ring topology, and the near-19.5% NaN ratio should not be cosmetically hole-filled.",
+  "rationale": "Use a denser slice factor, cubic centre curve, tighter RANSAC acceptance, and a pinned seed to make the unlocked full rerun reproducible while addressing the residual. Preserve the T3 radius and theta intervals rather than widening them around an off-centre fit. Use the generic curvature prior, moderately permissive binarization/Hough settings, T3 vertical prior, a small pattern tolerance, and uniform snapping to retain ten regularly spaced prompts. Match SAM to the T3 width, K height, and taper so downstream masks are not compensating for upstream geometry.",
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 0.9,
+      "slice_spacing_factor": 1.08,
+      "polynomial_degree": 3,
+      "random_seed": 0
+    },
+    "denoising": {
+      "mask_r_low": 2.85,
+      "mask_r_high": 3.0,
+      "mask_theta_low": 1.55,
+      "mask_theta_high": 17.15
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 25,
+      "hough_threshold_horizontal": 30,
+      "hough_threshold_vertical": 1500,
+      "maxLineGap_oblique": 40,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 823.8,
+      "angle": 6.12
+    }
+  },
+  "full": true,
+  "validated_at": "2026-09-14T00:19:05.060592",
+  "provenance": {
+    "agent_id": "874c42b3-747e-4646-877c-dc7bd169f07f"
+  }
+}

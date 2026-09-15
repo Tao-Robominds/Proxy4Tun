@@ -1,0 +1,34 @@
+{
+  "observation": "The anchor preserves all 10 rings and has substantial fill, but correspondence_f1@15 is only 0.213123. The line view is sparse across horizontal and oblique boundaries, 40% of prompt points are fallbacks, and the correspondence overlay shows many unsupported label boundaries.",
+  "rule": "When ring count is already correct but boundary correspondence and real-detection ratio are low, first increase usable boundary evidence and permit moderate line bridging while keeping the segmentation geometry near the current regime.",
+  "failure_mode": "Weak or fragmented horizontal and oblique detections leave too many boundaries without nearby line support, so fallback prompts produce complete rings whose internal label boundaries do not follow observed structure.",
+  "rationale": "This proposal is detection-recall oriented: a low curvature threshold and binary threshold expose faint seams, lower Hough thresholds admit fragmented structural lines, and moderate gap/tolerance settings reconnect them without using extreme bounds. SAM settings remain central to avoid disrupting the already-correct ring count.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.5,
+      "mask_r_high": 4.0
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "binary_threshold": 108,
+      "hough_threshold_oblique": 28,
+      "hough_threshold_horizontal": 28,
+      "hough_threshold_vertical": 1600,
+      "maxLineGap_oblique": 68,
+      "maxLineGap_horizontal": 22,
+      "pattern_tolerance": 15
+    },
+    "sam": {
+      "segment_width": 1800,
+      "K_height": 1250.0,
+      "angle": 9.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T04:37:57.854849",
+  "provenance": {
+    "agent_id": "8ceea654-0c4a-456f-ba33-8c5455ffc49a"
+  }
+}

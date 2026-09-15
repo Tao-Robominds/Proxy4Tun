@@ -1,0 +1,84 @@
+{
+  "subset": "4-4",
+  "arm": "fable",
+  "anchor": {
+    "round": "anchor",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/4-4-family-proxy/runs/4-4-anchor",
+    "proxy_raw": 0.4531,
+    "proxy_scaled": 0.4531,
+    "band": "reject",
+    "mIoU": 0.347,
+    "recentre_residual_max_cm": 35.0,
+    "features": {
+      "correspondence_f1@15": 0.07121111608841457,
+      "sam_fill_rate": 0.7221990764584009,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.2589034743193495
+    }
+  },
+  "rounds": [
+    {
+      "round": "round1",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/refinement/fable/4-4/round1",
+      "proxy_raw": 0.5143,
+      "proxy_scaled": 0.5143,
+      "band": "refine",
+      "mIoU": 0.731,
+      "recentre_residual_max_cm": 22.9,
+      "features": {
+        "correspondence_f1@15": 0.17263140963987667,
+        "sam_fill_rate": 0.7287574414484773,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.2394438663129998
+      }
+    },
+    {
+      "round": "round2",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/refinement/fable/4-4/round2",
+      "proxy_raw": 0.4963,
+      "proxy_scaled": 0.4963,
+      "band": "reject",
+      "mIoU": 0.745,
+      "recentre_residual_max_cm": 22.9,
+      "features": {
+        "correspondence_f1@15": 0.13537579481245035,
+        "sam_fill_rate": 0.7342914142198349,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.2354538574902171
+      }
+    },
+    {
+      "round": "round3",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/refinement/fable/4-4/round3",
+      "proxy_raw": 0.5156,
+      "proxy_scaled": 0.5156,
+      "band": "refine",
+      "mIoU": 0.368,
+      "recentre_residual_max_cm": 2.3,
+      "features": {
+        "correspondence_f1@15": 0.16379085944610386,
+        "sam_fill_rate": 0.7286165170562073,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.20961938589924425
+      }
+    }
+  ],
+  "selected": {
+    "round": "round3",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/refinement/fable/4-4/round3",
+    "proxy_raw": 0.5156,
+    "proxy_scaled": 0.5156,
+    "band": "refine",
+    "mIoU": 0.368,
+    "recentre_residual_max_cm": 2.3,
+    "features": {
+      "correspondence_f1@15": 0.16379085944610386,
+      "sam_fill_rate": 0.7286165170562073,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.20961938589924425
+    }
+  },
+  "selection_reason": "best proxy 0.5156; 2 within 0.01 margin; residual tiebreak -> round3",
+  "delta_proxy_scaled": 0.0625,
+  "delta_mIoU_offline": 0.021
+}

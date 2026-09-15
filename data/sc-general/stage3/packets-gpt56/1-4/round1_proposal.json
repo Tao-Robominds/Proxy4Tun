@@ -1,0 +1,29 @@
+{
+  "observation": "The anchor preserves the expected 10 rings with valid orientation and low recentring residual, but correspondence_f1@15 is only 0.39509, 30% of detections are fallbacks, and SAM segment-size CV is 1.54576. The correspondence overlay shows many unsupported label boundaries while the detected-line view contains strong repeated vertical structure but comparatively sparse and uneven horizontal/oblique joint support.",
+  "rule": "When ring count and orientation are already correct but boundary correspondence is weak, preserve the ring geometry and coordinate enhancement, line detection, and the SAM processing extent to increase real joint evidence without unlocking unfolding.",
+  "failure_mode": "Weak and spatially uneven joint-line evidence is causing prompt fallback and oversized or irregular SAM regions, so segmentation boundaries often do not coincide with detected joints.",
+  "rationale": "A lower curvature threshold and larger interaction radius retain and connect faint joint responses. Moderately lower horizontal and oblique Hough thresholds improve real-line recovery, while a smaller oblique line gap avoids bridging unrelated fragments; a slightly lower binary threshold supports the faint responses. Raising the SAM lower y bound to 4000 excludes more of the noisy upper fringe while retaining the lining body. All values stay within the packet bounds and unfolding is omitted because stage1_unlocked is false.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.002,
+      "inter_radius": 0.06
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 50,
+      "hough_threshold_horizontal": 50,
+      "maxLineGap_oblique": 35
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4000,
+        13300
+      ]
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T01:30:10.425396",
+  "provenance": {
+    "agent_id": "11340a86-1ed7-4ede-9dfd-963e28ff40ea"
+  }
+}

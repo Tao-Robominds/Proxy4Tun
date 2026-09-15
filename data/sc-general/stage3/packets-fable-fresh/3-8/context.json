@@ -1,0 +1,371 @@
+{
+  "subset": "3-8",
+  "arm": "fable_fresh",
+  "proposer": "Fable-5.1 (fresh per-case agent)",
+  "family": "t3",
+  "lining_mode": "continuous",
+  "stage1_unlocked": true,
+  "residual_gate_cm": 10.0,
+  "bands": {
+    "reject": "<0.5",
+    "refine": "[0.5, 0.7)",
+    "accept": ">=0.7"
+  },
+  "anchor": {
+    "proxy_raw": 0.561281,
+    "proxy_scaled": 0.561281,
+    "band": "refine",
+    "features": {
+      "correspondence_f1@15": 0.302212,
+      "sam_fill_rate": 0.59695,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.182088
+    },
+    "recentre_residual_max_cm": 24.0,
+    "orient_axis_corr": 0.9995216099864935,
+    "ring_count": 10,
+    "ring_count_error": 0.0,
+    "labelmap_source": "results.pkl",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-8-family-proxy/runs/3-8-anchor"
+  },
+  "intrinsics_gt_blind": {
+    "orient_axis_corr": 0.9995216099864935,
+    "orient_invariant_ok": 1.0,
+    "recentre_residual_max_cm": 24.0,
+    "denoise_retained_ratio": 0.7258077773485341,
+    "depth_nan_ratio": 0.18208811279684348,
+    "depth_outlier_ratio": 0.0008981363284279751,
+    "det_real_detection_ratio": 0.0,
+    "det_fallback_ratio": 1.0,
+    "det_n_points": 10.0,
+    "sam_fill_rate": 0.596949720945907,
+    "sam_ring_completeness": 0.8888888888888888,
+    "sam_segment_size_cv": 0.6767146840216215,
+    "sam_ontology_divergence": 0.19893838940867875
+  },
+  "history": [
+    {
+      "round": 1,
+      "status": "ok",
+      "overlay": {
+        "unfolding": {
+          "polynomial_degree": 3,
+          "random_seed": 0,
+          "ransac_threshold": 0.9
+        },
+        "denoising": {
+          "mask_r_low": 2.85,
+          "mask_r_high": 3.05,
+          "mask_theta_low": 1.55,
+          "mask_theta_high": 17.15
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0005
+        },
+        "detecting": {
+          "binary_threshold": 118,
+          "hough_threshold_oblique": 24,
+          "hough_threshold_horizontal": 22,
+          "hough_threshold_vertical": 1500,
+          "maxLineGap_oblique": 42,
+          "pattern_tolerance": 10,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1200,
+          "K_height": 823.8,
+          "angle": 6.12
+        }
+      },
+      "proxy_scaled": 0.37410147712792724,
+      "band": "reject",
+      "features": {
+        "correspondence_f1@15": 0.06793489572493028,
+        "sam_fill_rate": 0.46382571243044196,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.29341296529647
+      },
+      "recentre_residual_max_cm": 39.4,
+      "full_pipeline": true,
+      "rationale": "Round 1 spends the budget on stages 1-4 per the empirical tuning order. Unfolding: raise the centre-curve polynomial degree to 3 with a pinned seed (0) and a slightly tighter RANSAC threshold so the fitted curve can follow the end-of-span bend that leaves a 24 cm residual; stage1 is unlocked so the pilot will run --full. Denoising: keep the t3 prior inner radius (2.85) but open the outer gate a little (3.0 -> 3.05) so bolt-pocket/joint-row points and any remaining mildly off-centre end points are retained instead of punched out as NaN; theta gates stay at the t3 prior. Enhancing: keep curvature at the notebook default. Detecting: lower the binary threshold (127 -> 118) and the oblique/horizontal Hough thresholds (30 -> 24 / 22), raise oblique maxLineGap (30 -> 42) so the fragmented joint rows at ~800/~2300 and the left half of the K row yield continuous lines that the SAM boundaries can be matched against; pattern_tolerance 10 px and uniform_k_snap kept on because continuous lining needs the snapped K row. SAM geometry is left at the t3 priors (1200 mm, 823.8 mm, 6.12 deg) because per section 6 SAM knobs are only worth tuning once coverage and detection are healthy. Expected: lower depth_nan_ratio and higher sam_fill_rate from the recentred left end, higher correspondence_f1@15 from denser joint lines; residual itself should drop toward the 10 cm gate.",
+      "proposer": "Fable-5.1 (fresh per-case agent)"
+    },
+    {
+      "round": 2,
+      "status": "ok",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 2.78,
+          "mask_r_high": 3.1,
+          "mask_theta_low": 1.55,
+          "mask_theta_high": 17.15
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0005
+        },
+        "detecting": {
+          "binary_threshold": 112,
+          "hough_threshold_oblique": 22,
+          "hough_threshold_horizontal": 20,
+          "hough_threshold_vertical": 1500,
+          "maxLineGap_oblique": 40,
+          "pattern_tolerance": 10,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1200,
+          "K_height": 823.8,
+          "angle": 6.12
+        }
+      },
+      "proxy_scaled": 0.5166872969912764,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.2175955496554776,
+        "sam_fill_rate": 0.59319749139001,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.169279745918914
+      },
+      "recentre_residual_max_cm": 24.0,
+      "full_pipeline": false,
+      "rationale": "Round 2 is a recovery round: omit unfolding entirely (full=false) so the pilot replays stages 2-6 on the frozen anchor stage-1, discarding the degree-3 centreline that caused the round-1 collapse; with the anchor map straight and ring_count_error 0, the remaining losses are at ring 0 and in line yield. Denoising: widen the radial gate moderately from the t3 prior [2.85, 3.0] to [2.78, 3.10] (band 15 -> 32 cm, still inside bounds and well short of the limits) so ring-0 lining points displaced by the 24 cm end residual are retained instead of punched out as NaN; the t3 theta gate stays at the prior [1.55, 17.15] so the rail/floor region is still removed, and the density/gradient filter guards against under-gate leakage. This is a deliberate, bounded departure from 'keep band at priors' because the prescribed remedy (better centreline) was tried in round 1 and made things worse. Enhancing: curvature_threshold kept at the default 0.0005. Detecting: lower binary_threshold 127 -> 112 so the dotted joint rows survive binarisation and dilate into continuous strokes; lower hough_threshold_oblique 30 -> 22 and hough_threshold_horizontal 30 -> 20; raise maxLineGap_oblique 30 -> 40, which bridges the 10-30 px gaps between joint dots but stays below the ~50 px gaps between bolt pockets in a row so pocket rows do not become spurious lines; hough_threshold_vertical 1500 kept (it gave exactly 10 verticals for 10 rings on the anchor), pattern_tolerance 10 and uniform_k_snap true kept for the continuous K-row snap. SAM: t3 priors (1200 mm, 823.8 mm, 6.12 deg) untouched. Expected on the frozen stage-1: depth_nan_ratio below the anchor's 0.18 (ring-0 void shrinks), sam_fill_rate above 0.60 as ring-0 masks get valid pixels, correspondence_f1@15 above 0.30 from more accepted lines along the joint rows, ring_count_error stays 0, residual stays 24 cm (not penalised by the lean proxy). Target: back above the anchor 0.561 and into the upper refine band; round 3 can then either tighten detection if spurious pocket lines appear or revisit stage 1 with degree 2 / looser RANSAC.",
+      "proposer": "Fable-5.1 (fresh per-case agent)"
+    },
+    {
+      "round": 3,
+      "status": "ok",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 2.85,
+          "mask_r_high": 3.0,
+          "mask_theta_low": 1.55,
+          "mask_theta_high": 17.15
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0005
+        },
+        "detecting": {
+          "binary_threshold": 127,
+          "hough_threshold_oblique": 40,
+          "hough_threshold_horizontal": 40,
+          "hough_threshold_vertical": 1500,
+          "maxLineGap_oblique": 45,
+          "pattern_tolerance": 10,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1200,
+          "K_height": 823.8,
+          "angle": 6.12
+        }
+      },
+      "proxy_scaled": 0.5483360269939598,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.27852100999793966,
+        "sam_fill_rate": 0.5969456111654515,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.18208811279684348
+      },
+      "recentre_residual_max_cm": 24.0,
+      "full_pipeline": false,
+      "rationale": "Round 3 is a precision round on the frozen anchor stage-1 (full=false). Denoising: revert to the t3 priors [2.85, 3.0] and theta [1.55, 17.15], the band the anchor scored 0.561 with; the round-2 widening gained ~1 pt of NaN and nothing in fill, and it fed spurious outlier points, so it fails the r_tighten_hough precondition. Enhancing: curvature_threshold at the default 0.0005. Detecting: binary_threshold back to the default 127 so faint pocket edges do not survive binarisation; hough_threshold_oblique raised to 40 (anchor 30, round 2 22) so a line needs >= 40 collinear votes, which a ~40 px bolt-pocket edge cannot supply but the ~1000 px K-row seam can; maxLineGap_oblique raised to 45 (anchor 30) so the dotted K seam, including its sparser left half (x < 1000) that produced no lines on the anchor, is bridged into long continuous lines that carry more votes and cover more of the K label boundaries within 15 px; 45 stays well below the ~85 px clear gap between adjacent bolt pockets in a row, so pocket rows cannot chain into a line. hough_threshold_horizontal raised to 40 to drop the short unexplained horizontals (the true joint rows at ~770/~2300 are dotted with gaps above the fixed 10 px horizontal maxLineGap, so they only ever produce short fragments that fall outside the 15 px tolerance and cost precision). hough_threshold_vertical kept at 1500 (10 verticals for 10 rings), pattern_tolerance 10 and uniform_k_snap true kept for the continuous K-row snap, which also guarantees prompts even if line yield drops. SAM: t3 priors (1200 mm, 823.8 mm, 6.12 deg) untouched. Expected vs anchor: depth_nan_ratio ~0.18 and sam_fill_rate ~0.60 unchanged (same band, same stage-1), ring_count_error 0, correspondence_f1@15 above the anchor 0.30 from higher precision (fewer unexplained fragments) and higher K-row recall (longer lines), pushing proxy above 0.561 into the upper refine band. If the tightened threshold instead removes the K-row lines entirely, the snap regime keeps the prompts and the run degrades toward, not below, the anchor's line set, so downside is bounded and the anchor remains selectable.",
+      "proposer": "Fable-5.1 (fresh per-case agent)"
+    }
+  ],
+  "images": {
+    "depth_map_viridis.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-8-family-proxy/runs/3-8-anchor/depth_map_viridis.png",
+    "detected_lines.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-8-family-proxy/runs/3-8-anchor/detected_lines.png",
+    "initial_prompt_points.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-8-family-proxy/runs/3-8-anchor/initial_prompt_points.png",
+    "segmentation_results.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-8-family-proxy/runs/3-8-anchor/segmentation_results.png"
+  },
+  "ontology": {
+    "experiences": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/experiences.md",
+    "sam4tun_ontology": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/sam4tun_ontology.yaml",
+    "tunnel_priors": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/tunnel_priors.yaml"
+  },
+  "parameter_bounds": [
+    {
+      "name": "unfolding.ransac_threshold",
+      "stage": "unfolding",
+      "key": "ransac_threshold",
+      "kind": "float",
+      "low": 0.8,
+      "high": 1.2,
+      "special": null
+    },
+    {
+      "name": "unfolding.slice_spacing_factor",
+      "stage": "unfolding",
+      "key": "slice_spacing_factor",
+      "kind": "float",
+      "low": 1.05,
+      "high": 1.35,
+      "special": null
+    },
+    {
+      "name": "unfolding.polynomial_degree",
+      "stage": "unfolding",
+      "key": "polynomial_degree",
+      "kind": "int",
+      "low": 2,
+      "high": 3,
+      "special": null
+    },
+    {
+      "name": "unfolding.random_seed",
+      "stage": "unfolding",
+      "key": "random_seed",
+      "kind": "int",
+      "low": 0,
+      "high": 7,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_low",
+      "stage": "denoising",
+      "key": "mask_r_low",
+      "kind": "float",
+      "low": 2.7,
+      "high": 3.0,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_high",
+      "stage": "denoising",
+      "key": "mask_r_high",
+      "kind": "float",
+      "low": 2.9,
+      "high": 3.15,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_theta_low",
+      "stage": "denoising",
+      "key": "mask_theta_low",
+      "kind": "float",
+      "low": 1.0,
+      "high": 2.5,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_theta_high",
+      "stage": "denoising",
+      "key": "mask_theta_high",
+      "kind": "float",
+      "low": 15.0,
+      "high": 19.0,
+      "special": null
+    },
+    {
+      "name": "enhancing.curvature_threshold",
+      "stage": "enhancing",
+      "key": "curvature_threshold",
+      "kind": "float",
+      "low": 0.0002,
+      "high": 0.002,
+      "special": null
+    },
+    {
+      "name": "detecting.binary_threshold",
+      "stage": "detecting",
+      "key": "binary_threshold",
+      "kind": "int",
+      "low": 100,
+      "high": 160,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_oblique",
+      "stage": "detecting",
+      "key": "hough_threshold_oblique",
+      "kind": "int",
+      "low": 20,
+      "high": 60,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_horizontal",
+      "stage": "detecting",
+      "key": "hough_threshold_horizontal",
+      "kind": "int",
+      "low": 20,
+      "high": 60,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_vertical",
+      "stage": "detecting",
+      "key": "hough_threshold_vertical",
+      "kind": "int",
+      "low": 800,
+      "high": 2500,
+      "special": null
+    },
+    {
+      "name": "detecting.maxLineGap_oblique",
+      "stage": "detecting",
+      "key": "maxLineGap_oblique",
+      "kind": "int",
+      "low": 10,
+      "high": 60,
+      "special": null
+    },
+    {
+      "name": "detecting.pattern_tolerance",
+      "stage": "detecting",
+      "key": "pattern_tolerance",
+      "kind": "int",
+      "low": 5,
+      "high": 20,
+      "special": null
+    },
+    {
+      "name": "detecting.uniform_k_snap",
+      "stage": "detecting",
+      "key": "uniform_k_snap",
+      "kind": "bool",
+      "low": 0.0,
+      "high": 1.0,
+      "special": null
+    },
+    {
+      "name": "sam.segment_width",
+      "stage": "sam",
+      "key": "segment_width",
+      "kind": "int",
+      "low": 1000,
+      "high": 1400,
+      "special": null
+    },
+    {
+      "name": "sam.K_height",
+      "stage": "sam",
+      "key": "K_height",
+      "kind": "float",
+      "low": 700.0,
+      "high": 1000.0,
+      "special": null
+    },
+    {
+      "name": "sam.angle",
+      "stage": "sam",
+      "key": "angle",
+      "kind": "float",
+      "low": 4.0,
+      "high": 9.0,
+      "special": null
+    }
+  ],
+  "instructions": [
+    "Propose ONE coordinated multi-stage overlay within parameter_bounds.",
+    "Use observation -> ontology rule -> failure_mode -> overlay.",
+    "Do NOT read evaluation/, offline_gt.json, performance.md, perf_*, mIoU, or any ground-truth labels / GT-bearing CSVs.",
+    "Do NOT read existing Fable/deterministic selections, campaign logs, or other arms' refinement trees.",
+    "Use the SC-general proxy (proxy_scaled / band / lean features) as the between-round signal.",
+    "If stage1_unlocked is false, do not touch unfolding keys.",
+    "If stage1_unlocked is true and residual remains high, you may include unfolding (e.g. random_seed) and the pilot will auto --full.",
+    "Return JSON with keys: observation, failure_mode, rationale, overlay."
+  ],
+  "created_at": "2026-09-15T21:24:15.592742"
+}

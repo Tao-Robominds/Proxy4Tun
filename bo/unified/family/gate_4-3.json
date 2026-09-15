@@ -1,0 +1,21 @@
+{
+  "case": "4-3",
+  "gate_kind": "holdout",
+  "config_kind": "anchor",
+  "command": "./venv/bin/python bo-unified/run_holdout.py --gate-subset 4-3 # full pipeline, params from anchors/unified/params/4-1",
+  "lineage": "sibling unified params anchors/unified/params/4-1 \u2192 data/bo-unified/4-3-family-proxy/runs/4-3-anchor; stages 1\u20136 via anchors/unified",
+  "pass_fail_criteria": {
+    "pipeline_ok": true,
+    "miou_finite_and_ge_0.3": true,
+    "intrinsics_tier1_no_nan": true
+  },
+  "measured_mIoU": 0.516,
+  "orient_h_ring_corr": 0.983067663201833,
+  "orient_invariant_ok": 1.0,
+  "tier1_complete": true,
+  "passed": true,
+  "evidence_path": "/home/boringtao/Projects/Proxy4Tun/bo-unified/family/gate_4-3.json",
+  "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo-unified/4-3-family-proxy/runs/4-3-anchor",
+  "log_path": "/home/boringtao/Projects/Proxy4Tun/data/bo-unified/4-3-family-proxy/logs/4-3-anchor.log",
+  "study_root": "/home/boringtao/Projects/Proxy4Tun/data/bo-unified/4-3-family-proxy"
+}

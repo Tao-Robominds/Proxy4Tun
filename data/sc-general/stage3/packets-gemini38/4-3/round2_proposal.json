@@ -1,0 +1,27 @@
+{
+  "observation": "On frozen stage-1, det_fallback_ratio=0.4 with only 0.6 real detections while detected_lines shows many short oblique red/green joints and SC overlay leaves orange joints unexplained. Vertical count matches ring_count=10, so the miss is oblique/pattern yield for complex staggered seams rather than vertical band error. sam_fill_rate\u22480.72 with high size CV suggests crops are not locking onto slanted block edges.",
+  "rule": "ontology d7/r_relax_hough (f_missing_lines) and r_fix_height_priors: when oblique yield is weak and horizontal/fallback is active, lower oblique Hough thresholds / raise maxLineGap toward T4 prior, then retune SAM taper geometry; prefer full=false once residual is deferred.",
+  "failure_mode": "f_missing_lines + f_pattern_mismatch",
+  "rationale": "R2 is detection-led on a frozen unroll: relax oblique Hough and widen maxLineGap to recover slanted joints, keep vertical threshold high for stable synthetic ring centres, and use a slightly wider/taller SAM crop with stronger taper (angle 10.5) so trapezoidal panels cover the orange unexplained seams without touching unfolding.",
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 35,
+      "hough_threshold_horizontal": 40,
+      "hough_threshold_vertical": 5000,
+      "maxLineGap_oblique": 55,
+      "maxLineGap_horizontal": 12,
+      "pattern_tolerance": 12
+    },
+    "sam": {
+      "segment_width": 1900,
+      "K_height": 1300.0,
+      "angle": 10.5
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T09:54:57.514160",
+  "provenance": {
+    "agent_id": "d599ab09-e204-4631-ac42-708b308769ec"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "observation": "Same anchor diagnostics: correspondence_f1@15 collapses while det_real_detection_ratio=0.6 / det_fallback_ratio=0.4 and ring_count matches. Overlay right panel has substantial orange (joint present, no matching boundary) plus magenta assumed prompts near the bright horizontal occlusions\u2014suggests under-detected or gappy horizontal/oblique seams before SAM geometry is the bottleneck. Left-panel red unsupported edges concentrate near those white bands.",
+  "rule": "ontology d7/d6 \u2192 f_missing_lines / f_joint_oversmoothed with upstream check; remediation r_relax_hough and slightly lower curvature_threshold for joint contrast; experiences \u00a75: complex family often synthetic-vertical but oblique/horizontal still govern K-row pattern. Keep SAM near T4 priors so this round isolates detection yield.",
+  "failure_mode": "f_missing_lines",
+  "rationale": "Round-2 hypothesis (orthogonal to R1): unexplained orange joints and assumed prompts are a detection-yield problem. Soften binary + lower oblique/horizontal Hough thresholds, widen maxLineGap to bridge occlusion gaps, loosen pattern_tolerance, and leave segment_width/K_height/angle near notebook priors so any proxy lift is attributable to better joint support\u2014not an empty-crop K_height swing.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.00035
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 35,
+      "maxLineGap_oblique": 72,
+      "maxLineGap_horizontal": 18,
+      "pattern_tolerance": 16
+    },
+    "sam": {
+      "segment_width": 1800,
+      "K_height": 1230.0,
+      "angle": 9.8
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T10:08:46.948858",
+  "provenance": {
+    "agent_id": "bef98451-28ce-481b-aad2-4b1348adb67b"
+  }
+}

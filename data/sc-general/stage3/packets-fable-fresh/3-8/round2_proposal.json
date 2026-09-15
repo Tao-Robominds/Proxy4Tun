@@ -1,0 +1,36 @@
+{
+  "observation": "Round 1 was a hard regression, not a refinement: proxy 0.561 (refine) -> 0.374 (reject), recentre_residual_max 24.0 -> 39.4 cm, depth_nan_ratio 0.18 -> 0.29, sam_fill_rate 0.60 -> 0.46, correspondence_f1@15 0.30 -> 0.07; ring_count_error stayed 0. The round-1 artifacts show why: the unrolled depth map is now visibly warped (right edge bows outward, the K row and the ~750/~2300 px joint rows run as sinusoids instead of straight rows, the left end is smeared into a large void with a yellow high-r patch top-left and a dark low-r pocket mid-left), the 10 synthetic verticals cut through the bowed rings, and the only accepted oblique lines are a few K-row fragments at x 970-1950 plus two very short horizontal segments at ~760/~2330. In contrast the anchor map (SC overlay, right panel) is nearly rectangular, its vertical joints are straight and evenly spaced (~265 px), and its K row is straight; the anchor's weaknesses are (a) a full-height void plus high/low-r sliver confined to the leftmost ring (24 cm end-of-span residual pushing ring-0 points out of the 15 cm t3 r-band), (b) sparse, dotted joint rows in the outlier map so almost every label boundary is red/unsupported except along the right half of the K row, and (c) uncovered strips at the map ends. det_fallback_ratio 1.0 / det_real_detection_ratio 0.0 are the expected snap regime on continuous lining, not a detection failure per se.",
+  "rule": "experiences.md section 3 / ontology f_curve_overfit: a degree-3 centre curve with a tighter RANSAC threshold on a short 10-ring span produced a wavy centreline (residual up, not down) \u2014 revert to the frozen anchor stage-1 and do not re-roll stage 1 mid-comparison (section 10 anti-pattern). Section 7 tuning order then points at band selection and detection: ontology d3/r_radial_gate_widen for the ring-0 coverage loss that recentring did not remove (residual 24 cm is fixed on the frozen stage-1 and the t3 band is only 15 cm wide), and d6/d7 -> r_relax_hough for f_missing_lines (dotted joint rows yield too few oblique/horizontal lines, so SAM boundaries are unsupported and correspondence_f1 is low). Section 6: SAM geometry left at t3 priors because coverage/detection are not yet healthy.",
+  "failure_mode": "round 1: stage_1_centreline.f_curve_overfit (polynomial_degree 3 + ransac 0.9 -> warped unroll, residual 39 cm, f_depth_holes, f_missing_lines, f_over_under_coverage downstream). anchor (frozen stage-1 for this round): stage_2_denoise.f_over_gate at ring 0 (narrow r-band vs uncorrected 24 cm end residual) -> stage_3 f_depth_holes; stage_4_detection.f_missing_lines (sparse outlier map along the ~750/~2300 joint rows and left half of the K row) -> unsupported SAM label boundaries, low correspondence_f1@15.",
+  "rationale": "Round 2 is a recovery round: omit unfolding entirely (full=false) so the pilot replays stages 2-6 on the frozen anchor stage-1, discarding the degree-3 centreline that caused the round-1 collapse; with the anchor map straight and ring_count_error 0, the remaining losses are at ring 0 and in line yield. Denoising: widen the radial gate moderately from the t3 prior [2.85, 3.0] to [2.78, 3.10] (band 15 -> 32 cm, still inside bounds and well short of the limits) so ring-0 lining points displaced by the 24 cm end residual are retained instead of punched out as NaN; the t3 theta gate stays at the prior [1.55, 17.15] so the rail/floor region is still removed, and the density/gradient filter guards against under-gate leakage. This is a deliberate, bounded departure from 'keep band at priors' because the prescribed remedy (better centreline) was tried in round 1 and made things worse. Enhancing: curvature_threshold kept at the default 0.0005. Detecting: lower binary_threshold 127 -> 112 so the dotted joint rows survive binarisation and dilate into continuous strokes; lower hough_threshold_oblique 30 -> 22 and hough_threshold_horizontal 30 -> 20; raise maxLineGap_oblique 30 -> 40, which bridges the 10-30 px gaps between joint dots but stays below the ~50 px gaps between bolt pockets in a row so pocket rows do not become spurious lines; hough_threshold_vertical 1500 kept (it gave exactly 10 verticals for 10 rings on the anchor), pattern_tolerance 10 and uniform_k_snap true kept for the continuous K-row snap. SAM: t3 priors (1200 mm, 823.8 mm, 6.12 deg) untouched. Expected on the frozen stage-1: depth_nan_ratio below the anchor's 0.18 (ring-0 void shrinks), sam_fill_rate above 0.60 as ring-0 masks get valid pixels, correspondence_f1@15 above 0.30 from more accepted lines along the joint rows, ring_count_error stays 0, residual stays 24 cm (not penalised by the lean proxy). Target: back above the anchor 0.561 and into the upper refine band; round 3 can then either tighten detection if spurious pocket lines appear or revisit stage 1 with degree 2 / looser RANSAC.",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.78,
+      "mask_r_high": 3.1,
+      "mask_theta_low": 1.55,
+      "mask_theta_high": 17.15
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0005
+    },
+    "detecting": {
+      "binary_threshold": 112,
+      "hough_threshold_oblique": 22,
+      "hough_threshold_horizontal": 20,
+      "hough_threshold_vertical": 1500,
+      "maxLineGap_oblique": 40,
+      "pattern_tolerance": 10,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1200,
+      "K_height": 823.8,
+      "angle": 6.12
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T20:49:30.464816",
+  "provenance": {
+    "agent_id": "3-8-fable-fresh"
+  }
+}

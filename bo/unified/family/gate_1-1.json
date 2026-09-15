@@ -1,0 +1,23 @@
+{
+  "case": "1-1",
+  "gate_kind": "train_parity",
+  "command": "./venv/bin/python bo-unified/run_bo.py --case 1-1 --gate # copy data/unified/1-1 stage-1; stages 2\u20136 via anchors/unified",
+  "lineage": "bo-unified gate: stage-1 from data/unified/1-1 + anchors/unified/params/1-1 stages 2\u20136 \u2192 data/bo-unified/1-1-bo-proxy/runs/1-1-gate",
+  "target_mIoU": 0.8,
+  "target_source": "unified_ref_miou",
+  "measured_mIoU": 0.8,
+  "delta_mIoU": 0.0,
+  "pass_fail_criteria": {
+    "pipeline_ok": true,
+    "miou_within_0.02_of_target": true,
+    "canonical_invariant_passed": true,
+    "intrinsics_tier1_no_nan": true
+  },
+  "orient_h_ring_corr": 0.986058088023958,
+  "orient_invariant_ok": true,
+  "tier1_complete": true,
+  "passed": true,
+  "evidence_path": "/home/boringtao/Projects/Proxy4Tun/data/bo-unified/1-1-bo-proxy/validation_gate.json",
+  "output_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo-unified/1-1-bo-proxy/runs/1-1-gate",
+  "log_path": "/home/boringtao/Projects/Proxy4Tun/data/bo-unified/1-1-bo-proxy/logs/1-1-gate.log"
+}

@@ -1,0 +1,26 @@
+{
+  "observation": "Round 2 (tighten oblique Hough to 60/30, restore binarisation 127, curvature_threshold 0.0003) recovered and slightly beat the anchor: proxy 0.646 -> 0.650, correspondence_f1@15 0.395 -> 0.406, ring_count_error 0, fill rate flat at 0.698, NaN 0.150 -> 0.159 (small cost from less surface densification). initial_prompt_points.png now has 3 negative-slope prompts on the y~1185 row, 1 positive-slope on y~1615, 2 'assume' and 2 midpoints all on the two K-row loci, but ONE real prompt is still off-lattice at (x~1830, y~2045): it comes from the long green segment at y~2150-2180 px (x 1700-1950) that runs along the cable-bracket/bolt row of ring 8, not along a joint. That prompt was already present in the anchor and survives a threshold of 60, and in segmentation_results.png it produces a tilted, misplaced K sliver for that ring column, which is a direct source of unsupported (red) label boundaries in the overlay. The remaining margin red segment at x<110 px (y~1080) is harmless (outside ring 0). Stages 1-3 remain healthy (residual 1.9 cm, corr -0.995, retention 0.72).",
+  "rule": "d9 -> f_spurious_lines with likely_upstream stage_2_denoise.f_under_gate (a protruding bracket/bolt row survives the density gate and shows up as a straight oblique-angle trace in the outlier map). Remediation is two-pronged per the inter_stage_dependencies chain f_under_gate -> f_spurious_lines -> f_crop_offset: r_tighten_hough (raise oblique threshold, shorten maxLineGap, raise binarisation so only dense joint pixels vote) and a gentle density-gate tightening (grad_threshold up) without touching the radial band, which is a transfer prior. Detection fallback ('assume') is lattice-consistent on this scan, so losing a marginal real line is acceptable while removing an off-lattice one is a net gain (experiences sec.5: consistency with the ring pattern beats line count).",
+  "failure_mode": "stage_4_detection.f_spurious_lines (bracket-row oblique on ring 8, upstream f_under_gate) -> stage_5_segmentation.f_crop_offset on that ring",
+  "rationale": "Round 2 shows the conservative direction is the right one, so round 3 keeps its enhancing settings (inter_radius 0.06, curvature_threshold 0.0003) and pushes the detector further toward high-confidence traces: hough_threshold_oblique 75, maxLineGap_oblique 20 and binary_threshold 135 should reject the fragmented bracket-row trace while the strongest true joints (e.g. the 750-1000 px green joint and the 1470-1650 px red joint) remain, and any ring that loses its real line falls back to the K-row lattice rather than to an off-row point. denoising.grad_threshold is raised 0.2 -> 0.25 so the density/gradient test removes more protruding non-lining structure before projection, attacking the same false trace upstream; radial band, z_step and the vertical accumulator are left alone (retention healthy, 10/10 rings). Expected GT-free effect: no prompt outside the y~1185 / y~1615 rows, correspondence_f1@15 > 0.406, sam_fill_rate >= 0.70, ring_count_error 0, NaN staying in the 0.15-0.17 band, retention >= 0.68. Regression signature to watch: retention falling well below 0.7 or NaN rising above 0.2 would mean the gate is now over-tight and round 2 should be preferred.",
+  "overlay": {
+    "denoising": {
+      "grad_threshold": 0.25
+    },
+    "enhancing": {
+      "inter_radius": 0.06,
+      "curvature_threshold": 0.0003
+    },
+    "detecting": {
+      "binary_threshold": 135,
+      "hough_threshold_oblique": 75,
+      "maxLineGap_oblique": 20,
+      "hough_threshold_horizontal": 50
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-15T19:42:11.000512",
+  "provenance": {
+    "agent_id": "0e3bff9b-1e8b-416e-891c-e7c0f9a108b1"
+  }
+}

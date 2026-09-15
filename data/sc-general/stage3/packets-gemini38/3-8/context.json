@@ -1,0 +1,349 @@
+{
+  "subset": "3-8",
+  "arm": "gemini38",
+  "proposer": "Gemini-3.8 (fresh per-case agent)",
+  "family": "t3",
+  "lining_mode": "continuous",
+  "stage1_unlocked": true,
+  "residual_gate_cm": 10.0,
+  "bands": {
+    "reject": "<0.5",
+    "refine": "[0.5, 0.7)",
+    "accept": ">=0.7"
+  },
+  "anchor": {
+    "proxy_raw": 0.561281,
+    "proxy_scaled": 0.561281,
+    "band": "refine",
+    "features": {
+      "correspondence_f1@15": 0.302212,
+      "sam_fill_rate": 0.59695,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.182088
+    },
+    "recentre_residual_max_cm": 24.0,
+    "orient_axis_corr": 0.9995216099864935,
+    "ring_count": 10,
+    "ring_count_error": 0.0,
+    "labelmap_source": "results.pkl",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-8-family-proxy/runs/3-8-anchor"
+  },
+  "intrinsics_gt_blind": {
+    "orient_axis_corr": 0.9995216099864935,
+    "orient_invariant_ok": 1.0,
+    "recentre_residual_max_cm": 24.0,
+    "denoise_retained_ratio": 0.7258077773485341,
+    "depth_nan_ratio": 0.18208811279684348,
+    "depth_outlier_ratio": 0.0008981363284279751,
+    "det_real_detection_ratio": 0.0,
+    "det_fallback_ratio": 1.0,
+    "det_n_points": 10.0,
+    "sam_fill_rate": 0.596949720945907,
+    "sam_ring_completeness": 0.8888888888888888,
+    "sam_segment_size_cv": 0.6767146840216215,
+    "sam_ontology_divergence": 0.19893838940867875
+  },
+  "history": [
+    {
+      "round": 1,
+      "status": "ok",
+      "overlay": {
+        "unfolding": {
+          "random_seed": 2,
+          "ransac_threshold": 0.95,
+          "slice_spacing_factor": 1.12,
+          "polynomial_degree": 2
+        }
+      },
+      "proxy_scaled": 0.5614595937038465,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.44941629503771824,
+        "sam_fill_rate": 0.5913028826000115,
+        "ring_count_error": 1.0,
+        "depth_nan_ratio": 0.11714402542609148
+      },
+      "recentre_residual_max_cm": 2.2,
+      "full_pipeline": true,
+      "rationale": "R1 is a modest stage-1 probe only: alternate random_seed with slightly tighter ransac_threshold and mild slice densification (polynomial_degree stays 2). No denoise widen (residual mimics over-gating). Downstream knobs deferred until residual is addressed; full=true required because unfolding is touched.",
+      "proposer": "Gemini-3.8 (fresh per-case agent)"
+    },
+    {
+      "round": 2,
+      "status": "ok",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 2.82,
+          "mask_r_high": 3.05,
+          "mask_theta_low": 1.4,
+          "mask_theta_high": 17.3
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0007
+        },
+        "detecting": {
+          "binary_threshold": 118,
+          "hough_threshold_oblique": 28,
+          "hough_threshold_horizontal": 28,
+          "hough_threshold_vertical": 1600,
+          "maxLineGap_oblique": 42,
+          "pattern_tolerance": 12,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1220,
+          "K_height": 880.0,
+          "angle": 6.2
+        }
+      },
+      "proxy_scaled": 0.5406201688144624,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.2642345086064329,
+        "sam_fill_rate": 0.594755098182655,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.17878995760582916
+      },
+      "recentre_residual_max_cm": 24.0,
+      "full_pipeline": false,
+      "rationale": "No unfolding (full=false). Align denoise r/theta near T3 priors; lower binary and oblique/horizontal Hough with slightly larger maxLineGap to explain more central joint pixels; keep uniform_k_snap and mid vertical threshold. SAM: segment_width=1220, K_height=880 (mid-band, not 700 empty-crop risk), angle=6.2 near T3 taper 6.12\u00b0.",
+      "proposer": "Gemini-3.8 (fresh per-case agent)"
+    },
+    {
+      "round": 3,
+      "status": "ok",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 2.88,
+          "mask_r_high": 3.08,
+          "mask_theta_low": 1.55,
+          "mask_theta_high": 17.0
+        },
+        "enhancing": {
+          "curvature_threshold": 0.00045
+        },
+        "detecting": {
+          "binary_threshold": 135,
+          "hough_threshold_oblique": 40,
+          "hough_threshold_horizontal": 38,
+          "hough_threshold_vertical": 1800,
+          "maxLineGap_oblique": 30,
+          "pattern_tolerance": 15,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1300,
+          "K_height": 940.0,
+          "angle": 7.0
+        }
+      },
+      "proxy_scaled": 0.484367686282144,
+      "band": "reject",
+      "features": {
+        "correspondence_f1@15": 0.16199376354536454,
+        "sam_fill_rate": 0.5836340322699961,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.16613117139174102
+      },
+      "recentre_residual_max_cm": 24.0,
+      "full_pipeline": false,
+      "rationale": "Stages 2\u20136 only (full=false). Slightly tighter denoise and higher binary/Hough than R2 to cut orange unexplained clutter; pattern_tolerance a bit looser for continuous snap. SAM alternative: wider segment_width=1300, K_height=940 (still inside bounds, away from empty-crop floor), angle=7.0 to follow the observed K-row slope.",
+      "proposer": "Gemini-3.8 (fresh per-case agent)"
+    }
+  ],
+  "images": {
+    "depth_map_viridis.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-8-family-proxy/runs/3-8-anchor/depth_map_viridis.png",
+    "detected_lines.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-8-family-proxy/runs/3-8-anchor/detected_lines.png",
+    "initial_prompt_points.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-8-family-proxy/runs/3-8-anchor/initial_prompt_points.png",
+    "segmentation_results.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/3-8-family-proxy/runs/3-8-anchor/segmentation_results.png"
+  },
+  "ontology": {
+    "experiences": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/experiences.md",
+    "sam4tun_ontology": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/sam4tun_ontology.yaml",
+    "tunnel_priors": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/tunnel_priors.yaml"
+  },
+  "parameter_bounds": [
+    {
+      "name": "unfolding.ransac_threshold",
+      "stage": "unfolding",
+      "key": "ransac_threshold",
+      "kind": "float",
+      "low": 0.8,
+      "high": 1.2,
+      "special": null
+    },
+    {
+      "name": "unfolding.slice_spacing_factor",
+      "stage": "unfolding",
+      "key": "slice_spacing_factor",
+      "kind": "float",
+      "low": 1.05,
+      "high": 1.35,
+      "special": null
+    },
+    {
+      "name": "unfolding.polynomial_degree",
+      "stage": "unfolding",
+      "key": "polynomial_degree",
+      "kind": "int",
+      "low": 2,
+      "high": 3,
+      "special": null
+    },
+    {
+      "name": "unfolding.random_seed",
+      "stage": "unfolding",
+      "key": "random_seed",
+      "kind": "int",
+      "low": 0,
+      "high": 7,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_low",
+      "stage": "denoising",
+      "key": "mask_r_low",
+      "kind": "float",
+      "low": 2.7,
+      "high": 3.0,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_high",
+      "stage": "denoising",
+      "key": "mask_r_high",
+      "kind": "float",
+      "low": 2.9,
+      "high": 3.15,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_theta_low",
+      "stage": "denoising",
+      "key": "mask_theta_low",
+      "kind": "float",
+      "low": 1.0,
+      "high": 2.5,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_theta_high",
+      "stage": "denoising",
+      "key": "mask_theta_high",
+      "kind": "float",
+      "low": 15.0,
+      "high": 19.0,
+      "special": null
+    },
+    {
+      "name": "enhancing.curvature_threshold",
+      "stage": "enhancing",
+      "key": "curvature_threshold",
+      "kind": "float",
+      "low": 0.0002,
+      "high": 0.002,
+      "special": null
+    },
+    {
+      "name": "detecting.binary_threshold",
+      "stage": "detecting",
+      "key": "binary_threshold",
+      "kind": "int",
+      "low": 100,
+      "high": 160,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_oblique",
+      "stage": "detecting",
+      "key": "hough_threshold_oblique",
+      "kind": "int",
+      "low": 20,
+      "high": 60,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_horizontal",
+      "stage": "detecting",
+      "key": "hough_threshold_horizontal",
+      "kind": "int",
+      "low": 20,
+      "high": 60,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_vertical",
+      "stage": "detecting",
+      "key": "hough_threshold_vertical",
+      "kind": "int",
+      "low": 800,
+      "high": 2500,
+      "special": null
+    },
+    {
+      "name": "detecting.maxLineGap_oblique",
+      "stage": "detecting",
+      "key": "maxLineGap_oblique",
+      "kind": "int",
+      "low": 10,
+      "high": 60,
+      "special": null
+    },
+    {
+      "name": "detecting.pattern_tolerance",
+      "stage": "detecting",
+      "key": "pattern_tolerance",
+      "kind": "int",
+      "low": 5,
+      "high": 20,
+      "special": null
+    },
+    {
+      "name": "detecting.uniform_k_snap",
+      "stage": "detecting",
+      "key": "uniform_k_snap",
+      "kind": "bool",
+      "low": 0.0,
+      "high": 1.0,
+      "special": null
+    },
+    {
+      "name": "sam.segment_width",
+      "stage": "sam",
+      "key": "segment_width",
+      "kind": "int",
+      "low": 1000,
+      "high": 1400,
+      "special": null
+    },
+    {
+      "name": "sam.K_height",
+      "stage": "sam",
+      "key": "K_height",
+      "kind": "float",
+      "low": 700.0,
+      "high": 1000.0,
+      "special": null
+    },
+    {
+      "name": "sam.angle",
+      "stage": "sam",
+      "key": "angle",
+      "kind": "float",
+      "low": 4.0,
+      "high": 9.0,
+      "special": null
+    }
+  ],
+  "instructions": [
+    "Propose ONE coordinated multi-stage overlay within parameter_bounds.",
+    "Use observation -> ontology rule -> failure_mode -> overlay.",
+    "Do NOT read evaluation/, offline_gt.json, performance.md, perf_*, mIoU, or any ground-truth labels / GT-bearing CSVs.",
+    "Do NOT read existing Fable/deterministic selections, campaign logs, or other arms' refinement trees.",
+    "Use the SC-general proxy (proxy_scaled / band / lean features) as the between-round signal.",
+    "If stage1_unlocked is false, do not touch unfolding keys.",
+    "If stage1_unlocked is true and residual remains high, you may include unfolding (e.g. random_seed) and the pilot will auto --full.",
+    "Return JSON with keys: observation, failure_mode, rationale, overlay."
+  ],
+  "created_at": "2026-09-14T09:16:24.920449"
+}

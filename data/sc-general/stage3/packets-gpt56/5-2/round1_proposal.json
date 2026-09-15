@@ -1,0 +1,29 @@
+{
+  "observation": "The anchor is just below the accept band with exact ring count and complete rings, but correspondence_f1@15 is only 0.452805. The correspondence overlay shows many unsupported label boundaries, while real detections are only 0.6 and several prompts are assumed.",
+  "rule": "When topology is already correct but boundary correspondence is weak, preserve ring geometry and moderately increase usable horizontal and oblique line support before changing segmentation scale.",
+  "failure_mode": "Boundary evidence is too sparse or fragmented, causing fallback prompts and label transitions that are not supported by nearby detected lines.",
+  "rationale": "This balanced proposal lowers line-evidence barriers and permits longer gap bridging while retaining a mid-range SAM geometry. It targets correspondence without aggressively changing the already-correct ring count.",
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "binary_threshold": 118,
+      "hough_threshold_oblique": 34,
+      "hough_threshold_horizontal": 32,
+      "maxLineGap_oblique": 66,
+      "maxLineGap_horizontal": 22,
+      "pattern_tolerance": 15
+    },
+    "sam": {
+      "segment_width": 1800,
+      "K_height": 1225.0,
+      "angle": 9.0
+    }
+  },
+  "full": false,
+  "validated_at": "2026-09-14T06:01:05.425407",
+  "provenance": {
+    "agent_id": "7f2acae5-57e4-48e7-aa7a-99a919bf3a65"
+  }
+}

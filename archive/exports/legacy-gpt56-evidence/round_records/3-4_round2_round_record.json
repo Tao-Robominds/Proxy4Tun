@@ -1,0 +1,25 @@
+{
+  "proposal": {
+    "observation": "Round 1 made the upstream geometry substantially worse: the recentring residual rose from 20.8 cm to 32.9 cm, depth NaNs rose from about 19.5% to 30.5%, and SAM fill fell from about 57.1% to 47.4%. Orientation remained valid and the detector still produced ten evenly spaced fallback prompts with zero ring-count error. Denoising retention changed only slightly, so the dominant regression is the cubic, tightly gated centre-curve fit rather than the T3 support gates or downstream detection.",
+    "failure_mode": "The round-1 unfolding overlay induced an unstable or overfit centre curve (f_curve_overfit), increasing off-centre unrolling, depth holes, and downstream under-coverage. The all-fallback detector remains weakly identifiable but internally count-consistent, so it is not the immediate repair target.",
+    "rationale": "Use a conservative rollback of both round-1 unfolding choices: restore the ontology-default quadratic curve and move the RANSAC threshold to the neutral midpoint. This removes the cubic degree that amplified centreline excursions and avoids the overly strict 0.8 inlier gate that may have left the fit supported by too few slice centres. No denoising, detection, or SAM changes are included, preserving attribution and allowing the next feedback to establish whether upstream coverage returns before later-stage tuning.",
+    "overlay": {
+      "unfolding": {
+        "ransac_threshold": 1.0,
+        "polynomial_degree": 2
+      }
+    }
+  },
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 1.0,
+      "polynomial_degree": 2
+    }
+  },
+  "feedback_path": "/home/boringtao/Projects/Proxy4Tun/data/3-4-gpt56-refinement/round2/agent_feedback.json",
+  "offline_path": "/home/boringtao/Projects/Proxy4Tun/data/3-4-gpt56-refinement/round2/evaluation_offline.json",
+  "status": "ok",
+  "proxy_scaled": 0.5737276216994883,
+  "mIoU_offline": 0.622,
+  "elapsed_s": 228.902765750885
+}

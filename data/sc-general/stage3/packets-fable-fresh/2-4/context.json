@@ -1,0 +1,302 @@
+{
+  "subset": "2-4",
+  "arm": "fable_fresh",
+  "proposer": "Fable-5.1 (fresh per-case agent)",
+  "family": "t1&2",
+  "lining_mode": "staggered",
+  "stage1_unlocked": false,
+  "residual_gate_cm": 10.0,
+  "bands": {
+    "reject": "<0.5",
+    "refine": "[0.5, 0.7)",
+    "accept": ">=0.7"
+  },
+  "anchor": {
+    "proxy_raw": 0.676342,
+    "proxy_scaled": 0.676342,
+    "band": "refine",
+    "features": {
+      "correspondence_f1@15": 0.411668,
+      "sam_fill_rate": 0.745003,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.109191
+    },
+    "recentre_residual_max_cm": 1.7,
+    "orient_axis_corr": -0.9997455372446109,
+    "ring_count": 10,
+    "ring_count_error": 0.0,
+    "labelmap_source": "results.pkl",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/2-4-family-proxy/runs/2-4-anchor"
+  },
+  "intrinsics_gt_blind": {
+    "orient_axis_corr": -0.9997455372446109,
+    "orient_invariant_ok": 1.0,
+    "recentre_residual_max_cm": 1.7,
+    "denoise_retained_ratio": 0.7693688879665898,
+    "depth_nan_ratio": 0.10919078606422467,
+    "depth_outlier_ratio": 0.0029708795925650843,
+    "det_real_detection_ratio": 0.9,
+    "det_fallback_ratio": 0.1,
+    "det_n_points": 10.0,
+    "sam_fill_rate": 0.7450027236647557,
+    "sam_ring_completeness": 1.0,
+    "sam_segment_size_cv": 1.3219664851130428,
+    "sam_ontology_divergence": 0.22643770209071767
+  },
+  "history": [
+    {
+      "round": 1,
+      "status": "ok",
+      "overlay": {
+        "enhancing": {
+          "inter_radius": 0.07
+        },
+        "detecting": {
+          "binary_threshold": 115,
+          "hough_threshold_oblique": 45,
+          "hough_threshold_horizontal": 40,
+          "maxLineGap_oblique": 60
+        }
+      },
+      "proxy_scaled": 0.6806087731498789,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.4193699810634234,
+        "sam_fill_rate": 0.7452081658063344,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.10917412528728879
+      },
+      "recentre_residual_max_cm": 1.7,
+      "full_pipeline": false,
+      "rationale": "The proxy is in the refine band (0.676) and its only depressed lean feature that a bounded, GT-free change can move is correspondence_f1@15; ring count, residual, orientation and NaN are already at healthy values so nothing upstream should be touched. Make the joint evidence denser and the Hough stage slightly more permissive in a coordinated way: raise enhancing.inter_radius 0.06 -> 0.07 to interpolate more joint points in the sparse left columns; lower detecting.binary_threshold 127 -> 115 so more of the faint joint pixels survive binarisation; lower hough_threshold_horizontal 50 -> 40 so the visible dotted longitudinal joints become horizontal segments that support the many currently red B/A boundaries (precision and recall both rise); lower hough_threshold_oblique 50 -> 45 and raise maxLineGap_oblique 40 -> 60 so the dotted oblique K joints in rings 0, 1 and 9 join into full segments and the assumed column becomes a real detection. Spurious-line risk is bounded by the strict [5,10] deg angle filter, merge_close_points and the K/AB distance-pattern gate, and hough_threshold_vertical is deliberately left alone so the healthy 10-for-10 vertical count is not disturbed by the denser binary map. Denoising is left empty (retention and NaN healthy; mask_r stays at priors) and sam.y_bounds is left unchanged because the label map already spans the full depth map and there is no evidence linking fill rate to the SAM window. Expected signal: correspondence_f1@15 up, det_fallback_ratio 0.1 -> 0.0, ring_count_error stays 0, sam_fill_rate flat or slightly up; if ring count changes or oblique lines become noisy in round 2, back off binary_threshold first.",
+      "proposer": "Fable-5.1 (fresh per-case agent)"
+    },
+    {
+      "round": 2,
+      "status": "ok",
+      "overlay": {
+        "denoising": {
+          "mask_r_high": 2.85
+        },
+        "enhancing": {
+          "inter_radius": 0.07
+        },
+        "detecting": {
+          "hough_threshold_oblique": 40,
+          "hough_threshold_horizontal": 40,
+          "maxLineGap_oblique": 80
+        }
+      },
+      "proxy_scaled": 0.6867280973877014,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.4286861174300738,
+        "sam_fill_rate": 0.7489227257399289,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.10906758400319887
+      },
+      "recentre_residual_max_cm": 1.7,
+      "full_pipeline": false,
+      "rationale": "Widen only the upper radial gate: denoising.mask_r_high 2.79 -> 2.85 (+6 cm of headroom; prior outer 2.80, bound 2.90). This retains joint/recess points that are 15-75 mm deeper than the lining so enhance_outlier_points can flag them (depth_threshold_high 0.015 becomes reachable), which should thicken the joint lines in the binary map for both oblique (K) and horizontal (B/A) joints and sharpen joint contrast in the SAM depth input so mask edges land on the joints - the direct route to a higher correspondence_f1@15. mask_r_low stays 2.32 (rails/floor side unchanged). Keep the detection stage permissive so the extra joint evidence can be used: hough_threshold_oblique 40 (bound), maxLineGap_oblique 80 (bound) to bridge the dotted K joints in rings 0/1/9, hough_threshold_horizontal 40; keep inter_radius 0.07. Drop binary_threshold (dead knob on this scan, shown above). Ring count is pinned by the synthetic verticals, so the main risk is retaining out-of-band noise behind the lining (depth_outlier_ratio and NaN may shift slightly) and, if the widened band lets grout holes/bolt pockets act as extra 'joints', spurious oblique lines - the [6,9] deg angle filter and the K-row pattern gate limit that. Expected: correspondence_f1@15 up clearly (>0.45), det_fallback_ratio 0.1 -> 0.0 if ring 1 gets its oblique pair, denoise_retained_ratio slightly up, NaN flat or down, ring_count_error 0. If round 2 shows depth_outlier_ratio ballooning or the proxy dropping, round 3 should pull mask_r_high back to ~2.81 rather than revisit Hough.",
+      "proposer": "Fable-5.1 (fresh per-case agent)"
+    },
+    {
+      "round": 3,
+      "status": "ok",
+      "overlay": {
+        "denoising": {
+          "mask_r_high": 2.9,
+          "grad_threshold": 0.25
+        },
+        "enhancing": {
+          "inter_radius": 0.07
+        },
+        "detecting": {
+          "hough_threshold_oblique": 40,
+          "hough_threshold_horizontal": 40,
+          "maxLineGap_oblique": 80
+        }
+      },
+      "proxy_scaled": 0.696335945731631,
+      "band": "refine",
+      "features": {
+        "correspondence_f1@15": 0.4464884336967219,
+        "sam_fill_rate": 0.7488174107027055,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.10950353528960818
+      },
+      "recentre_residual_max_cm": 1.7,
+      "full_pipeline": false,
+      "rationale": "Extend the only lever that produced a real gain and add the one untouched stage-2 lever that targets the sparse columns directly. (1) denoising.mask_r_high 2.85 -> 2.90 (bound): another 5 cm of depth headroom above the lining surface (r ~2.775), so recess points 7-12 cm deep that were still clipped can reach enhance_outlier_points and thicken the joint lines in the outlier map and the SAM depth input; round 2 showed this direction improves both correspondence_f1@15 and sam_fill_rate with no NaN or residual cost. (2) denoising.grad_threshold 0.2 -> 0.25 (bound): relax the density-difference test so cells whose density drops relative to their neighbours are less readily removed - in the left third of the map the recess points are locally sparser than the already-sparse lining and are the first casualties of this filter; keeping them is what rings 0, 1 and 9 need for their oblique pairs and what the horizontal joints need to become continuous segments. z_step is left at 0.001 so the bin geometry is unchanged and the effect is attributable to the threshold alone. mask_r_low stays 2.32 (rails/floor side untouched, no under-gate risk from below). (3) Detection stays at the round-2 permissive settings so the extra joint evidence can be consumed: hough_threshold_oblique 40, maxLineGap_oblique 80, hough_threshold_horizontal 40; inter_radius stays 0.07; binary_threshold and hough_threshold_vertical are not touched (dead knobs on this scan); sam.y_bounds is not touched (map height ~3100 px, the lower bound of 3600 is outside the map). Risks: under-gating behind the lining (grout/bolt pockets, cable brackets) could raise depth_outlier_ratio and add spurious oblique/horizontal candidates; the [5,10] deg angle filter, merge_close_points and the K/AB distance-pattern gate bound the prompt-level impact, and ring count is pinned by the synthetic verticals. Expected: correspondence_f1@15 > 0.44, sam_fill_rate >= 0.749, det_fallback_ratio 0.1 -> 0.0 if ring 1 gets an oblique line, denoise_retained_ratio slightly up, NaN flat, ring_count_error 0. If the proxy falls below round 2, the selector should keep round 2 (mask_r_high 2.85) - grad_threshold would then be the suspect, not the radial gate.",
+      "proposer": "Fable-5.1 (fresh per-case agent)"
+    }
+  ],
+  "images": {
+    "depth_map_viridis.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/2-4-family-proxy/runs/2-4-anchor/depth_map_viridis.png",
+    "detected_lines.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/2-4-family-proxy/runs/2-4-anchor/detected_lines.png",
+    "initial_prompt_points.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/2-4-family-proxy/runs/2-4-anchor/initial_prompt_points.png",
+    "segmentation_results.png": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/2-4-family-proxy/runs/2-4-anchor/segmentation_results.png"
+  },
+  "ontology": {
+    "experiences": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/experiences.md",
+    "sam4tun_ontology": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/sam4tun_ontology.yaml",
+    "tunnel_priors": "/home/boringtao/Projects/Proxy4Tun/agents/ontology/tunnel_priors.yaml"
+  },
+  "parameter_bounds": [
+    {
+      "name": "unfolding.ransac_threshold",
+      "stage": "unfolding",
+      "key": "ransac_threshold",
+      "kind": "float",
+      "low": 0.8,
+      "high": 1.2,
+      "special": null
+    },
+    {
+      "name": "unfolding.slice_spacing_factor",
+      "stage": "unfolding",
+      "key": "slice_spacing_factor",
+      "kind": "float",
+      "low": 1.05,
+      "high": 1.35,
+      "special": null
+    },
+    {
+      "name": "unfolding.polynomial_degree",
+      "stage": "unfolding",
+      "key": "polynomial_degree",
+      "kind": "int",
+      "low": 2,
+      "high": 3,
+      "special": null
+    },
+    {
+      "name": "unfolding.random_seed",
+      "stage": "unfolding",
+      "key": "random_seed",
+      "kind": "int",
+      "low": 0,
+      "high": 7,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_low",
+      "stage": "denoising",
+      "key": "mask_r_low",
+      "kind": "float",
+      "low": 2.2,
+      "high": 2.5,
+      "special": null
+    },
+    {
+      "name": "denoising.mask_r_high",
+      "stage": "denoising",
+      "key": "mask_r_high",
+      "kind": "float",
+      "low": 2.7,
+      "high": 2.9,
+      "special": null
+    },
+    {
+      "name": "denoising.z_step",
+      "stage": "denoising",
+      "key": "z_step",
+      "kind": "float",
+      "low": 0.001,
+      "high": 0.008,
+      "special": null
+    },
+    {
+      "name": "denoising.grad_threshold",
+      "stage": "denoising",
+      "key": "grad_threshold",
+      "kind": "float",
+      "low": 0.1,
+      "high": 0.25,
+      "special": null
+    },
+    {
+      "name": "enhancing.curvature_threshold",
+      "stage": "enhancing",
+      "key": "curvature_threshold",
+      "kind": "float",
+      "low": 0.0003,
+      "high": 0.008,
+      "special": null
+    },
+    {
+      "name": "enhancing.inter_radius",
+      "stage": "enhancing",
+      "key": "inter_radius",
+      "kind": "float",
+      "low": 0.02,
+      "high": 0.08,
+      "special": null
+    },
+    {
+      "name": "detecting.binary_threshold",
+      "stage": "detecting",
+      "key": "binary_threshold",
+      "kind": "int",
+      "low": 100,
+      "high": 160,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_oblique",
+      "stage": "detecting",
+      "key": "hough_threshold_oblique",
+      "kind": "int",
+      "low": 40,
+      "high": 90,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_horizontal",
+      "stage": "detecting",
+      "key": "hough_threshold_horizontal",
+      "kind": "int",
+      "low": 40,
+      "high": 90,
+      "special": null
+    },
+    {
+      "name": "detecting.hough_threshold_vertical",
+      "stage": "detecting",
+      "key": "hough_threshold_vertical",
+      "kind": "int",
+      "low": 400,
+      "high": 800,
+      "special": null
+    },
+    {
+      "name": "detecting.maxLineGap_oblique",
+      "stage": "detecting",
+      "key": "maxLineGap_oblique",
+      "kind": "int",
+      "low": 20,
+      "high": 80,
+      "special": null
+    },
+    {
+      "name": "sam.y_bounds_lower",
+      "stage": "sam",
+      "key": "processing.y_bounds",
+      "kind": "int",
+      "low": 3600,
+      "high": 4400,
+      "special": "y_bounds_lower"
+    }
+  ],
+  "instructions": [
+    "Propose ONE coordinated multi-stage overlay within parameter_bounds.",
+    "Use observation -> ontology rule -> failure_mode -> overlay.",
+    "Do NOT read evaluation/, offline_gt.json, performance.md, perf_*, mIoU, or any ground-truth labels / GT-bearing CSVs.",
+    "Do NOT read existing Fable/deterministic selections, campaign logs, or other arms' refinement trees.",
+    "Use the SC-general proxy (proxy_scaled / band / lean features) as the between-round signal.",
+    "If stage1_unlocked is false, do not touch unfolding keys.",
+    "If stage1_unlocked is true and residual remains high, you may include unfolding (e.g. random_seed) and the pilot will auto --full.",
+    "Return JSON with keys: observation, failure_mode, rationale, overlay."
+  ],
+  "created_at": "2026-09-15T20:29:06.414133"
+}
