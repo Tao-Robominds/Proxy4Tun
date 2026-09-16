@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Error analysis for paper/revision/main_publish.tex (Results, "Error analysis").
+"""Error analysis for paper/revision/main_claude.tex (Results, "Error analysis").
 
 Reads only frozen tables and executed run directories:
   * data/sc-general/stage2/holdout_scores.csv          (54 stress-test runs)

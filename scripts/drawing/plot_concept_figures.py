@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Redraw the three legacy Google-Slides concept figures for main_publish.tex.
+"""Redraw the three legacy Google-Slides concept figures for main_claude.tex.
 
 Writes (aspect ratios match the previous PDFs):
   paper/revision/figs/position.pdf   (711 x 403 pt)

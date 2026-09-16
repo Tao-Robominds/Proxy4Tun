@@ -122,4 +122,4 @@ Refinement campaign (fresh Fable 5.1 arm):
 # proposals come from fresh per-case agents; apply/finish via the same script
 ```
 
-Manuscript: `paper/revision/main_publish.tex`. Tag: `v1.0-aic-submission`.
+Manuscript: `paper/revision/main_claude.tex`. Tag: `v1.0-aic-submission`.

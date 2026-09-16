@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Result figures for paper/revision/main_publish.tex.
+"""Result figures for paper/revision/main_claude.tex.
 
 Reads the frozen sc-general tables (four-feature proxy, 54-run stress test,
 22-case four-arm refinement panel) and writes two vector PDFs:
