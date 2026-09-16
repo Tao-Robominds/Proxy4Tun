@@ -214,35 +214,18 @@ The pipeline is adapted from SAM4Tun~\cite{ye2025sam4tun} for the three Seg2Tunn
 \label{fig:pipeline}
 \end{figure*}
 
-\begin{enumerate}
-\item \textbf{Unfolding.}
-RANSAC-based cross-sectional ellipse fitting and centreline estimation establish a cylindrical coordinate system~\cite{fischler1981ransac}. The lining surface is represented panoramically, with depth describing radial distance from the centreline. Coordinate orientation is fixed so that block positions retain the same meaning across runs.
+(1)~\emph{Unfolding}: RANSAC-based ellipse fitting and centreline estimation~\cite{fischler1981ransac} establish a cylindrical frame in which the lining is represented as a panoramic depth image (radial distance from the centreline). (2)~\emph{Denoising}: radial masks and grid-based density filtering~\cite{ester1996dbscan} remove points inconsistent with the lining surface, trading unwanted-point removal against retained lining data. (3)~\emph{Enhancement}: curvature-guided interpolation and progressive upsampling complete the depth image while preserving joints. (4)~\emph{Boundary detection}: orientation-specific Hough transforms~\cite{duda1972hough} recover candidate ring and block boundaries, organised by the expected family layout. (5)~\emph{Segmentation and reprojection}: the detected layout defines template-based SAM prompts~\cite{kirillov2023sam}, and the masks are mapped back to the point cloud. A GT-dependent evaluation step runs offline only.
 
-\item \textbf{Denoising.}
-Radial masks and grid-based point-density filtering remove points inconsistent with the expected lining surface, following the density-based principle underlying DBSCAN~\cite{ester1996dbscan}. Its settings affect both unwanted-point removal and the amount of lining data retained.
+Each family has an expert \emph{reference configuration} (\emph{family reference}) specifying a complete parameter set. A candidate update is an \emph{overlay} listing only the parameters to change, applied to a recorded base configuration. The family references are released with the code (Appendix~\ref{app:anchor-parameter}); Appendix~\ref{app:bo-config} lists the exploration bounds, which also define the search space permitted during refinement.
 
-\item \textbf{Enhancement.}
-Curvature-guided interpolation and progressive upsampling improve the completeness of the depth representation before detection, while preserving joint boundaries.
-
-\item \textbf{Boundary detection.}
-Orientation-specific Hough transforms identify candidate ring and block boundaries~\cite{duda1972hough}. These detections are organised according to the expected family layout.
-
-\item \textbf{Segmentation and reprojection.}
-The detected layout defines template-based prompts for SAM~\cite{kirillov2023sam}. The resulting image masks are mapped back to the point cloud to obtain three-dimensional block labels.
-\end{enumerate}
-
-A GT-dependent evaluation step runs offline only and has no parameters. Each family has an expert \emph{reference configuration} (\emph{family reference}) that specifies a complete parameter set. A candidate update is an \emph{overlay} listing only the parameters to change; it is applied to an explicitly recorded base configuration, and unchanged parameters retain their base values. Appendix~\ref{app:anchor-parameter} lists the family references and Appendix~\ref{app:bo-config} the exploration bounds, which also define the search space permitted during refinement.
-
-Two conventions matter for what follows. First, stage~1 fixes the coordinate frame using the per-point ring index stored in the Seg2Tunnel files: the centreline direction is chosen so that the axial coordinate correlates with the ring index with a prescribed sign, and the stage aborts unless the Pearson correlation exceeds 0.5 in magnitude. This index is a distributed ring annotation, not sensor metadata. It contributes one binary orientation choice and one validity check per subset, is never passed to the scorer or proposer, and reads no semantic label; but it shapes the frame on which all measurements are computed, so the executed pipeline is annotation-assisted at stage~1 (Appendix~\ref{app:anchor-parameter}). Second, stage-1 parameters are locked during refinement unless the starting run's recentring residual exceeds 10\,cm, so that candidate outputs of one case share a frame.
+Two conventions matter for what follows. First, stage~1 orients the frame using the per-point ring index stored in the Seg2Tunnel files (the axial coordinate must correlate with the ring index with a prescribed sign, $|\rho_{\mathrm P}|>0.5$). This index is a distributed ring annotation, not sensor metadata; it contributes one binary orientation choice and one validity check per subset, is never passed to the scorer or proposer, and reads no semantic label, but it shapes the frame on which all measurements are computed, so the executed pipeline is annotation-assisted at stage~1. Second, stage-1 parameters are locked during refinement unless the starting run's recentring residual exceeds 10\,cm, so that candidate outputs of one case share a frame.
 
 \subsubsection{Generating calibration examples}
 \label{sec:bo-experience}
 
 Calibration requires examples linking observable pipeline measurements to segmentation accuracy under successful and degraded parameter settings. We generate these examples by varying pipeline parameters on one labelled development subset per lining family. All runs on that subset are evaluated against the same annotations, so additional runs require computation but no additional scan labelling.
 
-We collect the examples in two stages (Fig.~\ref{fig:b-p}a). First, scrambled-Sobol sampling provides 32 valid trials spread across the prescribed parameter ranges~\cite{joe2008constructing}; continuous parameters are scaled to their bounds, while discrete parameters are mapped to their permitted values. Second, Bayesian exploration adds eight valid trials at settings whose effects on accuracy remain uncertain. A Gaussian-process (GP) response model with a Mat\'ern kernel ($\nu=2.5$), a white-noise term, and normalised targets learns from the completed evaluations; at each iteration we draw a random pool of 2048 candidate settings within the bounds and evaluate the one with the largest predictive standard deviation, updating the GP after each valid evaluation~\cite{gramacy2009adaptive,gramacy2020surrogates}. This acquisition explores uncertainty in the accuracy response; it does not maximise segmentation accuracy or minimise the final proxy's prediction error, so the records deliberately include poor outputs (GT mIoU from about 0.03 upward).
-
-A trial is valid when all stages complete and all ten candidate measurements are finite; 121 trials were attempted and one failed. Each family contributes 40 valid runs, giving 120 records across the three families. Each record stores its parameter setting, PQ and SC measurements, and GT mIoU. The GP uses parameter settings and GT mIoU to guide exploration, while the accuracy proxy uses PQ and SC measurements to estimate GT mIoU. Algorithm~\ref{alg:bo_exploration} and Appendix~\ref{app:bo-config} give the procedure, sampler and GP configuration, and per-family bounds.
+We collect the examples in two stages (Fig.~\ref{fig:b-p}a). First, scrambled-Sobol sampling~\cite{joe2008constructing} provides 32 valid trials spread across the prescribed parameter ranges. Second, Bayesian exploration adds eight valid trials at settings whose effect on accuracy is most uncertain: a Gaussian-process (GP) model of GT mIoU against parameter settings is fitted to the completed trials, and the candidate with the largest predictive standard deviation in a random pool is evaluated next~\cite{gramacy2009adaptive,gramacy2020surrogates}. This acquisition explores uncertainty in the accuracy response rather than maximising accuracy, so the records deliberately include poor outputs (GT mIoU from about 0.03 upward). A trial is valid when all stages complete and all ten candidate measurements are finite (121 attempted, one failed). Each family contributes 40 valid runs, giving 120 records, each storing its parameter setting, PQ and SC measurements, and GT mIoU. The GP guides exploration only; the proxy is fitted afterwards from measurements to GT mIoU. Appendix~\ref{app:bo-config} gives the sampler and GP configuration and the per-family bounds.
 
 \begin{figure*}[t]
 \centering
@@ -298,7 +281,7 @@ x_{\mathrm{corr}}&=\frac{2\pi_\delta\gamma_\delta}{\pi_\delta+\gamma_\delta},
 \end{aligned}
 \label{eq:corr-f1}
 \end{equation}
-with an empty set giving its fraction 0 and $x_{\mathrm{corr}}=0$ when $\pi_\delta+\gamma_\delta=0$, so severe disagreement scores the finite worst value rather than an unscorable run. Two finiteness rules apply: a calibration record requires all ten candidate measurements to be finite (so that every feature set is compared on the same runs), whereas at deployment a run whose four proxy measurements are not all finite is unscorable and is recorded as a failure, never imputed. Tolerances of 8 and 25\,px change LOFO correlation by less than 0.01 (Appendix~\ref{app:proxy-package}).
+with empty sets scoring 0, so severe disagreement receives the finite worst value rather than an unscorable run. At deployment, a run whose four measurements are not all finite is unscorable and is recorded as a failure, never imputed. Tolerances of 8 and 25\,px change LOFO correlation by less than 0.01 (Appendix~\ref{app:proxy-package}).
 
 \subsubsection{Learning the accuracy proxy}
 \label{sec:ridge-proxy}
@@ -311,41 +294,16 @@ b+\sum_{j=1}^{d}
 w_j\frac{x_j-\mu_j}{s_j},
 \label{eq:ridge-proxy}
 \end{equation}
-where $\mu_j$ and $s_j$ are the mean and standard deviation estimated on the training data, $w_j$ is the fitted coefficient, and $b$ is the intercept. The coefficients minimise
-\begin{equation}
-\sum_{i\in\mathcal{T}_{\mathrm{train}}}
-\left(y_i-b-\mathbf{w}^{\top}\mathbf{z}_i\right)^2
-+\alpha\|\mathbf{w}\|_2^2,
-\label{eq:ridge-objective}
-\end{equation}
-where $\mathbf{z}_i$ is the standardised feature vector and $\alpha$ is chosen from 25 log-spaced values in $[10^{-3},10^{3}]$ by leave-one-out cross-validation on the fitting data. Predictions are clipped to $[0,1]$; no evaluation prediction required clipping.
+where $\mu_j$ and $s_j$ are the training mean and standard deviation, $w_j$ the fitted coefficient, and $b$ the intercept; the penalty $\alpha$ is chosen from 25 log-spaced values in $[10^{-3},10^{3}]$ by leave-one-out cross-validation on the fitting data, and predictions are clipped to $[0,1]$.
 
-We compare PQ-only, SC-only, combined, and compact combined models (Table~\ref{tab:proxy-ablation}; Fig.~\ref{fig:b-p}b). Leave-one-family-out (LOFO) validation assesses transfer: models are fitted on two families (80 runs) and evaluated on the third (40), with scaling and penalty chosen inside the training split. The compact set was selected among eight nested candidates (top-$k$ features by standardised coefficient, $k=3,\ldots,10$, plus the set of coefficients above 10\% of the largest) by LOFO Spearman correlation; the selected set happens to retain one PQ and three SC measurements. Because held-out folds were used to choose the set, LOFO figures are model-selection diagnostics; the frozen 27-subset test of Section~\ref{sec:stress-test} is the unbiased estimate. The selected model was refitted on all 120 records and frozen before any evaluation-panel scoring (Appendix~\ref{app:proxy-package}). A permutation control shuffles GT mIoU within family (20 repeats) and refits, to check that the association is not driven by family means.
-
-\begin{table}[ht]
-\caption{Proxy feature-set comparisons.}
-\label{tab:proxy-ablation}
-\centering
-\begin{tabular}{p{0.31\columnwidth} p{0.59\columnwidth}}
-\toprule
-Model & Definition \\
-\midrule
-$P(q)$ & Four PQ measurements \\
-$P(c)$ & Six SC measurements \\
-$P(q{+}c)$ & All ten candidate measurements \\
-Compact $P(q{+}c)$ & Selected subset retaining PQ and SC; one pooled model \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The proxy score provides a common basis for comparing outputs. Regression coefficients describe fitted associations with accuracy; they are not causal prescriptions for parameter changes. We therefore evaluate the compact proxy as a practical scoring rule, without claiming superiority over nonlinear alternatives.
+We compare four feature sets: PQ only, $P(q)$; SC only, $P(c)$; all ten measurements, $P(q{+}c)$; and a compact subset of $P(q{+}c)$ (Fig.~\ref{fig:b-p}b). Leave-one-family-out (LOFO) validation assesses transfer: models are fitted on two families (80 runs) and evaluated on the third (40), with scaling and penalty chosen inside the training split. The compact set was selected among eight nested candidates (top-$k$ features by standardised coefficient, $k=3,\ldots,10$, plus the set of coefficients above 10\% of the largest) by LOFO Spearman correlation. Because held-out folds were used to choose the set, LOFO figures are model-selection diagnostics; the frozen 27-subset test of Section~\ref{sec:stress-test} is the unbiased estimate. The selected model was refitted on all 120 records and frozen before any evaluation-panel scoring (Appendix~\ref{app:proxy-package}). A permutation control that shuffles GT mIoU within family (20 repeats) checks that the association is not driven by family means. Regression coefficients describe fitted associations with accuracy, not causal prescriptions for parameter changes; we evaluate the compact proxy as a practical scoring rule without claiming superiority over nonlinear alternatives.
 
 \subsection{Proxy-guided parameter refinement}
 \label{sec:agent-design}
 
 The proxy estimates accuracy but does not determine which parameters should change. A \emph{proposer} supplies this step, and the loop is proposer-agnostic. In this study the proposer is either an LLM agent (Fig.~\ref{fig:agent}) that receives the current settings, intermediate outputs, the four proxy measurements and stage-1 residual, previous proxy feedback, the family reference, and a structured engineering ontology of failure modes, permitted changes, and stage dependencies (Appendix~\ref{app:panel-config}), or a sparsity-matched random-overlay sampler that draws bounded overlays without that context (Section~\ref{sec:poc-protocol}).
 
-We implement the LLM agent's refinement process as an explicit inspect/compare/update loop by chain-of-thought prompting~\cite{wei2023cot,yao2023react}: the agent first grounds itself in the current evidence, then links observed symptoms to failure modes, and finally proposes a small, bounded edit that can be verified by re-running the pipeline. The agent returns (i) a parameter overlay constrained to the family search space and (ii) a brief human-readable rationale summarising the evidence and intended effect. A worked three-round trace is given in Appendix~\ref{app:panel-config} (Table~\ref{tab:worked-example}).
+The LLM agent follows an inspect/compare/update loop by chain-of-thought prompting~\cite{wei2023cot,yao2023react}: it grounds itself in the current evidence, links observed symptoms to failure modes, and proposes a small bounded edit (\emph{symptom} $\rightarrow$ \emph{evidence} $\rightarrow$ \emph{bounded parameter diff} $\rightarrow$ \emph{rationale}). A worked three-round trace is given in Appendix~\ref{app:panel-config} (Table~\ref{tab:worked-example}).
 
 \begin{figure*}[t]
 \centering
@@ -354,16 +312,7 @@ We implement the LLM agent's refinement process as an explicit inspect/compare/u
 \label{fig:agent}
 \end{figure*}
 
-Each refinement attempt has three steps:
-\begin{enumerate}
-\item \textbf{Inspect and propose.}
-The proposer returns one overlay. For the LLM arms this follows \emph{symptom} $\rightarrow$ \emph{evidence} $\rightarrow$ \emph{bounded parameter diff} $\rightarrow$ \emph{rationale}; for the random arm the overlay is drawn from the search space.
-\item \textbf{Validate and execute.}
-The overlay is checked against the family search space (parameter names, types, marginal bounds; stage-1 keys only when unlocked). A valid candidate is executed through stages~1--5 and its measurements are computed.
-\item \textbf{Score and record.}
-The frozen proxy estimates candidate accuracy. The base configuration, overlay, execution status, measurements, score, and stage-1 residual are recorded for subsequent feedback and final selection.
-\end{enumerate}
-Each admitted case receives three attempts without early stopping. Invalid or failed attempts are recorded, consume an attempt, and are excluded from selection.
+Each attempt (Fig.~\ref{fig:verification}) obtains one overlay from the proposer, validates it against the family search space (parameter names, types, marginal bounds; stage-1 keys only when unlocked), executes the valid candidate through stages~1--5, and records its measurements, frozen-proxy score, and stage-1 residual for feedback and final selection. Each admitted case receives three attempts without early stopping; invalid or failed attempts consume an attempt and are excluded from selection.
 
 \paragraph{Admission.}
 The proxy score of the starting run is used once, before the loop, through the study operating bands
@@ -388,33 +337,10 @@ r^\star=
 \end{cases}
 \label{eq:refinement-selection}
 \end{equation}
-where the minimisation is lexicographic: among near-tied candidates the lower residual, then the higher score, is preferred. The residual is a GT-free stage-1 quantity used only as a tie-break; Section~\ref{sec:poc-verification} also reports pure maximum-proxy selection to show how much it mattered. SC measurements contribute to the proxy and inform the agent's diagnosis but impose no separate retention gate. Algorithm~\ref{alg:reflective_adaptation} summarises the procedure.
-
-\begin{algorithm}[!htb]
-\caption{Proxy-guided parameter refinement}
-\label{alg:reflective_adaptation}
-\small
-\begin{algorithmic}[1]
-\Require Subset $D$; start $P_0$ (expert family reference); frozen proxy $g$; bounds; budget $R=3$; $\varepsilon=0.01$
-\Ensure Retained configuration $P^\star$ and QC status
-\State Execute $P_0$; if it fails or any measurement is non-finite, \Return $P_0$, flag
-\State $\hat y_0\gets\operatorname{clip}(g(\mathbf x_0),0,1)$; $\eta_0\gets$ stage-1 residual
-\If{$\hat y_0<0.5$ \textbf{or} $\hat y_0\ge0.7$} \Return $P_0$, $\operatorname{QC}(\hat y_0)$ \Comment{pre-loop return, Eq.~\eqref{eq:qc-bands}}
-\EndIf
-\State $\mathcal V\gets\emptyset$
-\For{$r=1,\ldots,R$}
-  \State Obtain overlay from the proposer (context: settings, outputs, measurements, scores, history)
-  \State Validate overlay against bounds and stage-1 lock; \textbf{if} invalid, record and \textbf{continue}
-  \State $P_r\gets\operatorname{Apply}(P_0,\text{overlay})$; run stages 1--5; \textbf{if} failure, record and \textbf{continue}
-  \State $\hat y_r\gets\operatorname{clip}(g(\mathbf x_r),0,1)$; $\eta_r\gets$ residual; $\mathcal V\gets\mathcal V\cup\{r\}$
-\EndFor
-\State $r^\star\gets$ Eq.~\eqref{eq:refinement-selection}; $P^\star\gets P_{r^\star}$
-\State \Return $P^\star$, $\operatorname{QC}(\hat y_{r^\star})$
-\end{algorithmic}
-\end{algorithm}
+where the minimisation is lexicographic: among near-tied candidates the lower residual, then the higher score, is preferred. The residual is a GT-free stage-1 quantity used only as a tie-break; Section~\ref{sec:poc-verification} also reports pure maximum-proxy selection to show how much it mattered. SC measurements contribute to the proxy and inform the agent's diagnosis but impose no separate retention gate.
 
 \paragraph{Information boundary.}
-The scorer reads only the four measurements of the run being scored; the selector reads only proxy scores and residuals; and no GT label, GT value, or evaluation file of the scan under refinement is placed in any proposal prompt. One qualification remains: stage~1 uses the ring-index annotation as described in Section~\ref{sec:pipeline}. All three LLM arms use fresh per-case contexts resumed only for rounds 2--3 of the same case.
+The scorer reads only the four measurements of the run being scored; the selector reads only proxy scores and residuals; and no GT label, GT value, or evaluation file of the scan under refinement is placed in any proposal prompt. The one qualification is the stage-1 ring-index convention of Section~\ref{sec:pipeline}.
 
 \subsection{Experimental design}
 \label{sec:exp-setup}
@@ -426,7 +352,7 @@ The evaluation addresses three questions: whether PQ and SC support accuracy est
 
 We use Seg2Tunnel subsets from three lining families~\cite{lin2024seg2tunnel} (Table~\ref{tab:dataset}). Subsets 2-1, 3-1, and 5-1 are the development subsets and supply the 120 calibration records. The evaluation panel comprises 27 other subsets, nine per family, all excluded from proxy fitting. These subsets come from the represented families and tunnel collection, so the evaluation examines transfer to unseen scans within this setting rather than unrestricted transfer to new projects or lining geometries.
 
-``Held out'' refers to proxy calibration only. The expert reference configurations for 1-1 and 4-1 were tuned on those scans' own GT and then reapplied to them, whereas the other 25 subsets receive reference settings established on a different scan of the same tunnel. Every stage-1 execution reads the ring-index annotation for frame orientation. The degraded overlays for the continuous and complex families were identified by GT from earlier exploration trials on evaluation subsets 3-2 and 4-1 (Section~\ref{sec:stress-test}). Evaluation labels are otherwise used only to measure performance and to define retrospective GT strata.
+``Held out'' refers to proxy calibration only. Table~\ref{tab:dataset} lists every other use of annotation-derived information: the references for 1-1 and 4-1 were tuned on those scans' own GT, every stage-1 run reads the ring-index annotation, and two degraded overlays were identified by GT from earlier trials on evaluation subsets (Section~\ref{sec:stress-test}). Evaluation labels are otherwise used only to measure performance and to define retrospective GT strata.
 
 \begin{table*}[t]
 \caption{Development and evaluation subsets, and every use of annotation-derived information. One labelled development subset per family supplies the calibration trials; nine other subsets per family form the evaluation panel, all excluded from proxy fitting.}
@@ -451,28 +377,21 @@ Degraded-overlay source (GT mIoU) & 2-1 trial (0.032) & 3-2 trial (0.027) & 4-1 
 \end{tabular}
 \end{table*}
 
-\subsubsection{Feature and model comparisons}
-\label{sec:comparators}
-
-The comparisons in Table~\ref{tab:proxy-ablation} use the same calibration trials and segmentation pipeline. We report training fit and LOFO performance separately. LOFO comparisons inform model development; evaluation on the 27 unseen subsets then tests the frozen proxy. The permutation control (Section~\ref{sec:ridge-proxy}) examines whether the measurements carry information about accuracy beyond differences between families; it does not itself establish the absence of leakage, which is enforced separately by GT isolation and fold-specific fitting.
-
 \subsubsection{Paired degradation test}
 \label{sec:stress-test}
 
-Each evaluation subset is processed with its unmodified reference configuration and with a degraded counterpart, giving 27 pairs and 54 runs. The degradation rule was fixed before the proxy was frozen: for each family, the lowest-mIoU completed trial in an earlier parameter-exploration archive supplies a stage-2--5 overlay (Appendix~\ref{app:anchor-parameter}), applied unchanged on top of every subset's reference; stage-1 settings are inherited so that both members share a frame, and the full pipeline is rerun. No label or boundary is edited directly. All 54 runs executed and were scorable.
-
-Both outputs in each pair are assessed with the same frozen feature definitions and proxy, and GT mIoU is calculated separately. The test examines whether the proxy ranks the reference above its degraded counterpart and whether the fixed low-quality threshold detects the constructed degradation. Because one overlay per family is reused on nine scans, the degraded runs represent three severe parameter failure modes (GT mIoU 0.03--0.12), not 27 independent or marginal failures; the panel supports conclusions about discrimination under these perturbations rather than operational false-alarm rates.
+Each evaluation subset is processed with its unmodified reference configuration and with a degraded counterpart, giving 27 pairs and 54 runs. The degradation rule was fixed before the proxy was frozen: for each family, the lowest-mIoU completed trial in an earlier parameter-exploration archive supplies a stage-2--5 overlay (Appendix~\ref{app:anchor-parameter}), applied unchanged on top of every subset's reference with stage-1 settings inherited so that both members share a frame. No label or boundary is edited directly. The test asks whether the frozen proxy ranks the reference above its degraded counterpart and whether the fixed threshold detects the degradation. Because one overlay per family is reused on nine scans, the degraded runs represent three severe parameter failure modes (GT mIoU 0.03--0.12), not 27 independent or marginal failures; the panel supports conclusions about discrimination under these perturbations rather than operational false-alarm rates.
 
 \subsubsection{Refinement panel and proposal arms}
 \label{sec:poc-protocol}
 
 The starting run of every evaluation subset is its reference run, shared with the degradation test. The 22 starts with $0.5\le\hat y_0<0.7$ form the refinement panel; three starts fall below and two above the band, and GT plays no part in admission. Each case receives three proposals from each of three LLM proposal systems, Fable~5.1, GPT-5.6, and Gemini~3.8, and from a fourth \emph{random-overlay} control arm, under an identical proxy, validator, budget, execution code, and selector (Fig.~\ref{fig:verification}; Appendix~\ref{app:panel-config}). All $264$ proposals ($22\times3\times4$) executed. Stage~1 was unlocked in four cases (3-4, 3-8, 3-10, 4-3).
 
-The LLM arms are \emph{session-attributed proposal systems}, not verified model interventions. Model identifiers come from agent-interface sessions, not provider API records, and decoding settings were not controllable. Fable~5.1, GPT-5.6, and Gemini~3.8 each used a fresh per-case context resumed only for rounds 2--3 of that case; for Gemini~3.8 most cases had all three proposals prepared before execution. The LLM comparison is therefore exploratory and compares realised proposal systems, not intrinsic LLM capability.
+The LLM arms are \emph{session-attributed proposal systems}, not verified model interventions: identifiers come from agent-interface sessions rather than provider API records, decoding settings were not controllable, and each arm used a fresh per-case context resumed only for rounds 2--3 of that case (for Gemini~3.8 most cases had all three proposals prepared before execution). The LLM comparison is therefore exploratory and compares realised proposal systems, not intrinsic LLM capability.
 
-The random-overlay arm asks whether an LLM is needed at all as the proposer. For each case it draws three overlays non-adaptively (all three before any execution) with a fixed seed. The number of changed parameters $k$ is sampled from the pooled empirical distribution of parameters that the three LLM arms actually changed relative to the reference on the 198 panel records (excluding $k=0$); the chosen parameters then receive values drawn uniformly within the family search-space bounds, with the same integer, Boolean, and radial-gate repairs as the calibration sampler, and with unfolding parameters available only when stage~1 is unlocked. Values are not step-size matched to the LLMs; the control matches proposal sparsity, not proposal geometry.
+The random-overlay arm asks whether an LLM is needed at all as the proposer. For each case it draws three overlays non-adaptively with a fixed seed: the number of changed parameters $k$ is sampled from the pooled empirical distribution of parameters the three LLM arms actually changed on the 198 panel records (excluding $k=0$), and the chosen parameters receive values drawn uniformly within the family bounds, with unfolding keys available only when stage~1 is unlocked. The control matches proposal sparsity, not proposal geometry or step size.
 
-To separate the selector from the proposals, each arm is also summarised under reference policies applied to the same executed candidates: retain the start; always take round~1; a uniformly random round (reported as its expectation, the mean of the three rounds); pure maximum-proxy selection with the start eligible and no tie-break; and a GT oracle (best of start and three rounds). These are post-hoc fixed-pool comparisons; an adaptive proposer might have generated different later proposals under a different rule.
+To separate the selector from the proposals, each arm is also summarised under reference policies applied to the same executed candidates: retain the start; always take round~1; a uniformly random round (reported as the mean of the three rounds); pure maximum-proxy selection with the start eligible; and a GT oracle (best of start and three rounds). These are post-hoc fixed-pool comparisons; an adaptive proposer might have generated different later proposals under a different rule.
 
 \begin{figure*}[t]
 \centering
@@ -526,49 +445,18 @@ To separate the selector from the proposals, each arm is also summarised under r
 \subsubsection{Evaluation metrics and uncertainty}
 \label{sec:metrics}
 
-Offline segmentation accuracy is point-level semantic mIoU over the whole subset with labels background plus the positional block classes ($C=7$ for staggered and continuous, $8$ for complex). With $\mathcal A=\{c:\operatorname{TP}_c+\operatorname{FP}_c+\operatorname{FN}_c>0\}$ the set of classes present in GT or prediction,
-\begin{equation}
-\operatorname{IoU}_c
-=
-\frac{\operatorname{TP}_c}
-{\operatorname{TP}_c+\operatorname{FP}_c+\operatorname{FN}_c},
-\qquad
-\operatorname{mIoU}
-=
-\frac{1}{|\mathcal A|}\sum_{c\in\mathcal A}\operatorname{IoU}_c ,
-\end{equation}
-where IoU is pooled over points per class and background is included whenever it belongs to $\mathcal A$. Points removed by denoising or outside every SAM mask count as background, so lost lining points are false negatives. In every reported subset all $C$ classes occur in GT, so $|\mathcal A|=C$ throughout.
+Offline segmentation accuracy is point-level semantic mIoU over the whole subset, pooled per class over background plus the positional block classes ($C=7$ for staggered and continuous, $8$ for complex; all classes occur in every subset). Points removed by denoising or outside every SAM mask count as background, so lost lining points are false negatives. Proxy fidelity is reported as MAE against GT mIoU and Spearman $\rho$; for the paired test, pair-ranking accuracy is the fraction of the 27 pairs in which the reference scores strictly higher than its degraded counterpart, and alarm precision and recall are calculated at the fixed threshold of 0.5 against the reference/degraded construction labels. The primary interval for $\rho$ is a percentile bootstrap over subsets within family (pairs kept together; 2000 replicates); because subsets of one parent tunnel are dependent, a sensitivity interval enumerates all $5^5$ ordered resamples of the five parent tunnels.
 
-Proxy fidelity is reported as mean absolute error
-\begin{equation}
-\operatorname{MAE}
-=
-\frac{1}{n}\sum_{i=1}^{n}
-|\hat{y}_i-y_i|
-\end{equation}
-against GT mIoU, and Spearman $\rho$, which measures whether the proxy orders runs consistently with GT accuracy. For the paired degradation test, ranking accuracy is
-\begin{equation}
-\operatorname{PairRank}
-=
-\frac{1}{M}\sum_{s=1}^{M}
-\mathbb{I}
-\left[
-\hat{y}_{s,\mathrm{ref}}>
-\hat{y}_{s,\mathrm{deg}}
-\right],
-\end{equation}
-where $M=27$ and tied scores do not count as successful rankings. Alarm precision and recall are calculated at the fixed threshold of 0.5 against the reference/degraded construction labels. The primary interval for $\rho$ is a percentile bootstrap that resamples \emph{subsets} within family (pairs kept together; 2000 replicates, seed 0). Because subsets of one parent tunnel are dependent, a sensitivity interval enumerates all $5^5$ ordered resamples of the five parent tunnels.
-
-For refinement, the case effect $\Delta_i$ is the GT mIoU of the selected output minus that of the start. We report mean and median $\Delta$, improved/unchanged/harmed counts at three-decimal precision, worst harm, family and GT-stratum means, and 95\% intervals from a paired parent-tunnel cluster bootstrap (five clusters; 100{,}000 resamples; fixed seed). With five clusters these intervals are coarse, and with one realised trajectory per case and arm they exclude proposer stochasticity. Efficiency is described by proposal yield (candidates whose proxy exceeds the start), accepted-proposal precision (of those, the fraction whose GT mIoU also exceeds the start), selector regret (best available GT mIoU minus selected GT mIoU), and segmentation compute; LLM latency and cost are not compared because commensurate metadata are unavailable.
+For refinement, the case effect $\Delta_i$ is the GT mIoU of the selected output minus that of the start. We report mean and median $\Delta$, improved/unchanged/harmed counts at three-decimal precision, worst harm, family and GT-stratum means, and 95\% intervals from a paired parent-tunnel cluster bootstrap (five clusters; 100{,}000 resamples). With five clusters these intervals are coarse, and with one realised trajectory per case and arm they exclude proposer stochasticity. Efficiency is described by proposal yield (candidates whose proxy exceeds the start), accepted-proposal precision (the fraction of those whose GT mIoU also exceeds the start), and selector regret (best available minus selected GT mIoU); LLM latency and cost are not compared because commensurate metadata are unavailable.
 
 % ═════════════════════════════════════════════════════════════════════════
 \section{Results}\label{sec:results}
 
-The results follow the three questions of Section~\ref{sec:exp-setup}: Section~\ref{sec:main-results} compares feature sets on the calibration runs; Section~\ref{sec:degradation-results} tests the frozen proxy on the 54 stress-test runs; Sections~\ref{sec:poc-verification}--\ref{sec:efficiency-results} report the four-arm refinement panel and separate the selector from the proposers; and Section~\ref{sec:error-analysis} analyses where the proxy, the segmentation, and the selector err.
+The results follow the three questions of Section~\ref{sec:exp-setup}: Section~\ref{sec:main-results} compares feature sets on the calibration runs; Section~\ref{sec:degradation-results} tests the frozen proxy on the 54 stress-test runs; Sections~\ref{sec:poc-verification}--\ref{sec:regional-results} report the four-arm refinement panel and separate the selector from the proposers; and Section~\ref{sec:error-analysis} analyses where the proxy, the segmentation, and the selector err.
 
 \subsection{Proxy calibration and transfer between families}\label{sec:main-results}
 
-Table~\ref{tab:ablation-results} and Fig.~\ref{fig:ablation_results}a compare feature sets on the 120 development runs. The ten-feature model fits the calibration data most closely but transfers worst among the combined models; the four-feature compact model has the highest LOFO correlation (0.828) and lowest LOFO MAE (0.112). Across the eight nested candidates LOFO $\rho$ ranged from 0.723 (six features) to 0.828 (four); dropping the missing-depth rate to three features gave 0.794. SC alone transfers better than PQ alone, while the compact combination of one PQ and three SC measurements transfers better than either group on its own. The folds differ substantially: held-out continuous $\rho=0.627$ against 0.942 (staggered) and 0.915 (complex), so transfer to the multi-station continuous family is the weakest link in the calibration evidence. Within-family label permutation raises MAE to $0.196\pm0.008$ and lowers $\rho$ to $0.202\pm0.089$ (20 repeats), so the association is not an artefact of family means. These figures condition on parameter variation around three scans and, having been used to choose the feature set, are diagnostics rather than unbiased transfer estimates.
+Table~\ref{tab:ablation-results} and Fig.~\ref{fig:ablation_results}a compare feature sets on the 120 development runs. The ten-feature model fits the calibration data most closely but transfers worst among the combined models; the four-feature compact model has the highest LOFO correlation (0.828) and lowest LOFO MAE (0.112). SC alone transfers better than PQ alone, and the compact combination of one PQ and three SC measurements transfers better than either group. The folds differ substantially (held-out continuous $\rho=0.627$ against 0.942 staggered and 0.915 complex), so transfer to the multi-station continuous family is the weakest link in the calibration evidence. Within-family label permutation collapses $\rho$ to about 0.2, so the association is not an artefact of family means. Having been used to choose the feature set, these figures are diagnostics rather than unbiased transfer estimates.
 
 \begin{table*}[t]
 \caption{Feature-set comparison on the 120 development runs. LOFO: leave-one-family-out, mean of three folds. Per-fold LOFO for the deployed model: staggered $\rho=0.942$, MAE 0.122; continuous 0.627, 0.125; complex 0.915, 0.088. Permutation control (deployed set, 20 within-family shuffles): $\rho=0.202\pm0.089$, MAE $0.196\pm0.008$.}\label{tab:ablation-results}
@@ -595,7 +483,7 @@ The selected proxy contains one PQ and three SC measurements: missing-depth rate
 \end{aligned}
 \label{eq:lean-proxy}
 \end{equation}
-with $\alpha=10$ and constants in Appendix~\ref{app:proxy-package}. Positive correspondence and fill coefficients associate higher scores with segmentations that are populated and supported by detected joint evidence; negative ring-count and missing-depth coefficients associate lower scores with implausible ring counts and incomplete depth maps. These are conditional associations in a correlated linear model, not independent causal effects or instructions for changing parameters.
+with $\alpha=10$ and constants in Appendix~\ref{app:proxy-package}. Higher scores go to segmentations that are populated and supported by detected joint evidence; lower scores to implausible ring counts and incomplete depth maps. These are conditional associations in a correlated linear model, not instructions for changing parameters.
 
 \begin{figure*}[t]
 \centering
@@ -652,7 +540,7 @@ Random & 0.628 & 0.752 & $+0.014$ & 0.000 & $[-0.028,+0.078]$ & 16/22 & 8 / 8 / 
 \end{tabular*}
 \end{table*}
 
-Table~\ref{tab:selector-policies} and Fig.~\ref{fig:refinement_results}b isolate the selector on the same candidates. Unselected proposals harm three of four arms on average; the monotone-accept selector recovers 47--78\% of the GT-oracle gain. Max-proxy matches monotone-accept for almost every case--arm pair (one Gemini~3.8 tie-break on 3-4). The collapse and recovery of unselected random proposals is the strongest within-study evidence that proxy ranking with the start eligible, not proposer identity, carries the gain.
+Table~\ref{tab:selector-policies} and Fig.~\ref{fig:refinement_results}b isolate the selector on the same candidates. Unselected proposals harm three of four arms on average; the monotone-accept selector recovers 47--78\% of the GT-oracle gain. Max-proxy matches monotone-accept for almost every case--arm pair (one Gemini~3.8 tie-break on 3-4). The collapse and recovery of unselected random proposals is the strongest within-study evidence that proxy ranking with the start eligible, not proposer identity, carries the gain. Proposal yield differs by arm without changing this picture: of 66 candidates each, Fable~5.1, GPT-5.6, Gemini~3.8, and random produced 43, 22, 36, and 25 proxy-improving candidates, of which 39--56\% also improved GT mIoU, with mean selector regret of 0.014, 0.010, 0.006, and 0.017.
 
 \begin{table*}[t]
 \caption{Mean mIoU on the 22-case panel under alternative selection policies applied to the same executed candidates. All policies except the oracle are GT-blind and deployable; all are evaluated with GT. Random round is reported as its expectation (mean of three rounds). Oracle recovery $=$ (monotone-accept $-$ start)/(oracle $-$ start). Post-hoc fixed-pool comparison.}\label{tab:selector-policies}
@@ -698,16 +586,12 @@ Start GT mIoU $\ge0.7$ & 16 & $-0.014$ & $-0.008$ & $+0.009$ & $-0.012$ \\
 \end{tabular*}
 \end{table*}
 
-\subsection{Proposal yield and compute}\label{sec:efficiency-results}
-
-All 66 candidates per arm executed ($264$ in total). Fable~5.1 produced 43 proxy-improving candidates, of which 17 (39.5\%) also improved GT mIoU; GPT-5.6 produced 22, of which 12 (54.5\%); Gemini~3.8 produced 36, of which 18 (50.0\%); random produced 25, of which 14 (56.0\%). Mean selector regret was 0.014, 0.010, 0.006, and 0.017, respectively. Segmentation compute was similar across arms (mean 231--244\,s per run on one NVIDIA RTX~5060 GPU for the LLM arms; the random arm used the same execution path) and says nothing about LLM inference cost.
-
 \subsection{Error analysis}\label{sec:error-analysis}
 
 Three questions remain: where the proxy's numerical error comes from, which segmentation errors refinement removes, and why the selector sometimes retains a worse output. Point-level outcomes are classified against GT as \emph{correct}; \emph{false negative} (FN, a lining point predicted as background); \emph{false positive} (FP, a background point predicted as lining); and \emph{class swap} (a lining point assigned to the wrong lining block). Fractions are of all points in a subset (Table~\ref{tab:error-composition}; Fig.~\ref{fig:error_maps}).
 
 \paragraph{Proxy error.}
-On the 54 stress-test runs the signed error $\hat y-y$ is one-directional within each group: reference runs are under-estimated by 0.124 on average (staggered $-0.093$, continuous $-0.198$, complex $-0.081$) and degraded runs over-estimated by 0.076. The two directions together describe range compression, as expected from a regularised linear model whose predictions shrink towards the calibration mean. Two of the four measurements saturate on the degraded runs (missing-depth rate 0.89, fill rate 0.04 on average, against 0.16 and 0.71 for reference runs), and the ring-count residual is zero in all 54 runs, so the order \emph{within} the reference group rests on correspondence and, to a lesser extent, fill. Reference-run correspondence F1 averages 0.37, 0.24, and 0.30 by family, and the three reference alarms are the three reference runs with the lowest F1 (0.057, 0.124, and 0.071 for 3-2, 3-5, and 4-4): their correspondence contribution is negative ($-0.061$, $-0.024$, $-0.053$) while the other three terms are positive. Two of these are moderately accurate outputs (GT mIoU 0.631 and 0.588) on multi-station continuous scans with weak detected joint evidence; the third (4-4, GT mIoU 0.347) is a poor output that the construction labels count as a false alarm.
+On the 54 stress-test runs the signed error $\hat y-y$ is one-directional within each group: reference runs are under-estimated by 0.124 on average (worst for continuous, $-0.198$) and degraded runs over-estimated by 0.076, the range compression expected from a regularised linear model. Missing-depth and fill saturate on the degraded runs (0.89 and 0.04 against 0.16 and 0.71 for reference runs) and the ring-count residual is zero in all 54 runs, so the order \emph{within} the reference group rests on correspondence and, to a lesser extent, fill. The three reference alarms (3-2, 3-5, 4-4) are the three reference runs with the lowest correspondence F1 (0.06--0.12), the only term that contributes negatively for them. Two are moderately accurate outputs (GT mIoU 0.631 and 0.588) on multi-station continuous scans with weak detected joint evidence; the third (4-4, GT mIoU 0.347) is a poor output that the construction labels count as a false alarm.
 
 \begin{table}[ht]
 \caption{Point-level error composition (\% of all points, mean over subsets). Degraded and reference: the 27 stress-test pairs. Start and arms: the 22 admitted cases, with the selected output of each arm. Refinement changes the swap fraction; FN and FP move by at most 0.3 points.}
@@ -731,7 +615,7 @@ Random selected & 86.3 & 2.7 & 5.5 & 5.4 \\
 \end{table}
 
 \paragraph{Segmentation error.}
-The degraded overlays act by removing lining points: 68.6\% of all points become false negatives (Fig.~\ref{fig:error_maps}a), which is why the missing-depth and fill terms detect every one of them. Reference runs err differently: 7.1\% swaps, 5.2\% FP, 3.6\% FN. The error maps show that swaps occur as whole-ring bands (Fig.~\ref{fig:error_maps}b, d): when the key block of a ring is mislocated, the template labelling inherited from SAM4Tun rotates every block in that ring, the same mechanism identified for the unmodified pipeline in~\cite{taoR4Tun}. Refinement acts on this error type and on little else. Over the 22 cases the swap fraction falls from 6.6\% to 5.4--5.7\% depending on the arm, while FN and FP change by at most 0.3 points; the reduction is concentrated on the staggered family (8.9\% at the start; 4.7, 4.9, 6.6, and 5.5\% after Fable~5.1, GPT-5.6, Gemini~3.8, and random selection), where the gain in Table~\ref{tab:gt-strata} also concentrates. Continuous starts lose points instead (6.1\% FN, the largest of any family) and complex starts over-segment (8.3\% FP); neither fraction is reduced by any arm (5.2--7.0\% and 8.3--8.5\%), so the two families with little gain fail in ways that the permitted stage-2--5 changes did not repair within three attempts.
+The degraded overlays act by removing lining points: 68.6\% of all points become false negatives (Fig.~\ref{fig:error_maps}a), which is why the missing-depth and fill terms detect every one of them. Reference runs err differently (7.1\% swaps, 5.2\% FP, 3.6\% FN), and the error maps show that swaps occur as whole-ring bands (Fig.~\ref{fig:error_maps}b, d): when the key block of a ring is mislocated, the template labelling inherited from SAM4Tun rotates every block in that ring~\cite{taoR4Tun}. Refinement acts on this error type and on little else: over the 22 cases the swap fraction falls from 6.6\% to 5.4--5.7\% while FN and FP change by at most 0.3 points, and the reduction is concentrated on the staggered family (8.9\% at the start, 4.7--6.6\% after selection), where the gain in Table~\ref{tab:gt-strata} also concentrates. Continuous starts lose points instead (6.1\% FN) and complex starts over-segment (8.3\% FP); neither fraction is reduced by any arm, so the two families with little gain fail in ways that the permitted stage-2--5 changes did not repair within three attempts.
 
 \begin{figure*}[t]
 \centering
@@ -756,7 +640,7 @@ Benefit concentrates on the few low-accuracy starts; the accurate majority barel
 
 \subsection{Comparison with existing paradigms}\label{sec:positioning}
 
-Comparisons here concern operating points, not accuracy leaderboards (Table~\ref{tab:sota}). Supervised 3D models on Seg2Tunnel report strong in-distribution accuracy~\cite{lin2024seg2tunnel} but require per-point labels and GPU re-training for each new lining family, and provide no deployment-time accept/refine/flag gate. SAM4Tun reaches high accuracy on curated rings tuned case by case~\cite{ye2025sam4tun}, but a single fixed configuration transfers imperfectly off the reference scan (mean 0.722 over the 27 evaluation subsets here) and the pipeline emits no signal when it degrades. Relative to that static pipeline, Proxy4Tun adds an explicit accept/refine/flag gate without deployment labels. Relative to one-shot LLM parameter adapters such as R4Tun~\cite{taoR4Tun}, it adds a calibrated numeric proxy, so refinement can be \emph{assessed and selected} by an explicit estimated-quality signal rather than merely proposed; the random-control arm shows that this selection is where most of the benefit lies.
+Comparisons here concern operating points, not accuracy leaderboards (Table~\ref{tab:sota}). Supervised 3D models on Seg2Tunnel report strong in-distribution accuracy~\cite{lin2024seg2tunnel} but require per-point labels and re-training for each new lining family, and provide no deployment-time gate. SAM4Tun reaches high accuracy on rings tuned case by case~\cite{ye2025sam4tun}, but a single fixed configuration transfers imperfectly off the reference scan (mean 0.722 over the 27 evaluation subsets here) and emits no signal when it degrades. Relative to that static pipeline, Proxy4Tun adds an accept/refine/flag gate without deployment labels; relative to one-shot LLM parameter adapters such as R4Tun~\cite{taoR4Tun}, it adds a calibrated proxy so that refinement can be \emph{assessed and selected} rather than merely proposed, which the random-control arm shows is where most of the benefit lies. In practice, each pipeline release needs one expert reference per lining family and one offline calibration; the same calibration-and-selection pattern can extend to other parameterised infrastructure pipelines, provided the proxy is re-frozen whenever the pipeline or operating population changes.
 
 \begin{table*}[t]
 \caption{Positioning Proxy4Tun against representative tunnel-segmentation paradigms by setup cost and deployment capability. \checkmark{} indicates the requirement (or capability) applies, ``--'' that it does not. \emph{Deep-learning training} refers to training or fine-tuning a segmentation network; Proxy4Tun fits only a separate linear proxy on offline labelled development data. mIoU figures are \emph{not} measured under comparable settings: supervised and expert-tuned figures are taken from~\cite{lin2024seg2tunnel} and~\cite{ye2025sam4tun} under their original protocols, whereas the Proxy4Tun figures are from this study on the 27 evaluation subsets: 0.722 for the fixed expert reference, and 0.732 after proxy-admitted refinement of 22 cases with the Fable~5.1 arm (0.739 for GPT-5.6 and Gemini~3.8; 0.733 for random), with the five non-admitted subsets unchanged.}\label{tab:sota}
@@ -773,15 +657,9 @@ SAM4Tun, fixed family reference & -- & -- & -- & 0.722 (27 evaluation subsets) \
 \end{tabular*}
 \end{table*}
 
-\subsection{Practical implications}
-
-Each pipeline release needs one expert reference per lining family and one offline calibration. The frozen proxy then gives each new run a deployment-label-free mIoU estimate and an accept/refine/flag decision, and a retained-start selector turns any bounded proposer into a loop that filters harmful changes. The same calibration-and-selection pattern can extend to other parameterised infrastructure pipelines, provided the proxy is re-frozen whenever the pipeline or operating population changes.
-
 \subsection{Limitations}\label{sec:limitations}
 
-Claims rest on a single collection, three lining families, five parent tunnels, and one trajectory per case--arm.
-
-Five limitations bound the study. First, calibration uses parameter variation around one labelled development scan per family within one dataset; transfer depends on how closely a new tunnel matches its reference, and the weak continuous-family fold already shows within-family variation matters. Second, the executed pipeline is annotation-assisted at stage~1; replacing the ring index by a survey direction or geometric convention would require re-establishing the measurements. Third, the compact linear proxy is auditable but cannot represent nonlinear stage interactions or unfamiliar failures, and its four measurements do not register a rotation of block labels within a ring whose joints are correctly placed. Fourth, the alarm and refinement results use constructed degradations and proxy-admitted panels evaluated retrospectively; neither estimates deployment false-alarm rates on naturally degraded runs. Fifth, the LLM comparison is exploratory: identifiers are session-attributed, stochasticity is unmeasured, and the random control matches sparsity but not step size. A confirmatory design needs verified identifiers, repeated seeds, randomised arm order, and external datasets with natural failures.
+Claims rest on a single collection, three lining families, five parent tunnels, and one trajectory per case--arm; five limitations bound the study. First, calibration uses parameter variation around one labelled development scan per family within one dataset; transfer depends on how closely a new tunnel matches its reference, and the weak continuous-family fold already shows within-family variation matters. Second, the executed pipeline is annotation-assisted at stage~1; replacing the ring index by a survey direction or geometric convention would require re-establishing the measurements. Third, the compact linear proxy is auditable but cannot represent nonlinear stage interactions or unfamiliar failures, and its four measurements do not register a rotation of block labels within a ring whose joints are correctly placed. Fourth, the alarm and refinement results use constructed degradations and proxy-admitted panels evaluated retrospectively; neither estimates deployment false-alarm rates on naturally degraded runs. Fifth, the LLM comparison is exploratory: identifiers are session-attributed, stochasticity is unmeasured, and the random control matches sparsity but not step size. A confirmatory design needs verified identifiers, repeated seeds, randomised arm order, and external datasets with natural failures.
 
 % ═════════════════════════════════════════════════════════════════════════
 \section{Conclusions}\label{sec:conclusions}
@@ -810,79 +688,10 @@ Fable~5.1, GPT-5.6, and Gemini~3.8 were evaluated as proposal systems in the ref
 
 \section{Reference configurations and coordinate conventions}\label{app:anchor-parameter}
 
-Table~\ref{tab:anchor-params} lists the expert reference configuration of each family (JSON keys of the parameter snapshots). The continuous-family reference \texttt{3-1-1} is a profile identifier established on development scan 3-1 and applied unchanged to 3-2--3-10; the other references (1-1, 2-1, 4-1, 5-1) name both scan and profile, and 1-1 and 4-1 were tuned on their own GT. Table~\ref{tab:degraded-overlays} lists the three degraded overlays.
+The expert reference configuration of each family is released as a JSON parameter snapshot with the code (Data availability); the snapshots cover the unfolding geometry (diameter 5.5 / 5.9 / 7.5\,m and ring length 1.2 / 1.2 / 1.8\,m for staggered / continuous / complex), the radial denoising gates, the enhancement thresholds, the Hough accumulator settings, and the SAM template geometry (segments per ring, segment order, key-block height and joint inclination). The continuous-family reference is a profile established on development scan 3-1 and applied unchanged to 3-2--3-10; the other references (1-1, 2-1, 4-1, 5-1) name both scan and profile, and 1-1 and 4-1 were tuned on their own GT. Table~\ref{tab:degraded-overlays} lists the three degraded overlays.
 
-\paragraph{Coordinates.}
-Stage~1 samples the fitted centreline $\mathbf c(t)$ at $1210\,N_{\mathrm{sl}}$ parameter values and assigns each point to its nearest sample $\mathbf b$ with tangent $\mathbf t$. Coordinates are radius $r=\lVert\mathbf b-\mathbf a\rVert$, axial chord length $h$, and circumferential arc $s$ from
-\begin{equation}
-\begin{aligned}
-\phi&=\frac{180}{\pi}\arccos\frac{\mathbf u\cdot\mathbf v}{\lVert\mathbf u\rVert\lVert\mathbf v\rVert},\qquad
-\sigma=u_xt_y-u_yt_x,\\
-\theta_{\mathrm{deg}}&=\begin{cases}\phi,&\sigma\ge0,\\360-\phi,&\sigma<0,\end{cases}\qquad
-s=\frac{\pi\,\texttt{diameter}}{360}\,\theta_{\mathrm{deg}},
-\end{aligned}
-\label{eq:theta-convention}
-\end{equation}
-with $\mathbf u=\mathbf b-\mathbf a$ and $\mathbf v$ the vertical projected into the normal plane; $\theta=0$ is the invert. Measured median sample spacing on 26 reference runs is 4.98--5.05\,mm (regular) and 7.45--7.48\,mm (complex). An audit of 50 retained stage-1 tables (70{,}009{,}267 rows) found no non-finite $r$, $\theta$, or $h$.
-
-\paragraph{Ring-index provenance and units.}
-The Seg2Tunnel ring-index column orients the frame and validates $|\operatorname{corr}_{\mathrm P}(h,\text{ring})|>0.5$. Depth images use 5\,mm/px (15\,px $=75$\,mm); \texttt{processing.y\_bounds} is in millimetres, while \texttt{y\_step} and \texttt{mask\_theta\_*} are metres.
-
-\begin{table*}[t]
-\caption{Expert reference configurations by family (staggered / continuous / complex). Names are the JSON keys of the parameter snapshots.}\label{tab:anchor-params}
-\footnotesize
-\setlength{\tabcolsep}{3pt}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l l Y{0.30\textwidth} l @{}}
-\toprule
-Stage & Parameter & Description & Staggered / Continuous / Complex \\
-\midrule
-Unfolding & \texttt{diameter} & Cylindrical scale. & 5.5 / 5.9 / 7.5\,m \\
-Unfolding & \texttt{slice\_spacing\_factor} & Slice spacing (ring width). & 1.2 / 1.2 / 1.8\,m \\
-Unfolding & \texttt{polynomial\_degree} & Centreline fit degree. & 3 / 2 / 2 \\
-Unfolding & \texttt{canonical\_orientation} & Orient $\mathbf t$ by the ring-index column. & on / on / on \\
-Unfolding & \texttt{h\_ring\_sign} & Required sign of $\mathrm{corr}(h,\text{ring})$; fixes circumferential order. & $+1$ / $-1$ / $+1$ \\
-Unfolding & \texttt{residual\_recentre} & Per-bin frame recentring. & off / on / on \\
-\midrule
-Denoising & \texttt{mask\_r\_low} & Inner radial gate. & 2.33 / 2.85 / 3.65\,m \\
-Denoising & \texttt{mask\_r\_high} & Outer radial gate. & 2.78 / 3.0 / 3.9\,m \\
-Denoising & \texttt{y\_step} & Circumferential bin width. & 0.4 / 0.5 / 0.1\,m \\
-Denoising & \texttt{z\_step} & Radial histogram bin width. & 0.005 / 0.001 / 0.001\,m \\
-Denoising & \texttt{grad\_threshold} & Outer-edge gradient threshold. & 0.15 / 0.2 / 0.2 \\
-Denoising & \texttt{smoothing\_window\_size} & Cutoff-curve smoothing window. & 5 / 3 / 3 \\
-Denoising & \texttt{smoothing\_offset} & Post-smoothing cutoff bias. & $-$0.002 / $-$0.003 / $-$0.005\,m \\
-Denoising & \texttt{default\_cutoff\_z} & Fallback radial cutoff. & 2.75 / 2.85 / 3.65\,m \\
-\midrule
-Enhancing & \texttt{upsampling\_stage1} & Stage-1 upsampling spacing. & 0.06 / 0.08 / 0.09\,m \\
-Enhancing & \texttt{upsampling\_stage2} & Stage-2 upsampling spacing. & 0.03 / 0.04 / 0.045\,m \\
-Enhancing & \texttt{upsampling\_stage3} & Stage-3 upsampling spacing. & 0.015 / 0.02 / 0.0225\,m \\
-Enhancing & \texttt{curvature\_threshold} & Panel--joint curvature threshold. & 0.005 / 0.0005 / 0.0005 \\
-Enhancing & \texttt{depth\_threshold\_low} & Lower interpolation depth tolerance. & 0.005 / 0.01 / 0.0065\,m \\
-Enhancing & \texttt{depth\_threshold\_high} & Upper interpolation depth tolerance. & 0.015 / 0.01 / 0.013\,m \\
-Enhancing & \texttt{inter\_radius} & Interpolation neighbour radius. & 0.03 / 0.06 / 0.06\,m \\
-Enhancing & \texttt{n\_segment\_start/end} & Interpolated ring-index window. & 0--5 / 2--8 / 5--14 \\
-Enhancing & \texttt{ring\_spacing\_factor} & Nominal ring width. & 1.2 / 1.2 / 1.8\,m \\
-\midrule
-Detecting & \texttt{binary\_threshold} & Depth-map binarisation level. & 125 / 127 / 125 \\
-Detecting & \texttt{hough\_threshold\_oblique} & Oblique joint-line accumulator threshold (votes). & 65 / 30 / 35 \\
-Detecting & \texttt{hough\_threshold\_horizontal} & Horizontal joint-line accumulator threshold (votes). & 65 / 30 / 35 \\
-Detecting & \texttt{hough\_threshold\_vertical} & Ring-boundary accumulator threshold (votes). & 600 / 1500 / 5000 \\
-Detecting & \texttt{minLineLength\_oblique} & Minimum oblique line length. & 100 / 40 / 80\,px \\
-Detecting & \texttt{minLineLength\_horizontal} & Minimum horizontal line length. & 100 / 50 / 80\,px \\
-Detecting & \texttt{maxLineGap\_oblique} & Oblique line-merging gap limit. & 45 / 30 / 60\,px \\
-Detecting & \texttt{maxLineGap\_horizontal} & Horizontal line-merging gap limit. & 10 / 10 / 15\,px \\
-Detecting & \texttt{angle\_range\_oblique\_positive} & Positive oblique-joint angle band. & [6, 9] / [4, 10] / [5, 10]$^{\circ}$ \\
-Detecting & \texttt{angle\_range\_oblique\_negative} & Negative oblique-joint angle band. & [$-$9, $-$6] / [$-$10, $-$4] / [$-$10, $-$5]$^{\circ}$ \\
-\midrule
-Segmenting & \texttt{segment\_per\_ring} & Segments per ring. & 6 / 6 / 7 \\
-Segmenting & \texttt{segment\_order} & Circumferential segment order. & \begin{tabular}[t]{@{}l@{}}K,B1,A1--A3,B2 /\\K,B2,A3--A1,B1 /\\K,B1,A1--A4,B2\end{tabular} \\
-Segmenting & \texttt{segment\_width} & Nominal segment width. & 1200 / 1200 / 1800\,mm \\
-Segmenting & \texttt{K\_height} & Key-segment arc height. & 1079.9 / 823.8 / 1227.0\,mm \\
-Segmenting & \texttt{AB\_height} & Standard-segment arc height. & 3239.8 / 3346.8 / 3726.9\,mm \\
-Segmenting & \texttt{angle} & Oblique K-joint inclination. & 7.52 / 6.12 / 9.8$^{\circ}$ \\
-Segmenting & \texttt{processing.y\_bounds} & Circumferential prompt window. & 3800--13300 / 4500--14000 / 4200--13100\,mm \\
-\bottomrule
-\end{tabular*}
-\end{table*}
+\paragraph{Coordinates and units.}
+Stage~1 assigns each point to its nearest sample of the fitted centreline and expresses it by radius $r$, axial position $h$, and circumferential arc $s$ measured from the invert, with the centreline direction oriented so that $h$ correlates with the Seg2Tunnel ring-index column ($|\rho_{\mathrm P}|>0.5$, prescribed sign per family). Depth images use 5\,mm/px (15\,px $=75$\,mm); \texttt{processing.y\_bounds} is in millimetres, while \texttt{y\_step} and \texttt{mask\_theta\_*} are in metres.
 
 \begin{table*}[t]
 \caption{Degraded overlays of the paired degradation test: the lowest-mIoU completed trial of each family in an earlier exploration archive, applied on top of every evaluation subset's reference with unfolding inherited. Only parameters differing from the reference are listed (rounded; snapshots hold full precision).}
@@ -926,30 +735,7 @@ Feature $j$ & $\mu_j$ & $s_j$ & $w_j$ \\
 
 \section{Calibration sampling}\label{app:bo-config}
 
-Algorithm~\ref{alg:bo_exploration} and Table~\ref{tab:bo-config} specify the example-generation procedure; Table~\ref{tab:bo-bounds} lists the per-family bounds, which also define the refinement validator's search space.
-
-\begin{algorithm}[!htb]
-\caption{Generating calibration examples through space-filling sampling and Bayesian exploration}
-\label{alg:bo_exploration}
-\small
-\begin{algorithmic}[1]
-\Require Development subset $D_f$ with GT $Y_f$; reference $P_f^{\mathrm{ref}}$; bounds $\Theta_f$; $N_{\mathrm{exp}}=10$; budgets $N_0=32$, $N_1=8$; pool $M=2048$; attempt caps $A_0=M$, $A_1=3N_1$
-\Ensure Records $\mathcal T_f$ of $(\theta,\mathbf x,y)$
-\State $\mathcal T_f\gets\emptyset$; initialise a scrambled-Sobol sequence
-\Statex \textit{Stage 1: broad initial coverage}
-\While{fewer than $N_0$ valid trials and fewer than $A_0$ attempts}
-  \State Draw the next Sobol point; map to $\theta\in\Theta_f$ (integers rounded, Booleans thresholded; inverted radial gates reset to midpoint $\mp0.02$\,m)
-  \State Run the pipeline with $\operatorname{Apply}(P_f^{\mathrm{ref}},\theta)$; if valid, append $(\theta,\operatorname{Features}(R,N_{\mathrm{exp}}),\operatorname{mIoU}(R,Y_f))$, else log
-\EndWhile
-\Statex \textit{Stage 2: Bayesian exploration}
-\State Fit a GP to the $(\theta,y)$ pairs
-\While{fewer than $N_1$ valid trials and fewer than $A_1$ attempts}
-  \State Draw $M$ random candidates in $\Theta_f$; choose $\theta=\arg\max\sigma_t(\vartheta)$
-  \State Run the pipeline; if valid, append the record and refit the GP, else log
-\EndWhile
-\State \Return $\mathcal T_f$
-\end{algorithmic}
-\end{algorithm}
+Table~\ref{tab:bo-config} specifies the example-generation procedure of Section~\ref{sec:bo-experience}; Table~\ref{tab:bo-bounds} lists the per-family bounds, which also define the refinement validator's search space.
 
 \begin{table*}[t]
 \caption{Calibration sampling configuration (frozen snapshot).}\label{tab:bo-config}
@@ -958,10 +744,11 @@ Algorithm~\ref{alg:bo_exploration} and Table~\ref{tab:bo-config} specify the exa
 \toprule
 Setting & Value \\
 \midrule
-Valid trials per family & 40 (32 scrambled-Sobol $+$ 8 GP-uncertainty acquisitions) \\
-GP & Mat\'ern $\nu=2.5$ $+$ white noise; \texttt{normalize\_y=True}; length-scale bounds $(10^{-2},10^{2})$, noise $(10^{-6},10^{-1})$; \texttt{GaussianProcessRegressor}, 3 optimiser restarts \\
+Valid trials per family & 40 (32 scrambled-Sobol $+$ 8 GP-uncertainty acquisitions), applied as overlays on the family reference \\
+Sobol mapping & Continuous parameters scaled to bounds; integers rounded, Booleans thresholded; inverted radial gates reset to midpoint $\mp0.02$\,m \\
+GP & Mat\'ern $\nu=2.5$ $+$ white noise; \texttt{normalize\_y=True}; length-scale bounds $(10^{-2},10^{2})$, noise $(10^{-6},10^{-1})$; \texttt{GaussianProcessRegressor}, 3 optimiser restarts; refitted after each valid trial \\
 Acquisition & Maximise predictive standard deviation over a random pool of 2048 candidates \\
-Validity & Stages 1--5 and the offline evaluation step complete, evaluation file present, all ten candidate measurements finite; otherwise excluded and topped up (121 attempts, one failure, no cap reached) \\
+Validity & Stages 1--5 and the offline evaluation step complete, all ten candidate measurements finite; otherwise excluded and topped up (121 attempts, one failure) \\
 \bottomrule
 \end{tabular*}
 \end{table*}
@@ -1031,12 +818,8 @@ Stored selections & Each arm holds the 22 panel cases (66 executions). An earlie
 \end{tabular*}
 \end{table*}
 
-\paragraph{Tunnel ontology.}
-The LLM proposer consults a staged SAM4Tun ontology that encodes pipeline artifacts, per-stage parameters and quality metrics, failure modes, diagnostic rules, remediation actions, and inter-stage dependencies. The complete YAML is part of the release.
-
-
-\paragraph{Agent prompt.}
-Each attempt issues a single bounded JSON overlay. The model-facing prompt is assembled from a fixed skeleton (role, isolation rules, current state, GT-blind measurements and proxy features, allowed artifact images, family parameter bounds, and the required output schema); Listing~\ref{lst:prompt-skeleton} gives the schema. Full per-attempt prompts are part of the execution records. GT mIoU and evaluation directories are never included in any prompt.
+\paragraph{Ontology and prompt.}
+The LLM proposer consults a staged SAM4Tun ontology (pipeline artifacts, per-stage parameters and quality metrics, failure modes, diagnostic rules, remediation actions, inter-stage dependencies; the YAML is part of the release). Each attempt's prompt is assembled from a fixed skeleton (role, isolation rules, current state, GT-blind measurements and proxy features, allowed artifact images, family bounds) and requires the JSON schema of Listing~\ref{lst:prompt-skeleton}. Full per-attempt prompts are part of the execution records; GT mIoU and evaluation directories are never included.
 
 \begin{lstlisting}[caption={Required proposal schema (per attempt).},label={lst:prompt-skeleton}]
 {
@@ -1053,10 +836,10 @@ Each attempt issues a single bounded JSON overlay. The model-facing prompt is as
 An earlier Fable~5.1 arm run in a persistent session with pilot exposure gave mean selected mIoU 0.768 ($\Delta=+0.030$) on the same 22-case panel; it is superseded by the fresh per-case Fable~5.1 arm reported in the main text and is not used in any comparison.
 
 \paragraph{Worked example.}
-Table~\ref{tab:worked-example} traces one admitted case, subset 1-5 under the GPT-5.6 arm (fresh per-case context, stage~1 locked, residual 2.5\,cm in all rounds), from the start to the retained output. The start scores $\hat y_0=0.555$ (refine band) with correspondence F1 0.201. Round~1 loosened the detector (lower binarisation and Hough thresholds, longer oblique gap) to recover ``missing and fragmented staggered seams''; the executed candidate scored 0.528, below the start, and was therefore inadmissible. Reading that feedback, round~2 ``deliberately moves away from Round~1's permissive detector'' and tightened the same parameters; correspondence rose to 0.230 and the score to 0.571. Round~3 stayed ``close to the successful Round~2 settings'' and tightened further, reaching 0.610. The selector retained round~3 as the unique candidate above the start within $\varepsilon$; its offline GT mIoU is 0.887 against 0.549 at the start, the largest gain in the panel. Fill and missing-depth barely change across the rounds, illustrating that within a case the proxy moves through the correspondence term (Section~\ref{sec:error-analysis}). GT values were computed offline after the run and were never available to the agent.
+Table~\ref{tab:worked-example} traces subset 1-5 under the GPT-5.6 arm (stage~1 locked, residual 2.5\,cm in all rounds). The start scores $\hat y_0=0.555$ with correspondence F1 0.201. Round~1 loosened the detector to recover ``missing and fragmented staggered seams'' and scored 0.528, below the start. Reading that feedback, round~2 ``deliberately moves away from Round~1's permissive detector'' and tightened the same parameters (score 0.571); round~3 tightened further (0.610) and was retained; its offline GT mIoU is 0.887 against 0.549 at the start, the largest gain in the panel. Fill and missing-depth barely change across the rounds: within a case the proxy moves through the correspondence term (Section~\ref{sec:error-analysis}). GT values were computed offline and were never available to the agent.
 
 \begin{table*}[t]
-\caption{Worked example: subset 1-5, GPT-5.6 arm. Overlay values are shown for the parameters the agent changed relative to the staggered reference (Table~\ref{tab:anchor-params}); \texttt{curv} $=$ \texttt{curvature\_threshold}, \texttt{r} $=$ \texttt{inter\_radius}, \texttt{bin} $=$ \texttt{binary\_threshold}, \texttt{H$_{o}$/H$_{h}$} $=$ oblique/horizontal Hough thresholds, \texttt{gap} $=$ \texttt{maxLineGap\_oblique}, $y_{\mathrm{lo}}$ $=$ lower bound of \texttt{processing.y\_bounds} (mm). The four proxy measurements, the clipped score, the selector decision, and the offline GT mIoU are listed per round.}
+\caption{Worked example: subset 1-5, GPT-5.6 arm. Overlay values are shown for the parameters the agent changed relative to the staggered reference; \texttt{curv} $=$ \texttt{curvature\_threshold}, \texttt{r} $=$ \texttt{inter\_radius}, \texttt{bin} $=$ \texttt{binary\_threshold}, \texttt{H$_{o}$/H$_{h}$} $=$ oblique/horizontal Hough thresholds, \texttt{gap} $=$ \texttt{maxLineGap\_oblique}, $y_{\mathrm{lo}}$ $=$ lower bound of \texttt{processing.y\_bounds} (mm). The four proxy measurements, the clipped score, the selector decision, and the offline GT mIoU are listed per round.}
 \label{tab:worked-example}
 \centering
 \footnotesize
