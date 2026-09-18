@@ -17,17 +17,15 @@ Requires Python ≥ 3.11. SAM weights are local
 
 | Path | Purpose |
 |---|---|
-| [`final_package/`](final_package/README.md) | **Intact research package** — calibration + four-feature proxy + 3 LLM arms + random control |
 | [`anchors/`](anchors/README.md) | **Reference profiles** — stage scripts + `parameters_*.json` per tunnel family |
 | [`data/anchors/`](data/anchors/README.md) | **Frozen anchor runs** — full artifacts for 1-1 … 5-1 (do not overwrite) |
-| [`bo/`](bo/README.md) | Consolidated Bayesian-optimization package (proxy, campaigns, plots) |
+| [`bo/`](bo/README.md) | Canonical Bayesian-optimization code (proxy, campaigns, plots) |
 | [`bo/sc_general/`](bo/sc_general/) | Frozen four-feature proxy + refinement campaign runners |
 | [`data/bo/`](data/bo/MANIFEST.md) | **Frozen BO artifacts** — all phases under `data/bo/<phase>/` (do not overwrite) |
-| `data/refinement/<arm>/<case>/` | LLM / random refinement run trees (fable, gpt56, gemini38, random) |
+| `data/refinement/<arm>/<case>/` | Compact refinement labels and JSON (full trees in cold store) |
 | `data/sc-general/` | Stage-2 holdout scores and stage-3 selections / packets |
 | `data/subsets/` | Labelled point-cloud inputs (`*.txt`) |
-| `exports/sc-general-*-evaluation/` | Manuscript evaluation bundles |
-| [`archive/`](archive/MANIFEST.md) | Legacy campaigns and evidence moved out of the live tree |
+| `exports/sc-general-random-evaluation/` | Canonical panel CSV/JSON for the manuscript |
 | [`agents/ontology/`](agents/ontology/) | Segment schema and tunnel priors |
 | `sam4tun/` | CLI, helpers, modular stages, SAM vendor tree |
 | [`reports/`](reports/anchors-summary.md) | Experiment reports and winner manifests |
@@ -104,7 +102,7 @@ campaign under `data/<experiment-id>/`.
 
 ## Reproducing the paper (SC-general)
 
-Frozen artefacts live under `final_package/` (symlinks/copies into `data/`). Core scripts:
+Compact evidence lives in `data/sc-general/`, `data/refinement/`, and `exports/`. Core scripts:
 
 ```bash
 ./venv/bin/python bo/sc_general/build_tables.py --split both
@@ -122,10 +120,10 @@ Refinement campaign (fresh Fable 5.1 arm):
 # proposals come from fresh per-case agents; apply/finish via the same script
 ```
 
-Manuscript: `paper/Proxy4Tun/main_claude.tex`. Submission tag: `v1.0-aic-submission` (immutable). Cleanup tag: see `LINEAGE.md`.
+Manuscript: `paper/Proxy4Tun/main_claude.tex`. Submission tag: `v1.0-aic-submission` (immutable). Historical `archive/` and `final_package/` snapshots: tag `cleanup-2026-09-18` (see `LINEAGE.md`).
 
 Reproduction modes:
 - **Compile paper** — `paper/Proxy4Tun/main_claude.tex` + local `figs/`
-- **Compact numerical verification** — `final_package/` + `exports/` + selector/holdout scripts (no full pipeline)
+- **Compact numerical verification** — `data/sc-general/`, `data/refinement/`, `exports/`, and selector/holdout scripts (no full pipeline)
 - **Full pipeline rerun** — `data/subsets/` + `anchors/` into a new `data/<experiment-id>/` (never overwrite protected trees)
 - **Historical / cold-storage replay** — `/home/boringtao/Proxy4Tun-cold-store/` (see `LINEAGE.md`)
