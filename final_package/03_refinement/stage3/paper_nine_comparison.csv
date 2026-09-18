@@ -1,0 +1,10 @@
+subset,family,proxy_band,in_refine_band,anchor_proxy,anchor_mIoU,fable51_round,fable51_proxy,fable51_mIoU,delta_fable51,legacy_fable5_mIoU,delta_legacy_fable5,legacy_gpt56_mIoU,delta_legacy_gpt56
+4-4,complex,reject,False,0.4531,0.347,round3,0.5156,0.368,0.021,0.7,0.353,0.422,0.075
+1-5,staggered,refine,True,0.5551,0.549,round3,0.6837,0.892,0.343,0.782,0.233,0.437,-0.112
+1-4,staggered,refine,True,0.6463,0.556,round2,0.7224,0.578,0.022,0.786,0.23,0.556,0.0
+3-2,continuous,reject,False,0.4537,0.631,round3,0.4684,0.749,0.118,0.719,0.088,0.747,0.116
+4-3,complex,refine,True,0.5202,0.516,round2,0.5726,0.544,0.028,0.544,0.028,0.516,0.0
+4-1,complex,refine,True,0.5518,0.635,round1,0.6208,0.653,0.018,0.659,0.024,0.659,0.024
+3-4,continuous,refine,True,0.5197,0.622,anchor,0.5197,0.622,0.0,0.631,0.009,0.622,0.0
+3-5,continuous,reject,False,0.4388,0.588,round1,0.6712,0.87,0.282,0.588,0.0,0.713,0.125
+2-2,staggered,refine,True,0.6991,0.673,round2,0.7573,0.843,0.17,0.668,-0.005,0.586,-0.087

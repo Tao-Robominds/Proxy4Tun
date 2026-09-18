@@ -41,4 +41,4 @@ NOTEBOOK_PKG = PACKAGE_ROOT / "notebook_direct"
 ARCHIVE_V0_PKG = PACKAGE_ROOT / "archive_v0"
 
 # Manuscript figure output (read by bayes plotters)
-MANUSCRIPT_FIGS = REPO_ROOT / "paper" / "Proxy4Tun_manuscript" / "figs"
+MANUSCRIPT_FIGS = REPO_ROOT / "paper" / "Proxy4Tun" / "figs"

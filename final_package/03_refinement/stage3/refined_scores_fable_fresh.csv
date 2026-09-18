@@ -1,0 +1,28 @@
+subset,family,arm,in_panel,anchor_proxy,anchor_band,anchor_mIoU,selected_round,selected_proxy,selected_mIoU,delta_proxy,delta_mIoU,refined,gt_good,selection_reason
+1-1,staggered,fable_fresh,True,0.6067,refine,0.787,round2,0.6449,0.786,0.0382,-0.001,True,True,best proxy 0.6449; 2 within 0.01 margin; residual tiebreak -> round2
+1-2,staggered,fable_fresh,True,0.6478,refine,0.821,round2,0.6531,0.835,0.0053,0.014,True,True,best proxy 0.6531; 1 within 0.01 margin; residual tiebreak -> round2
+1-3,staggered,fable_fresh,True,0.5501,refine,0.779,round3,0.5671,0.78,0.017,0.001,True,True,best proxy 0.5671; 2 within 0.01 margin; residual tiebreak -> round3
+1-4,staggered,fable_fresh,True,0.6463,refine,0.556,round2,0.65,0.557,0.0036,0.001,True,False,best proxy 0.6500; 1 within 0.01 margin; residual tiebreak -> round2
+1-5,staggered,fable_fresh,True,0.5551,refine,0.549,round2,0.6216,0.886,0.0665,0.337,True,False,best proxy 0.6216; 1 within 0.01 margin; residual tiebreak -> round2
+2-2,staggered,fable_fresh,True,0.6991,refine,0.673,round2,0.753,0.846,0.0539,0.173,True,False,best proxy 0.7530; 1 within 0.01 margin; residual tiebreak -> round2
+2-3,staggered,fable_fresh,False,0.7463384308778203,accept,0.8,anchor,0.7463384308778203,0.8,0.0,0.0,False,True,not refined (out of band or missing selection)
+2-4,staggered,fable_fresh,True,0.6763,refine,0.835,round3,0.6963,0.783,0.02,-0.052,True,True,best proxy 0.6963; 2 within 0.01 margin; residual tiebreak -> round3
+2-5,staggered,fable_fresh,False,0.723479373550679,accept,0.886,anchor,0.723479373550679,0.886,0.0,0.0,False,True,not refined (out of band or missing selection)
+3-10,continuous,fable_fresh,True,0.5887,refine,0.853,round1,0.6189,0.852,0.0302,-0.001,True,True,best proxy 0.6189; 1 within 0.01 margin; residual tiebreak -> round1
+3-2,continuous,fable_fresh,False,0.4536534034557882,reject,0.631,anchor,0.4536534034557882,0.631,0.0,0.0,False,False,not refined (out of band or missing selection)
+3-3,continuous,fable_fresh,True,0.5216,refine,0.808,round3,0.5905,0.812,0.0689,0.004,True,True,best proxy 0.5905; 1 within 0.01 margin; residual tiebreak -> round3
+3-4,continuous,fable_fresh,True,0.5197,refine,0.622,round2,0.5296,0.601,0.01,-0.021,True,False,best proxy 0.5326; 2 within 0.01 margin; residual tiebreak -> round2
+3-5,continuous,fable_fresh,False,0.4388163486480276,reject,0.588,anchor,0.4388163486480276,0.588,0.0,0.0,False,False,not refined (out of band or missing selection)
+3-6,continuous,fable_fresh,True,0.6814,refine,0.836,round2,0.7442,0.82,0.0628,-0.016,True,True,best proxy 0.7442; 2 within 0.01 margin; residual tiebreak -> round2
+3-7,continuous,fable_fresh,True,0.5397,refine,0.845,round1,0.5439,0.846,0.0042,0.001,True,True,best proxy 0.5439; 2 within 0.01 margin; residual tiebreak -> round1
+3-8,continuous,fable_fresh,True,0.5613,refine,0.723,anchor,0.5613,0.723,0.0,0.0,False,True,monotone accept: no round beat anchor scaled proxy
+3-9,continuous,fable_fresh,True,0.6413,refine,0.82,round2,0.6468,0.818,0.0055,-0.002,True,True,best proxy 0.6468; 1 within 0.01 margin; residual tiebreak -> round2
+4-1,complex,fable_fresh,True,0.5518,refine,0.635,round3,0.5563,0.65,0.0045,0.015,True,False,best proxy 0.5563; 1 within 0.01 margin; residual tiebreak -> round3
+4-2,complex,fable_fresh,True,0.5435,refine,0.734,round1,0.5774,0.539,0.0339,-0.195,True,True,best proxy 0.5774; 3 within 0.01 margin; residual tiebreak -> round1
+4-3,complex,fable_fresh,True,0.5202,refine,0.516,round2,0.5408,0.516,0.0206,0.0,True,False,best proxy 0.5408; 1 within 0.01 margin; residual tiebreak -> round2
+4-4,complex,fable_fresh,False,0.4530978340507981,reject,0.347,anchor,0.4530978340507981,0.347,0.0,0.0,False,False,not refined (out of band or missing selection)
+4-5,complex,fable_fresh,True,0.6094,refine,0.75,round1,0.6555,0.784,0.0462,0.034,True,True,best proxy 0.6555; 2 within 0.01 margin; residual tiebreak -> round1
+5-2,complex,fable_fresh,True,0.6829,refine,0.793,round3,0.6985,0.793,0.0156,0.0,True,True,best proxy 0.6985; 2 within 0.01 margin; residual tiebreak -> round3
+5-3,complex,fable_fresh,True,0.6807,refine,0.762,round2,0.6863,0.761,0.0057,-0.001,True,True,best proxy 0.6863; 2 within 0.01 margin; residual tiebreak -> round2
+5-4,complex,fable_fresh,True,0.6923,refine,0.76,round3,0.7087,0.76,0.0164,0.0,True,True,best proxy 0.7087; 1 within 0.01 margin; residual tiebreak -> round3
+5-5,complex,fable_fresh,True,0.6098,refine,0.775,round3,0.6453,0.772,0.0355,-0.003,True,True,best proxy 0.6453; 1 within 0.01 margin; residual tiebreak -> round3

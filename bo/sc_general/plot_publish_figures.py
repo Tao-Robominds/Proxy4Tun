@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Result figures for paper/revision/main_claude.tex.
+"""Result figures for paper/Proxy4Tun/main_claude.tex.
 
 Reads the frozen sc-general tables (four-feature proxy, 54-run stress test,
 22-case four-arm refinement panel) and writes two vector PDFs:
@@ -8,7 +8,7 @@ Reads the frozen sc-general tables (four-feature proxy, 54-run stress test,
 * figs/refinement_results.pdf (a) selected mIoU by arm, (b) selector policies,
                               (c) per-case gain vs starting GT mIoU
 
-Read-only with respect to data/; writes only under paper/revision/figs/.
+Read-only with respect to data/; writes only under paper/Proxy4Tun/figs/.
 """
 
 from __future__ import annotations
@@ -40,7 +40,7 @@ RANDOM_EXPORT = REPO / "exports" / "sc-general-random-evaluation"
 PANEL = RANDOM_EXPORT / "panel_all_arms.csv"
 POLICIES = RANDOM_EXPORT / "selector_policies.csv"
 BOOT = RANDOM_EXPORT / "cluster_bootstrap.json"
-OUT = REPO / "paper" / "revision" / "figs"
+OUT = REPO / "paper" / "Proxy4Tun" / "figs"
 
 FAMILY_COLORS = {"staggered": "#2C73D2", "continuous": "#44BBA4", "complex": "#E67E22"}
 FAMILY_ORDER = ("staggered", "continuous", "complex")

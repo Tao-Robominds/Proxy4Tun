@@ -1,0 +1,94 @@
+{
+  "cases": {
+    "3-4": {
+      "agent_id": "dda9350d-e500-4cfd-b2f7-b8afd09ce9d1",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T18:20:51.726802"
+    },
+    "1-3": {
+      "agent_id": "e96e1c27-2d59-47ba-855d-bad223982b51",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T18:56:59.815495"
+    },
+    "1-1": {
+      "agent_id": "a4946ffe-205e-48ce-8516-cf72bdc3c760",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:27:59.730422"
+    },
+    "1-4": {
+      "agent_id": "0e3bff9b-1e8b-416e-891c-e7c0f9a108b1",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:28:05.767683"
+    },
+    "1-5": {
+      "agent_id": "b91e8879-4c42-47f0-9537-376c4ddb1d32",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:28:39.535685"
+    },
+    "1-2": {
+      "agent_id": "754241b1-8160-4a02-9e1d-06dad262c162",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:27:32.569417"
+    },
+    "2-4": {
+      "agent_id": "da0d173c-6924-4d97-9613-777a892b55f4",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:29:17.871210"
+    },
+    "2-2": {
+      "agent_id": "195d9542-296a-45df-b83d-690041e29f75",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:27:30.405624"
+    },
+    "3-3": {
+      "agent_id": "8bf61149-a559-4a7b-87a6-25495c5ebfd8",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:28:46.554974"
+    },
+    "3-7": {
+      "agent_id": "3-7-fable-fresh",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:30:18.974834"
+    },
+    "3-8": {
+      "agent_id": "3-8-fable-fresh",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:29:16.201378"
+    },
+    "3-10": {
+      "agent_id": "3-10-fable-fresh",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:28:58.269181"
+    },
+    "3-9": {
+      "agent_id": "3-9-fable-fresh",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:26:42.584707"
+    },
+    "3-6": {
+      "agent_id": "3-6-fable-fresh",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:27:03.477599"
+    },
+    "4-3": {
+      "agent_id": "4-3-fable-fresh",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:27:34.421375"
+    },
+    "4-2": {
+      "agent_id": "4-2-fable-fresh",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:04:13.293320"
+    },
+    "4-1": {
+      "agent_id": "4-1-fable-fresh",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:29:19.666951"
+    },
+    "4-5": {
+      "agent_id": "4-5-fable-fresh",
+      "model": "claude-fable-5-1-thinking-high",
+      "updated_at": "2026-09-15T19:29:09.580530"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Error analysis for paper/revision/main_claude.tex (Results, "Error analysis").
+"""Error analysis for paper/Proxy4Tun/main_claude.tex (Results, "Error analysis").
 
 Reads only frozen tables and executed run directories:
   * data/sc-general/stage2/holdout_scores.csv          (54 stress-test runs)
@@ -9,7 +9,7 @@ Reads only frozen tables and executed run directories:
     offline_gt.json,only_label.csv}                    (264 executed candidates)
   * <stress-run dir>/{only_label.csv,unwrapped.csv}    (per-point labels, frame)
 
-Writes only under paper/revision/figs/:
+Writes only under paper/Proxy4Tun/figs/:
   * error_maps.pdf              per-point error maps (unfolded surface)
   * error_analysis_numbers.json every number quoted in the section
 
@@ -38,7 +38,7 @@ HOLDOUT = REPO / "data" / "sc-general" / "stage2" / "holdout_scores.csv"
 PANEL = REPO / "exports" / "sc-general-random-evaluation" / "panel_all_arms.csv"
 MODELS = REPO / "bo" / "sc_general" / "models.json"
 REFINE = REPO / "data" / "refinement"
-OUT = REPO / "paper" / "revision" / "figs"
+OUT = REPO / "paper" / "Proxy4Tun" / "figs"
 
 ARMS = ("fable_fresh", "gpt56", "gemini38", "random")
 ARM_LABEL = {

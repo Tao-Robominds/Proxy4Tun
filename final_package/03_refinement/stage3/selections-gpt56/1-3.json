@@ -1,0 +1,84 @@
+{
+  "subset": "1-3",
+  "arm": "gpt56",
+  "anchor": {
+    "round": "anchor",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/1-3-family-proxy/runs/1-3-anchor",
+    "proxy_raw": 0.5501,
+    "proxy_scaled": 0.5501,
+    "band": "refine",
+    "mIoU": 0.779,
+    "recentre_residual_max_cm": 1.4,
+    "features": {
+      "correspondence_f1@15": 0.18682551305625716,
+      "sam_fill_rate": 0.7325314614464593,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.10903285620918383
+    }
+  },
+  "rounds": [
+    {
+      "round": "round1",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/refinement/gpt56/1-3/round1",
+      "proxy_raw": 0.5468,
+      "proxy_scaled": 0.5468,
+      "band": "refine",
+      "mIoU": 0.551,
+      "recentre_residual_max_cm": 1.4,
+      "features": {
+        "correspondence_f1@15": 0.1783956718390941,
+        "sam_fill_rate": 0.7372519921553955,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.10902184773990094
+      }
+    },
+    {
+      "round": "round2",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/refinement/gpt56/1-3/round2",
+      "proxy_raw": 0.5585,
+      "proxy_scaled": 0.5585,
+      "band": "refine",
+      "mIoU": 0.61,
+      "recentre_residual_max_cm": 1.4,
+      "features": {
+        "correspondence_f1@15": 0.2030842395531044,
+        "sam_fill_rate": 0.736192592187766,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.11647231943018957
+      }
+    },
+    {
+      "round": "round3",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/refinement/gpt56/1-3/round3",
+      "proxy_raw": 0.5704,
+      "proxy_scaled": 0.5704,
+      "band": "refine",
+      "mIoU": 0.78,
+      "recentre_residual_max_cm": 1.4,
+      "features": {
+        "correspondence_f1@15": 0.2264802736926521,
+        "sam_fill_rate": 0.7323801185939408,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.11568302726270038
+      }
+    }
+  ],
+  "selected": {
+    "round": "round3",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/refinement/gpt56/1-3/round3",
+    "proxy_raw": 0.5704,
+    "proxy_scaled": 0.5704,
+    "band": "refine",
+    "mIoU": 0.78,
+    "recentre_residual_max_cm": 1.4,
+    "features": {
+      "correspondence_f1@15": 0.2264802736926521,
+      "sam_fill_rate": 0.7323801185939408,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.11568302726270038
+    }
+  },
+  "selection_reason": "best proxy 0.5704; 1 within 0.01 margin; residual tiebreak -> round3",
+  "delta_proxy_scaled": 0.0202,
+  "delta_mIoU_offline": 0.001
+}

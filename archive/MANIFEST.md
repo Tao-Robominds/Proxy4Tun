@@ -89,3 +89,11 @@ Moved out of the live working tree; not part of the final SC-general package.
 - `paper_old` → `/home/boringtao/Projects/Proxy4Tun/archive/paper_old`
 - `legacy-gpt56-evidence` → `/home/boringtao/Projects/Proxy4Tun/archive/exports/legacy-gpt56-evidence`
 - `five-feature-evaluation` → `/home/boringtao/Projects/Proxy4Tun/archive/exports/five-feature-evaluation`
+
+## 2026-09-18 repository cleanup
+
+- Canonical manuscript: `paper/Proxy4Tun/main_claude.tex`
+- Paper history: `archive/paper-history/{manuscript,R4Tun}/`
+- Duplicate BO code roots: `archive/bo-history/`
+- Cold store: `/media/boringtao/R4Tun/Proxy4Tun-cold-store/` (see root `LINEAGE.md`)
+- Legacy Fable panel CSV: `archive/results-history/panel_all_arms_legacy_fable.csv`

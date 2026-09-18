@@ -2,9 +2,9 @@
 """Redraw the three legacy Google-Slides concept figures for main_claude.tex.
 
 Writes (aspect ratios match the previous PDFs):
-  paper/revision/figs/position.pdf   (711 x 403 pt)
-  paper/revision/figs/intrinsics.pdf (702 x 240 pt)
-  paper/revision/figs/b-p.pdf        (700 x 287 pt)
+  paper/Proxy4Tun/figs/position.pdf   (711 x 403 pt)
+  paper/Proxy4Tun/figs/intrinsics.pdf (702 x 240 pt)
+  paper/Proxy4Tun/figs/b-p.pdf        (700 x 287 pt)
 
 Thumbnails come from read-only BO/anchor artefacts under data/bo/ and
 scripts/3d/ (never writes into anchors/).
@@ -22,7 +22,7 @@ from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangl
 from PIL import Image
 
 REPO = Path(__file__).resolve().parents[2]
-OUT = REPO / "paper" / "revision" / "figs"
+OUT = REPO / "paper" / "Proxy4Tun" / "figs"
 ANCHOR = REPO / "data" / "bo" / "unified" / "5-2-family-proxy" / "runs" / "5-2-anchor"
 QL = REPO / "scripts" / "3d" / "5-1_quality_levels.png"
 

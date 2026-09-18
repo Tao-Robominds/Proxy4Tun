@@ -1,0 +1,36 @@
+{
+  "segment_per_ring": 6,
+  "segment_order": [
+    "K",
+    "B2",
+    "A3",
+    "A2",
+    "A1",
+    "B1"
+  ],
+  "segment_width": 1200,
+  "K_height": 823.8,
+  "AB_height": 3346.8,
+  "angle": 6.12,
+  "geometry_profile": "t3",
+  "mirror_k_geometry": true,
+  "segment_loop_extra": 1,
+  "use_original_label_distributions": true,
+  "processing": {
+    "resolution": 0.005,
+    "padding": 150,
+    "crop_margin": 50,
+    "mask_eps": 0.001,
+    "y_bounds": [
+      4500,
+      14000
+    ],
+    "y_exceptions_offsets": [
+      1140.08,
+      -1140.08,
+      0.0,
+      993.34,
+      -993.34
+    ]
+  }
+}

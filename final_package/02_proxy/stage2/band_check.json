@@ -1,0 +1,75 @@
+{
+  "criteria": "anchor proxy in [0.5, 0.7] and GT mIoU < 0.7",
+  "n_in_band": 6,
+  "in_band_cases": [
+    "1-4",
+    "1-5",
+    "2-2",
+    "3-4",
+    "4-1",
+    "4-3"
+  ],
+  "paper_panel": [
+    "1-4",
+    "1-5",
+    "2-2",
+    "3-2",
+    "3-4",
+    "3-5",
+    "4-1",
+    "4-3",
+    "4-4"
+  ],
+  "intersection_with_paper": [
+    "1-4",
+    "1-5",
+    "2-2",
+    "3-4",
+    "4-1",
+    "4-3"
+  ],
+  "paper_only": [
+    "3-2",
+    "3-5",
+    "4-4"
+  ],
+  "new_only": [],
+  "in_band_rows": [
+    {
+      "subset": "1-4",
+      "family": "staggered",
+      "mIoU": 0.556,
+      "proxy": 0.646303951095412
+    },
+    {
+      "subset": "1-5",
+      "family": "staggered",
+      "mIoU": 0.549,
+      "proxy": 0.5551113970371828
+    },
+    {
+      "subset": "2-2",
+      "family": "staggered",
+      "mIoU": 0.673,
+      "proxy": 0.6991424563960598
+    },
+    {
+      "subset": "3-4",
+      "family": "continuous",
+      "mIoU": 0.622,
+      "proxy": 0.5196911758815168
+    },
+    {
+      "subset": "4-1",
+      "family": "complex",
+      "mIoU": 0.635,
+      "proxy": 0.5518192011809684
+    },
+    {
+      "subset": "4-3",
+      "family": "complex",
+      "mIoU": 0.516,
+      "proxy": 0.5202175341472948
+    }
+  ]
+}

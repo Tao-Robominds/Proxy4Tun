@@ -1,0 +1,84 @@
+{
+  "subset": "4-2",
+  "arm": "gemini38",
+  "anchor": {
+    "round": "anchor",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/bo/unified/4-2-family-proxy/runs/4-2-anchor",
+    "proxy_raw": 0.5435,
+    "proxy_scaled": 0.5435,
+    "band": "refine",
+    "mIoU": 0.734,
+    "recentre_residual_max_cm": 2.0,
+    "features": {
+      "correspondence_f1@15": 0.21312284933676434,
+      "sam_fill_rate": 0.7318014994277484,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.2093606933058968
+    }
+  },
+  "rounds": [
+    {
+      "round": "round1",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/refinement/gemini38/4-2/round1",
+      "proxy_raw": 0.5447,
+      "proxy_scaled": 0.5447,
+      "band": "refine",
+      "mIoU": 0.57,
+      "recentre_residual_max_cm": 2.0,
+      "features": {
+        "correspondence_f1@15": 0.215593240265055,
+        "sam_fill_rate": 0.7312675694096163,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.2093606933058968
+      }
+    },
+    {
+      "round": "round2",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/refinement/gemini38/4-2/round2",
+      "proxy_raw": 0.5761,
+      "proxy_scaled": 0.5761,
+      "band": "refine",
+      "mIoU": 0.718,
+      "recentre_residual_max_cm": 2.0,
+      "features": {
+        "correspondence_f1@15": 0.2732941543000086,
+        "sam_fill_rate": 0.7318014994277484,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.2108369876417932
+      }
+    },
+    {
+      "round": "round3",
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/refinement/gemini38/4-2/round3",
+      "proxy_raw": 0.6618,
+      "proxy_scaled": 0.6618,
+      "band": "refine",
+      "mIoU": 0.744,
+      "recentre_residual_max_cm": 2.0,
+      "features": {
+        "correspondence_f1@15": 0.4274451915283511,
+        "sam_fill_rate": 0.7353677198667747,
+        "ring_count_error": 0.0,
+        "depth_nan_ratio": 0.20832905814151056
+      }
+    }
+  ],
+  "selected": {
+    "round": "round3",
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/refinement/gemini38/4-2/round3",
+    "proxy_raw": 0.6618,
+    "proxy_scaled": 0.6618,
+    "band": "refine",
+    "mIoU": 0.744,
+    "recentre_residual_max_cm": 2.0,
+    "features": {
+      "correspondence_f1@15": 0.4274451915283511,
+      "sam_fill_rate": 0.7353677198667747,
+      "ring_count_error": 0.0,
+      "depth_nan_ratio": 0.20832905814151056
+    }
+  },
+  "selection_reason": "best proxy 0.6618; 1 within 0.01 margin; residual tiebreak -> round3",
+  "delta_proxy_scaled": 0.1183,
+  "delta_mIoU_offline": 0.01
+}

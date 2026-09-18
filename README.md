@@ -32,7 +32,7 @@ Requires Python ≥ 3.11. SAM weights are local
 | `sam4tun/` | CLI, helpers, modular stages, SAM vendor tree |
 | [`reports/`](reports/anchors-summary.md) | Experiment reports and winner manifests |
 | `logs/` | Pipeline logs for anchor and key experiment runs |
-| `paper/Proxy4Tun_manuscript/` | Active manuscript |
+| `paper/Proxy4Tun/` | **Canonical manuscript** — `main_claude.tex` + `figs/` |
 
 ## Anchor quick reference
 
@@ -122,4 +122,10 @@ Refinement campaign (fresh Fable 5.1 arm):
 # proposals come from fresh per-case agents; apply/finish via the same script
 ```
 
-Manuscript: `paper/revision/main_claude.tex`. Tag: `v1.0-aic-submission`.
+Manuscript: `paper/Proxy4Tun/main_claude.tex`. Submission tag: `v1.0-aic-submission` (immutable). Cleanup tag: see `LINEAGE.md`.
+
+Reproduction modes:
+- **Compile paper** — `paper/Proxy4Tun/main_claude.tex` + local `figs/`
+- **Compact numerical verification** — `final_package/` + `exports/` + selector/holdout scripts (no full pipeline)
+- **Full pipeline rerun** — `data/subsets/` + `anchors/` into a new `data/<experiment-id>/` (never overwrite protected trees)
+- **Historical / cold-storage replay** — `/home/boringtao/Proxy4Tun-cold-store/` (see `LINEAGE.md`)

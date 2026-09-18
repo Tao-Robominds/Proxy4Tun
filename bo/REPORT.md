@@ -102,7 +102,7 @@ bayes (Aug 2–3)                notebook_direct (Jul 28)
   alarm 27/27 **PASS**. Holdout MAE drift **0.071 → 0.086**; train Spearman
   **0.853 → 0.877**. Clustered Spearman CI ≈ **[0.75, 0.89]**.
 - **Artifacts:** `data/bo/bayes/` (200 G). Figure regen:
-  `bo/bayes/plot_figures.py` → `Proxy4Tun_manuscript/figs/`.
+  `bo/bayes/plot_figures.py` → `paper/Proxy4Tun/figs/`.
 
 ### 2.6 proxy_scale + reflect
 
@@ -127,7 +127,7 @@ bayes (Aug 2–3)                notebook_direct (Jul 28)
 
 ## 3. Manuscript figures ↔ producers
 
-| Figure (under `Proxy4Tun_manuscript/figs/`) | Producer |
+| Figure (under `paper/Proxy4Tun/figs/`) | Producer |
 |---|---|
 | `proxy_training_fullstage.pdf` | `bo/bayes/plot_figures.py` (bayes tables) or `scripts/drawing/plot_proxy_fullstage.py` (full_stage tables) |
 | `proxy_holdout_fullstage.pdf` | same |

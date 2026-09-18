@@ -326,8 +326,19 @@ using the study operating bands:
 \end{cases}
 \label{eq:qc-bands}
 \end{equation}
-which illustrate assessment decisions and are not validated engineering acceptance criteria. Only ``refine'' starts enter the loop. The same band is applied to the retained output afterwards; a result may remain in the refine band after the fixed budget is exhausted. \paragraph{Selection.}
-The initial output remains available throughout refinement. If no candidate has a higher proxy score, we retain it. Otherwise, we consider candidates that improve on the initial score. 
+which illustrate assessment decisions and are not validated engineering acceptance criteria. Only ``refine'' starts enter the loop. The same band is applied to the retained output afterwards; a result may remain in the refine band after the fixed budget is exhausted.
+
+\paragraph{Selection.}
+Selection is monotone in the proxy and keeps the start eligible. Let $r=0$ be the start, $\mathcal V$ the scored candidates, $\hat y_r$ the clipped score, and $\eta_r$ the stage-1 recentring residual (cm). With $\mathcal C=\{r\in\mathcal V:\hat y_r>\hat y_0\}$ and $\mathcal C_\varepsilon=\{r\in\mathcal C:\hat y_r\ge\max_{\mathcal C}\hat y-\varepsilon\}$, $\varepsilon=0.01$,
+\begin{equation}
+r^\star=
+\begin{cases}
+0, & \mathcal C=\emptyset,\\
+\operatorname*{arg\,min}_{r\in\mathcal C_\varepsilon}(\eta_r,\,-\hat y_r), & \text{otherwise},
+\end{cases}
+\label{eq:refinement-selection}
+\end{equation}
+where the minimisation is lexicographic: among near-tied candidates the lower residual, then the higher score, is preferred. The residual is a GT-free stage-1 quantity used only as a tie-break; Section~\ref{sec:poc-verification} also reports pure maximum-proxy selection to show how much it mattered. SC measurements contribute to the proxy and inform the agent's diagnosis but impose no separate retention gate.
 
 \subsection{Experimental design}
 \label{sec:exp-setup}

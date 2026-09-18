@@ -1,0 +1,28 @@
+subset,family,arm,in_panel,anchor_proxy,anchor_band,anchor_mIoU,selected_round,selected_proxy,selected_mIoU,delta_proxy,delta_mIoU,refined,gt_good,selection_reason
+1-1,staggered,gemini38,True,0.6067,refine,0.787,round3,0.6182,0.763,0.0116,-0.024,True,True,best proxy 0.6182; 2 within 0.01 margin; residual tiebreak -> round3
+1-2,staggered,gemini38,True,0.6478,refine,0.821,round3,0.6995,0.842,0.0517,0.021,True,True,best proxy 0.6995; 1 within 0.01 margin; residual tiebreak -> round3
+1-3,staggered,gemini38,True,0.5501,refine,0.779,round2,0.6921,0.867,0.142,0.088,True,True,best proxy 0.6921; 1 within 0.01 margin; residual tiebreak -> round2
+1-4,staggered,gemini38,True,0.6463,refine,0.556,anchor,0.6463,0.556,0.0,0.0,False,False,monotone accept: no round beat anchor scaled proxy
+1-5,staggered,gemini38,True,0.5551,refine,0.549,round2,0.667,0.613,0.1119,0.064,True,False,best proxy 0.6670; 1 within 0.01 margin; residual tiebreak -> round2
+2-2,staggered,gemini38,True,0.6991,refine,0.673,round2,0.7569,0.839,0.0578,0.166,True,False,best proxy 0.7569; 1 within 0.01 margin; residual tiebreak -> round2
+2-3,staggered,gemini38,False,0.7463384308778203,accept,0.8,anchor,0.7463384308778203,0.8,0.0,0.0,False,True,not refined (out of band or missing selection)
+2-4,staggered,gemini38,True,0.6763,refine,0.835,round2,0.7084,0.835,0.0321,0.0,True,True,best proxy 0.7084; 1 within 0.01 margin; residual tiebreak -> round2
+2-5,staggered,gemini38,False,0.723479373550679,accept,0.886,anchor,0.723479373550679,0.886,0.0,0.0,False,True,not refined (out of band or missing selection)
+3-10,continuous,gemini38,True,0.5887,refine,0.853,round2,0.606,0.854,0.0173,0.001,True,True,best proxy 0.6060; 1 within 0.01 margin; residual tiebreak -> round2
+3-2,continuous,gemini38,False,0.4536534034557882,reject,0.631,anchor,0.4536534034557882,0.631,0.0,0.0,False,False,not refined (out of band or missing selection)
+3-3,continuous,gemini38,True,0.5216,refine,0.808,anchor,0.5216,0.808,0.0,0.0,False,True,monotone accept: no round beat anchor scaled proxy
+3-4,continuous,gemini38,True,0.5197,refine,0.622,round1,0.5534,0.692,0.0337,0.07,True,False,best proxy 0.5629; 2 within 0.01 margin; residual tiebreak -> round1
+3-5,continuous,gemini38,False,0.4388163486480276,reject,0.588,anchor,0.4388163486480276,0.588,0.0,0.0,False,False,not refined (out of band or missing selection)
+3-6,continuous,gemini38,True,0.6814,refine,0.836,round3,0.7143,0.841,0.0329,0.005,True,True,best proxy 0.7143; 1 within 0.01 margin; residual tiebreak -> round3
+3-7,continuous,gemini38,True,0.5397,refine,0.845,round1,0.5556,0.845,0.0159,0.0,True,True,best proxy 0.5556; 1 within 0.01 margin; residual tiebreak -> round1
+3-8,continuous,gemini38,True,0.5613,refine,0.723,round1,0.5615,0.728,0.0002,0.005,True,True,best proxy 0.5615; 1 within 0.01 margin; residual tiebreak -> round1
+3-9,continuous,gemini38,True,0.6413,refine,0.82,round1,0.6514,0.817,0.0101,-0.003,True,True,best proxy 0.6514; 1 within 0.01 margin; residual tiebreak -> round1
+4-1,complex,gemini38,True,0.5518,refine,0.635,round3,0.6083,0.658,0.0564,0.023,True,False,best proxy 0.6083; 1 within 0.01 margin; residual tiebreak -> round3
+4-2,complex,gemini38,True,0.5435,refine,0.734,round3,0.6618,0.744,0.1183,0.01,True,True,best proxy 0.6618; 1 within 0.01 margin; residual tiebreak -> round3
+4-3,complex,gemini38,True,0.5202,refine,0.516,anchor,0.5202,0.516,0.0,0.0,False,False,monotone accept: no round beat anchor scaled proxy
+4-4,complex,gemini38,False,0.4530978340507981,reject,0.347,anchor,0.4530978340507981,0.347,0.0,0.0,False,False,not refined (out of band or missing selection)
+4-5,complex,gemini38,True,0.6094,refine,0.75,round1,0.6223,0.78,0.013,0.03,True,True,best proxy 0.6223; 2 within 0.01 margin; residual tiebreak -> round1
+5-2,complex,gemini38,True,0.6829,refine,0.793,round3,0.6872,0.782,0.0042,-0.011,True,True,best proxy 0.6872; 2 within 0.01 margin; residual tiebreak -> round3
+5-3,complex,gemini38,True,0.6807,refine,0.762,round1,0.6843,0.762,0.0036,0.0,True,True,best proxy 0.6843; 1 within 0.01 margin; residual tiebreak -> round1
+5-4,complex,gemini38,True,0.6923,refine,0.76,anchor,0.6923,0.76,0.0,0.0,False,True,monotone accept: no round beat anchor scaled proxy
+5-5,complex,gemini38,True,0.6098,refine,0.775,round1,0.6732,0.793,0.0634,0.018,True,True,best proxy 0.6732; 1 within 0.01 margin; residual tiebreak -> round1

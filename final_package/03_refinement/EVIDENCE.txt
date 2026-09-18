@@ -1,0 +1,1 @@
+Full run trees cold-stored; local compact evidence: data/refinement (post-cleanup)
