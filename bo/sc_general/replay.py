@@ -26,7 +26,7 @@ import pandas as pd
 _REPO = Path(__file__).resolve().parents[2]
 if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
-from bo.elegant.features import ANCHOR_PARAMS  # noqa: E402
+from bo.runtime.features import ANCHOR_PARAMS  # noqa: E402
 
 DEFAULT_RING_COUNT = 10
 SHADOW_ROOT = _REPO / "data" / "sc-general" / "replay"

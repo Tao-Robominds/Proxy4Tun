@@ -33,7 +33,7 @@ _REPO = Path(__file__).resolve().parents[2]
 if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
 
-from bo.full_stage.train_proxy import predict  # noqa: E402
+from bo.runtime.ridge import predict  # noqa: E402
 from bo.paths import UNIFIED_DATA  # noqa: E402
 from bo.sc_general.features import all_features  # noqa: E402
 from bo.sc_general.label_map import build_label_map  # noqa: E402
@@ -42,8 +42,8 @@ from bo.sc_general.replay import (  # noqa: E402
     find_ring_count,
     replay_run,
 )
-from bo.unified.intrinsics import extract_intrinsics  # noqa: E402
-from bo.unified.spaces import holdout_case_config  # noqa: E402
+from bo.runtime.intrinsics import extract_intrinsics  # noqa: E402
+from bo.runtime.spaces import holdout_case_config  # noqa: E402
 
 PKG = Path(__file__).resolve().parent
 MODELS = PKG / "models.json"

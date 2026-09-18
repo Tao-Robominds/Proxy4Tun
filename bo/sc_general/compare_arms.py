@@ -648,7 +648,7 @@ def write_paper_nine(comp: pd.DataFrame) -> tuple[Path, Path]:
             f_proxy = float(s["proxy_scaled"])
             f_miou = float(s["mIoU"])
             if not family:
-                from bo.unified.spaces import FAMILY_MODE, family_of_subset
+                from bo.runtime.spaces import FAMILY_MODE, family_of_subset
 
                 family = FAMILY_MODE[family_of_subset(subset)]
 

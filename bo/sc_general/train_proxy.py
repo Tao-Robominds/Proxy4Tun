@@ -24,7 +24,7 @@ _REPO = Path(__file__).resolve().parents[2]
 if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
 
-from bo.full_stage.train_proxy import (  # noqa: E402
+from bo.runtime.ridge import (  # noqa: E402
     COEF_PRUNE_FRAC,
     fit_ridge,
     leave_one_family_out_cv,

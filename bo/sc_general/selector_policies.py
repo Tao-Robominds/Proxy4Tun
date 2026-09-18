@@ -32,7 +32,7 @@ if str(_REPO) not in sys.path:
 
 from bo.sc_general.select_round import select_dir_for  # noqa: E402
 from bo.sc_general.stage3_report import PANEL  # noqa: E402
-from bo.unified.spaces import FAMILY_MODE, family_of_subset  # noqa: E402
+from bo.runtime.spaces import FAMILY_MODE, family_of_subset  # noqa: E402
 
 STAGE3 = _REPO / "data" / "sc-general" / "stage3"
 EXPORT = _REPO / "exports" / "sc-general-random-evaluation"

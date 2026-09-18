@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from bo.unified.spaces import FAMILY_SPACES, Dim, family_of_subset
+from bo.runtime.spaces import FAMILY_SPACES, Dim, family_of_subset
 
 
 def dims_by_key(dims: list[Dim]) -> dict[tuple[str, str], Dim]:

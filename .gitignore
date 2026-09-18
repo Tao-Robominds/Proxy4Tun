@@ -33,7 +33,17 @@ sam4tun/segment-anything/segment_anything.egg-info/
 !/data/subsets/
 /data/subsets/*
 !/data/subsets/README.md
+!/data/README.md
 /sam4tun/data/
+
+# Release 1.0 holds the previous result trees (including data/bo). Do not commit them.
+/releases/1.0/data/anchors/
+/releases/1.0/data/bo/
+/releases/1.0/data/bo-*/
+/releases/1.0/data/notebook-direct
+/releases/1.0/data/reflect
+/releases/1.0/data/refinement/
+/releases/1.0/logs/
 
 # Logs (local only; manifests cite log names)
 /logs/

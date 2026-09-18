@@ -24,8 +24,8 @@ _REPO = Path(__file__).resolve().parents[2]
 if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
 
-from bo.bayes.clustered_stats import subset_bootstrap_spearman  # noqa: E402
-from bo.full_stage.train_proxy import predict  # noqa: E402
+from bo.runtime.clustered_stats import subset_bootstrap_spearman  # noqa: E402
+from bo.runtime.ridge import predict  # noqa: E402
 from bo.sc_general.build_tables import (  # noqa: E402
     BAYES_FEATURE_COLS,
     _join_row,
@@ -46,7 +46,7 @@ from bo.sc_general.score_holdouts import (  # noqa: E402
     tau_sweep,
     write_gate_md,
 )
-from bo.unified.spaces import family_of_subset  # noqa: E402
+from bo.runtime.spaces import family_of_subset  # noqa: E402
 
 STAGE2 = _REPO / "data" / "sc-general" / "stage2"
 OUT = _REPO / "data" / "sc-general" / "stage2_devonly"

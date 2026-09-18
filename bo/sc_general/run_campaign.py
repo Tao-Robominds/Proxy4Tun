@@ -32,7 +32,7 @@ from bo.sc_general.refine_pilot import (  # noqa: E402
 )
 from bo.sc_general.select_round import select  # noqa: E402
 from bo.sc_general.score_scaled import score_run, anchor_run_dir  # noqa: E402
-from bo.unified.spaces import FAMILY_MODE, family_of_subset  # noqa: E402
+from bo.runtime.spaces import FAMILY_MODE, family_of_subset  # noqa: E402
 
 STAGE3 = _REPO / "data" / "sc-general" / "stage3"
 CAMPAIGN = STAGE3 / "campaign.md"

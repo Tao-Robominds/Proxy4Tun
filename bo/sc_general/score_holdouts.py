@@ -25,8 +25,8 @@ _REPO = Path(__file__).resolve().parents[2]
 if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
 
-from bo.bayes.clustered_stats import subset_bootstrap_spearman  # noqa: E402
-from bo.full_stage.train_proxy import fit_ridge, predict  # noqa: E402
+from bo.runtime.clustered_stats import subset_bootstrap_spearman  # noqa: E402
+from bo.runtime.ridge import fit_ridge, predict  # noqa: E402
 
 STAGE2 = _REPO / "data" / "sc-general" / "stage2"
 HOLDOUT_TABLE = STAGE2 / "holdout_table.csv"

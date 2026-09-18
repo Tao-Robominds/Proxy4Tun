@@ -47,7 +47,7 @@ from bo.sc_general.refine_pilot import (  # noqa: E402
 from bo.sc_general.overlay_validator import validate_overlay  # noqa: E402
 from bo.sc_general.select_round import select, select_dir_for  # noqa: E402
 from bo.sc_general.stage3_report import PANEL  # noqa: E402
-from bo.unified.spaces import family_of_subset  # noqa: E402
+from bo.runtime.spaces import family_of_subset  # noqa: E402
 
 ARM = "fable_fresh"
 MODEL_ID = "claude-fable-5-1-thinking-high"

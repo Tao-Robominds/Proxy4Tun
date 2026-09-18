@@ -22,10 +22,10 @@ if str(_REPO) not in sys.path:
 
 from bo.paths import REPO_ROOT  # noqa: E402
 from bo.sc_general.build_tables import process_run  # noqa: E402
-from bo.unified.intrinsics import extract_intrinsics, has_complete_tier1, write_intrinsics  # noqa: E402
-from bo.unified.param_io import load_anchor_params, load_family_params, materialize_run_params  # noqa: E402
-from bo.unified.pipeline import parse_performance, run_stages  # noqa: E402
-from bo.unified.spaces import (  # noqa: E402
+from bo.runtime.intrinsics import extract_intrinsics, has_complete_tier1, write_intrinsics  # noqa: E402
+from bo.runtime.param_io import load_anchor_params, load_family_params, materialize_run_params  # noqa: E402
+from bo.runtime.pipeline import parse_performance, run_stages  # noqa: E402
+from bo.runtime.spaces import (  # noqa: E402
     CASE_CONFIG,
     all_holdout_subsets,
     family_of_subset,
