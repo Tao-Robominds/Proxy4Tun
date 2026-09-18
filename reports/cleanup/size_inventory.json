@@ -1,0 +1,142 @@
+[
+  {
+    "path": "anchors",
+    "exists": true,
+    "bytes": 987412,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "data/anchors",
+    "exists": true,
+    "bytes": 8600987589,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "data/bo",
+    "exists": true,
+    "bytes": 598776257155,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "data/sc-general",
+    "exists": true,
+    "bytes": 983618013,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "data/refinement",
+    "exists": true,
+    "bytes": 101708140264,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "data/_archive",
+    "exists": true,
+    "bytes": 29462496491,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "data/subsets",
+    "exists": true,
+    "bytes": 2177471326,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "exports",
+    "exists": true,
+    "bytes": 59518,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "final_package",
+    "exists": true,
+    "bytes": 44338,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "paper",
+    "exists": true,
+    "bytes": 17860420,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "manuscript",
+    "exists": true,
+    "bytes": 66735757,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "archive",
+    "exists": true,
+    "bytes": 110859415,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "logs",
+    "exists": true,
+    "bytes": 2204625,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "bo",
+    "exists": true,
+    "bytes": 7907096,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "bo-elegant",
+    "exists": true,
+    "bytes": 3855876,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "bo-full-stage",
+    "exists": true,
+    "bytes": 174255,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "bo-notebook-direct",
+    "exists": true,
+    "bytes": 57925,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "bo-proxy-scale",
+    "exists": true,
+    "bytes": 53763,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "bo-unified",
+    "exists": true,
+    "bytes": 423910,
+    "is_symlink": false,
+    "target": null
+  },
+  {
+    "path": "scripts/3d",
+    "exists": true,
+    "bytes": 117320708,
+    "is_symlink": false,
+    "target": null
+  }
+]

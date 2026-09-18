@@ -1,0 +1,102 @@
+{
+  "head": "bc8380e0dd2f7af9f3bcabaeb68087cc9f7ff3b2",
+  "key_checksums": [
+    {
+      "path": "bo/sc_general/models.json",
+      "sha256": "ffd06e852270d186230829f71bf9f1463dc79b85eec03f69def119ae0b355564",
+      "bytes": 4752
+    },
+    {
+      "path": "bo/sc_general/ablation.json",
+      "sha256": "5a2675daaf76af2f2aa47dc281c4d19900ba4fab74fdcc53520b846b7726b108",
+      "bytes": 26671
+    },
+    {
+      "path": "paper/Proxy4Tun/main_claude.tex",
+      "sha256": "96e5ca910253a533b3512582f346c9670e1464533c87c96d17a76831516003ba",
+      "bytes": 89764
+    },
+    {
+      "path": "paper/Proxy4Tun/figs/error_maps.pdf",
+      "sha256": "32e8fcdf737be62fc1ecf62f35e94729cb88fc3e0ecef1ec5dc6b035db2436ba",
+      "bytes": 70256
+    },
+    {
+      "path": "paper/Proxy4Tun/figs/error_analysis_numbers.json",
+      "sha256": "dc6bcbd2a188094d0a8369e24debc43a7bd29bf50f227863ca7602a09a8c6deb",
+      "bytes": 7987
+    },
+    {
+      "path": "paper/Proxy4Tun/figs/refinement_results.pdf",
+      "sha256": "86269ec7900e8f5aa228e53700a433d7f7ebc7e608ce1ccdb332d73323745df6",
+      "bytes": 276789
+    },
+    {
+      "path": "exports/sc-general-random-evaluation/cluster_bootstrap.json",
+      "sha256": "1b559985d5f85d39926ce98b531ea371953b5cd13bf10d6afd2899607983df1c",
+      "bytes": 2313
+    },
+    {
+      "path": "exports/sc-general-random-evaluation/panel_all_arms.csv",
+      "sha256": "b0e07d85497bb721325ec6dcbc19b657ffe7ca213d611852fa80880cf009e39f",
+      "bytes": 14794
+    },
+    {
+      "path": "exports/sc-general-random-evaluation/panel_all_arms_legacy_fable.csv",
+      "sha256": "b5e8deb3501521b643e3730848de87d3af40785f15186805d8592115e5b9a0e6",
+      "bytes": 14717
+    },
+    {
+      "path": "exports/sc-general-random-evaluation/panel_fable.csv",
+      "sha256": "f3649fb216e50d456f8e55db1feb1aab54ac80668641d436d48fe47e49cef402",
+      "bytes": 3969
+    },
+    {
+      "path": "exports/sc-general-random-evaluation/panel_fable_fresh.csv",
+      "sha256": "29b5a225b1d7209e670c63280ff7ae6e0c81856c5038f5fec0bd111f541f167f",
+      "bytes": 4046
+    },
+    {
+      "path": "exports/sc-general-random-evaluation/panel_gemini38.csv",
+      "sha256": "e9222e057c7dda32690577c0280898c4e913b9080b732d14aeb35f1a6623e86e",
+      "bytes": 3909
+    },
+    {
+      "path": "exports/sc-general-random-evaluation/panel_gpt56.csv",
+      "sha256": "230de20ad2d9cdf68a69d7b74b511838e860b77b4e5a5e87f9cc7ff40caf7dfb",
+      "bytes": 3931
+    },
+    {
+      "path": "exports/sc-general-random-evaluation/panel_random.csv",
+      "sha256": "73884b272561140a6fa5cb47d8024e380f05ea1332030dbb74e0d64338a3ef57",
+      "bytes": 3898
+    },
+    {
+      "path": "exports/sc-general-random-evaluation/report.md",
+      "sha256": "f383e7be80e193192f7fe91d0aab0be79908adf8e012495a5c8bc3e945e131ee",
+      "bytes": 1458
+    },
+    {
+      "path": "exports/sc-general-random-evaluation/selector_policies.csv",
+      "sha256": "3d7827b67f05ce82b4d3792c542df54b54b3c7a4a5e040cdd59fc4f8d5311921",
+      "bytes": 693
+    },
+    {
+      "path": "exports/sc-general-random-evaluation/summaries.json",
+      "sha256": "3cfe1b1d6ca42b666d5d94d1c34fd7c284ec9863754d0b1e74ca0c3c6c553723",
+      "bytes": 5790
+    }
+  ],
+  "tex_figs": [
+    "ablation_results.pdf",
+    "agent.pdf",
+    "b-p.pdf",
+    "error_maps.pdf",
+    "intrinsics.pdf",
+    "motivation.pdf",
+    "pipeline.pdf",
+    "refinement_results.pdf",
+    "task.pdf"
+  ],
+  "missing_figs": []
+}
