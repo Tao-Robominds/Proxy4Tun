@@ -1,0 +1,54 @@
+{
+  "subset": "1-5",
+  "family": "staggered",
+  "arm": "fable",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 145,
+      "hough_threshold_oblique": 60,
+      "hough_threshold_horizontal": 80,
+      "maxLineGap_oblique": 30
+    }
+  },
+  "proposal": {
+    "observation": "Round-1 feedback (relax oblique Hough 42 / maxLineGap 60, binary 115, inter_radius 0.07) was rejected: correspondence_f1@15 fell 0.322 -> 0.185 while sam_fill_rate, ring_count_error and depth_nan_ratio were unchanged (deltas +0.0002, 0, ~0). After-images show why: the extra oblique red/green segments did not land on joints - they appeared in the dense right block around the bolt-hole rows and inside the top rail/invert band (y<250), several bridging across two rings - i.e. spurious lines, not recovered joints. initial_prompt_points after round 1 still has ~11 centres for 10 rings, the single 'positive_slope' intersection was lost (became 'assume'), and several midpoint fallbacks shifted vertically by 150-350 px (x~1810: 2280->1930; x~2050: 1850->1690), so block boundaries in the labelled mask moved and became less regular. The incumbent (round 0) map already has many blue horizontal fallback lines concentrated in the sparse left third and in the top/bottom rail bands; the depth map itself is healthy (nan ratio 0.12, 10 rings, fill 0.74). Conclusion: on this scan the binding constraint is line precision, not line recall - adding lines lowers F1.",
+    "rule": "d9 (stage_4_detection): m_prompt_count / line set inflated by lines that do not match the K/AB pattern -> f_spurious_lines; d8: m_spacing_regularity poor after round 1 -> f_pattern_mismatch downstream of the spurious lines. d7 (f_missing_lines) was tested in round 1 via r_relax_hough and empirically refuted for this subset (F1 -0.137 with no change in fill or ring count), so the ontology's alternative branch r_tighten_hough applies.",
+    "failure_mode": "stage_4_detection.f_spurious_lines (false oblique/horizontal Hough lines in bolt-hole rows and rail/invert bands produce extra intersections and displaced fallback prompt centres), leading to stage_4_detection.f_pattern_mismatch.",
+    "rationale": "Reverse the round-1 direction along the ontology's r_tighten_hough remediation: raise binary_threshold above the 127 default so only strong joint/outlier pixels binarise (the F1-preserving staggered dev example used 150; the F1-losing one used 102 and round 1 used 115), raise hough_threshold_oblique to 60 to demand more accumulator support per oblique line, and cut maxLineGap_oblique to 30 so segments can no longer bridge across bolt-hole rows or ring boundaries. Also raise hough_threshold_horizontal to 80 (dev Example 1 kept F1 with 84; Example 3 lost F1 with 43) to thin the dense horizontal fallback lines in the rail/invert bands that do not correspond to any block boundary. Vertical Hough is untouched because the 10 ring boundaries are already exactly right; enhancing, denoising and sam are untouched because depth_nan_ratio, denoise_retained_ratio and sam_fill_rate are healthy and round 1 showed that stage-3/4 changes do not move them. Unfolding is untouched (stage-1 locked). All values are inside configs/bounds/staggered.json. Expected effect: fewer, more precise lines -> higher correspondence_f1@15 precision, stable fill/ring/nan terms.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991680441522386,
+    "denoise_retained_ratio": 0.7712866638776553,
+    "depth_nan_ratio": 0.12040894298363669,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.835928720500883,
+    "correspondence_f1@15": 0.381016830092567,
+    "chamfer_sym_px": 71.94979476928711,
+    "sam_fill_rate": 0.7357202621670618,
+    "phase_incoherence_deg": 14.1
+  },
+  "score": 0.6732192823971639,
+  "score_raw": 0.6732192823971639,
+  "band": "refine",
+  "gt_miou": 0.884,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6410668863547464,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.32237648215183345,
+    "sam_fill_rate": 0.7404006879561196,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12040894298363669
+  },
+  "elapsed_s": 264.6,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/1-5/round2/params",
+  "finished_at": "2026-09-19T13:29:24"
+}

@@ -1,0 +1,25 @@
+---
+description: Freeze data/release2 as the manuscript snapshot
+alwaysApply: true
+---
+
+# Frozen Release 2 manuscript data
+
+**HARD RULE:** `data/release2/` is locked for the manuscript. Never modify or remove anything under it. Do not chmod it writable, and do not pipeline-write, truncate, move, or replace files there.
+
+Frozen contents include calibration, proxy, degradation, references, refinement runs (Fable, Gemini, GPT-5.6 medium, random), selection records, and analysis reports.
+
+## Allowed
+
+- Read files for the manuscript, tables, and figures
+- Copy *from* `data/release2/` into a new directory
+
+## Forbidden
+
+```bash
+# BAD — writes or deletes the locked snapshot
+./venv/bin/python -u bo/release2/refine.py --apply 1-1 --arm fable --round 1 --proposal-json ...
+rm -rf data/release2/refinement/gpt56_medium
+```
+
+New experiments go under `data/<experiment-id>/`, never inside `data/release2/`.

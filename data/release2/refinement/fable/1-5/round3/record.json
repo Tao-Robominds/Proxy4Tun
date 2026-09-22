@@ -1,0 +1,54 @@
+{
+  "subset": "1-5",
+  "family": "staggered",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 155,
+      "hough_threshold_oblique": 72,
+      "hough_threshold_horizontal": 88,
+      "maxLineGap_oblique": 22
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 (tighten Hough: binary 145, oblique 60, horizontal 80, maxLineGap 30) was accepted: proxy 0.641 -> 0.673, correspondence_f1@15 0.322 -> 0.381, chamfer_sym_px 84.3 -> 71.9, phase_incoherence 24.2 -> 14.1 deg, ring_count_error stayed 0, depth_nan_ratio unchanged, sam_fill_rate dipped only -0.005 (0.740 -> 0.736). The after initial_prompt_points now has exactly 10 centres for 10 rings (8 midpoint + 2 assume) instead of 11, so the extra intersection is gone and the prompt grid is regular. The current detected_lines.png is cleaner but still carries spurious lines: a red oblique segment inside the top rail/invert band (x~1900-2100, y~50), oblique segments that cut across bolt-hole rows in the dense right half (e.g. x~1200-1450 y~1530, x~1700-1950 y~2380), and dense blue horizontal fallback lines in the top and bottom rail bands (y<100, y>2900) plus isolated horizontals in the sparse left third that sit on nothing. The two rounds so far form a monotone response on this subset: adding lines (round 1) cost -0.137 F1, removing lines (round 2) gained +0.059 F1, with fill/ring/nan essentially flat both times.",
+    "rule": "d9 (stage_4_detection): residual lines that do not belong to any joint or block boundary -> f_spurious_lines still partially active. d7 (f_missing_lines) is not indicated: prompt count equals expected rings, ring_count_error=0, and round 1 showed extra lines do not help. d5/d3/d12 do not fire (nan ratio 0.12, retained ratio 0.77, fill 0.74 healthy), so stages 2-3 and SAM are left alone.",
+    "failure_mode": "stage_4_detection.f_spurious_lines (remaining false oblique/horizontal Hough lines in rail bands and across bolt-hole rows lower line precision and pull correspondence_f1@15 down).",
+    "rationale": "Final round: take one more step along the direction that was just accepted (ontology r_tighten_hough), sized like round 2 but stopping short of the bound edges so genuine joint lines are not eliminated entirely: binary_threshold 145 -> 155 to drop more weak outlier pixels in the rail bands, hough_threshold_oblique 60 -> 72 and maxLineGap_oblique 30 -> 22 so oblique segments need denser contiguous support and cannot bridge bolt-hole rows, hough_threshold_horizontal 80 -> 88 to thin the horizontal fallback lines that carpet the top/bottom rail bands. Prompt-centre count is already anchored at 10 by the unchanged vertical Hough and by midpoint/assume fallback, so the risk to ring_count_error is low; SAM fill barely moved under round 2 and is expected to stay near 0.735. Unfolding untouched (stage-1 locked); denoising, enhancing and sam untouched because their measurements are healthy and round 1/2 showed detection-only overlays move F1 without disturbing them. All values are within configs/bounds/staggered.json.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991680441522386,
+    "denoise_retained_ratio": 0.7712866638776553,
+    "depth_nan_ratio": 0.12040894298363669,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8303104826314172,
+    "correspondence_f1@15": 0.3148196764760642,
+    "chamfer_sym_px": 92.18015670776367,
+    "sam_fill_rate": 0.7365578952261423,
+    "phase_incoherence_deg": 29.8
+  },
+  "score": 0.6354522633120333,
+  "score_raw": 0.6354522633120333,
+  "band": "refine",
+  "gt_miou": 0.693,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6732192823971639,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.381016830092567,
+    "sam_fill_rate": 0.7357202621670618,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12040894298363669
+  },
+  "elapsed_s": 261.0,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/1-5/round3/params",
+  "finished_at": "2026-09-19T14:30:12"
+}

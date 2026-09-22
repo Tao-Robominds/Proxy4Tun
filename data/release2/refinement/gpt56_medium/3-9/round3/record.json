@@ -1,0 +1,51 @@
+{
+  "subset": "3-9",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 3,
+  "overlay": {
+    "sam": {
+      "angle": 7.5
+    }
+  },
+  "proposal": {
+    "observation": "Moving the SAM taper angle to 7.0 improved correspondence_f1@15 by 0.009296 and sam_fill_rate by 0.001270 while detected lines, prompt centres, depth_nan_ratio, and the correct 10-ring layout remained unchanged.",
+    "rule": "When a stage-5-only change improves both correspondence and fill without disturbing stable upstream artifacts, continue in the validated direction with a smaller bounded step on the accepted incumbent.",
+    "failure_mode": "f_template_mismatch",
+    "rationale": "The accepted round-2 result isolates a beneficial steeper-template direction after the shallower 4.5-degree trial was rejected. Increasing the accepted 7.0-degree angle modestly to 7.5 degrees seeks further boundary alignment while limiting the risk of overshooting and preserving the stable detection, prompt spacing, ring count, and depth coverage.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9992437316181036,
+    "denoise_retained_ratio": 0.7719211863424968,
+    "depth_nan_ratio": 0.13082197231971604,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4312401055408971,
+    "correspondence_f1@15": 0.3068434254496829,
+    "chamfer_sym_px": 82.11956882476807,
+    "sam_fill_rate": 0.7304455404577879,
+    "phase_incoherence_deg": 1.2
+  },
+  "score": 0.6269745903437784,
+  "score_raw": 0.6269745903437784,
+  "band": "refine",
+  "gt_miou": 0.819,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6649189608600792,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.37297407396630483,
+    "sam_fill_rate": 0.7302593469158074,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.13082197231971604
+  },
+  "elapsed_s": 190.8,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-9/round3/params",
+  "finished_at": "2026-09-20T00:43:39"
+}

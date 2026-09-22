@@ -1,0 +1,79 @@
+{
+  "subset": "4-4",
+  "family": "complex",
+  "arm": "random",
+  "round": 2,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0011388800414108456
+    },
+    "detecting": {
+      "hough_threshold_vertical": 3678,
+      "binary_threshold": 153,
+      "hough_threshold_oblique": 65
+    },
+    "denoising": {
+      "mask_r_high": 3.8814127022249343,
+      "mask_r_low": 3.7692092339654972
+    },
+    "sam": {
+      "segment_width": 1814,
+      "angle": 7.295619102688321
+    }
+  },
+  "proposal": {
+    "observation": "adaptive random control proposal",
+    "rule": "k-matched uniform draw on incumbent",
+    "failure_mode": "n/a (control)",
+    "rationale": "random bounded overlay on current best",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9419279327470528,
+    "denoise_retained_ratio": 0.04699136671550337,
+    "depth_nan_ratio": 0.933777398902571,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.17156439066551427,
+    "correspondence_f1@15": 0.0,
+    "chamfer_sym_px": 200.0,
+    "sam_fill_rate": 0.04417185396543304,
+    "phase_incoherence_deg": 12.5
+  },
+  "score": 0.07925818707790433,
+  "score_raw": 0.07925818707790433,
+  "band": "flag",
+  "gt_miou": 0.051,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6246587521721076,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.4381724676866004,
+    "sam_fill_rate": 0.5886227382275606,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.30257956632903465
+  },
+  "elapsed_s": 145.9,
+  "provenance": {
+    "arm": "random",
+    "seed_base": 20260915,
+    "panel_index": 13,
+    "round": 2,
+    "k": 8,
+    "chosen": [
+      "enhancing.curvature_threshold",
+      "detecting.hough_threshold_vertical",
+      "denoising.mask_r_high",
+      "sam.segment_width",
+      "detecting.binary_threshold",
+      "detecting.hough_threshold_oblique",
+      "sam.angle",
+      "denoising.mask_r_low"
+    ],
+    "stage1_unlocked": false
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/random/4-4/round2/params",
+  "finished_at": "2026-09-19T11:57:31"
+}

@@ -1,0 +1,51 @@
+{
+  "subset": "3-3",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 25
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 increased oblique detections in the interior while leaving the depth map, ten propagated prompt locations, fill rate, ring-count error, and depth-hole ratio effectively unchanged. This coincided with correspondence_f1@15 improving from 0.113 to 0.144, but the after image still contains oblique evidence in only a small minority of rings.",
+    "rule": "When a bounded relaxation of oblique Hough detection improves correspondence without harming coverage or ring count, continue that successful direction conservatively while holding the accepted maximum line gap and all upstream geometry fixed.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "The accepted round provides direct case-specific evidence that greater oblique-line yield is beneficial. Reducing the oblique threshold from the accepted value of 30 to 25 is a small in-bounds refinement intended to recover additional interior joint traces while limiting the risk of spurious detections.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.99996584722565,
+    "denoise_retained_ratio": 0.81787798500355,
+    "depth_nan_ratio": 0.11387375767737186,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.20666402221340738,
+    "correspondence_f1@15": 0.11392343802932778,
+    "chamfer_sym_px": 94.12507438659668,
+    "sam_fill_rate": 0.7799816440680901,
+    "phase_incoherence_deg": 1.7
+  },
+  "score": 0.5355389388291988,
+  "score_raw": 0.5355389388291988,
+  "band": "refine",
+  "gt_miou": 0.808,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5529614958405507,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.14423879463455733,
+    "sam_fill_rate": 0.7799816440680901,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11387375767737186
+  },
+  "elapsed_s": 193.5,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-3/round3/params",
+  "finished_at": "2026-09-20T00:27:50"
+}

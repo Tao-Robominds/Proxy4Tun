@@ -1,0 +1,52 @@
+{
+  "subset": "4-4",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "sam": {
+      "K_height": 1120.300923474133,
+      "angle": 11.78815640322864
+    }
+  },
+  "proposal": {
+    "observation": "Incumbent remains round 1 (proxy 0.666): correspondence_f1@15=0.404, sam_fill_rate=0.728, ring_count_error=0, depth_nan_ratio=0.223, phase_incoherence_deg=17.7, chamfer_sym_px=56.9. Round 2 curvature_threshold=0.000366 was rejected: proxy 0.666\u21920.614, correspondence 0.404\u21920.315 (exact return to the start), depth_nan_ratio +0.0014, fill and rings unchanged. After images show the prompt set reverted to the pre-round-1 layout (three assume points, negative-slope back at y\u22483350). On the incumbent, ten magenta ring lines are still correct, but red/green obliques stay short, blue horizontal fallback remains, and the far-left columns are still bare. Incumbent intersection y values still jump by hundreds to ~2000 px across evenly spaced ring x positions, so the centres are not a K/AB lattice. Stage-1 residual is 9.10 cm (locked).",
+    "rule": "d8: spacing vs the K/AB prior is still poor after d7 was accepted. Do not repeat d6 \u2014 lowering curvature_threshold undid the correspondence gain. Do not chase sam_fill_rate; those joints lowered or zeroed the proxy.",
+    "failure_mode": "f_pattern_mismatch",
+    "rationale": "r_fix_height_priors: set K_height (shared by check_distance_pattern and the SAM template) and the taper angle, leaving the accepted Hough block in place. The only development joint that raised the proxy (s021) used K_height=1120.3 and angle=11.79 and kept ring_count_error at 0; that SAM pair has not been applied here. segment_width is left unchanged so the vertical ring band that already counts ten rings is not moved. Unfolding stays locked. The rejected curvature value is not repeated. The fill-seeking joints (angle \u224810.2, K_height 1165 or 1490) dropped the proxy or collapsed fill and rings, so those values are not used.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9419279327470528,
+    "denoise_retained_ratio": 0.7386938922343486,
+    "depth_nan_ratio": 0.2232064422522924,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5536366270646189,
+    "correspondence_f1@15": 0.3346671030149214,
+    "chamfer_sym_px": 97.17694473266602,
+    "sam_fill_rate": 0.7268003859790991,
+    "phase_incoherence_deg": 15.0
+  },
+  "score": 0.6251598013036682,
+  "score_raw": 0.6251598013036682,
+  "band": "refine",
+  "gt_miou": 0.78,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6656771274481178,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.40420114892251,
+    "sam_fill_rate": 0.7284786673779505,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.2232064422522924
+  },
+  "elapsed_s": 237.4,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-4/round3/params",
+  "finished_at": "2026-09-19T21:44:57"
+}

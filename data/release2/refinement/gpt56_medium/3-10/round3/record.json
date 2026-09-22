@@ -1,0 +1,51 @@
+{
+  "subset": "3-10",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 3,
+  "overlay": {
+    "sam": {
+      "angle": 5.75
+    }
+  },
+  "proposal": {
+    "observation": "Lowering the accepted 5.5-degree taper to 5.0 degrees reduced correspondence_f1@15 by 0.097091 while detected lines, prompt locations, ring count, and depth holes remained unchanged. The segmentation imagery changes only at the template-mask stage, indicating a sharp angle-sensitive template mismatch rather than an upstream detection or unfolding failure.",
+    "rule": "When a lower one-parameter setting is rejected but the incumbent setting was accepted and upstream outputs are invariant, retain the incumbent's stable stages and probe only a smaller step on the opposite side of the accepted value.",
+    "failure_mode": "f_template_mismatch",
+    "rationale": "Setting the taper angle to 5.75 degrees tests the opposite side of the accepted 5.5-degree incumbent with half the rejected step size. This conservative final refinement follows the observed angle sensitivity without changing the correct ring count, prompt geometry, depth coverage, or unfolding, and 5.75 remains inside the allowed [4.0, 9.0] range.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9990592937874491,
+    "denoise_retained_ratio": 0.7404734761200185,
+    "depth_nan_ratio": 0.14202755710717666,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.46289829768659974,
+    "correspondence_f1@15": 0.3377579166904335,
+    "chamfer_sym_px": 72.17908573150635,
+    "sam_fill_rate": 0.6976657691965621,
+    "phase_incoherence_deg": 1.3
+  },
+  "score": 0.6318807277821944,
+  "score_raw": 0.6318807277821944,
+  "band": "refine",
+  "gt_miou": 0.853,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6264067155240316,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.32823542937054834,
+    "sam_fill_rate": 0.6976617265384335,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.14202755710717666
+  },
+  "elapsed_s": 190.7,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-10/round3/params",
+  "finished_at": "2026-09-20T00:46:52"
+}

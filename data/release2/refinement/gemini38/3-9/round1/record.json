@@ -1,0 +1,58 @@
+{
+  "subset": "3-9",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.00035
+    },
+    "detecting": {
+      "binary_threshold": 114,
+      "hough_threshold_oblique": 24,
+      "hough_threshold_horizontal": 45,
+      "maxLineGap_oblique": 45,
+      "uniform_k_snap": false
+    }
+  },
+  "proposal": {
+    "observation": "Stage 1 is locked (residual 2.80 cm). Ring count is already exact: ten magenta ring mid-lines and ring_count_error 0. The weak proxy term is correspondence_f1@15 0.364 (chamfer_sym_px 75.3, boundary_explained_edge@25 0.474); sam_fill_rate 0.729 and depth_nan_ratio 0.131 are secondary. On detected_lines, red is positive-angle oblique, green is negative-angle oblique, blue is horizontal. Only one negative-angle track (about y 1450-1500) and one positive-angle track (about y 1620-1650, fragmented and fading on the right where the depth void is) survive; their separation is about 165-170 px, matching K_height 823.8 mm at 5 mm/px. Other block boundaries visible in the segmentation bands have no oblique line. A few isolated blue horizontals sit off those tracks. All ten prompt centres are labelled propagated and lie on one row at y about 1553, while the oblique tracks themselves drift about 40-50 px across the span (phase_incoherence 1.1 deg).",
+    "rule": "If ring_count_error is already 0, oblique yield is only the K-edge pair, other block boundaries still have partial edge support, and uniform_k_snap has collapsed every prompt onto one design row while the joint tracks slope, treat it as missing oblique lines plus a flat K snap. Do not retune unfolding or the vertical Hough threshold.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Correspondence is the harmonic mean of detected joint lines and SAM block boundaries at 15 px. The lines that exist sit on the K edges, so most of the 75 px chamfer is block boundaries with no line, not a bad ring count. Lower curvature_threshold from 0.0005 to 0.00035 so fainter non-K joints enter the outlier map before detection. Lower binary_threshold from 127 to 114 and hough_threshold_oblique from 30 to 24, and raise maxLineGap_oblique from 30 to 45, to keep the weaker gapped oblique segments on those boundaries; the real joints are in the plus/minus 4-10 deg taper window, not the horizontal fallback. Raise hough_threshold_horizontal from 30 to 45 so the isolated blue horizontals do not add unexplained line pixels. Set uniform_k_snap false so each ring keeps its measured K Y instead of all ten being forced to 1553, letting the block stack follow the same about 1 deg track the oblique lines already follow. Leave segment_width, K_height, angle, denoising, and hough_threshold_vertical at the reference: ring pitch and the K gap already match, and the worked full overlays on the development continuous case jointly lowered correspondence and fill.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9992437316181036,
+    "denoise_retained_ratio": 0.7719211863424968,
+    "depth_nan_ratio": 0.1350918033569706,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.48806746815000895,
+    "correspondence_f1@15": 0.34250989249197566,
+    "chamfer_sym_px": 78.74631309509277,
+    "sam_fill_rate": 0.7284098243988018,
+    "phase_incoherence_deg": 2.0
+  },
+  "score": 0.6460316550562326,
+  "score_raw": 0.6460316550562326,
+  "band": "refine",
+  "gt_miou": 0.817,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6591558534408575,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36367764129925506,
+    "sam_fill_rate": 0.7289890931960742,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.13082197231971604
+  },
+  "elapsed_s": 185.4,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-9/round1/params",
+  "finished_at": "2026-09-19T19:25:58"
+}

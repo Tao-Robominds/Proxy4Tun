@@ -1,0 +1,54 @@
+{
+  "subset": "3-9",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "hough_threshold_horizontal": 24
+    }
+  },
+  "proposal": {
+    "observation": "Incumbent is still the start (0.6592). Round 1 lowered the oblique threshold to 24 and raised the horizontal threshold to 45; correspondence_f1@15 fell 0.021 and the score fell to 0.646. Round 2 raised curvature_threshold to 0.0008, binary_threshold to 136, hough_threshold_oblique to 36 and hough_threshold_horizontal to 50; score 0.6592 to 0.6539, correspondence_f1@15 0.364 to 0.354, sam_fill_rate essentially flat, ring_count_error still 0, depth_nan_ratio 0.131 to 0.126. After round 2 the same two oblique tracks remain, blue horizontal segments are still only short fragments near y 800 and y 2300, prompts are still the snapped row at y 1550, and the large depth voids are unchanged. Both directions of the oblique threshold lost correspondence, and both rejected rounds raised the horizontal threshold. Stage 1 is locked.",
+    "rule": "If lowering and raising hough_threshold_oblique both lose correspondence, stop moving oblique, binary, gap, snap, and vertical. depth_nan_ratio changes with curvature_threshold, not with Hough votes. Keep the curvature value that cut holes, and lower hough_threshold_horizontal, which both failed rounds raised.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "The oblique detector already holds the tapered K-edge tracks, and moving its threshold either way removed or added the wrong pixels. The other block seams are near 0 deg, so they belong to the horizontal detector; the only horizontal hits are the short blue fragments, and the SAM bands run the full width. Lower hough_threshold_horizontal from 30 to 24 so those seams survive in more rings, without touching hough_threshold_oblique (stay at 30). Repeat curvature_threshold 0.0008 because that is the stage-3 change tied to the 0.0046 nan drop; binary and Hough do not write the depth map, so this does not repeat the round-2 detection tighten that cost 0.010 F1. Leave unfolding, vertical Hough, uniform_k_snap, and SAM geometry at the reference: ten rings and the 0.729 fill are already in place, and the worked full overlays that moved SAM jointly cut fill.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9992437316181036,
+    "denoise_retained_ratio": 0.7719211863424968,
+    "depth_nan_ratio": 0.126232335049755,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4750298278506903,
+    "correspondence_f1@15": 0.36334543433851935,
+    "chamfer_sym_px": 75.10422134399414,
+    "sam_fill_rate": 0.7279008953840552,
+    "phase_incoherence_deg": 1.1
+  },
+  "score": 0.6594294665404898,
+  "score_raw": 0.6594294665404898,
+  "band": "refine",
+  "gt_miou": 0.819,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6591558534408575,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36367764129925506,
+    "sam_fill_rate": 0.7289890931960742,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.13082197231971604
+  },
+  "elapsed_s": 191.4,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-9/round3/params",
+  "finished_at": "2026-09-19T21:25:11"
+}

@@ -1,0 +1,51 @@
+{
+  "subset": "3-3",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "pattern_tolerance": 16
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 was accepted: proxy 0.541\u21920.548, correspondence_f1@15 0.124\u21920.136, sam_fill_rate 0.780\u21920.779, ring_count_error still 0, depth_nan_ratio unchanged at 0.114. The non-proxy geometry moved the wrong way: chamfer_sym_px 93.5\u219297.7 and boundary_explained_edge@25 0.219\u21920.181. Incumbent detecting is binary_threshold 105, hough_threshold_oblique 24, maxLineGap_oblique 56, uniform_k_snap false. After images: K-band green segments remain only on edge columns near y\u22481470, red segments cover several columns near y\u22481580\u20131680, columns 5\u20138 still have no K-band segment, and one red outlier sits near y\u22482250 in column 5. initial_prompt_points regressed from round 1's mixed measured/assume markers to ten propagated centres on one flat line at y\u22481550. Stage-1 stays locked (residual 2.70 cm).",
+    "rule": "d8: the extra oblique fragments no longer form a distance pattern the checker will keep, so every prompt centre is propagated instead of measured. The y\u22482250 segment is hundreds of pixels off that row, so d9 has not moved the prompts.",
+    "failure_mode": "f_pattern_mismatch",
+    "rationale": "Two Hough relaxations raised correspondence, but the second crossed the point where check_distance_pattern gives up: measured intersections disappeared, a far outlier appeared, and chamfer/edge coverage reversed. Oblique threshold is already 24, four above the floor, and the development collapse that zeroed correspondence used 22 together with a tolerance of 19 and uniform_k_snap. Do not step those knobs again, and do not turn snap on. Open pattern_tolerance to 16 so the K-band intersections that already exist can pass the checker, while 16 px still cannot admit the y\u22482250 outlier. Leave vertical and horizontal Hough, enhancing, denoising, SAM, and locked unfolding unchanged: fill, phase (1.6 deg), ring count, and NaN ratio are the stable terms.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.99996584722565,
+    "denoise_retained_ratio": 0.81787798500355,
+    "depth_nan_ratio": 0.11387375767737186,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.20682810639142518,
+    "correspondence_f1@15": 0.11284116113121614,
+    "chamfer_sym_px": 93.98272609710693,
+    "sam_fill_rate": 0.7799747173013317,
+    "phase_incoherence_deg": 1.7
+  },
+  "score": 0.5349146506285205,
+  "score_raw": 0.5349146506285205,
+  "band": "refine",
+  "gt_miou": 0.808,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5478052228733965,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.13583918610310708,
+    "sam_fill_rate": 0.778987653038253,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11387375767737186
+  },
+  "elapsed_s": 191.3,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-3/round3/params",
+  "finished_at": "2026-09-19T21:09:35"
+}

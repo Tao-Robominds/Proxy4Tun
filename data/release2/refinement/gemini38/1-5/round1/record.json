@@ -1,0 +1,58 @@
+{
+  "subset": "1-5",
+  "family": "staggered",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0045,
+      "inter_radius": 0.072
+    },
+    "detecting": {
+      "binary_threshold": 140,
+      "hough_threshold_oblique": 62,
+      "hough_threshold_horizontal": 82,
+      "maxLineGap_oblique": 26
+    }
+  },
+  "proposal": {
+    "observation": "Ten rings are already recovered (ring_count_error 0) and sam_fill_rate is 0.740, but correspondence_f1@15 is 0.322 with chamfer 84 px and phase incoherence 24.2\u00b0. Vertical magenta ring lines are regular. Blue horizontals pile up at the map ends, and red/green obliques cross those ring lines, especially in the right-hand columns. Intersection points are not staggered: several rings share one y (near 1635 and near 2280) instead of the K/AB offset. Depth NaN ratio is 0.120 and stage-1 residual is 0.00 cm.",
+    "rule": "d8 fires: prompt spacing does not match the staggered K/AB pattern. d9 also fires: extra end-of-map horizontals and cross-ring obliques. d7 does not fire, because ring count is complete and boundary edges are largely explained (0.836). Stage 1 stays locked.",
+    "failure_mode": "f_pattern_mismatch",
+    "rationale": "Correspondence is failing because intersections lock onto shared horizontals and lines that bridge ring bounds, not because rings or fill are missing. Raise the horizontal Hough threshold so end horizontals stop pinning several rings to one y. Raise the oblique threshold only moderately, and shorten maxLineGap_oblique, so duplicate crossing slants drop while true joints are not wiped out. Slightly raise binary_threshold so weak speckle is not voted in. Before that, raise curvature_threshold and inter_radius a little so true joint points stay continuous and are not absorbed into the surface. Leave the vertical Hough threshold, the radial gate, y_bounds, and every unfolding key unchanged.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991680441522386,
+    "denoise_retained_ratio": 0.7712866638776553,
+    "depth_nan_ratio": 0.11382149327410482,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8571219011295291,
+    "correspondence_f1@15": 0.3837283830650441,
+    "chamfer_sym_px": 71.03772354125977,
+    "sam_fill_rate": 0.7346367312787617,
+    "phase_incoherence_deg": 13.8
+  },
+  "score": 0.6756026763609266,
+  "score_raw": 0.6756026763609266,
+  "band": "refine",
+  "gt_miou": 0.888,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6410668863547464,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.32237648215183345,
+    "sam_fill_rate": 0.7404006879561196,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12040894298363669
+  },
+  "elapsed_s": 287.9,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/1-5/round1/params",
+  "finished_at": "2026-09-19T19:09:37"
+}

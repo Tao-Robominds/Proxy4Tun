@@ -1,0 +1,56 @@
+{
+  "subset": "3-4",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "unfolding": {
+      "polynomial_degree": 3
+    },
+    "detecting": {
+      "hough_threshold_oblique": 24,
+      "hough_threshold_horizontal": 22,
+      "maxLineGap_oblique": 48
+    }
+  },
+  "proposal": {
+    "observation": "Proxy 0.5265 is limited by correspondence_f1@15=0.244 (chamfer 75 px), not by ring count. detected_lines.png has all 10 magenta ring centres, but positive (red) and negative (green) oblique segments stop before the rightmost rings even though joint pixels continue there, and only one short blue horizontal segment is present. initial_prompt_points.png is the expected continuous uniform-K row (all 10 centres propagated at one Y). SAM fill is 0.571 and depth_nan_ratio is 0.195. Stage-1 residual is 20.80 cm (gate 10 cm) with orientation agreement 0.998, so the axis is not flipped.",
+    "rule": "Low oblique and horizontal yield with joints still visible implies f_missing_lines (d7), not f_depth_holes and not f_spurious_lines. Rings that lack one slope fall through to the half-K offset or the previous-Y assume, then uniform snap freezes one phase, so the line set and the SAM block boundaries miss each other (f_pattern_mismatch -> f_crop_offset). Residual above the gate with polynomial degree 2 is f_curve_overfit; do not change slice spacing while ring_count_error is already 0.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Keep uniform_k_snap and the vertical Hough threshold so the 10-ring count stays intact, and do not retune the radial gate: the development overlays that moved denoising jointly raised depth_nan_ratio and cut fill. Raise the centre-curve degree from 2 to 3 so the 20.8 cm residual is not left as unroll shear on the right rings. Then modestly relax the two detectors that are actually empty: oblique vote 30->24 and maxLineGap 30->48 to bridge the right-ring fragments that currently fail min line length, and horizontal vote 30->22 because a single stub cannot explain the circumferential block boundaries. Thresholds stay above the floor so this is not a flood of spurious lines.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 3.5234150143864045,
+    "orient_agreement": 0.9919162694862304,
+    "denoise_retained_ratio": 0.6876339304620336,
+    "depth_nan_ratio": 0.3053895005504164,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.3170945157526254,
+    "correspondence_f1@15": 0.038081005161415306,
+    "chamfer_sym_px": 117.06456756591797,
+    "sam_fill_rate": 0.47370092745521536,
+    "phase_incoherence_deg": 5.5
+  },
+  "score": 0.3561874546210536,
+  "score_raw": 0.3561874546210536,
+  "band": "flag",
+  "gt_miou": 0.517,
+  "residual_cm": 32.9,
+  "incumbent_before_score": 0.5264765228145997,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.24397684368509054,
+    "sam_fill_rate": 0.5707661034176089,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19497856422227988
+  },
+  "elapsed_s": 197.7,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-4/round1/params",
+  "finished_at": "2026-09-19T19:12:56"
+}

@@ -1,0 +1,51 @@
+{
+  "subset": "3-4",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "denoising": {
+      "mask_r_high": 3.15
+    }
+  },
+  "proposal": {
+    "observation": "Round-2 feedback (rejected, 0.5456->0.5363): lowering enhancing.curvature_threshold to 0.0003 with a further Hough relaxation did not add joint lines in rings 8-10 or on the top/bottom joints; the only new oblique segments appeared as spurious short green/red fragments along the noisy left-edge strip (x<300, y~290-1550), correspondence_f1@15 fell 0.278->0.260, depth_nan_ratio rose 0.195->0.202, and initial_prompt_points.png still shows all 10 centres 'propagated' at y~1520. The detection path is therefore saturated: the K pair is recoverable only in the scanner-adjacent mid-band and per-ring direct detection cannot be forced by stage-3/4 knobs within bounds. The incumbent (round 1) depth_map_viridis.png shows where the remaining proxy loss lives: a large white void in the bottom-right (y>780, x>450 at map scale) with a fragmented, speckled edge of isolated green islands, plus a yellow (high-r) fringe immediately adjacent to that void, a yellow high-r strip along the left data edge (x~40-60) bordering the white left margin, and yellow bolt pockets rendered as white holes. In the viridis scale yellow = large radius (bolt pockets are recessed and read yellow), so the voids sit exactly where r approaches the upper radial gate; a speckled island edge is the signature of points straddling a threshold rather than a clean occlusion shadow. Stage 1 is unlocked with a 20.8 cm centreline residual (gate 10 cm): a centre offset of that size makes r vary around the circumference by ~+/-20 cm, so a fixed radial band clips the high-r side of the lining (toward both floor-side edges of the unrolled map). sam_fill_rate (0.569) is also capped by these same uncovered regions (ring-instance panel is light/uncovered over the bottom-right void and bottom strip).",
+    "rule": "d3/d5 (stage_2_denoise -> stage_3_upsample): depth-map hole ratio elevated with holes concentrated where r is largest -> f_over_gate (radial gate too tight on the outer side), propagating via inter_stage_dependency stage_2_denoise.f_over_gate -> stage_3_upsample.f_depth_holes -> stage_5_segmentation.f_over_under_coverage (lining left as label 0). Remediation r_radial_gate_widen: widen [r_inner, r_outer] toward the prior radius_range; here only the outer bound is implicated by the yellow high-r fringes, so widen the upper gate only. The alternative remediation for the root cause (re-fitting the centreline via unfolding params) is stochastic and all three worked examples that moved unfolding jointly collapsed sam_fill_rate and inflated depth_nan_ratio, so the gate is widened instead of re-unfolding.",
+    "failure_mode": "stage_2_denoise.f_over_gate (outer radial gate clipping high-r lining; downstream f_depth_holes and f_over_under_coverage)",
+    "rationale": "Rounds 1-2 exhausted the detection path (round 1 +0.034 F1 accepted; round 2 further relaxation and denser outliers rejected), so the final round moves the one stage not yet touched and whose symptom is directly visible: the outer radial gate. Setting denoising.mask_r_high to the top of its bound (3.15) admits the high-r lining points bordering the bottom-right void, the left-edge strip and the recessed bolt pockets, which should lower depth_nan_ratio and let the SAM ring/block masks cover the bottom-right and bottom-strip regions, raising sam_fill_rate. Only the outer bound is moved: the inner gate is left untouched so that no inside-tunnel structure (rails, brackets) is admitted, ring_count_error stays anchored by the unchanged vertical Hough band, and the round-1 detection settings that produced the F1 gain are retained (binary_threshold 115, hough_threshold_oblique 30, maxLineGap_oblique 50, pattern_tolerance 12 remain in the incumbent; round-2 enhancing/detecting values are not reused). Beyond the lining radius there is only wall/soil return, so widening r_outer carries little background-leakage risk (f_under_gate), unlike widening r_inner. Expected joint response: depth_nan_ratio down, sam_fill_rate up, correspondence_f1@15 roughly unchanged, ring_count_error 0; if the incumbent already sits at 3.15 the overlay is a no-op rather than a regression.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9984156385609421,
+    "denoise_retained_ratio": 0.7386354973955025,
+    "depth_nan_ratio": 0.17625286352567918,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.3911599386816556,
+    "correspondence_f1@15": 0.0,
+    "chamfer_sym_px": 93.59916496276855,
+    "sam_fill_rate": 0.5986532842078516,
+    "phase_incoherence_deg": 2.4
+  },
+  "score": 0.3988533193600042,
+  "score_raw": 0.3988533193600042,
+  "band": "flag",
+  "gt_miou": 0.646,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5456144390579352,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.27807919569558853,
+    "sam_fill_rate": 0.5693728031169271,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19497856422227988
+  },
+  "elapsed_s": 182.8,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-4/round3/params",
+  "finished_at": "2026-09-19T14:35:50"
+}

@@ -26,11 +26,12 @@ itself.
 - Editing `anchors/<family>/` JSON or stage scripts without explicit user request to change the anchor
 - Deleting or replacing files inside `data/anchors/` to “refresh” a run
 
-Also protected (existing): `data/baseline`, and the entire consolidated BO
-tree `data/bo/` (phases `unified`, `elegant`, `full_stage`, `bayes`,
-`reflect`, `notebook_direct`, `archive_v0`). Old path aliases
-(`data/bo-unified`, …) are symlinks into `data/bo/` and are equally frozen.
-Write new campaigns under `data/<experiment-id>/` only.
+Also protected (existing): `data/baseline`, `data/release2/` (manuscript
+snapshot; no edits and no deletion), and the entire consolidated BO tree
+`data/bo/` (phases `unified`, `elegant`, `full_stage`, `bayes`, `reflect`,
+`notebook_direct`, `archive_v0`). Old path aliases (`data/bo-unified`, …)
+are symlinks into `data/bo/` and are equally frozen. Write new campaigns
+under `data/<experiment-id>/` only.
 
 ## Examples
 

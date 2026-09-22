@@ -1,0 +1,56 @@
+{
+  "subset": "1-1",
+  "family": "staggered",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "enhancing": {
+      "inter_radius": 0.074
+    },
+    "detecting": {
+      "hough_threshold_oblique": 42,
+      "hough_threshold_horizontal": 72,
+      "maxLineGap_oblique": 64
+    }
+  },
+  "proposal": {
+    "observation": "Correspondence is the weak measurement (correspondence_f1@15=0.282, chamfer_sym_px=105, phase_incoherence_deg=6.6) while ring_count_error=0, sam_fill_rate=0.728, and depth_nan_ratio=0.120. Detected lines show ten intact vertical dividers, but oblique segments are sparse and sit mostly mid-to-right, with horizontal segments acting as fallback. Prompt centres on the left (about x=125, 375, 625) are assume points; only one positive-slope and one negative-slope intersection exist, and midpoints cluster on the right. Ring masks 0-2 are mottled and bleed, while rings 3-9 are clean columns. Left depth has local holes, but retained ratio 0.76 and the nan ratio are not a global void.",
+    "rule": "d7: oblique line yield is low and horizontal fallback is already in use, so prompt centres on the early rings are assumed rather than intersected.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Stage 1 is locked (residual 0.00 cm), so unfolding is untouched. Ring count is already exact, so the vertical Hough threshold stays at 500. Radial gates stay put: z_step is already at the 0.001 floor, and the staggered degrade example that raised the oblique threshold and tightened mask_r_high collapsed correspondence. The direct fix is r_relax_hough after a small joint-bridge step: raise inter_radius from 0.06 to 0.074 so fragmented left joint points connect, lower hough_threshold_oblique from 50 to 42, and raise maxLineGap_oblique from 40 to 64. Raise hough_threshold_horizontal from 50 to 72 so short horizontal fallback lines do not keep setting the left prompt locus. All values are inside staggered bounds.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999336994200428,
+    "denoise_retained_ratio": 0.763569489665416,
+    "depth_nan_ratio": 0.11988629422133794,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.6923770861524583,
+    "correspondence_f1@15": 0.22301771058038802,
+    "chamfer_sym_px": 122.4677734375,
+    "sam_fill_rate": 0.7285936107823623,
+    "phase_incoherence_deg": 12.0
+  },
+  "score": 0.5801510865828647,
+  "score_raw": 0.5801510865828647,
+  "band": "refine",
+  "gt_miou": 0.663,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6139625641458475,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.2822583627704685,
+    "sam_fill_rate": 0.7278950267246003,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11990621963918995
+  },
+  "elapsed_s": 263.5,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/1-1/round1/params",
+  "finished_at": "2026-09-19T18:56:25"
+}

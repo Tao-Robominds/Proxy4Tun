@@ -1,0 +1,51 @@
+{
+  "subset": "5-5",
+  "family": "complex",
+  "arm": "gpt56_medium",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 25
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 reverted the entire correspondence gain from 0.3924 to 0.3162 without changing fill, ring count, depth holes, detected lines, or segmentation. Its after prompt image removes the positive-slope prompt near x=1630, y=2140 that was present in the accepted incumbent, showing that pattern_tolerance=11 filtered out useful recovered evidence.",
+    "rule": "When useful oblique-derived prompts remain sparse and horizontal fallback is still prominent, treat the residual issue as low oblique line yield rather than distance-pattern mismatch; relax the oblique Hough threshold incrementally while retaining the accepted maxLineGap.",
+    "failure_mode": "stage_4_detection.f_missing_lines",
+    "rationale": "Lower hough_threshold_oblique from the accepted incumbent value of 27 to the bounded minimum of 25, while inheriting maxLineGap_oblique=74 and the incumbent pattern tolerance. This is a small continuation of the only empirically accepted direction, seeks additional oblique evidence without changing depth, SAM geometry, or locked unfolding, and avoids the rejected pattern-tolerance change.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9125884650166897,
+    "denoise_retained_ratio": 0.7673354664684634,
+    "depth_nan_ratio": 0.19323166894404062,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.573527105441999,
+    "correspondence_f1@15": 0.3151071043521804,
+    "chamfer_sym_px": 68.61245918273926,
+    "sam_fill_rate": 0.7561778560970978,
+    "phase_incoherence_deg": 28.8
+  },
+  "score": 0.6290256700023314,
+  "score_raw": 0.6290256700023314,
+  "band": "refine",
+  "gt_miou": 0.775,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6734273652232845,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.39236632776140035,
+    "sam_fill_rate": 0.7561778560970978,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19323166894404062
+  },
+  "elapsed_s": 244.3,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/5-5/round3/params",
+  "finished_at": "2026-09-20T01:08:06"
+}

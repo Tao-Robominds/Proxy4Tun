@@ -1,0 +1,56 @@
+{
+  "subset": "4-3",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.00035
+    },
+    "detecting": {
+      "hough_threshold_oblique": 28,
+      "maxLineGap_oblique": 76,
+      "hough_threshold_horizontal": 58
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was accepted: proxy 0.6210\u21920.6323, correspondence_f1@15 0.337\u21920.356 (+0.0195), with sam_fill_rate, ring_count_error, and depth_nan_ratio unchanged at 0.714, 0, and 0.229. Chamfer fell only 81.9\u219278.2 and boundary_explained_edge@25 0.467\u21920.471; phase_incoherence_deg stayed 17.1. Before/after detected_lines.png are nearly the same drawing: blue horizontal runs per column are identical, red pixels only 881\u21921015, and the edge columns are still almost empty of oblique segments. Prompt seeds barely moved (one negative-slope point reclassified as a midpoint). Segmentation pixels differ by 0.04%; the depth map is identical. Stage-1 residual remains 3.0 cm, so unfolding stays locked. The four-feature gap is still correspondence, not fill or ring count.",
+    "rule": "d6: joint contrast stayed low after r_relax_hough. Oblique fragments did not lengthen when the oblique threshold was lowered to 28 and maxLineGap_oblique raised to 76, so d7 is no longer the binding constraint. That implies upstream f_joint_oversmoothed rather than another accumulator tweak. d3 does not fire (retained ratio 0.724).",
+    "failure_mode": "f_joint_oversmoothed",
+    "rationale": "Keep the accepted detecting overlay (hough_threshold_oblique 28, maxLineGap_oblique 76, hough_threshold_horizontal 58). Those keys are the incumbent, and further moves are almost at the bounds (25 and 80) after a change that did not redraw the lines. Lower enhancing.curvature_threshold from the reference 0.0005 to 0.00035, inside [0.0002, 0.002] and near the correspondence-improve example's 0.000366, so more joint points stay sharp before Hough. That example's gain was joint and included unfolding, which this case cannot touch; the opposite direction (curvature 0.0013 in the sam-fill example) coincided with a correspondence drop, so do not raise it. Do not widen or narrow the radial gate: nan and fill did not move, and the narrow-gate degrade example collapsed both. Do not retune SAM angle yet; phase did not respond because the prompt centres did not move.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9853621137665801,
+    "denoise_retained_ratio": 0.7244459655940515,
+    "depth_nan_ratio": 0.23056910740966158,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.47121755186271314,
+    "correspondence_f1@15": 0.35639383452509676,
+    "chamfer_sym_px": 78.23246765136719,
+    "sam_fill_rate": 0.7137013969678645,
+    "phase_incoherence_deg": 17.1
+  },
+  "score": 0.6319888209949687,
+  "score_raw": 0.6319888209949687,
+  "band": "refine",
+  "gt_miou": 0.554,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6322540236030219,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.35639383452509676,
+    "sam_fill_rate": 0.7137013969678645,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22909308809933374
+  },
+  "elapsed_s": 231.7,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-3/round2/params",
+  "finished_at": "2026-09-19T20:25:41"
+}

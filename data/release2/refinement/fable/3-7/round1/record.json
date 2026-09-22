@@ -1,0 +1,53 @@
+{
+  "subset": "3-7",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 30,
+      "maxLineGap_oblique": 45
+    }
+  },
+  "proposal": {
+    "observation": "detected_lines.png shows all 10 vertical ring boundaries (magenta) recovered, consistent with ring_count_error=0, but oblique line yield is very low: only 3 positive (green) and 3 negative (red) oblique segments, all confined to the right-most ~3 rings (x~1700-2400, y~1450-1650), plus a single short horizontal fallback line near (2300, 800). The binarised outlier map itself shows the joint-mark rows (y~1350-1750) present across ALL ten ring columns, just sparser on the left, so the joint evidence exists in the depth/outlier map but is not being converted into Hough lines. initial_prompt_points.png shows all 10 prompt centres at an identical y~1550 tagged 'propagated', i.e. only one locus was actually detected and the rest were replicated. depth_map_viridis.png has holes concentrated in the top band and along the mid-height joint row, but the lining body is largely filled; depth_nan_ratio=0.165 and sam_fill_rate=0.767 are acceptable, so the dominant deficit is correspondence_f1@15=0.172.",
+    "rule": "d7 (stage_4_detection): m_line_yield low AND horizontal fallback triggered -> f_missing_lines. Upstream precondition check: joint marks are visible in every ring column of the outlier map and depth holes are moderate, so f_joint_oversmoothed / f_depth_holes are not the primary cause; remediation r_relax_hough applies (lower oblique Hough threshold, raise maxLineGap, admit more outlier pixels via a lower binary threshold).",
+    "failure_mode": "f_missing_lines",
+    "rationale": "The proxy's weakest term is correspondence_f1@15; the prompt centres are propagated from a single detected locus, so any lateral drift of true joints across rings is not captured, and SAM crops land slightly off-segment (f_crop_offset via f_pattern_mismatch). Relaxing only the oblique HoughLinesP path (threshold toward the low end, larger maxLineGap) and lowering the binarisation threshold should let the sparser left-side joint dots form oblique segments per ring, giving per-ring intersections instead of propagated ones. Vertical Hough, pattern_tolerance, denoising, enhancing and SAM stages are left untouched because ring count is correct, fill rate is healthy, and stage 1 is locked. Values are chosen moderately (not at the extreme 20/60) to avoid the spurious-line regime seen in worked example g005 (hough_oblique=22 combined with binary_threshold=150 and vertical=822 collapsed f1 to 0 as a joint outcome); here binary_threshold is lowered rather than raised, and the vertical accumulator is not changed.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991211319489915,
+    "denoise_retained_ratio": 0.7976920114616173,
+    "depth_nan_ratio": 0.16450624232718375,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.24692712906057945,
+    "correspondence_f1@15": 0.18418713823435579,
+    "chamfer_sym_px": 95.18791389465332,
+    "sam_fill_rate": 0.7666947332693675,
+    "phase_incoherence_deg": 1.7
+  },
+  "score": 0.5624260119449889,
+  "score_raw": 0.5624260119449889,
+  "band": "refine",
+  "gt_miou": 0.846,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5553118036890422,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.17174823917999785,
+    "sam_fill_rate": 0.7667991671398826,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.16450624232718375
+  },
+  "elapsed_s": 184.6,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-7/round1/params",
+  "finished_at": "2026-09-19T12:35:17"
+}

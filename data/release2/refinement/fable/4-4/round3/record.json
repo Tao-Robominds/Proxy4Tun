@@ -1,0 +1,53 @@
+{
+  "subset": "4-4",
+  "family": "complex",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "sam": {
+      "segment_width": 1820,
+      "K_height": 1120.0,
+      "angle": 11.5
+    }
+  },
+  "proposal": {
+    "observation": "Round-2 feedback: pushing detection further (hough_threshold_oblique 25, maxLineGap_oblique 78, hough_threshold_horizontal 64, binary_threshold 116, pattern_tolerance 14, curvature 0.0003) was rejected: proxy 0.6794->0.6735, correspondence_f1@15 0.428->0.418, depth_nan_ratio 0.2242->0.2256, fill rate unchanged. The round-2 'after' initial_prompt_points.png is pixel-identical to the round-1 incumbent (same 10 centres: 2 assume, 5 midpoint, 1 negative_slope, 2 positive_slope), so the extra Hough relaxation produced no new usable oblique intersections; it only added a few short spurious oblique stubs (e.g. red near x 600/y 3750 and x 2600/y 4400) and the lower curvature threshold slightly raised the NaN ratio. Stage-4 prompt placement is therefore saturated for this scan, and the small f1 loss came from the depth-map/enhancing perturbation rather than from prompt centres. In the incumbent detected_lines.png the 10 vertical ring boundaries sit at x ~190, 550, 905, 1270, 1640, 2000, 2360, 2730, 3100, 3460, i.e. a mean ring pitch of ~363 px = ~1.82 m at 0.005 m/px. In segmentation_results.png the ring instances follow these verticals, but the block boundaries inside each ring (K/B/A polygons) are the remaining source of boundary error: chamfer_sym_px is still 55 px and boundary_explained_edge@25 only 0.60 with phase_incoherence 17.7 deg, indicating the SAM block templates are slightly mis-scaled/mis-tapered relative to the detected joint geometry.",
+    "rule": "d10/d12 (stage_5_segmentation) with inter-stage check passed: stage-4 f_missing_lines is no longer actionable (prompt centres unchanged under further Hough relaxation), so per the orchestration hint the agent moves downstream. Residual boundary error with correct ring count and stable prompts implies f_template_mismatch (template width/height/taper not matching segment geometry). Remediation r_fix_template: set segment_width, K_height, taper angle to the tunnel geometry observed in the map.",
+    "failure_mode": "f_template_mismatch (SAM block templates mis-scaled relative to the observed ~1.82 m ring pitch and joint taper), after stage-4 f_missing_lines has saturated.",
+    "rationale": "Final round, so the overlay switches lever rather than repeating the saturated detection direction, and it deliberately leaves the round-1 detection/enhancing values in place (the incumbent) because round 2 showed further changes there are neutral-to-negative. The only image-grounded geometric quantity available without GT is the ring pitch: ~363 px -> segment_width ~1817 mm, so segment_width is set to 1820 to make the per-ring template width match the detected ring boundaries. K_height and angle are set to the values of the only improving worked example for this family (s021: K_height 1120, angle 11.79 -> f1 0.446->0.460), rounded to 1120 / 11.5; the two degrading examples used larger K_height (1378) or lower angle (10.3), so 1120 / 11.5 sits on the favourable side of the observed range while staying well inside bounds. Denoising and unfolding are untouched (stage 1 locked; fill rate is capped by fixture-band holes and both radial-band examples degraded). All values are inside configs/bounds/complex.json. Joint overlay; no per-parameter causal attribution is claimed.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9419279327470528,
+    "denoise_retained_ratio": 0.7386938922343486,
+    "depth_nan_ratio": 0.2232064422522924,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5536366270646189,
+    "correspondence_f1@15": 0.3346671030149214,
+    "chamfer_sym_px": 97.17694473266602,
+    "sam_fill_rate": 0.7268003859790991,
+    "phase_incoherence_deg": 15.0
+  },
+  "score": 0.6251598013036682,
+  "score_raw": 0.6251598013036682,
+  "band": "refine",
+  "gt_miou": 0.78,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6794345113337916,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.42844633691520206,
+    "sam_fill_rate": 0.7284786673779505,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22418923678741126
+  },
+  "elapsed_s": 243.9,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/4-4/round3/params",
+  "finished_at": "2026-09-19T15:07:37"
+}

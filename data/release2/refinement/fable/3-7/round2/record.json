@@ -1,0 +1,57 @@
+{
+  "subset": "3-7",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 105,
+      "hough_threshold_oblique": 22,
+      "maxLineGap_oblique": 30
+    },
+    "sam": {
+      "K_height": 885.0,
+      "angle": 5.5
+    }
+  },
+  "proposal": {
+    "observation": "Round-1 overlay (binary_threshold 115, hough_oblique 30, maxLineGap 45) was accepted: correspondence_f1@15 0.172 -> 0.184, boundary_explained_edge@25 0.209 -> 0.247, chamfer 96.3 -> 95.2 px, while sam_fill_rate, ring_count_error and depth_nan_ratio were unchanged. However the before/after detected_lines.png are visually indistinguishable: still 3 positive (green) and 2-3 negative (red) oblique segments, all in the right-most three rings (x~1690-2450), one horizontal fallback line, and initial_prompt_points.png still shows all 10 prompt centres 'propagated' at one y~1550. Pixel measurement of the drawn lines (image aspect preserved, ~2.28 data px per image px) gives green slopes of +5.2/+5.8/+5.9 deg and the clean red segment -4.7 deg, i.e. a taper of ~5-6 deg, and a K block that spans y~1485 (top edge) to y~1662 (bottom edge) at ring centre, i.e. ~177 px ~ 885 mm at 5 mm/px with centre y~1573 (the propagated prompts sit ~23 px above this). One red segment spans x 937-1145 image px (two rings) with a fitted slope of only -1.7 deg: with maxLineGap=45 the Hough is bridging the ~45 data px gap between the joint marks of adjacent rings, producing a merged, flattened segment that falls outside the [-10,-5] angle window. Joint marks remain visible in all ten ring columns of the outlier map but are smaller/sparser on the left seven rings.",
+    "rule": "d7 (stage_4_detection): m_line_yield low AND horizontal fallback triggered -> f_missing_lines (persisting after a mild relaxation), with a secondary d8/d10 signal: the template K block geometry (K_height, taper angle) should be set from the observed joint lines so the SAM template boundaries land within the 15 px correspondence window (r_fix_template / r_fix_height_priors). Remediations: r_relax_hough (lower oblique threshold further, lower binarisation threshold) but with maxLineGap reduced so segments are not bridged across ring boundaries; r_fix_template (K_height, angle from measured lines).",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Round 1 confirmed the direction (accepted, +0.007 proxy) but the step was too small to convert the left-side joint marks into lines, so the K locus is still propagated from a single ring. This round pushes the oblique Hough accumulator threshold to 22 and the binarisation threshold to 105 so the sparser left-side marks accumulate enough votes, while REDUCING maxLineGap_oblique from 45 to 30 so a segment cannot bridge the ~45 px inter-ring gap (which currently produces a flattened cross-ring segment that fails the angle filter). Vertical Hough threshold, pattern_tolerance and uniform_k_snap are untouched because the 10 ring boundaries are exact and a single shared K height is correct for the continuous family. In the SAM stage, K_height=885 mm and angle=5.5 deg are set directly from the measured line geometry (177 px K span, 5-6 deg taper); both are near the middle of their bounds, so if the incumbent already matches, the template is unchanged, and otherwise the K/B block edges move toward the observed joint lines, which is what correspondence_f1@15 and boundary_explained_edge measure. Denoising/enhancing are untouched (depth_nan_ratio and fill rate healthy); unfolding untouched (stage 1 locked). Worked example g005 (hough_oblique 22 together with binary_threshold 150, vertical 822, pattern_tolerance 19, snap on) collapsed f1 as a joint outcome; here the low oblique threshold is paired with a LOWER binary threshold and no vertical/pattern changes, so that regime is not reproduced.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991211319489915,
+    "denoise_retained_ratio": 0.7976920114616173,
+    "depth_nan_ratio": 0.16450624232718375,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.24992971605285352,
+    "correspondence_f1@15": 0.1822318624340591,
+    "chamfer_sym_px": 96.42150688171387,
+    "sam_fill_rate": 0.7678565600788476,
+    "phase_incoherence_deg": 1.7
+  },
+  "score": 0.5616867628131739,
+  "score_raw": 0.5616867628131739,
+  "band": "refine",
+  "gt_miou": 0.848,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5624260119449889,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.18418713823435579,
+    "sam_fill_rate": 0.7666947332693675,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.16450624232718375
+  },
+  "elapsed_s": 185.1,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-7/round2/params",
+  "finished_at": "2026-09-19T13:41:37"
+}

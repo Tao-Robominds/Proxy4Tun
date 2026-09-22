@@ -1,0 +1,53 @@
+{
+  "subset": "1-3",
+  "family": "staggered",
+  "arm": "fable",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 42,
+      "maxLineGap_oblique": 60,
+      "hough_threshold_horizontal": 72
+    }
+  },
+  "proposal": {
+    "observation": "detected_lines.png shows oblique line yield is low for a 10-ring staggered scan: only ~6 positive-slope (red) and ~7 negative-slope (green) oblique segments were found, concentrated in two bands (y~1100-1350 and y~1500-1750), while the joint map itself shows staggered oblique joints as fragmented dotted traces at every ring row (y~200, 550, 900, 1250, 1600, 1950, 2300, 2650). Many blue horizontal fallback lines fire at rows where no oblique line was recovered (y~230, 450, 880, 1530, 1960, 2380, 2620). initial_prompt_points.png confirms the consequence: only 8 midpoint intersections in two rows plus one 'assume' point and two isolated negative_slope points, i.e. prompt centres are recovered for only a fraction of the ring loci. depth_map_viridis.png is well filled (depth_nan_ratio 0.122, no large voids) and vertical joints/markers are crisp, so upstream depth holes are not the limiting factor. Four-feature state: correspondence_f1@15 = 0.337 (dominant weakness), chamfer_sym_px = 79, sam_fill_rate = 0.735, ring_count_error = 0 (10 rings, vertical band correct).",
+    "rule": "d7 (stage_4_detection): m_line_yield low AND horizontal fallback triggered -> f_missing_lines. Precondition for r_relax_hough checked: d5 (m_hole_ratio high) does not fire (depth_nan_ratio 0.122, depth map continuous), and joints are visible in the outlier map as fragmented rather than absent, so f_depth_holes is ruled out and f_joint_oversmoothed is not the primary blocker; the in-bounds remedy for fragmented-but-present joints is r_relax_hough. Inter-stage chain respected: f_missing_lines -> unstable/sparse prompt centres -> stage_5 f_crop_offset / low correspondence.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "The oblique joints exist in the outlier map but are dotted, so the HoughLinesP accumulator does not reach threshold and gaps break candidate segments. Lowering hough_threshold_oblique toward the bottom of its bound (42) and raising maxLineGap_oblique (60) lets the fragmented oblique traces vote into single lines across all ring rows, which should add midpoint intersections for the rows currently served only by fallback and raise correspondence_f1@15. Raising hough_threshold_horizontal (72) reduces the spurious horizontal fallback lines that currently produce off-locus intersections ('assume'/isolated points), keeping fallback only where it is strongly supported. This mirrors the worked examples as a joint analogy: both improve examples on 2-1 (s005, s002) used low oblique thresholds (44, 47) with maxLineGap 40-47, while the catastrophic degrade example (s011) used a high oblique threshold (76) with a small gap (32); s005, the only example that improved the proxy, also used a high horizontal threshold (84). No per-parameter causal attribution is claimed. Unfolding is untouched because stage-1 is locked; denoising, enhancing and SAM y_bounds are left at incumbent since the depth map and ring count are healthy and changing them would confound the detection fix. All values are inside configs/bounds/staggered.json.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999867062401834,
+    "denoise_retained_ratio": 0.7630407091253434,
+    "depth_nan_ratio": 0.12176547785903094,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8305248618784531,
+    "correspondence_f1@15": 0.2963252718497801,
+    "chamfer_sym_px": 80.03215408325195,
+    "sam_fill_rate": 0.7139677891962223,
+    "phase_incoherence_deg": 14.3
+  },
+  "score": 0.6171041411676677,
+  "score_raw": 0.6171041411676677,
+  "band": "refine",
+  "gt_miou": 0.633,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6473891053236706,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3369665231037002,
+    "sam_fill_rate": 0.7349035504612804,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12176547785903094
+  },
+  "elapsed_s": 250.7,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/1-3/round1/params",
+  "finished_at": "2026-09-19T12:18:51"
+}

@@ -1,0 +1,56 @@
+{
+  "subset": "3-6",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 1,
+  "overlay": {
+    "denoising": {
+      "mask_theta_low": 2.5,
+      "mask_theta_high": 16.5
+    },
+    "sam": {
+      "K_height": 840.0,
+      "angle": 5.8
+    }
+  },
+  "proposal": {
+    "observation": "Detection is healthy: 10 propagated prompt centres at uniform 243 px spacing (ring_count_error 0), all sitting at y=1550, which matches the K-block centre measured directly from the depth map (upper oblique edge 1454->1479 px, lower 1646->1623 px per ring; K height 193 px at left joint, 144 px at right joint, 168 px = 840 mm at ring centre; taper half-angle ~5.8 deg). Ring joints fall on 243 px = ~1212 mm multiples and the SAM ring bands align with them. The deficits are elsewhere: depth_nan_ratio 0.105 with holes concentrated in the two sidewall ends of the unrolled map (top 0-500 px rows are 10-33% NaN from a cable-bracket row; bottom 2750-3123 px rows are 13-51% NaN from a second bracket gap and the diagonal walkway/rail structure in the bottom-right), while interior rows are only 3-7% NaN. The label map leaves the outermost ~120 px band at the top and ~90 px band at the bottom unlabeled (label 0), so those hole-rich end rows also drag sam_fill_rate (0.649) and add unmatched edges against correspondence_f1@15 (0.467). The SAM K label band spans ~1479-1629 px, slightly inside the measured K edges (1467/1634 at centre), i.e. template geometry is close but the K template may be marginally short.",
+    "rule": "d5 (m_hole_ratio high -> f_depth_holes) with the holes localised to the theta extremes near the invert/walkway, where the ontology's T3-style theta gate (p_theta_gate) is the designated control; plus r_fix_template: set K template geometry from the measured joint geometry rather than a generic prior. Upstream chain respected: stage-1 is locked (residual 3.2 cm, gate 10 cm) so no unfolding change; detection shows no f_missing_lines/f_spurious_lines so no Hough change.",
+    "failure_mode": "stage_3_upsample.f_depth_holes (localised to the sidewall ends of the theta range, i.e. background/walkway occlusion rather than a radial-gate problem) with a mild stage_5_segmentation.f_template_mismatch on the K block height.",
+    "rationale": "Tightening the theta keep-band from both sides (mask_theta_low to its upper bound 2.5, mask_theta_high to 16.5) shrinks the map arc by a guaranteed ~1.6 m (~10% of rows) taken from the sidewall ends regardless of the incumbent gate offset, removing the highest-NaN rows and the unlabeled end bands: depth_nan_ratio should fall from ~0.105 toward ~0.085-0.095, the unlabeled fraction shrinks so sam_fill_rate rises, and the unmatched bracket/walkway edges disappear from the correspondence denominator. The K block at 1467-1634 px stays >800 px from either new edge so prompt detection and the K/AB stacking are unaffected; the crop is kept moderate (not the full 15.0 bound) to limit vertical-Hough vote loss and avoid the ring-count failure seen in example g000. K_height=840 mm and angle=5.8 deg are the values measured from the oblique K edges in this scan, so they either no-op or pull the K template onto the true joints (the current K label band is ~18 px shorter than the measured block). Segment width, Hough thresholds, radial gate, curvature and pattern tolerance are left untouched because detection and ring alignment are already correct; the worked examples show large joint changes to detection/SAM priors degrade fill rate and F1 (0.67->0.29-0.43), so the overlay is deliberately small and evidence-anchored.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9998273166785221,
+    "denoise_retained_ratio": 0.6334647091667488,
+    "depth_nan_ratio": 0.09834530714098938,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.9444570908263146,
+    "correspondence_f1@15": 0.6182703518751584,
+    "chamfer_sym_px": 31.452836990356445,
+    "sam_fill_rate": 0.5860643084704569,
+    "phase_incoherence_deg": 0.5
+  },
+  "score": 0.764011917693086,
+  "score_raw": 0.764011917693086,
+  "band": "accept",
+  "gt_miou": 0.693,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6966921252558986,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.46700890973588527,
+    "sam_fill_rate": 0.6490524518014911,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.1052027439356335
+  },
+  "elapsed_s": 154.4,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-6/round1/params",
+  "finished_at": "2026-09-19T12:32:11"
+}

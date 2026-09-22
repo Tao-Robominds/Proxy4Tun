@@ -1,0 +1,61 @@
+{
+  "subset": "4-4",
+  "arm": "gemini38",
+  "family": "complex",
+  "start": {
+    "score": 0.6146403436848227,
+    "band": "refine",
+    "gt_miou": 0.784
+  },
+  "candidates": [
+    {
+      "round": 0,
+      "name": "start",
+      "score": 0.6146403436848227,
+      "band": "refine",
+      "gt_miou": 0.784,
+      "valid": true,
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/references/4-4"
+    },
+    {
+      "round": 1,
+      "name": "round1",
+      "score": 0.6656771274481178,
+      "band": "refine",
+      "gt_miou": 0.807,
+      "valid": true,
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-4/round1"
+    },
+    {
+      "round": 2,
+      "name": "round2",
+      "score": 0.6143860468000993,
+      "band": "refine",
+      "gt_miou": 0.784,
+      "valid": true,
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-4/round2"
+    },
+    {
+      "round": 3,
+      "name": "round3",
+      "score": 0.6251598013036682,
+      "band": "refine",
+      "gt_miou": 0.78,
+      "valid": true,
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-4/round3"
+    }
+  ],
+  "selected": {
+    "round": 1,
+    "name": "round1",
+    "score": 0.6656771274481178,
+    "band": "refine",
+    "gt_miou": 0.807,
+    "valid": true,
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-4/round1"
+  },
+  "selection_rule": "max score among start+valid; ties within 0.01 keep earlier (start, then round order)",
+  "delta_score": 0.051,
+  "delta_gt_miou": 0.023,
+  "finished_at": "2026-09-19T21:54:03"
+}

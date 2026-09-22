@@ -1,0 +1,52 @@
+{
+  "subset": "3-9",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 1,
+  "overlay": {
+    "sam": {
+      "K_height": 845.0,
+      "segment_width": 1215
+    }
+  },
+  "proposal": {
+    "observation": "detected_lines.png: 10 magenta ring boundaries at x = 121, 365, 608, 850, 1094, 1336, 1581, 1823, 2065, 2309 px (pitch 243.1 px = 1216 mm at 5 mm/px), so ring_count_error = 0 and the vertical band is correct. The K block is delimited by a green oblique chain at y ~ 1470 px and a red oblique chain at y ~ 1639 px (both consistent across rings 0-5, fragmented from ring 6 onward), i.e. a measured K height of ~169 px = ~845 mm with the K centre at y ~ 1554. initial_prompt_points.png shows all 10 prompts as 'propagated' at y ~ 1550, so uniform_k_snap is active and the prompt row sits on the measured K centre: stage 4 is healthy. segmentation_results.png shows the K label band only ~1486-1622 px and the upper A/B bands stacked at ~648 px (AB ~ 3240 mm) intervals with the topmost ~130 px and bottom ~110 px of lining left unlabelled; depth_map_viridis.png has a large NaN void top-right and joint voids at y ~ 307-446, 1524-1555, 2755-2787 (depth_nan_ratio 0.13). Weakest proxy features are correspondence_f1@15 = 0.364 and sam_fill_rate = 0.729, both stage-5 boundary/coverage quantities, while ring count and NaN ratio are already fine.",
+    "rule": "d10/d12 (stage_5_segmentation): block boundaries mis-registered against visible joints at 15 px tolerance while ring count and prompt row are correct implies the template geometry priors (K_height, segment_width) rather than detection or denoising; r_fix_template: set block heights/widths to the geometry actually measured on this scan. Stage-1 is locked (residual 2.8 cm < 10 cm gate) so unfolding is untouched; denoising/enhancing are left alone because depth_nan_ratio (0.13) and retained ratio (0.77) are healthy and the worked examples show that broad joint perturbations of those stages collapsed sam_fill_rate (0.67 -> 0.30-0.43).",
+    "failure_mode": "f_template_mismatch (with downstream f_crop_offset): K_height/segment_width priors not matching the K height (~845 mm) and ring pitch (~1216 mm) measured from the detected joint lines, shifting B1/B2/A crops and their SAM boundaries relative to the true joints.",
+    "rationale": "In stage 5 the K crop half-height is 0.5*K_height and the B1/B2 crop centres sit at K_centre -/+ (0.5*K_height + 0.5*AB_height), so an error of ~30 mm in K_height moves every A/B boundary by ~3 px and a 150 mm error by ~15 px, which is exactly the correspondence_f1@15 tolerance; segment_width sets the crop half-width, and a width below the 1216 mm pitch leaves uncovered columns between rings while a width above it lets neighbouring rings overwrite each other. Both are read directly from the incumbent detected_lines.png (green/red K chains 169 px apart; vertical pitch 243.1 px), so the overlay pins the SAM template to the scan geometry instead of a generic prior. This is a minimal two-parameter stage-5 change: it cannot alter ring_count_error or depth_nan_ratio (upstream of SAM), and it is expected to raise correspondence_f1@15 by aligning block boundaries with the visible K/AB joints and to hold or raise sam_fill_rate through gap-free ring coverage. Values are inside bounds (K_height 700-1000, segment_width 1000-1400) and unfolding, denoising, enhancing and detecting keys are deliberately untouched.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9992437316181036,
+    "denoise_retained_ratio": 0.7719211863424968,
+    "depth_nan_ratio": 0.13082197231971604,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.454089219330855,
+    "correspondence_f1@15": 0.33321547203223995,
+    "chamfer_sym_px": 78.43043327331543,
+    "sam_fill_rate": 0.7249631750550305,
+    "phase_incoherence_deg": 1.2
+  },
+  "score": 0.6403166756036744,
+  "score_raw": 0.6403166756036744,
+  "band": "refine",
+  "gt_miou": 0.819,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6591558534408575,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36367764129925506,
+    "sam_fill_rate": 0.7289890931960742,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.13082197231971604
+  },
+  "elapsed_s": 189.4,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-9/round1/params",
+  "finished_at": "2026-09-19T12:41:33"
+}

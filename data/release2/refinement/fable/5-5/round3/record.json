@@ -1,0 +1,51 @@
+{
+  "subset": "5-5",
+  "family": "complex",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 35
+    }
+  },
+  "proposal": {
+    "observation": "Round-2 feedback: the further-relaxed overlay (curvature 0.0003, binary 115, oblique Hough 27 / gap 76, horizontal 65, sam.angle 10.5) was rejected: proxy 0.711 -> 0.623, correspondence_f1@15 0.462 -> 0.305, sam_fill_rate 0.750 -> 0.7562 (exactly the round-0 start value), depth_nan_ratio 0.195 -> 0.196, ring_count_error 0. The round-2 after initial_prompt_points.png is identical to the round-0 start layout (2 assume at x=180/900, positive_slope at x=540/3060, midpoints at 1260/1620/1980/2340/2700/3420 with the same y), i.e. the relaxation reverted the prompt set that round 1 had improved (round 1 had x=1620 as positive_slope y=2140 and x=2340 as negative_slope y=1400 instead of midpoints 2120/1430). The round-2 after detected_lines.png shows the same long red/green K-edge pairs as round 1 (spanning joint-to-joint, e.g. x1090-1450, 1800-2160, 2520-2880, 2150-2560, 3240-3600) PLUS several new short oblique fragments running parallel to, and a few pixels off, the genuine lines: red x1450-1550 y~2050, red x1950-2050 y~3440, red x2200-2300 y~1290, green x1100-1150 y~30 (top margin). These duplicates were absent in round 1 and present in round 0, and the two rings whose prompt type flipped back (x=1620, x=2340) are exactly the rings where a duplicate fragment appeared next to the true edge. Reading the prompt geometry: single-slope prompts sit K_height_pixel/2 (~115 px) from the intersection and both-slope prompts sit at the midpoint of the pair, so 'midpoint' is not a fallback; the loss came from fragments forming false pairs and from extra detected segments that no mask boundary can explain. The round-1 incumbent still carries a few residual fragments (red x100-150 y~2010, red x600-700 y~4880 in the noisy bottom margin, two short greens x1090-1150 y~2150 and x1600-1700 y~2230). Vertical ring-centre lines (10, 360 px pitch), fill rate and NaN ratio are healthy in all rounds.",
+    "rule": "d9 (spurious oblique segments -> stage_4_detection.f_spurious_lines) rather than d7: relaxing oblique Hough past the round-1 point added duplicate fragments that produced extra intersections and false prompt pairs (f_pattern_mismatch -> stage-5 f_crop_offset). Remediation r_tighten_hough: raise the oblique HoughLinesP threshold moderately so low-vote fragments drop while the long joint-to-joint K edges (which survived at 27 with duplicates, so they have vote margin) are kept. No upstream change: f_joint_oversmoothed remediation (lower curvature/binary) was tried jointly in round 2 and did not pay off; radial band, vertical Hough, gaps, pattern_tolerance, segment_width and all sam priors stay at the accepted round-1 incumbent. Unfolding untouched (stage1_unlocked=false).",
+    "failure_mode": "stage_4_detection.f_spurious_lines -> stage_4_detection.f_pattern_mismatch -> stage_5_segmentation.f_crop_offset",
+    "rationale": "Across the three observed states the ordering of oblique-fragment count tracks the ordering of correspondence_f1@15: round 0 (fragments at x1450/1950/2200/3200, f1 0.316), round 2 (same fragments plus a top-margin one, f1 0.305), round 1 (fragments removed on the two flipped rings, f1 0.462). Round 2 demonstrated that moving oblique Hough looser than round 1 (27/76) re-creates the fragments and reverts the prompt set to the start layout, so the final step should move in the opposite direction from the accepted incumbent, by a similarly small amount, and change nothing else that could confound the read: hough_threshold_oblique 30 -> 35 (+5, mirroring the -3 that was enough to break it), maxLineGap_oblique kept at 70 so the dotted K edges still bridge into single joint-to-joint lines. This is a single-stage, single-parameter overlay by design for the final round: the incumbent is in the accept band and the only diagnosed defect is a handful of low-vote oblique fragments, so the risk-minimising action is the one remediation that targets them directly. The main risk is that the shortest genuine edge (red x520-700 near ring centre x=540, ~180 px) falls below the new threshold and that ring becomes 'assume'; this is bounded because the ring is already single-slope and its neighbour rings are stable, whereas the upside is removing the residual fragments near x=100, x=650 (bottom margin), x=1120 and x=1650 that currently count as unexplained detections. Joint outcome only; no per-parameter causal effect is claimed beyond this specific parameter's monotone relation to the number of admitted low-vote segments. Value is inside [25, 70]; no unfolding keys.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9125884650166897,
+    "denoise_retained_ratio": 0.7673354664684634,
+    "depth_nan_ratio": 0.19323166894404062,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5716450668896321,
+    "correspondence_f1@15": 0.3162260435797977,
+    "chamfer_sym_px": 68.7043285369873,
+    "sam_fill_rate": 0.7561778560970978,
+    "phase_incoherence_deg": 28.8
+  },
+  "score": 0.6296687362455977,
+  "score_raw": 0.6296687362455977,
+  "band": "refine",
+  "gt_miou": 0.775,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.7112494292642254,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.4623385895190617,
+    "sam_fill_rate": 0.7498994349982542,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19497982605977907
+  },
+  "elapsed_s": 238.7,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/5-5/round3/params",
+  "finished_at": "2026-09-19T15:11:46"
+}

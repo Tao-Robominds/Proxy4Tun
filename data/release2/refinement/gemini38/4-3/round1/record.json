@@ -1,0 +1,53 @@
+{
+  "subset": "4-3",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 28,
+      "maxLineGap_oblique": 76,
+      "hough_threshold_horizontal": 58
+    }
+  },
+  "proposal": {
+    "observation": "Dominant weak feature is correspondence_f1@15=0.337, with chamfer_sym_px=81.9, boundary_explained_edge@25=0.467, and phase_incoherence_deg=17.1. Ring count is already exact (ring_count_error=0) and sam_fill_rate=0.714 is secondary; depth_nan_ratio=0.229 with denoise_retained_ratio=0.724 is not a collapsed radial gate. Stage-1 residual is 3.0 cm (gate 10 cm) and orient_agreement=0.985, so unfolding stays locked. On detected_lines.png the ten magenta verticals are evenly spaced across the full height, but red/green oblique segments are short fragments and absent on the edge columns, while blue horizontal segments repeat at shared y across most columns. initial_prompt_points.png shows only a handful of assume/midpoint/negative_slope seeds, clustered in the upper half rather than one oblique intersection lattice per ring. The label and ring maps still cover all ten rings, so SAM is filling a complete grid from misplaced centres.",
+    "rule": "d7: oblique line yield is low and horizontal fallback is active, which implies f_missing_lines. Downstream this is f_crop_offset (poor correspondence) rather than a ring-count or fill failure. d3 does not fire: retained ratio is not very low. Stage-1 rules do not fire.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Remediate detection only (r_relax_hough), after checking upstream: joints are visible but broken, and the radial band is not the g000-style collapse (that joint overlay drove correspondence and fill to near zero via a ~4 cm gate). Do not copy the correspondence-improve example's unfolding keys; stage 1 is locked. Relative to the complex reference, lower hough_threshold_oblique 35\u219228 (floor 25; that example used 27 inside a joint change, not a causal claim) so weaker oblique joints pass, and raise maxLineGap_oblique 60\u219276 (ceiling 80; example used 74) to bridge the short red/green fragments past the fixed min line length. Raise hough_threshold_horizontal 35\u219258 (example used 60; the degrade example used 25) so the shared-y horizontal fallback stops setting a common phase on a staggered lining. Leave vertical Hough at its ceiling, pattern_tolerance, denoising, curvature, and SAM priors unchanged: ring spacing is already regular and widening or narrowing the gate is the wrong analogy for this correspondence gap.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9853621137665801,
+    "denoise_retained_ratio": 0.7244459655940515,
+    "depth_nan_ratio": 0.22909308809933374,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.47121755186271314,
+    "correspondence_f1@15": 0.35639383452509676,
+    "chamfer_sym_px": 78.23246765136719,
+    "sam_fill_rate": 0.7137013969678645,
+    "phase_incoherence_deg": 17.1
+  },
+  "score": 0.6322540236030219,
+  "score_raw": 0.6322540236030219,
+  "band": "refine",
+  "gt_miou": 0.554,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6210363325939159,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3368749830151404,
+    "sam_fill_rate": 0.7137013969678645,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22909308809933374
+  },
+  "elapsed_s": 235.4,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-3/round1/params",
+  "finished_at": "2026-09-19T19:41:31"
+}

@@ -1,0 +1,56 @@
+{
+  "subset": "1-3",
+  "family": "staggered",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "enhancing": {
+      "inter_radius": 0.068
+    },
+    "detecting": {
+      "hough_threshold_oblique": 44,
+      "hough_threshold_horizontal": 80,
+      "maxLineGap_oblique": 64
+    }
+  },
+  "proposal": {
+    "observation": "Staggered subset 1-3 scores 0.647 with correspondence_f1@15 at 0.337, while sam_fill_rate is 0.735, ring_count_error is 0, and depth_nan_ratio is 0.122. Stage 1 is locked (residual 0 cm). All 10 ring centres are present, but the main 6\u20139 degree joints do not cross centres 0, 2, and 9: centre 0 has no oblique hit so the prompt is assumed at y=1123, and centres 2 and 9 keep only a low negative-slope hit (prompts y=2279 and y=2065) instead of the staggered midpoint rows near y=1200 and y=1634 used by the other seven rings. Those centres sit a few pixels past the end of the main red/green segments. Short blue horizontal segments are drawn on many circumferential rows and still enter the line-to-boundary match, consistent with chamfer_sym_px of 79.",
+    "rule": "d7: oblique yield fails at ring centres while horizontal segments are present, so the miss is f_missing_lines rather than a ring-count or fill failure. Upstream check before relaxing Hough: denoise_retained_ratio 0.76 is not an over-tight radial gate, depth holes are moderate, vertical detection already yields 10 rings, and stage1_unlocked is false.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Apply r_relax_hough only on the oblique channel, and keep horizontal lines from diluting correspondence. Lower hough_threshold_oblique from 50 to 44 and raise maxLineGap_oblique from 40 to 64 so the main oblique segments can extend across the near-miss centres. Raise hough_threshold_horizontal from 50 to 80 so off-joint horizontal segments drop out of the F1. Raise inter_radius only from 0.06 to 0.068 so joint points can close gaps of a few pixels before Hough. That sits next to the development overlay that did not collapse correspondence (oblique 44, horizontal 84, gap 47, inter_radius 0.058) and away from the overlay that zeroed correspondence (oblique 76) and the one that bought fill by cutting correspondence (inter_radius 0.022). Leave unfolding, the vertical threshold, binary threshold, z_step (already 0.001), and y_bounds at the reference so ring count and fill are not traded away.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999867062401834,
+    "denoise_retained_ratio": 0.7630407091253434,
+    "depth_nan_ratio": 0.12174807886058867,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8717986030267754,
+    "correspondence_f1@15": 0.32225403278726517,
+    "chamfer_sym_px": 80.90277862548828,
+    "sam_fill_rate": 0.7325713991436517,
+    "phase_incoherence_deg": 17.6
+  },
+  "score": 0.6381650579692606,
+  "score_raw": 0.6381650579692606,
+  "band": "refine",
+  "gt_miou": 0.551,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6473891053236706,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3369665231037002,
+    "sam_fill_rate": 0.7349035504612804,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12176547785903094
+  },
+  "elapsed_s": 250.0,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/1-3/round1/params",
+  "finished_at": "2026-09-19T19:54:06"
+}

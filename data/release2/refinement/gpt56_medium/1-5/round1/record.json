@@ -1,0 +1,55 @@
+{
+  "subset": "1-5",
+  "family": "staggered",
+  "arm": "gpt56_medium",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 150,
+      "hough_threshold_oblique": 44,
+      "hough_threshold_horizontal": 84,
+      "hough_threshold_vertical": 508,
+      "maxLineGap_oblique": 47
+    }
+  },
+  "proposal": {
+    "observation": "The expected 10 rings are recovered and the vertical ring loci are regular, but correspondence_f1@15 is low (0.3224). The detected-line overlay shows sparse, short oblique joint segments together with prominent horizontal fallback segments, while boundary_explained_edge@25 remains high (0.8359).",
+    "rule": "When ring count and vertical spacing are coherent but oblique line yield is fragmented and horizontal fallback is visible, preserve the established ring geometry and retune the bounded stage-4 Hough configuration for stronger, more continuous staggered-joint evidence.",
+    "failure_mode": "stage_4_detection.f_missing_lines, with fragmented oblique detections causing unstable prompt-centre correspondence rather than a ring-count failure",
+    "rationale": "This partial overlay uses the detection-stage portion of the successful staggered development configuration as a joint setting. It raises the binary threshold to suppress weak clutter, keeps the oblique accumulator permissive, allows moderate oblique gaps, makes horizontal fallback more selective, and retains a bounded vertical threshold. The worked example reports only the joint outcome, so no individual parameter effect is assumed. Unfolding is omitted because stage1_unlocked is false.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991680441522386,
+    "denoise_retained_ratio": 0.7712866638776553,
+    "depth_nan_ratio": 0.12040894298363669,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8253717178108194,
+    "correspondence_f1@15": 0.2730667661270838,
+    "chamfer_sym_px": 92.39850616455078,
+    "sam_fill_rate": 0.7373430019058244,
+    "phase_incoherence_deg": 30.2
+  },
+  "score": 0.611716228236635,
+  "score_raw": 0.611716228236635,
+  "band": "refine",
+  "gt_miou": 0.557,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6410668863547464,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.32237648215183345,
+    "sam_fill_rate": 0.7404006879561196,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12040894298363669
+  },
+  "elapsed_s": 264.7,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/1-5/round1/params",
+  "finished_at": "2026-09-19T23:29:50"
+}

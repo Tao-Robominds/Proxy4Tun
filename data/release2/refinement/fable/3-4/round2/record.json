@@ -1,0 +1,55 @@
+{
+  "subset": "3-4",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 2,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0003
+    },
+    "detecting": {
+      "hough_threshold_oblique": 25,
+      "maxLineGap_oblique": 60
+    }
+  },
+  "proposal": {
+    "observation": "Round-1 feedback (accepted, 0.5265->0.5456): relaxing the oblique Hough stage raised correspondence_f1@15 0.244->0.278 while sam_fill_rate (0.571->0.569), ring_count_error (0) and depth_nan_ratio (0.195) were unchanged. In the after detected_lines.png the red oblique joint trace is now continuous across rings 1-4 (x~100-1000) and appears at ring 6 (x~1370-1450), but oblique lines are still confined to the single mid-band (y~1420-1620) and still absent for rings 8-10 (x>1600); the single blue horizontal fallback at y~770 persists. initial_prompt_points.png after round 1 still shows all 10 centres as 'propagated' at y~1520, i.e. the midpoint of the green (~1440) and red (~1605) traces, so the K pair is recovered only once and copied to the other rings. In the outlier map the top (y~770) and bottom (y~2300) circumferential joints appear only as sparse dotted traces and rings 8-10 show almost no joint pixels besides bolt-hole rows: the joint/outlier point set entering stage 4 is too sparse away from the high-density mid-band. Depth map coverage is unchanged, so holes are not the limiter.",
+    "rule": "Round 1 applied r_relax_hough for f_missing_lines and gave only a marginal line-yield gain with no ring-specific prompt centres, which by the r_relax_hough precondition ('first rule out upstream f_joint_oversmoothed') and inter_stage_dependency stage_3_upsample.f_joint_oversmoothed -> stage_4_detection.f_missing_lines points to the upstream cause: d6 (m_joint_contrast low -> f_joint_oversmoothed). The in-bounds stage-3 control that decides which points are treated as joint/outlier points and enhanced along the joint is enhancing.curvature_threshold; lowering it admits more high-curvature joint points into enhance_outlier_points, sharpening the joint traces in the outlier map for all rings. A further small Hough relaxation (r_relax_hough) then converts the denser traces into oblique segments; the angle filter [5,10] deg and the K/AB distance-pattern check guard against f_spurious_lines from bolt-hole rows.",
+    "failure_mode": "stage_3_upsample.f_joint_oversmoothed (upstream of stage_4_detection.f_missing_lines)",
+    "rationale": "Keep everything that round 1 established (binary_threshold 115, pattern_tolerance 12 remain in the incumbent) and everything that is already healthy: hough_threshold_vertical (10 rings correct), denoising (depth_nan_ratio unchanged and mostly a genuine bottom-right void; the g000 example shows tightening mask_r inflates NaN and breaks ring count), SAM geometry (K band is correctly placed on the mid joint; without ring-specific centres a template change cannot be attributed) and unfolding (stage 1 is unlocked but the unrolled map is straight and well aligned, and all three worked examples that moved unfolding jointly degraded sam_fill_rate). The overlay therefore moves one upstream knob and two detection knobs in the direction round 1 already validated: enhancing.curvature_threshold lowered to 0.0003 (bounds 0.0002-0.002; below the 0.0005 default and below every worked-example value 0.0005-0.0017, none of which produced dense joints) so the top/bottom circumferential joints and the rings 8-10 joints acquire enough outlier pixels; detecting.hough_threshold_oblique lowered from 30 to 25 and maxLineGap_oblique raised from 50 to 60 so the newly denser dotted traces are bridged into full-ring oblique segments and the K pair can be matched per ring instead of propagated. Expected joint response: oblique line yield extends to all 10 rings, prompt centres switch from propagated to directly detected, correspondence_f1@15 rises further and sam_fill_rate improves through better-aligned per-ring crops, with ring_count_error and depth_nan_ratio unchanged.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9984156385609421,
+    "denoise_retained_ratio": 0.6936518019734892,
+    "depth_nan_ratio": 0.2023331250769203,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4592638544251447,
+    "correspondence_f1@15": 0.25987076134061154,
+    "chamfer_sym_px": 82.93338584899902,
+    "sam_fill_rate": 0.5767882098843857,
+    "phase_incoherence_deg": 2.5
+  },
+  "score": 0.5362823202698532,
+  "score_raw": 0.5362823202698532,
+  "band": "refine",
+  "gt_miou": 0.625,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5456144390579352,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.27807919569558853,
+    "sam_fill_rate": 0.5693728031169271,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19497856422227988
+  },
+  "elapsed_s": 179.9,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-4/round2/params",
+  "finished_at": "2026-09-19T13:35:37"
+}

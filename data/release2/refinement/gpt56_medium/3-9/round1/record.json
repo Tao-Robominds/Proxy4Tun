@@ -1,0 +1,51 @@
+{
+  "subset": "3-9",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 1,
+  "overlay": {
+    "sam": {
+      "angle": 4.5
+    }
+  },
+  "proposal": {
+    "observation": "All 10 ring instances are recovered with high fill, but correspondence_f1@15 remains low (0.3637); the detected oblique joint traces are shallow while several semantic-mask boundaries appear more steeply tapered than those traces.",
+    "rule": "When ring_count_error is zero and sam_fill_rate is already high, preserve prompt detection and refine the stage-5 template geometry rather than increasing coverage or changing the locked centreline.",
+    "failure_mode": "f_template_mismatch",
+    "rationale": "A conservative reduction of the SAM taper angle targets boundary alignment without perturbing the correct 10-ring layout. The value is within the allowed [4.0, 9.0] range, and no unfolding key is changed because stage1_unlocked is false.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9992437316181036,
+    "denoise_retained_ratio": 0.7719211863424968,
+    "depth_nan_ratio": 0.13082197231971604,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.43707348039993654,
+    "correspondence_f1@15": 0.35364335710043276,
+    "chamfer_sym_px": 77.37052345275879,
+    "sam_fill_rate": 0.7254059019215173,
+    "phase_incoherence_deg": 1.2
+  },
+  "score": 0.6522033038283295,
+  "score_raw": 0.6522033038283295,
+  "band": "refine",
+  "gt_miou": 0.816,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6591558534408575,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36367764129925506,
+    "sam_fill_rate": 0.7289890931960742,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.13082197231971604
+  },
+  "elapsed_s": 188.7,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-9/round1/params",
+  "finished_at": "2026-09-19T22:57:03"
+}

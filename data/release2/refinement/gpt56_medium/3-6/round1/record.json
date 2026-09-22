@@ -1,0 +1,51 @@
+{
+  "subset": "3-6",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 1,
+  "overlay": {
+    "sam": {
+      "angle": 4.5
+    }
+  },
+  "proposal": {
+    "observation": "All 10 ring instances are recovered and the detected vertical bands are regular, but correspondence_f1@15 is only 0.4670 and SAM fill is 0.6491. The visible longitudinal joint traces have a shallow taper near the lower end of the allowed angle range, while the labeled masks show broad, regular coverage rather than a ring-count failure.",
+    "rule": "With ring count already correct, preserve detection and stage 1; apply the ontology's r_fix_template guidance to test a conservative SAM template-angle correction for a suspected template mismatch.",
+    "failure_mode": "stage_5_segmentation.f_template_mismatch",
+    "rationale": "A single low-end taper-angle setting directly targets geometric alignment of the SAM template without perturbing the correct 10-ring structure or the locked unfolding stage. This is a bounded hypothesis based on the overlay and proxy measurements; no per-parameter causal effect is claimed.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9998273166785221,
+    "denoise_retained_ratio": 0.6947482510592177,
+    "depth_nan_ratio": 0.1052027439356335,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4859193067966423,
+    "correspondence_f1@15": 0.4388549637794472,
+    "chamfer_sym_px": 70.94142532348633,
+    "sam_fill_rate": 0.6474398134463165,
+    "phase_incoherence_deg": 0.8
+  },
+  "score": 0.6799781039129604,
+  "score_raw": 0.6799781039129604,
+  "band": "refine",
+  "gt_miou": 0.834,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6966921252558986,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.46700890973588527,
+    "sam_fill_rate": 0.6490524518014911,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.1052027439356335
+  },
+  "elapsed_s": 188.5,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-6/round1/params",
+  "finished_at": "2026-09-19T22:47:10"
+}

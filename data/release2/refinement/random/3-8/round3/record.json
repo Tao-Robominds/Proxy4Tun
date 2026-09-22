@@ -1,0 +1,69 @@
+{
+  "subset": "3-8",
+  "family": "continuous",
+  "arm": "random",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "pattern_tolerance": 14,
+      "maxLineGap_oblique": 30,
+      "uniform_k_snap": false
+    },
+    "unfolding": {
+      "random_seed": 4,
+      "slice_spacing_factor": 1.2126174148472633
+    }
+  },
+  "proposal": {
+    "observation": "adaptive random control proposal",
+    "rule": "k-matched uniform draw on incumbent",
+    "failure_mode": "n/a (control)",
+    "rationale": "random bounded overlay on current best",
+    "full": true
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 3.2733640101522705,
+    "orient_agreement": 0.9994702871904865,
+    "denoise_retained_ratio": 0.7437962864023804,
+    "depth_nan_ratio": 0.15984349472939366,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.45484001620089104,
+    "correspondence_f1@15": 0.3115060854741871,
+    "chamfer_sym_px": 90.47352600097656,
+    "sam_fill_rate": 0.5481625171583334,
+    "phase_incoherence_deg": 2.9
+  },
+  "score": 0.5641192422185429,
+  "score_raw": 0.5641192422185429,
+  "band": "refine",
+  "gt_miou": 0.616,
+  "residual_cm": 25.400000000000002,
+  "incumbent_before_score": 0.5917089711439448,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3507828847680208,
+    "sam_fill_rate": 0.5612686070310124,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.15605940336249324
+  },
+  "elapsed_s": 207.7,
+  "provenance": {
+    "arm": "random",
+    "seed_base": 20260915,
+    "panel_index": 7,
+    "round": 3,
+    "k": 5,
+    "chosen": [
+      "detecting.pattern_tolerance",
+      "unfolding.random_seed",
+      "unfolding.slice_spacing_factor",
+      "detecting.maxLineGap_oblique",
+      "detecting.uniform_k_snap"
+    ],
+    "stage1_unlocked": true
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/random/3-8/round3/params",
+  "finished_at": "2026-09-19T10:57:45"
+}

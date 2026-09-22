@@ -1,0 +1,71 @@
+{
+  "subset": "3-10",
+  "family": "continuous",
+  "arm": "random",
+  "round": 1,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.771523396996964,
+      "mask_theta_low": 1.4950444446583473
+    },
+    "unfolding": {
+      "ransac_threshold": 0.9154793409855677,
+      "slice_spacing_factor": 1.1196968812319135
+    },
+    "sam": {
+      "segment_width": 1048
+    }
+  },
+  "proposal": {
+    "observation": "adaptive random control proposal",
+    "rule": "k-matched uniform draw on incumbent",
+    "failure_mode": "n/a (control)",
+    "rationale": "random bounded overlay on current best",
+    "full": true
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 1.547562508716013,
+    "orient_agreement": 0.9990355974117986,
+    "denoise_retained_ratio": 0.7416701029260759,
+    "depth_nan_ratio": 0.14225585431121043,
+    "ring_count_error": 1.0,
+    "boundary_explained_edge@25": 0.5412717823295629,
+    "correspondence_f1@15": 0.3852200273255546,
+    "chamfer_sym_px": 69.07161808013916,
+    "sam_fill_rate": 0.5885342130157422,
+    "phase_incoherence_deg": 1.8
+  },
+  "score": 0.5444165041020756,
+  "score_raw": 0.5444165041020756,
+  "band": "refine",
+  "gt_miou": 0.724,
+  "residual_cm": 3.7,
+  "incumbent_before_score": 0.6028244393016267,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.2872649727544261,
+    "sam_fill_rate": 0.697552574768962,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.14202755710717666
+  },
+  "elapsed_s": 207.2,
+  "provenance": {
+    "arm": "random",
+    "seed_base": 20260915,
+    "panel_index": 9,
+    "round": 1,
+    "k": 5,
+    "chosen": [
+      "denoising.mask_r_low",
+      "denoising.mask_theta_low",
+      "unfolding.ransac_threshold",
+      "sam.segment_width",
+      "unfolding.slice_spacing_factor"
+    ],
+    "stage1_unlocked": true
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/random/3-10/round1/params",
+  "finished_at": "2026-09-19T11:10:52"
+}

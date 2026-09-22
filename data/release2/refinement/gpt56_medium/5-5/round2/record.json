@@ -1,0 +1,51 @@
+{
+  "subset": "5-5",
+  "family": "complex",
+  "arm": "gpt56_medium",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "pattern_tolerance": 11
+    }
+  },
+  "proposal": {
+    "observation": "The accepted round-1 relaxation raised correspondence_f1@15 from 0.3162 to 0.3924 while leaving fill, ring count, and depth holes unchanged. The after image adds one positive-slope prompt, but prompt-centre spacing remains irregular, including a large gap in the lower half, while the depth and segmentation images are otherwise unchanged.",
+    "rule": "Poor prompt-centre spacing regularity relative to the K/AB pattern indicates stage_4_detection.f_pattern_mismatch; refine the bounded distance-pattern tolerance while preserving the accepted oblique Hough settings.",
+    "failure_mode": "stage_4_detection.f_pattern_mismatch",
+    "rationale": "Set pattern_tolerance to 11 pixels, matching the successful complex-family correspondence overlay, to admit near-pattern intersections from the newly recovered oblique lines without further increasing line yield or changing SAM geometry. This is a focused follow-up on the new incumbent, remains within bounds, and leaves locked unfolding untouched.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9125884650166897,
+    "denoise_retained_ratio": 0.7673354664684634,
+    "depth_nan_ratio": 0.19323166894404062,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5716450668896321,
+    "correspondence_f1@15": 0.3162260435797977,
+    "chamfer_sym_px": 68.7043285369873,
+    "sam_fill_rate": 0.7561778560970978,
+    "phase_incoherence_deg": 28.8
+  },
+  "score": 0.6296687362455977,
+  "score_raw": 0.6296687362455977,
+  "band": "refine",
+  "gt_miou": 0.775,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6734273652232845,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.39236632776140035,
+    "sam_fill_rate": 0.7561778560970978,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19323166894404062
+  },
+  "elapsed_s": 239.6,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/5-5/round2/params",
+  "finished_at": "2026-09-20T00:23:17"
+}

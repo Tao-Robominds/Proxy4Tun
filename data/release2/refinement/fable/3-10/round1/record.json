@@ -1,0 +1,53 @@
+{
+  "subset": "3-10",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 112,
+      "hough_threshold_oblique": 32,
+      "maxLineGap_oblique": 48
+    }
+  },
+  "proposal": {
+    "observation": "detected_lines.png: the outlier binary map is very sparse; joint traces appear only as faint dotted rows at y~1470 and y~1640, and oblique Hough segments (red/green) are recovered almost exclusively over the right seven rings (x > ~850 px). Rings 1-3 on the left yield essentially no oblique lines, so their prompt centres are propagated rather than detected (initial_prompt_points.png shows 10 'propagated' points, none 'detected'). The 10 magenta vertical lines match expected_rings=10 and ring_count_error=0, so the vertical band is healthy. depth_map_viridis.png shows NaN voids concentrated in the top ~15% band, the mid horizontal joint row, and the bottom ~10%, consistent with depth_nan_ratio=0.142 (moderate). segmentation_results.png shows a coherent 10-ring instance map and a K/B/A band layout, consistent with sam_fill_rate=0.698. The weakest incumbent measurement is correspondence_f1@15=0.287 (chamfer_sym_px=80), i.e. predicted block boundaries are offset from image edges.",
+    "rule": "d6 (m_joint_contrast low in the outlier map) together with d7 (m_line_yield low; oblique lines missing on the left rings so centres are propagated instead of detected). Remediation r_relax_hough: lower the oblique HoughLinesP threshold and raise maxLineGap; additionally lower the binarisation threshold so the faint dotted joint traces survive s4_2 binarise-and-dilate. Preconditions: f_depth_holes is moderate (nan ratio 0.14, not a large void inside the joint rows), and f_joint_oversmoothed cannot be addressed here because depth_threshold_low/high are outside the bounded parameter set, so the in-bounds stage-4 relaxation is the admissible action. Vertical threshold is left untouched because ring count is already correct.",
+    "failure_mode": "stage_4_detection.f_missing_lines (upstream suspect stage_3_upsample.f_joint_oversmoothed), propagating to stage_5_segmentation.f_crop_offset and hence low boundary correspondence.",
+    "rationale": "All three worked examples changed every stage jointly and every one lowered the proxy (0.624 -> 0.480/0.209/0.509), with sam_fill_rate collapsing each time; this argues against broad overlays from a 'refine'-band incumbent. The incumbent already has ring_count_error=0 and acceptable fill/NaN, so the targeted lever is correspondence_f1@15, whose evidence in the images is missing oblique joint lines on the left rings. A detecting-only overlay that lowers binary_threshold toward the low end of its bound, lowers hough_threshold_oblique and raises maxLineGap_oblique should raise oblique line yield so more rings get detected rather than propagated K-joint loci, tightening prompt-centre placement and the SAM crop/template alignment without touching the unfolding (stage-1 is only marginally unlocked, residual 10.2 vs 10.0 gate, and all example overlays that changed unfolding degraded), denoising, or SAM geometry. Values stay strictly inside configs/bounds/continuous.json. This is a joint stage-4 change; no per-parameter causal attribution is claimed.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9990592937874491,
+    "denoise_retained_ratio": 0.7404734761200185,
+    "depth_nan_ratio": 0.14202755710717666,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5004868549172347,
+    "correspondence_f1@15": 0.313123760888178,
+    "chamfer_sym_px": 74.83550643920898,
+    "sam_fill_rate": 0.6975566174270906,
+    "phase_incoherence_deg": 1.3
+  },
+  "score": 0.6176870969249272,
+  "score_raw": 0.6176870969249272,
+  "band": "refine",
+  "gt_miou": 0.854,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6028244393016267,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.2872649727544261,
+    "sam_fill_rate": 0.697552574768962,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.14202755710717666
+  },
+  "elapsed_s": 188.2,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-10/round1/params",
+  "finished_at": "2026-09-19T12:44:43"
+}

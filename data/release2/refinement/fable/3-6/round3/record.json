@@ -1,0 +1,56 @@
+{
+  "subset": "3-6",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "denoising": {
+      "mask_theta_low": 2.5,
+      "mask_theta_high": 15.2
+    },
+    "sam": {
+      "K_height": 840.0,
+      "angle": 5.8
+    }
+  },
+  "proposal": {
+    "observation": "Round-2 feedback (rejected, 0.764->0.744): lowering mask_theta_low 2.5->2.2 moved the map top by +57 px (0.29 m, i.e. the top edge tracks theta_low 1:1 with the data starting near theta~1.55) but the map bottom also grew by +124 px back to the round-0 extent, so the run re-admitted the hole-fragmented bottom band (rows 30-96% NaN, unlabeled B1 sliver, walkway structure) together with 57 top rows in the 40%-NaN cable-bracket zone. Result: correspondence_f1@15 -0.047, depth_nan_ratio +0.015, sam_fill_rate +0.030 -> net loss, confirming that F1 carries most of the proxy weight (the two rounds imply roughly w_F1 ~0.5, w_fill ~0.14, w_nan ~0.03) and that the F1 gain of round 1 came from removing fragmented, unlabeled end rows, not from adding retained points. On the incumbent (round-1) map of 2808 rows the top is at the theta_low bound (2.5, cannot crop further) and the remaining fragmented region is at the bottom: rows 2578-2634 are 59% NaN (second sidewall bracket row), rows 2467-2578 are 11-13% NaN and the right third of rows 2356-2808 (walkway/rail structure) is 11-42% NaN, with a 24 px unlabeled sliver at 2783-2808. Rows 2300-2467 are only 3-6% NaN. Cropping the bottom to ~2550 px would lower the depth-NaN fraction from 0.084 to 0.072 on the viridis measure (~0.098 -> ~0.085 on the proxy measure), remove the bracket band and most of the walkway fragments, and leave the A3 block as a 440 px partial block (the A1 block at the top is already a 609 px partial and is labeled fine). K (1277-1445 px), the horizontal joints (609, 2113) and all 10 ring centres are >1100 px away from the new edge, so detection and the K/AB stacking are unaffected. mask_theta_high has never been varied; its natural role (top follows theta_low) is the bottom edge, and with the data spanning ~15.6 m from theta~1.55 the bottom currently sits near 16.5.",
+    "rule": "d5/d12 as in round 1: m_hole_ratio high and coverage fragmented at a theta extreme -> the T3-style theta gate (p_theta_gate) is the designated control; round-2 falsified r_balance_coverage-by-widening for this scan (fill weight too small, F1 loss too large). Stage-1 locked (residual 3.2 cm) so no unfolding; detection unchanged (10/10 rings) so no detecting change; radial gate untouched because filling occluder holes removes the hole-rim boundaries that currently explain edges.",
+    "failure_mode": "stage_3_upsample.f_depth_holes localised to the high-theta (bottom) sidewall band plus the walkway structure, producing fragmented label/none boundaries and an unlabeled edge sliver (stage_5_segmentation.f_boundary_rings_missing analogue at the map end).",
+    "rationale": "Crop the bottom end with mask_theta_high 16.5->15.2 (about 1.3 m = ~250 rows under the observed 1:1 theta-to-row mapping), which removes the 59%-NaN bracket band at 2578-2634 px with a ~30 px margin, the unlabeled 24 px sliver and most of the fragmented walkway region, while leaving all rows down to 2550 px (3-13% NaN) in place. Expected response by analogy with round 1 (removing 316 fragmented rows gave F1 +0.15) and the inverse of round 2 (adding 181 fragmented rows gave F1 -0.047): F1 up by roughly +0.03 to +0.05, depth_nan_ratio down ~0.012, sam_fill_rate down ~0.05 (fill tracks retained rows); under the inferred weights this nets to about +0.01 to +0.02. If theta_high turns out not to bind at this value the run reproduces the incumbent rather than degrading it; if it cuts somewhat more than 250 px the K block and both horizontal joints remain far from the edge, so the failure mode of example g000 (ring loss) is not reachable. The round-1 values for mask_theta_low, K_height and angle are restated so the proposal is self-contained; segment_width is left at the reference value since it was part of the rejected round-2 overlay and has no measurable benefit (ring bands already meet at the K-edge resets).",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9998273166785221,
+    "denoise_retained_ratio": 0.582441619864026,
+    "depth_nan_ratio": 0.08666360424868942,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.9371126922194171,
+    "correspondence_f1@15": 0.6138281658819577,
+    "chamfer_sym_px": 29.400721549987793,
+    "sam_fill_rate": 0.5408775905672152,
+    "phase_incoherence_deg": 0.4
+  },
+  "score": 0.7486047795806771,
+  "score_raw": 0.7486047795806771,
+  "band": "accept",
+  "gt_miou": 0.639,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.764011917693086,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.6182703518751584,
+    "sam_fill_rate": 0.5860643084704569,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.09834530714098938
+  },
+  "elapsed_s": 149.2,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-6/round3/params",
+  "finished_at": "2026-09-19T14:38:21"
+}

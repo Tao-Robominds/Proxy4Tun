@@ -1,0 +1,58 @@
+{
+  "subset": "4-2",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0009
+    },
+    "detecting": {
+      "binary_threshold": 132,
+      "hough_threshold_oblique": 46,
+      "hough_threshold_horizontal": 32,
+      "maxLineGap_oblique": 42,
+      "maxLineGap_horizontal": 18
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was rejected: proxy 0.6967\u21920.6751, correspondence_f1@15 0.453\u21920.416 (\u22120.037), sam_fill_rate unchanged at 0.730, ring_count_error still 0, depth_nan_ratio +0.0008. The applied diff lowered the oblique Hough threshold to 28, opened the oblique gap to 70, raised the horizontal threshold to 58, cut the horizontal gap to 10, set curvature to 0.0004 and angle to 9.2. Against the before image that added four short red fragments and six green fragments and deleted six horizontal joints; prompt centres and fill did not move. Ten vertical boundaries remain. Stage-1 residual is 1.90 cm, so unfolding stays locked. Incumbent is still the start.",
+    "rule": "When a more sensitive oblique detector plus a stricter horizontal gate adds short oblique fragments, drops horizontal joints, and cuts correspondence while fill and ring count stay fixed, reverse that detection move: raise the oblique threshold, shorten the oblique gap, lower the horizontal threshold, and restore a moderate horizontal gap. Raise curvature slightly so faint noise is not enhanced into those fragments. Do not set angle back to 9.2, do not open the radial gate, and do not touch unfolding or the vertical accumulator.",
+    "failure_mode": "f_spurious_lines",
+    "rationale": "The score drop tracked the line-set change, not fill or ring count, so the round-1 missing-lines diagnosis was wrong on this scan: the extra \u00b19\u00b0 fragments were unmatched and the lost horizontals were matched. Ontology remediation for spurious lines is a higher oblique Hough threshold, with upstream joint enhancement checked first. This overlay is the opposite of the rejected diff and is not the development collapse corner (binary 155, narrow segment, K_height near 1490, outer radial gate), which jointly drove fill to ~0 and depth NaN to ~0.98. The correspondence-improving development overlay used a low oblique threshold and is only a joint analogy that also changed unfolding; that detection direction already failed here with stage 1 locked. Partial overlay on the start, not a stack on the rejected round.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9672561546948405,
+    "denoise_retained_ratio": 0.7425428545709399,
+    "depth_nan_ratio": 0.20684943161359043,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.561847813342713,
+    "correspondence_f1@15": 0.45065627578226936,
+    "chamfer_sym_px": 73.7000503540039,
+    "sam_fill_rate": 0.7297588827591528,
+    "phase_incoherence_deg": 9.4
+  },
+  "score": 0.6957379600818716,
+  "score_raw": 0.6957379600818716,
+  "band": "refine",
+  "gt_miou": 0.787,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6966793181559678,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.45298510069511344,
+    "sam_fill_rate": 0.7297588827591528,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.20905922176413247
+  },
+  "elapsed_s": 244.6,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-2/round2/params",
+  "finished_at": "2026-09-19T20:21:40"
+}

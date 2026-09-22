@@ -1,0 +1,51 @@
+{
+  "subset": "4-4",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.000366
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 detecting overlay was accepted: proxy 0.615\u21920.666, correspondence_f1@15 0.315\u21920.404, boundary_explained_edge@25 now 0.597, chamfer_sym_px 76.2\u219256.9. sam_fill_rate stayed 0.728, ring_count_error stayed 0, depth_nan_ratio stayed 0.223. phase_incoherence_deg rose 15.8\u219217.7. After images still show short red/green oblique segments and horizontal blue fallback, with the top-left joint texture (x<1000, y<1500) almost uncovered. Intersection points remain one irregular centre per ring: x is evenly spaced across ten rings, but y jumps by hundreds to ~2000 px, so the K/AB lattice is not locked. Stage-1 residual is still 9.10 cm (locked). Depth-map holes and fill did not move because denoising and SAM were not changed.",
+    "rule": "d6 after a successful d7: oblique yield is still low in uncovered bands, so remaining missing centres are upstream faint joints (f_joint_oversmoothed), not a further Hough relax. Do not retune the accepted detector, and do not chase sam_fill_rate \u2014 the fill-seeking joint analogy lowered the proxy.",
+    "failure_mode": "f_joint_oversmoothed",
+    "rationale": "r_relax_hough's precondition is to rule out faint joints before lowering the oblique threshold again. That threshold is already 27 (bound 25) and maxLineGap_oblique is already 74; pushing them further risks the phase slip seen when prompts were only reclassified, not regularised. The correspondence-improve analogy (s021) used curvature_threshold=0.000366 in the joint that raised correspondence 0.446\u21920.460 and held rings, and that enhancing knob was not in the accepted round-1 overlay. The fill-improve analogy (s028) used a higher curvature (0.00130) and correspondence fell 0.446\u21920.365 while the proxy fell 0.700\u21920.654. The fill-degrade analogy collapsed when the radial window and SAM size were extreme, so denoising and SAM stay untouched. Unfolding stays untouched.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9419279327470528,
+    "denoise_retained_ratio": 0.7386938922343486,
+    "depth_nan_ratio": 0.22462176435324388,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5426572690932043,
+    "correspondence_f1@15": 0.3153968305460408,
+    "chamfer_sym_px": 76.18681812286377,
+    "sam_fill_rate": 0.7284786673779505,
+    "phase_incoherence_deg": 15.8
+  },
+  "score": 0.6143860468000993,
+  "score_raw": 0.6143860468000993,
+  "band": "refine",
+  "gt_miou": 0.784,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6656771274481178,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.40420114892251,
+    "sam_fill_rate": 0.7284786673779505,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.2232064422522924
+  },
+  "elapsed_s": 233.2,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-4/round2/params",
+  "finished_at": "2026-09-19T20:29:44"
+}

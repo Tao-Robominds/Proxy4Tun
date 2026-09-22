@@ -1,0 +1,58 @@
+{
+  "subset": "3-4",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0007
+    },
+    "detecting": {
+      "hough_threshold_oblique": 40,
+      "maxLineGap_oblique": 18
+    },
+    "sam": {
+      "segment_width": 1280
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 was accepted: score 0.5265\u21920.5355, correspondence_f1@15 0.244\u21920.272, depth_nan_ratio 0.195\u21920.188, ring_count_error stayed 0, but sam_fill_rate fell 0.571\u21920.545. The after line plot dropped the off-band red cluster and kept one oblique band, ten magenta ring centres, and a single horizontal stub. Prompt centres are unchanged (still one propagated Y). Edge agreement fell (boundary_explained_edge@25 0.575\u21920.456) and chamfer rose 75\u219280 px, so the masks drifted even though the cleaned lines match them slightly better inside 15 px.",
+    "rule": "The fill drop with frozen prompts is f_over_under_coverage from the surface change, not a missing-line or ring-count failure. The oblique tighten is the part that removed the spurious band and raised F1; do not loosen it and do not repeat polynomial degree 3. Ease the curvature gate that moved boundaries off the image edges, and widen the ring template so the uncovered lining is labeled without shifting the K edges.",
+    "failure_mode": "f_over_under_coverage",
+    "rationale": "The overlay is absolute on the family reference, so the accepted oblique settings are restated: vote 40 and maxLineGap 18. Curvature is eased from 0.001 to 0.0007, between the start (fill 0.571, edges aligned) and the accepted value that cut fill by 0.026. segment_width 1200\u21921280 covers a bit more of each ring; K_height and angle stay put so the ~6\u00b0 joint band is not shifted. No unfolding, no horizontal retune, uniform_k_snap stays on.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9984156385609421,
+    "denoise_retained_ratio": 0.6936518019734892,
+    "depth_nan_ratio": 0.19102953138648862,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4278086287911149,
+    "correspondence_f1@15": 0.26170738984126907,
+    "chamfer_sym_px": 83.54500484466553,
+    "sam_fill_rate": 0.5542878922627367,
+    "phase_incoherence_deg": 2.6
+  },
+  "score": 0.5319230697016839,
+  "score_raw": 0.5319230697016839,
+  "band": "refine",
+  "gt_miou": 0.606,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5354679451520715,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.2720838282705015,
+    "sam_fill_rate": 0.5451192139922924,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.1876038832373969
+  },
+  "elapsed_s": 186.7,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-4/round3/params",
+  "finished_at": "2026-09-19T21:12:44"
+}

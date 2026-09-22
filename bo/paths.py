@@ -42,3 +42,12 @@ ARCHIVE_V0_PKG = PACKAGE_ROOT / "archive_v0"
 
 # Manuscript figure output (read by bayes plotters)
 MANUSCRIPT_FIGS = REPO_ROOT / "paper" / "Proxy4Tun" / "figs"
+
+# Release 2 manuscript snapshot. Frozen: do not modify or delete.
+RELEASE2_DATA = REPO_ROOT / "data" / "release2"
+# Release 2.1 extension (12 out-of-band cases). Writes only under data/release2.1/.
+RELEASE21_DATA = REPO_ROOT / "data" / "release2.1"
+# Release 3 campaign (self-contained under data/release3/; never write into release2).
+RELEASE3_DATA = REPO_ROOT / "data" / "release3"
+PIPELINE_DIR = REPO_ROOT / "pipeline"
+REFERENCES_DIR = REPO_ROOT / "configs" / "references"

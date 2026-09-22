@@ -1,0 +1,51 @@
+{
+  "subset": "3-9",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0012
+    }
+  },
+  "proposal": {
+    "observation": "Two rounds of feedback bracket the problem. Round 1 (stage-5 geometry: K_height 845, segment_width 1215) left the label layout unchanged and cost -0.030 on correspondence_f1@15, so the SAM template is already aligned. Round 2 (relaxed detecting: binary 115, oblique 35, horizontal 28, gap 45) did NOT recover the dotted A1/B1 (~y 790) and B2/A3 (~y 2300) joint rows as horizontal lines and did not extend the K chains past x ~ 1650 (green) / ~ 2070 (red); it only added short spurious oblique fragments (green at y ~ 1930 and ~ 2150, extra red at ~ 1750, more green at 1300-1450), so line-pixels-on-boundaries fell and F1 dropped -0.021 while sam_fill_rate, ring_count_error and depth_nan_ratio were exactly unchanged. From the incumbent detected_lines.png, roughly 84% of line pixels already sit on label transitions, so F1 = 0.364 is capped by boundary-explained (~0.23) and cannot be raised through Hough thresholds: relaxing adds off-boundary fragments and tightening risks deleting the short right-hand K fragments that are the only support for the rings 6-8 boundaries. Stage 4 and 5 are therefore exhausted. The remaining unexploited feature is depth_nan_ratio = 0.131: depth_map_viridis.png shows, besides the unrecoverable top-right occlusion void, a dense field of small white holes at every bolt pocket, dotted gaps along the circumferential joint rows (y ~ 307-446, 1524-1555, 2755-2787) and speckle along the ring boundaries, i.e. holes bordered by high-curvature points where the surface up-sampler refuses to insert midpoints. denoise_retained_ratio is 0.77 and the radial band is already reasonable, and ring count (10) and the prompt row (all 'propagated' at y ~ 1550) are correct.",
+    "rule": "d5 (stage_3_upsample): m_hole_ratio high -> f_depth_holes; remediation r_increase_window_or_upsample (densify the surface so voids are interpolated). In this pipeline the surface up-sampler (enhance_segment_surface) only inserts a midpoint between two neighbours when their curvature difference is <= curvature_threshold, so the threshold is the gate that keeps the edges of every bolt pocket and joint gap from being bridged; raising it is the bounded knob equivalent to a finer up-sampling step. Stage 1 is locked (unfolding untouched). Denoising is deliberately left alone because mask_r_low/high also set the depth-image vmin/vmax that SAM sees, which would perturb stage 5 in the way round 1 showed to be fragile; detecting and sam are left at incumbent because rounds 1-2 showed they are already at a local optimum for this scan.",
+    "failure_mode": "f_depth_holes (stage 3): NaN voids in the unrolled depth map around bolt pockets, joint gaps and ring boundaries because the curvature gate blocks surface midpoint insertion across those edges; this directly inflates depth_nan_ratio and leaves SAM crops with white speckle that can only lower mask coverage (f_over_under_coverage downstream).",
+    "rationale": "depth_nan_ratio is the only one of the four proxy features that has not yet been targeted and it is measured directly on depth_map.npy, so denser surface up-sampling acts on it without going through the noisy detection/SAM chain that defeated rounds 1 and 2. Raising enhancing.curvature_threshold from the ~0.0005 default region to 0.0012 (2.4x, still well inside [0.0002, 0.002]) lets the three-step midpoint schedule bridge the ~5-15 cm bolt-pocket and joint gaps that are bordered by high-curvature points, shrinking the interior holes while the large top-right occlusion (no neighbours to bridge) is left as is. The joint/outlier map used by stage 4 comes from enhance_outlier_points with the fixed depth thresholds, not from the curvature-gated surface densification, so the replayed line set and ring count are unaffected; the prompt row is fixed by uniform_k_snap. Fewer white voids inside the K/A/B blocks can only help SAM mask completeness (sam_fill_rate) and keeps block boundaries where they are, so correspondence_f1@15 is expected to hold. This is a single-stage, single-parameter change, so if it fails the attribution is clean, and its expected direction on the proxy (lower NaN ratio, equal or higher fill rate) is positive. Unfolding untouched; value inside bounds.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9992437316181036,
+    "denoise_retained_ratio": 0.7719211863424968,
+    "depth_nan_ratio": 0.12262320697604703,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.47017543859649125,
+    "correspondence_f1@15": 0.3634011078374149,
+    "chamfer_sym_px": 74.77359008789062,
+    "sam_fill_rate": 0.7277684910875358,
+    "phase_incoherence_deg": 1.1
+  },
+  "score": 0.6600661150627274,
+  "score_raw": 0.6600661150627274,
+  "band": "refine",
+  "gt_miou": 0.818,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6591558534408575,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36367764129925506,
+    "sam_fill_rate": 0.7289890931960742,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.13082197231971604
+  },
+  "elapsed_s": 192.4,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-9/round3/params",
+  "finished_at": "2026-09-19T14:47:46"
+}

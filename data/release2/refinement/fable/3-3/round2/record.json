@@ -1,0 +1,54 @@
+{
+  "subset": "3-3",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 100,
+      "hough_threshold_oblique": 25,
+      "maxLineGap_oblique": 60,
+      "pattern_tolerance": 16
+    }
+  },
+  "proposal": {
+    "observation": "Round-1 feedback: the detecting-only overlay (binary 110, oblique 30, maxLineGap 50, tolerance 14) was accepted; proxy 0.5349 -> 0.5578, correspondence_f1@15 0.113 -> 0.153, boundary_explained_edge@25 0.207 -> 0.226, chamfer_sym_px 94.0 -> 90.7, while sam_fill_rate (0.780), ring_count_error (0) and depth_nan_ratio (0.114) were unchanged to 5 decimals. The new detected_lines.png shows the same 10 correct magenta ring boundaries, longer green/red oblique segments in the 3 left-most columns, and new short red segments at x~800, ~950 and ~1780 near y~1600-1690; but the 4 remaining central/right columns still have no oblique lines and no second joint row (~y2260 or ~y300 in the depth map) is detected anywhere. initial_prompt_points.png is unchanged: a single propagated prompt row at y~1540 for all 10 rings, so the SAM masks (and fill rate) did not move; the entire gain came from the detection side, with no spurious oblique lines through the bolt-hole grid.",
+    "rule": "d7 still fires (m_line_yield low in 4+ columns; prompt centres still propagated from one row) -> f_missing_lines. Round 1 confirmed the r_relax_hough direction is monotone-positive on this scan and side-effect free for the other three features; the ontology precondition (rule out f_depth_holes / f_joint_oversmoothed) is unchanged: depth_nan_ratio 0.114 is low, and no in-bounds stage-3 joint knob exists. Continue r_relax_hough one further step rather than switching stage.",
+    "failure_mode": "stage_4_detection.f_missing_lines (residual; downstream stage_5_segmentation.f_crop_offset persists because prompts are still a single propagated row)",
+    "rationale": "Stage 1 is locked; unfolding untouched. The vertical band (hough_threshold_vertical, uniform_k_snap) and SAM geometry (segment_width, K_height, angle) are left alone because ring_count_error=0 and sam_fill_rate=0.78 are already healthy and the worked example s019 shows that SAM-geometry moves can collapse fill rate. The central columns still show only 1-3 px joint fragments after binarisation, so the bottleneck is pixel survival and gap bridging, not the vote threshold alone. Step the same three knobs once more: binary_threshold 110 -> 100 (bound; example s000 used 100 with ring_count_error 0), hough_threshold_oblique 30 -> 25 (still above the ~22 used by degrade example g005, whose zeroed correspondence was joint with binary 150 and a loose vertical band, neither repeated here), maxLineGap_oblique 50 -> 60 (bound) so the dotted joint traces in the central columns can link into 5-10 deg segments, and pattern_tolerance 14 -> 16 so intersections at a second joint row can be admitted by the K/AB distance pattern and replace propagation with per-ring prompts. The oblique angle filter [5,10]/[-10,-5] deg continues to reject the 0/90 deg bolt-hole alignments, which is why round 1 produced no spurious lines. If this step yields no further gain the next round should switch to the SAM template stage rather than push detecting to its floor.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.99996584722565,
+    "denoise_retained_ratio": 0.81787798500355,
+    "depth_nan_ratio": 0.11387375767737186,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.18134366054891396,
+    "correspondence_f1@15": 0.1355047172052134,
+    "chamfer_sym_px": 93.97948741912842,
+    "sam_fill_rate": 0.778987653038253,
+    "phase_incoherence_deg": 1.6
+  },
+  "score": 0.5476130000498961,
+  "score_raw": 0.5476130000498961,
+  "band": "refine",
+  "gt_miou": 0.812,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5578123030644832,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.15268920015725135,
+    "sam_fill_rate": 0.779964327151194,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11387375767737186
+  },
+  "elapsed_s": 189.2,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-3/round2/params",
+  "finished_at": "2026-09-19T13:32:35"
+}

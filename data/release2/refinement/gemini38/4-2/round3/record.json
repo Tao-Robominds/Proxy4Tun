@@ -1,0 +1,56 @@
+{
+  "subset": "4-2",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.63,
+      "mask_r_high": 3.9
+    },
+    "sam": {
+      "segment_width": 1908,
+      "K_height": 1152.0
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 was rejected on the start: proxy 0.6967\u21920.6957, correspondence_f1@15 0.453\u21920.451 (\u22120.0023), sam_fill_rate unchanged at 0.730, ring_count_error still 0, depth_nan_ratio 0.209\u21920.207 (\u22120.0022). The applied diff (curvature 0.0009, binary 132, oblique threshold 46, horizontal threshold 32, oblique gap 42, horizontal gap 18) only dropped three green joints and added two short horizontals. Round 1, which went the other way on those Hough keys and set angle to 9.2, cut correspondence by 0.037 and moved the label map on 0.16% of pixels, so the taper is already near the measured \u00b19\u00b0 joints. Fill has not moved in either round. Ten ring boundaries remain. Stage-1 residual is 1.90 cm. Incumbent is still the start. Chamfer is 71 px and phase incoherence is 9.4\u00b0.",
+    "rule": "When both a looser and a tighter Hough setting fail to raise correspondence, and the taper already matches the joint slope, stop editing detection and curvature. Move the untried template scale (segment width and K height) into the band that kept ring count on the complex development scans, and set a mid radial gate that is not the outer shell. Do not retune angle, pattern tolerance, the vertical accumulator, or any unfolding key.",
+    "failure_mode": "f_template_mismatch",
+    "rationale": "Correspondence is the score driver, and two opposite detection diffs both lost it while fill stayed bitwise identical, so the remaining mismatch is template scale against the 71 px chamfer, not missing or spurious Hough lines. K_height also feeds the distance pattern, so the value stays near the complex trials that kept ring_count_error at 0 (about 1120\u20131165), not near 1490. Segment width stays near 1900, clear of the narrow 1625 width in the joint collapse that sent fill to ~0 and depth NaN to ~0.98. The radial band is the untried nan lever: inner-middle 3.63\u20133.90, wider than the very tight development band and short of the outer gate in that collapse. Angle is omitted because 9.2 already matched the lines and did not move the masks. Partial overlay on the start.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9672561546948405,
+    "denoise_retained_ratio": 0.7429353291411083,
+    "depth_nan_ratio": 0.20895190355670426,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.596012287718078,
+    "correspondence_f1@15": 0.4785943561451236,
+    "chamfer_sym_px": 82.27054214477539,
+    "sam_fill_rate": 0.7288525391252909,
+    "phase_incoherence_deg": 9.4
+  },
+  "score": 0.711116586423818,
+  "score_raw": 0.711116586423818,
+  "band": "accept",
+  "gt_miou": 0.781,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6966793181559678,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.45298510069511344,
+    "sam_fill_rate": 0.7297588827591528,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.20905922176413247
+  },
+  "elapsed_s": 241.8,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-2/round3/params",
+  "finished_at": "2026-09-19T21:36:43"
+}

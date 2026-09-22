@@ -1,0 +1,53 @@
+{
+  "subset": "5-5",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 27,
+      "hough_threshold_horizontal": 60,
+      "maxLineGap_oblique": 74
+    }
+  },
+  "proposal": {
+    "observation": "Ten magenta verticals are present and ring_count_error is 0, but the detected-lines image is dominated by short horizontal segments (about 50 lines near 0 degrees, length about 50 px). Oblique detections are fewer and broken: negative-slope lines cluster near -8 to -10 degrees with many stubs, positive-slope lines near +8 to +10 degrees are sparse, and the left rings show joint ink with almost no overlays. correspondence_f1@15 is 0.316 (chamfer 68.7 px) while sam_fill_rate 0.756, depth_nan_ratio 0.193, and ring_count_error 0 are not the failing features. Stage-1 residual is 1.90 cm, inside the 10 cm gate.",
+    "rule": "When oblique yield is low, near-horizontal segments outnumber the +/-5 to 10 degree lines, and rings that still show joint ink have almost no overlays, while ring count and depth-NaN stay acceptable, classify this as horizontal fallback from missing oblique lines (d7), not as an unfolding, radial-gate, or fill failure.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "The complex correspondence-improve example (s021) raised correspondence_f1@15 on the same family with a healthy ring count using a low oblique Hough threshold, a high horizontal threshold, and a large oblique maxLineGap; that was a joint outcome, not a per-key effect. The degrade example moved those three knobs the other way and correspondence collapsed, together with a tight radial gate that must not be copied here (depth_nan_ratio is already 0.193; that example drove it to 0.93). Unfolding is omitted because stage 1 is locked. SAM is left unchanged because fill is already 0.756 and the fill-seeking example lost correspondence. Vertical Hough is left unchanged because all 10 ring lines are already present.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9125884650166897,
+    "denoise_retained_ratio": 0.7673354664684634,
+    "depth_nan_ratio": 0.19323166894404062,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5693584011205085,
+    "correspondence_f1@15": 0.3904452199408769,
+    "chamfer_sym_px": 67.77685737609863,
+    "sam_fill_rate": 0.7561778560970978,
+    "phase_incoherence_deg": 28.0
+  },
+  "score": 0.672323284180667,
+  "score_raw": 0.672323284180667,
+  "band": "refine",
+  "gt_miou": 0.78,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6296687362455977,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3162260435797977,
+    "sam_fill_rate": 0.7561778560970978,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19323166894404062
+  },
+  "elapsed_s": 239.4,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/5-5/round1/params",
+  "finished_at": "2026-09-19T19:49:46"
+}

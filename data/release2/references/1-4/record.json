@@ -1,0 +1,27 @@
+{
+  "subset": "1-4",
+  "family": "staggered",
+  "arm": "reference",
+  "overlay": {},
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9949867357416942,
+    "denoise_retained_ratio": 0.7669359499358255,
+    "depth_nan_ratio": 0.1596729826190407,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8486775545599075,
+    "correspondence_f1@15": 0.4509704720527594,
+    "chamfer_sym_px": 58.21220302581787,
+    "sam_fill_rate": 0.7427446211120309,
+    "phase_incoherence_deg": 13.2
+  },
+  "score": 0.7086921290614443,
+  "score_raw": 0.7086921290614443,
+  "band": "accept",
+  "gt_miou": 0.853,
+  "valid": true,
+  "failure_reason": null,
+  "elapsed_s": 266.9,
+  "stage1_unwrapped_sha256": "51f8578da47554f5ff58466a9f8b58f340b029b5885cdf904167fee12cef2e2f",
+  "log": "/home/boringtao/Projects/Proxy4Tun/data/release2/references/1-4/pipeline.log"
+}

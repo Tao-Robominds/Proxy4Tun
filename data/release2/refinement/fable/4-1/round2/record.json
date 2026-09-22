@@ -1,0 +1,56 @@
+{
+  "subset": "4-1",
+  "family": "complex",
+  "arm": "fable",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 115,
+      "pattern_tolerance": 18
+    },
+    "sam": {
+      "K_height": 1220.0,
+      "angle": 9.0
+    }
+  },
+  "proposal": {
+    "observation": "Round-1 feedback: relaxing the oblique Hough (threshold 30, maxLineGap 70) and lowering curvature_threshold to 0.0004 left the binarised outlier map visually unchanged and did NOT raise oblique line yield (still ~8 short oblique segments vs ~30 horizontal fallback segments; one green segment at x~1450 was even lost, consistent with HoughLinesP sampling noise). The only material change was in prompt centres: the ring at x~1630 lost its detected negative_slope centre (y~370) and fell back to an 'assume' centre at y~1130, and correspondence_f1@15 dropped 0.365 -> 0.273 with sam_fill_rate, ring_count_error and depth_nan_ratio unchanged. So the proxy is highly sensitive to WHERE each ring's K-block prompt centre lands, and 7 of 12 centres are still 'assume' at alternating y~1130 / y~1550, i.e. inferred from the pattern prior rather than from detected intersections. The two complete oblique pairs that do exist give a direct geometric read of the K block: pair at x 2200-2560 spans y 1243 -> 1480 (~237 px) and pair at x 2830-3200 spans 3738 -> 3990 (~252 px), i.e. K height ~1220 mm at 5 mm/px, and slopes of 6.3-10.3 deg (mean ~9 deg). Several detected oblique segments (x~1380-1440 y~440, x~1350-1380 y~1290) intersect vertical joints but were discarded by the distance-pattern check rather than becoming prompt centres.",
+    "rule": "d8: m_spacing_regularity poor vs K/AB pattern -> f_pattern_mismatch (detected intersections rejected by check_distance_pattern, replaced by 'assume' centres). d7 was tested in round 1 and r_relax_hough was inert on this scan, so the enhancing/Hough lever is ruled out; apply r_fix_height_priors instead: set K_height (which derives K_height_pixel for the pattern check and the SAM template) and taper angle from the measured block geometry and widen pattern_tolerance so detected intersections are accepted, plus a modest binary_threshold reduction to thicken the dotted joint strokes feeding the intersection step.",
+    "failure_mode": "stage_4_detection.f_pattern_mismatch -> stage_5_segmentation.f_crop_offset (prompt centres assumed, not detected; block templates land off the true K position)",
+    "rationale": "Round 1 showed that on 4-1 the line-yield lever (curvature_threshold, oblique Hough threshold/gap) does not change the outlier map or oblique yield, while the position of K prompt centres moves correspondence_f1@15 by ~0.09 per ring. The remaining lever inside bounds that decides whether a detected intersection becomes a prompt centre is the distance-pattern check (K_height_pixel, AB_height_pixel, pattern_tolerance). Setting sam.K_height=1220 mm matches the K height measured directly from the two complete oblique pairs (237-252 px at 5 mm/px), so both the pattern prior and the SAM K template match the real block; sam.angle=9.0 matches the mean measured taper of the detected oblique edges (6.3-10.3 deg); detecting.pattern_tolerance=18 (bounds 5-20) lets near-miss intersections such as those at x~1630 and x~1270 pass the pattern check instead of degrading to 'assume'; detecting.binary_threshold=115 slightly thickens the dotted chevron strokes so the existing oblique segments extend to the vertical joints. This follows the improving dev analogue s021 in direction for K_height (1120) and angle (11.8, upper range) while staying near the geometry read off this scan. Unfolding (clean unroll, orient_agreement 0.94) and denoising (nan ratio unaffected by round 1) are left untouched to avoid the ring_count_error breakage seen in s005/s016. Joint outcome expected; no per-parameter attribution claimed; all values inside configs/bounds/complex.json.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9399161465063901,
+    "denoise_retained_ratio": 0.7610957754105794,
+    "depth_nan_ratio": 0.22606519178835907,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.46964720839071933,
+    "correspondence_f1@15": 0.35992669601497357,
+    "chamfer_sym_px": 80.74217987060547,
+    "sam_fill_rate": 0.7516065103119458,
+    "phase_incoherence_deg": 33.6
+  },
+  "score": 0.6473718898911145,
+  "score_raw": 0.6473718898911145,
+  "band": "refine",
+  "gt_miou": 0.742,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6504471704561834,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36527770315648833,
+    "sam_fill_rate": 0.7516065103119458,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22606519178835907
+  },
+  "elapsed_s": 233.9,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/4-1/round2/params",
+  "finished_at": "2026-09-19T13:55:04"
+}

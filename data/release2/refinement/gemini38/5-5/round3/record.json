@@ -1,0 +1,54 @@
+{
+  "subset": "5-5",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.000366
+    },
+    "detecting": {
+      "binary_threshold": 110
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 was rejected: horizontal threshold 70 and oblique maxLineGap 80 moved correspondence_f1@15 from 0.390 to 0.381, with sam_fill_rate, ring_count_error, and depth_nan_ratio unchanged. On the after image the near-0\u00b0 horizontal segments barely changed (about 51 to 50), while the oblique lines got worse: negative-slope fragments shortened (median length about 29 to 22 px) and positive-slope components fell. The incumbent therefore remains round 1 (oblique threshold 27, horizontal threshold 60, oblique gap 74): correspondence 0.390, fill 0.756, ring count error 0, depth NaN 0.193, chamfer 67.8 px, phase incoherence 28\u00b0. Ten verticals are still present, but the left rings and several circumferential bands still have joint ink and no oblique overlay. Stage-1 residual is 1.90 cm, inside the 10 cm gate.",
+    "rule": "When pushing the horizontal accumulator and the oblique gap past the accepted Hough setting shortens the oblique segments and lowers correspondence, stop moving those two keys. If empty bands still show joint ink that the incumbent detector does not mark, treat the miss as faint joints upstream of Hough (d6), not as another vote-threshold tweak.",
+    "failure_mode": "f_joint_oversmoothed",
+    "rationale": "Round 1 is the incumbent because that Hough setting raised correspondence by 0.074. Round 2 showed the bound of that move is harmful, so this overlay does not set horizontal threshold 70, oblique gap 80, or a lower oblique threshold. Ontology r_relax_hough says to rule out faint joints before further Hough changes; the empty bands still have ink, so lower curvature_threshold to 0.000366, the enhancing value that co-occurred with the correspondence-improve example, and lower binary_threshold to 110 so those sharpened ridges survive binarization and are re-detected at the incumbent Hough settings, which are left unset. Do not tighten the radial gate: depth NaN is already 0.193, and the degrade examples drove it above 0.9. Do not touch vertical Hough: ring count error is 0, and the ring-count degrade example broke it. Do not chase sam_fill_rate. Unfolding is omitted because stage 1 is locked.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9125884650166897,
+    "denoise_retained_ratio": 0.7673354664684634,
+    "depth_nan_ratio": 0.1947229448680951,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5716450668896321,
+    "correspondence_f1@15": 0.3162260435797977,
+    "chamfer_sym_px": 68.7043285369873,
+    "sam_fill_rate": 0.7561778560970978,
+    "phase_incoherence_deg": 28.8
+  },
+  "score": 0.629400792417479,
+  "score_raw": 0.629400792417479,
+  "band": "refine",
+  "gt_miou": 0.775,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.672323284180667,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3904452199408769,
+    "sam_fill_rate": 0.7561778560970978,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19323166894404062
+  },
+  "elapsed_s": 243.2,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/5-5/round3/params",
+  "finished_at": "2026-09-19T21:49:10"
+}

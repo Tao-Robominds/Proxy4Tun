@@ -1,0 +1,4 @@
+dev,trial_id,acquisition,failure_reason,elapsed_s
+3-1,s005,sobol,Stage 5 failed for s005; see /home/boringtao/Projects/Proxy4Tun/data/release2/calibration/3-1/runs/s005/pipeline.log,114.7
+3-1,s009,sobol,Stage 5 failed for s009; see /home/boringtao/Projects/Proxy4Tun/data/release2/calibration/3-1/runs/s009/pipeline.log,124.6
+3-1,s024,sobol,Stage 5 failed for s024; see /home/boringtao/Projects/Proxy4Tun/data/release2/calibration/3-1/runs/s024/pipeline.log,140.8

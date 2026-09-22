@@ -1,0 +1,52 @@
+{
+  "subset": "3-10",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "sam": {
+      "K_height": 870.0,
+      "angle": 5.2
+    }
+  },
+  "proposal": {
+    "observation": "Round-2 feedback: a second relaxation step on the oblique detector (104/26/56) was rejected, proxy 0.6177 -> 0.6099, entirely via correspondence_f1@15 (0.313 -> 0.299); fill rate, NaN ratio and ring count unchanged. The round-2 after detected_lines.png shows why: more K-joint segments did appear on rings 2-4 (red at x~500-1000, y~1640), but the relaxation also admitted spurious oblique segments on bolt rows and off the K joint (red at x~1750/y~850, x~2100/y~1500, x~2200/y~1550; green at x~1800/y~1770 and x~1800/y~1400), and initial_prompt_points.png still reports all 10 centres as 'propagated'. So stage-4 relaxation is non-monotone here: round 1 (112/32/48) sits at or near the optimum for the oblique lever and further loosening only adds f_spurious_lines. The incumbent is therefore round 1, whose remaining weakness is still boundary correspondence (correspondence_f1@15=0.313, chamfer_sym_px=74.8, boundary_explained_edge@25=0.50). Measuring the incumbent's detected_lines.png directly (equal-aspect render, 0.447 render px per depth-map px): the accepted K-joint rows sit at depth-map y~1454 (green, upper joint) and y~1629 (red, lower joint) at matching x, i.e. a K-block height of ~174 px ~ 870 mm at 5 mm/px; the oblique joint slopes cluster at 4.8-6.2 deg with a median ~5.2 deg (red segments -4.8..-6.9 deg, green +4.6..+5.8 deg); ring pitch from the 10 magenta vertical lines is ~245 px ~ 1225 mm. The labelled-mask panel shows the K (label 1) band as a thin strip near y~1575 rather than spanning the full ~1454-1629 joint-to-joint range, and the B/A bands are offset from the visible joint rows, consistent with a template-geometry mismatch rather than a missing-prompt problem.",
+    "rule": "d10/d12 evidence at stage 5 (block boundaries do not coincide with visible joint edges; chamfer ~75 px while the proxy scores correspondence at 15 px) with d8-style spacing mismatch between the SAM template geometry and the K/AB joint pattern actually present in the image. Remediation r_fix_template / r_fix_height_priors: set the K block height and taper angle from the tunnel geometry measured on the depth map, keeping resolution unchanged so pixel priors derive consistently. Precondition checks: upstream f_missing_lines has been pushed as far as it helps (round 1 accepted, round 2 rejected for spurious lines), ring count is correct (vertical band healthy), depth holes moderate and unchanged, so the remaining offset is attributable to the stage-5 template rather than to prompts or holes. segment_width is deliberately not changed because it also parametrises the vertical-line band and the ring pitch is already recovered exactly (10/10).",
+    "failure_mode": "stage_5_segmentation.f_template_mismatch (K block height / taper angle not matching the joint geometry visible in the depth map), manifesting as f_crop_offset-like boundary misalignment and low correspondence_f1@15.",
+    "rationale": "Two rounds bracket the oblique-detector lever: 112/32/48 improved the proxy (+0.0149), 104/26/56 degraded it (-0.0078) by admitting spurious lines while all prompts remain propagated, so a third detecting-only step has little expected upside. The only four-feature term with headroom is correspondence_f1@15, and the incumbent images now give a direct geometric measurement of the K block (~870 mm tall, ~5.2 deg taper) that the SAM template should reproduce. The proposal sets sam.K_height=870 and sam.angle=5.2 to those measured values; both are well inside the bounds [700,1000] and [4,9], and they are anchored in the image rather than guessed. Expected effect: template polygons for K/B/A land on the visible joint rows, tightening mask boundaries toward image edges and raising correspondence_f1@15; fill rate should be preserved because the prompt centres and depth map are untouched. The worked examples that collapsed sam_fill_rate changed unfolding, denoising, detection and SAM jointly (with segment_width pushed to 1361-1395 and K_height to 710-773), so they are not analogous to a two-parameter, image-derived SAM geometry adjustment layered on the accepted round-1 detection settings. Unfolding is again left untouched (stage-1 only marginally unlocked at 10.2 vs 10.0 cm; unfold_residual already 0.0 on the incumbent). This is a joint two-parameter stage-5 change; no per-parameter causal attribution is claimed.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9990592937874491,
+    "denoise_retained_ratio": 0.7404734761200185,
+    "depth_nan_ratio": 0.14202755710717666,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.3202997719126751,
+    "correspondence_f1@15": 0.24551627697522013,
+    "chamfer_sym_px": 86.93744468688965,
+    "sam_fill_rate": 0.6965944647924903,
+    "phase_incoherence_deg": 1.3
+  },
+  "score": 0.5785139658044742,
+  "score_raw": 0.5785139658044742,
+  "band": "refine",
+  "gt_miou": 0.854,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6176870969249272,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.313123760888178,
+    "sam_fill_rate": 0.6975566174270906,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.14202755710717666
+  },
+  "elapsed_s": 187.1,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-10/round3/params",
+  "finished_at": "2026-09-19T14:50:55"
+}

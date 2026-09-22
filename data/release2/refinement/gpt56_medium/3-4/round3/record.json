@@ -1,0 +1,51 @@
+{
+  "subset": "3-4",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 3,
+  "overlay": {
+    "sam": {
+      "angle": 8.4
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 left the depth map, detected lines, prompt centres, ring count, and depth_nan_ratio unchanged, but the joint SAM geometry change reduced correspondence_f1@15 from 0.244 to 0.139 while changing fill only from 0.571 to 0.560. The before/after masks show that the loss is localized to stage-5 label and ring boundaries rather than upstream coverage or prompt generation. Because segment_width, K_height, and angle changed together, the response does not identify which one caused the loss.",
+    "rule": "When upstream artifacts and prompt geometry are invariant but a joint template edit sharply reduces correspondence, return to the unchanged incumbent for all other parameters and test only one stage-5 geometry dimension in the opposite direction from the rejected low-angle setting.",
+    "failure_mode": "Stage-5 template taper mismatch causing mask boundaries to diverge from the detected segment geometry.",
+    "rationale": "A new unfolding intervention is permitted but not supported: round 1 increased holes and reduced both fill and correspondence, while round 2 proves that meaningful correspondence changes can occur entirely in stage 5. The rejected overlay set angle to the lower bound of 4 degrees together with width and height changes. This final overlay isolates angle at 8.4 degrees, close to the high-angle continuous worked example, while preserving the incumbent segment width, K height, depth map, detections, and prompt centres. The worked example is only a joint-outcome analogy, so no per-parameter causal claim is made.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9984156385609421,
+    "denoise_retained_ratio": 0.6936518019734892,
+    "depth_nan_ratio": 0.19497856422227988,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.41016412323639506,
+    "correspondence_f1@15": 0.1755303150741745,
+    "chamfer_sym_px": 89.64706039428711,
+    "sam_fill_rate": 0.5725744293397704,
+    "phase_incoherence_deg": 2.8
+  },
+  "score": 0.487737983138307,
+  "score_raw": 0.487737983138307,
+  "band": "flag",
+  "gt_miou": 0.623,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5264765228145997,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.24397684368509054,
+    "sam_fill_rate": 0.5707661034176089,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19497856422227988
+  },
+  "elapsed_s": 186.3,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-4/round3/params",
+  "finished_at": "2026-09-20T00:30:58"
+}

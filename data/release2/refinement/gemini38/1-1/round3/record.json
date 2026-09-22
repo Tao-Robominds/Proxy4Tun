@@ -1,0 +1,66 @@
+{
+  "subset": "1-1",
+  "family": "staggered",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.27,
+      "mask_r_high": 2.85
+    },
+    "enhancing": {
+      "curvature_threshold": 0.005
+    },
+    "detecting": {
+      "binary_threshold": 150,
+      "hough_threshold_oblique": 58,
+      "maxLineGap_oblique": 34
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3710,
+        13100
+      ]
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 was accepted: proxy 0.6140\u21920.6199, correspondence_f1@15 0.282\u21920.293 (+0.010), sam_fill_rate and depth_nan_ratio flat, ring_count_error still 0. Chamfer fell only 105\u2192102 px and phase_incoherence stayed 6.6\u00b0. The depth map is pixel-identical, and detected-line / segmentation images barely moved. Prompt centres are unchanged: three left rings are still assume points, with one negative-slope and one positive-slope intersection. Left joint texture is still missing, so another Hough tweak will not create those centres. Incumbent detection is binary_threshold 150, hough_threshold_oblique 58, maxLineGap_oblique 34.",
+    "rule": "d5: depth_nan_ratio is still 0.120 with visible left-edge holes, and d8 still fires because the early-ring centres are assumed rather than intersected. Detection is no longer the open lever.",
+    "failure_mode": "f_depth_holes",
+    "rationale": "Stage 1 stays locked. The accepted detector is retained exactly (binary 150, oblique 58, gap 34) because the overlay is applied on the family reference; dropping those keys would revert the only correspondence gain. Do not repeat round 1 (looser oblique, larger gap, higher horizontal threshold, larger inter_radius), which moved a centre and cut correspondence, and do not approach the degrade example (oblique 76, binary 109, tight mask_r_high, higher z_step). Follow the staggered improve example's non-detection half: widen the radial gate from 2.32/2.79 to 2.27/2.85, raise curvature_threshold from 0.0005 to 0.005 so more of the lining surface is interpolated into the holes, and set y_bounds lower to 3710 (upper stays 13100) so more negative prompts are kept and the early-ring masks are constrained. Vertical Hough stays 500.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999336994200428,
+    "denoise_retained_ratio": 0.7692421789184238,
+    "depth_nan_ratio": 0.11578277657031538,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.7150092081031307,
+    "correspondence_f1@15": 0.3408393402120372,
+    "chamfer_sym_px": 93.1054458618164,
+    "sam_fill_rate": 0.7255482614229125,
+    "phase_incoherence_deg": 6.6
+  },
+  "score": 0.6475939643896258,
+  "score_raw": 0.6475939643896258,
+  "band": "refine",
+  "gt_miou": 0.783,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6199037709779585,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.2926098358823092,
+    "sam_fill_rate": 0.7278711701049587,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11990621963918995
+  },
+  "elapsed_s": 282.0,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/1-1/round3/params",
+  "finished_at": "2026-09-19T21:54:03"
+}

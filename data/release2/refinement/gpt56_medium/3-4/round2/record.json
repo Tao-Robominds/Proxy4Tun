@@ -1,0 +1,53 @@
+{
+  "subset": "3-4",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 2,
+  "overlay": {
+    "sam": {
+      "segment_width": 1225,
+      "K_height": 875.0,
+      "angle": 4.0
+    }
+  },
+  "proposal": {
+    "observation": "The rejected round-1 overlay widened and visibly warped the unrolled map, increased depth_nan_ratio from 0.195 to 0.335, reduced fill from 0.571 to 0.346, and reduced correspondence from 0.244 to 0.167. In contrast, the unchanged incumbent already has 10 regular vertical ring loci and 10 nearly level, evenly spaced prompt centres. Its visible ring spacing is about 245 pixels (approximately 1225 mm at the ontology's 0.005 m/pixel resolution), while the detected transverse joint lines are shallow and bracket the prompt row by roughly 175 pixels (approximately 875 mm).",
+    "rule": "After a rejected joint overlay damages upstream geometry while ring count and prompt regularity were already correct, keep unfolding, denoising, enhancing, and detection unchanged and make one conservative stage-5 template calibration from the incumbent image geometry.",
+    "failure_mode": "Stage-5 template mismatch: segment width, K height, and taper angle are not aligned closely enough with the otherwise regular incumbent ring spacing and shallow detected joint geometry.",
+    "rationale": "The before/after evidence argues against another stage-1 or broad multi-stage intervention despite stage1_unlocked being true: round 1 introduced substantially more holes and lower coverage, and its joint changes do not identify a beneficial upstream parameter. The incumbent's exact ring count and regular prompt row instead support a bounded SAM-only overlay. A 1225 mm width follows the approximately 245-pixel ring spacing, an 875 mm K height follows the approximately 175-pixel joint bracket, and the minimum allowed 4-degree taper matches the visibly shallow lines. This preserves the unchanged incumbent depth map and detection outputs while testing the localized template-mismatch hypothesis.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9984156385609421,
+    "denoise_retained_ratio": 0.6936518019734892,
+    "depth_nan_ratio": 0.19497856422227988,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.35488176964149504,
+    "correspondence_f1@15": 0.13895272077010495,
+    "chamfer_sym_px": 97.68697547912598,
+    "sam_fill_rate": 0.5601278956507009,
+    "phase_incoherence_deg": 2.7
+  },
+  "score": 0.46259767815390634,
+  "score_raw": 0.46259767815390634,
+  "band": "flag",
+  "gt_miou": 0.612,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5264765228145997,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.24397684368509054,
+    "sam_fill_rate": 0.5707661034176089,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19497856422227988
+  },
+  "elapsed_s": 184.2,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-4/round2/params",
+  "finished_at": "2026-09-19T23:47:01"
+}

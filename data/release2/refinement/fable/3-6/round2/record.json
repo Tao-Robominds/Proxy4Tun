@@ -1,0 +1,54 @@
+{
+  "subset": "3-6",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 2,
+  "overlay": {
+    "denoising": {
+      "mask_theta_low": 2.2
+    },
+    "sam": {
+      "segment_width": 1209
+    }
+  },
+  "proposal": {
+    "observation": "Round-1 feedback: the theta crop removed ~316 of 3123 rows (190 px at the top, 126 px at the bottom; map now ~2417x2798 px) and K_height/angle put the SAM K band at 1280-1442 px against measured oblique K edges at 1277/1445 px (centre 1361 = prompt y). correspondence_f1@15 rose 0.467->0.618, boundary_explained_edge@25 0.55->0.94 and chamfer 66->31 px, because the previously unlabeled, hole-fragmented end bands (top 121 px, bottom 90 px) were the main source of unexplained edges. The whole map is now labeled except a 24 px sliver at the bottom; the A1 block is truncated by the top edge (its A1/A2 boundary is at 609 px with a 671 px AB stack, so ~62 px of A1 lie above the map). sam_fill_rate fell 0.649->0.586, i.e. by 9.7%, almost exactly the 10.1% row loss, while denoise_retained_ratio fell 0.695->0.633: fill tracks the retained point fraction, not the labeled fraction of the map (labeled/retained stays ~0.93 in both rounds). Remaining NaN (0.098) is physical occlusion: the sidewall cable-bracket rows at 98-298 px (52% NaN) and 2476-2675 px (38%), the crown cable tray inside K (1321-1341 px), and the walkway structure in the bottom-right; SAM masks already outline these holes, so those hole rims count as explained edges. Ring joints (K-edge resets) sit exactly on 10 equal pitches of the map width: 241.7 px = ~1209 mm at 5 mm/px, and the SAM ring bands are anchored there. A/B horizontal boundaries (609, 2113) sit 9-13 px from the detected horizontal joint rows (~600, ~2100), inside the 15 px tolerance; the K edges, taper and ring pitch are all matched, so template geometry has no remaining bounded lever except segment_width.",
+    "rule": "d12 (m_coverage low) read through the round-1 response: coverage is bounded by stage-2 retention, so r_balance_coverage means recovering retained rows only where stage-5 will label them and where hole density is at or below the map average; r_fix_template for segment_width so ring bands close on the measured pitch. Stage-1 remains locked (residual 3.2 cm); detection is unchanged (10/10 rings, propagated), so no detecting change; no radial-gate widening because filling occluder holes would remove the hole-rim boundaries that currently explain edges and would compress the depth-map contrast SAM depends on.",
+    "failure_mode": "stage_5_segmentation.f_over_under_coverage (under-coverage driven by the round-1 stage-2 theta crop truncating the A1 block at the low-theta map edge), with a minor stage_5_segmentation.f_template_mismatch on ring width.",
+    "rationale": "Give back 0.3 m of the round-1 crop at the low-theta end only (mask_theta_low 2.5->2.2, ~60 rows). Under the pipeline's row = (theta - theta_low)/resolution mapping this is the top of the map, where the restored rows fall inside the already-truncated A1 block (62 px of A1 are currently cut off), so they are labeled rather than left as an unlabeled sliver, and their NaN density (~10%) is at the map average; expected fill gain ~ +0.012 with F1 and nan neutral, plus a slightly taller map giving the vertical Hough more votes. The high-theta end is left at 16.5 because the rows there would belong to a new B1 block sliver that the reverse/stop logic does not segment (that is why round 0 had a 90 px unlabeled band) and were 45-50% NaN, so restoring them would repeat the round-0 unexplained-edge failure. segment_width is set to the measured ring pitch (1209 mm) so consecutive ring bands meet at the K-edge resets without a gap; this is a no-op if the reference already equals it. K_height and angle stay at the round-1 measured values; everything else is untouched to protect the F1 gain, which the round-1 deltas show is the dominant proxy term.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9998273166785221,
+    "denoise_retained_ratio": 0.6601734161001084,
+    "depth_nan_ratio": 0.1134212950644352,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8110599078341014,
+    "correspondence_f1@15": 0.5715268010744291,
+    "chamfer_sym_px": 46.03912162780762,
+    "sam_fill_rate": 0.615584458238907,
+    "phase_incoherence_deg": 0.7
+  },
+  "score": 0.7442078657232216,
+  "score_raw": 0.7442078657232216,
+  "band": "accept",
+  "gt_miou": 0.764,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.764011917693086,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.6182703518751584,
+    "sam_fill_rate": 0.5860643084704569,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.09834530714098938
+  },
+  "elapsed_s": 172.1,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-6/round2/params",
+  "finished_at": "2026-09-19T13:38:31"
+}

@@ -1,0 +1,71 @@
+{
+  "subset": "1-5",
+  "family": "staggered",
+  "arm": "gpt56_medium",
+  "round": 2,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.271234368812293,
+      "mask_r_high": 2.849971817806363,
+      "z_step": 0.0012452491931617261,
+      "grad_threshold": 0.19536032313480972
+    },
+    "enhancing": {
+      "curvature_threshold": 0.006115869881771505,
+      "inter_radius": 0.05813454734161497
+    },
+    "detecting": {
+      "binary_threshold": 150,
+      "hough_threshold_oblique": 44,
+      "hough_threshold_horizontal": 84,
+      "hough_threshold_vertical": 508,
+      "maxLineGap_oblique": 47
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3710,
+        13100
+      ]
+    }
+  },
+  "proposal": {
+    "observation": "On the unchanged incumbent, all 10 expected ring instances are present, but correspondence_f1@15 is only 0.3224. Round 1 left the depth map unchanged, moved several prompt midpoints, reduced the visible midpoint set from eight to seven while preserving the assume and positive-slope anchors, and lowered correspondence_f1@15 by 0.04931. This shows that changing detection alone perturbed prompt placement without improving the underlying joint evidence.",
+    "rule": "When a bounded detection-only overlay degrades correspondence while depth structure is unchanged, do not continue isolated Hough tuning. Instead, test one coordinated non-unfolding setting that jointly conditions denoising and enhancement, applies the corresponding detector configuration, and aligns the SAM processing bound.",
+    "failure_mode": "stage_3_upsample.f_joint_oversmoothed propagating to stage_4_detection.f_missing_lines or f_pattern_mismatch and then to stage_5_segmentation.f_crop_offset",
+    "rationale": "This is the complete stage-2-through-stage-5 portion of the staggered development overlay whose measured joint response improved proxy score from 0.741 to 0.744 while preserving ring count and reducing depth_nan_ratio. Round 1 established that its detection portion alone is harmful on subset 1-5, so the proposal tests the coordinated setting rather than assigning causality to any individual parameter. Unfolding is omitted because stage1_unlocked is false, and every value is inside the packet bounds.",
+    "full": true
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991680441522386,
+    "denoise_retained_ratio": 0.7867684655789523,
+    "depth_nan_ratio": 0.12714124339136773,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.853050034270048,
+    "correspondence_f1@15": 0.3215874232049545,
+    "chamfer_sym_px": 81.29369354248047,
+    "sam_fill_rate": 0.7480909217682331,
+    "phase_incoherence_deg": 18.7
+  },
+  "score": 0.6419486165743467,
+  "score_raw": 0.6419486165743467,
+  "band": "refine",
+  "gt_miou": 0.642,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6410668863547464,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.32237648215183345,
+    "sam_fill_rate": 0.7404006879561196,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12040894298363669
+  },
+  "elapsed_s": 288.0,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/1-5/round2/params",
+  "finished_at": "2026-09-19T23:40:44"
+}

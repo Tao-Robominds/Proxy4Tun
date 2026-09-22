@@ -1,0 +1,52 @@
+{
+  "subset": "3-8",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 3,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.7,
+      "mask_r_high": 3.15
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 produced identical metrics and before/after images, showing that lowering the oblique Hough threshold does not affect this case's active path. The unchanged incumbent still has a 0.1821 depth-NaN ratio and only 0.5969 SAM fill, and the depth image contains broad repeated voids despite an exact 10-ring count and coherent prompt spacing.",
+    "rule": "When ring geometry and prompt count are stable but depth holes and under-coverage remain high, prioritize the ontology's upstream radial-gate widening remediation over further detection or SAM-template changes.",
+    "failure_mode": "stage_2_denoise.f_over_gate with downstream stage_3_upsample.f_depth_holes and stage_5_segmentation.f_over_under_coverage",
+    "rationale": "Widening both radial limits to their allowed bounds is a direct bounded test of whether lining points are being discarded before projection. It targets depth-map support and fill while leaving the successful degree-2 unfolding, exact ring count, and detection/SAM geometry unchanged.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9995216099864935,
+    "denoise_retained_ratio": 0.7609381806823879,
+    "depth_nan_ratio": 0.16433706191178343,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5922018348623853,
+    "correspondence_f1@15": 0.2981669732650278,
+    "chamfer_sym_px": 80.8049955368042,
+    "sam_fill_rate": 0.5948003057676658,
+    "phase_incoherence_deg": 1.4
+  },
+  "score": 0.571078986691508,
+  "score_raw": 0.571078986691508,
+  "band": "refine",
+  "gt_miou": 0.694,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5709255888387867,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3022120169979324,
+    "sam_fill_rate": 0.596949720945907,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.18208811279684348
+  },
+  "elapsed_s": 184.4,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-8/round3/params",
+  "finished_at": "2026-09-20T00:40:27"
+}

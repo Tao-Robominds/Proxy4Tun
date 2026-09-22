@@ -1,0 +1,54 @@
+{
+  "subset": "3-4",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 30,
+      "maxLineGap_oblique": 50,
+      "binary_threshold": 115,
+      "pattern_tolerance": 12
+    }
+  },
+  "proposal": {
+    "observation": "detected_lines.png: 10 magenta vertical ring boundaries are regularly spaced (~245 px) across the full 2400 px width, consistent with ring_count_error=0. Oblique line yield is very low: only ~15 short green/red segments, all confined to the mid-band y~1420-1640 and to x<1600 (rings 1-7); rings 8-10 have no oblique lines at all, and one blue horizontal fallback segment appears at y~770. The outlier map shows the circumferential joints at y~770, ~1600 and ~2300 only as broken dotted traces, so Hough fragments never reach accumulator threshold and gaps are not bridged. initial_prompt_points.png confirms that all 10 prompt centres are 'propagated' at a single y~1520 rather than directly detected per ring. depth_map_viridis.png: NaN regions are a left-edge strip, three horizontal joint bands and a genuine bottom-right void (depth_nan_ratio 0.195), i.e. moderate holes, not the dominant issue. segmentation_results.png: K band is placed at the mid joint band and ring stripes are coherent, but sam_fill_rate is 0.57 and correspondence_f1@15 only 0.24 with chamfer 74.7 px, indicating per-ring block boundaries are offset from the real joints because prompt centres are inferred from a single propagated row instead of ring-specific intersections.",
+    "rule": "d7 (stage_4_detection): m_line_yield low AND horizontal fallback triggered -> f_missing_lines. Upstream check per inter_stage_dependencies: joint traces are visible in the outlier map (m_joint_contrast moderate, not absent) and m_hole_ratio is moderate, so f_joint_oversmoothed / f_depth_holes are not the primary cause; remediation r_relax_hough applies (lower oblique threshold, raise maxLineGap). Downstream chain f_missing_lines -> unstable prompt centres -> f_crop_offset explains low correspondence_f1@15 and sub-par sam_fill_rate.",
+    "failure_mode": "stage_4_detection.f_missing_lines",
+    "rationale": "Ring count and vertical band are already correct, so hough_threshold_vertical, unfolding (despite being unlocked, the depth map is well unrolled and the worked examples show that unfolding+denoising changes jointly collapsed sam_fill_rate and inflated depth_nan_ratio), denoising and SAM geometry are left untouched to avoid perturbing the two measurements that are currently healthy. The overlay is confined to the detection stage where the observed deficiency lies: hough_threshold_oblique lowered to 30 and maxLineGap_oblique raised to 50 so the dotted joint traces are bridged into full oblique segments across all 10 rings; binary_threshold lowered modestly to 115 so weaker outlier pixels on the joint traces survive binarisation; pattern_tolerance raised to 12 so the K/AB distance-pattern check accepts directly detected intersections instead of falling back to a propagated row. Worked example s019 (oblique 49, maxLineGap 53, binary 118, tolerance 16) was the mildest of the three joint degradations and kept ring_count_error at 0, suggesting these detection-side values are tolerable; unlike s019 this overlay does not move unfolding, denoising or SAM, which were the shared ingredients of the fill-rate collapse. Expected response: higher oblique line yield, ring-specific prompt centres, improved correspondence_f1@15 and sam_fill_rate, with ring_count_error and depth_nan_ratio unchanged.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9984156385609421,
+    "denoise_retained_ratio": 0.6936518019734892,
+    "depth_nan_ratio": 0.19497856422227988,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4686174724342663,
+    "correspondence_f1@15": 0.27807919569558853,
+    "chamfer_sym_px": 79.58315467834473,
+    "sam_fill_rate": 0.5693728031169271,
+    "phase_incoherence_deg": 2.7
+  },
+  "score": 0.5456144390579352,
+  "score_raw": 0.5456144390579352,
+  "band": "refine",
+  "gt_miou": 0.619,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5264765228145997,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.24397684368509054,
+    "sam_fill_rate": 0.5707661034176089,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19497856422227988
+  },
+  "elapsed_s": 183.9,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-4/round1/params",
+  "finished_at": "2026-09-19T12:29:35"
+}

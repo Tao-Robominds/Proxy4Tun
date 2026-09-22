@@ -1,0 +1,51 @@
+{
+  "subset": "4-1",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "sam": {
+      "angle": 11.79
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was rejected. The joint overlay (polynomial degree 3, ransac 0.97, curvature 0.000366, oblique threshold 27, oblique gap 74, horizontal gap 25, pattern tolerance 12) moved the proxy 0.650\u21920.600. Correspondence fell 0.365\u21920.279; fill barely moved (0.752\u21920.750); ring count stayed exact; depth NaN rose only 0.226\u21920.230. Before, the left-side prompt centres were a regular assume zigzag at about y=1120 and y=1550. After, that lattice broke: an assume point became a shifted negative-slope point and another assume drifted off the 1550 line. Ten vertical bands and the block labels are still present. The incumbent is therefore still the start, where correspondence 0.365, chamfer 80 px, and phase incoherence 33.5\u00b0 remain the gap, with fill and ring count already healthy.",
+    "rule": "d7-style line relaxation already fired and was rejected, so it is not repeated. With ring count and fill held and correspondence still low, d10 applies: block boundaries do not sit on the joints (phase incoherence 33.5\u00b0, chamfer 80 px) even though the ten-ring layout and the K/B/A label sequence are intact. That is a template taper mismatch, not another missing-line pass and not a radial-gate or vertical-band failure.",
+    "failure_mode": "f_template_mismatch",
+    "rationale": "Do not stack on the rejected keys and do not copy the depth-nan overlays: s005 cut correspondence and added a ring error, and s016 collapsed fill. The only joint example that raised correspondence without a ring error (s021) used a taper near 11.8\u00b0, while the degrading example used about 7.1\u00b0. Set sam.angle to 11.79, inside [7, 12], and leave every other knob at the reference. Segment width stays 1800 because the vertical pitch already matches that width, and K_height stays 1226.97 so the SAM template height is not pulled off the detection pattern prior. Unfolding, curvature, and Hough stay at the start values that still outscore round 1.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9399161465063901,
+    "denoise_retained_ratio": 0.7610957754105794,
+    "depth_nan_ratio": 0.22606519178835907,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.47472961730449253,
+    "correspondence_f1@15": 0.36527770315648833,
+    "chamfer_sym_px": 80.34091854095459,
+    "sam_fill_rate": 0.7516065103119458,
+    "phase_incoherence_deg": 33.5
+  },
+  "score": 0.6504471704561834,
+  "score_raw": 0.6504471704561834,
+  "band": "refine",
+  "gt_miou": 0.741,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6504471704561834,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36527770315648833,
+    "sam_fill_rate": 0.7516065103119458,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22606519178835907
+  },
+  "elapsed_s": 237.1,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-1/round2/params",
+  "finished_at": "2026-09-19T20:17:26"
+}

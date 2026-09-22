@@ -1,0 +1,75 @@
+{
+  "subset": "3-6",
+  "family": "continuous",
+  "arm": "random",
+  "round": 3,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0017265507682066815
+    },
+    "denoising": {
+      "mask_theta_high": 15.250820928196031
+    },
+    "detecting": {
+      "maxLineGap_oblique": 37,
+      "pattern_tolerance": 13,
+      "binary_threshold": 159
+    },
+    "sam": {
+      "K_height": 857.8786767404779
+    }
+  },
+  "proposal": {
+    "observation": "adaptive random control proposal",
+    "rule": "k-matched uniform draw on incumbent",
+    "failure_mode": "n/a (control)",
+    "rationale": "random bounded overlay on current best",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9998273166785221,
+    "denoise_retained_ratio": 0.6247413538279634,
+    "depth_nan_ratio": 0.07510486849535981,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5472145397076255,
+    "correspondence_f1@15": 0.44353708929051644,
+    "chamfer_sym_px": 67.34575653076172,
+    "sam_fill_rate": 0.5772259992774329,
+    "phase_incoherence_deg": 0.6
+  },
+  "score": 0.664841816156962,
+  "score_raw": 0.664841816156962,
+  "band": "refine",
+  "gt_miou": 0.727,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6966921252558986,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.46700890973588527,
+    "sam_fill_rate": 0.6490524518014911,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.1052027439356335
+  },
+  "elapsed_s": 175.4,
+  "provenance": {
+    "arm": "random",
+    "seed_base": 20260915,
+    "panel_index": 5,
+    "round": 3,
+    "k": 6,
+    "chosen": [
+      "enhancing.curvature_threshold",
+      "denoising.mask_theta_high",
+      "detecting.maxLineGap_oblique",
+      "detecting.pattern_tolerance",
+      "sam.K_height",
+      "detecting.binary_threshold"
+    ],
+    "stage1_unlocked": false
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/random/3-6/round3/params",
+  "finished_at": "2026-09-19T10:38:21"
+}

@@ -1,0 +1,60 @@
+{
+  "subset": "4-2",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "hough_threshold_oblique": 28,
+      "hough_threshold_horizontal": 58,
+      "maxLineGap_oblique": 70,
+      "maxLineGap_horizontal": 10
+    },
+    "sam": {
+      "angle": 9.2
+    }
+  },
+  "proposal": {
+    "observation": "Correspondence is the weak feature (F1@15 0.453, symmetric chamfer 71 px, phase incoherence 9.4\u00b0) while ring_count_error is already 0 and depth_nan_ratio 0.209 is near the complex development baseline. The unrolled map has all 10 vertical ring boundaries. Surviving oblique joints are short and locked at about \u00b19\u00b0, and they are missing on the edge rings and on several interior columns; horizontal segments are more numerous and, near the bottom, bridge a full ring pitch. Stage-1 residual is 1.90 cm, so unfolding stays locked.",
+    "rule": "When oblique yield is incomplete at a stable \u00b19\u00b0 taper, horizontal fallback bridges across rings, and the ring count is already exact, sharpen joints slightly, lower the oblique Hough threshold, raise the oblique gap, raise the horizontal Hough threshold, and cut the horizontal gap. Set the SAM taper to the observed joint slope. Do not move the vertical accumulator, the radial gate, or any unfolding key.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Horizontal fallback with incomplete \u00b19\u00b0 obliques is the ontology missing-lines mode, and it matches the low correspondence and 9.4\u00b0 phase incoherence. The complex correspondence-improving development overlay (joint proxy 0.700\u21920.708) also relaxed oblique detection and kept a moderate horizontal threshold, but that trial changed unfolding and is only an analogy: stage 1 is locked here, so those keys are omitted. Horizontal gap is tightened rather than opened because this image already bridges horizontals across a ring pitch. Angle is set to 9.2, inside [7, 12], to match the measured taper instead of that trial's 11.8\u00b0. The radial gate and vertical threshold are left alone: ring count is exact, and the development collapse that drove fill to ~0 and depth NaN to ~0.98 sat in the wide-gate / narrow-segment corner. This is a partial overlay, not a full parameter replacement.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9672561546948405,
+    "denoise_retained_ratio": 0.7425428545709399,
+    "depth_nan_ratio": 0.20986416715658057,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5615876179867503,
+    "correspondence_f1@15": 0.4157487717450211,
+    "chamfer_sym_px": 77.18645095825195,
+    "sam_fill_rate": 0.7297588827591528,
+    "phase_incoherence_deg": 9.5
+  },
+  "score": 0.6751345769938186,
+  "score_raw": 0.6751345769938186,
+  "band": "refine",
+  "gt_miou": 0.787,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6966793181559678,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.45298510069511344,
+    "sam_fill_rate": 0.7297588827591528,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.20905922176413247
+  },
+  "elapsed_s": 232.9,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-2/round1/params",
+  "finished_at": "2026-09-19T19:37:26"
+}

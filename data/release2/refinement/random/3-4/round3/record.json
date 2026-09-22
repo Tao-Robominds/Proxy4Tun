@@ -1,0 +1,65 @@
+{
+  "subset": "3-4",
+  "family": "continuous",
+  "arm": "random",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 42,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "angle": 6.5052248444235605
+    }
+  },
+  "proposal": {
+    "observation": "adaptive random control proposal",
+    "rule": "k-matched uniform draw on incumbent",
+    "failure_mode": "n/a (control)",
+    "rationale": "random bounded overlay on current best",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9984156385609421,
+    "denoise_retained_ratio": 0.6958920933384153,
+    "depth_nan_ratio": 0.21657217255709388,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.39996170783074864,
+    "correspondence_f1@15": 0.24320790253006883,
+    "chamfer_sym_px": 85.21061992645264,
+    "sam_fill_rate": 0.5719561258628721,
+    "phase_incoherence_deg": 2.5
+  },
+  "score": 0.5225485886268237,
+  "score_raw": 0.5225485886268237,
+  "band": "refine",
+  "gt_miou": 0.631,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5736463567853329,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3372976351528439,
+    "sam_fill_rate": 0.5621691441155295,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.21511351855901387
+  },
+  "elapsed_s": 188.1,
+  "provenance": {
+    "arm": "random",
+    "seed_base": 20260915,
+    "panel_index": 4,
+    "round": 3,
+    "k": 3,
+    "chosen": [
+      "detecting.hough_threshold_oblique",
+      "detecting.uniform_k_snap",
+      "sam.angle"
+    ],
+    "stage1_unlocked": true
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/random/3-4/round3/params",
+  "finished_at": "2026-09-19T10:31:01"
+}

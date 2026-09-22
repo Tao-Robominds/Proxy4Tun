@@ -1,0 +1,56 @@
+{
+  "subset": "3-9",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0008
+    },
+    "detecting": {
+      "binary_threshold": 136,
+      "hough_threshold_oblique": 36,
+      "hough_threshold_horizontal": 50
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was rejected: score 0.6592 to 0.6460, correspondence_f1@15 0.364 to 0.343, sam_fill_rate essentially unchanged (0.729 to 0.728), ring_count_error still 0, depth_nan_ratio 0.131 to 0.135. The rejected overlay lowered curvature_threshold, binary_threshold and hough_threshold_oblique, raised maxLineGap_oblique and hough_threshold_horizontal, and set uniform_k_snap false. After that, the two oblique tracks (green negative-angle, red positive-angle) still sit beside the centre seam and still fade on the sparse right, but the left columns gained extra stray green and red segments. Prompt Y did not follow the track slope: seven rings are midpoints already at about 1550 and the three right rings are assumes at the same row. The start prompts were already a flat propagated row at that design Y, so the snap was not the correspondence error. Stage 1 stays locked.",
+    "rule": "If relaxing oblique and binary thresholds, widening maxLineGap, and disabling uniform_k_snap lowers correspondence while measured prompt Y is already on the design row, the next overlay must tighten line acceptance and keep the snap. Do not retune unfolding or the vertical Hough threshold.",
+    "failure_mode": "f_spurious_lines",
+    "rationale": "Correspondence is line pixels versus SAM block boundaries at 15 px. Round 1 added unexplained oblique fragments and lost 0.021 F1, so the start is precision-limited, not recall-limited. Raise curvature_threshold from 0.0005 to 0.0008 so only sharper joints reach the edge map (the lower value also nudged depth_nan up). Raise binary_threshold from 127 to 136 and hough_threshold_oblique from 30 to 36 so the K-edge tracks, which sit on the bright seams, survive while the short left-column fragments do not. Raise hough_threshold_horizontal from 30 to 50 to drop the isolated blue horizontals, which are outside the 4-10 deg taper window. Leave maxLineGap_oblique at 30, uniform_k_snap true, hough_threshold_vertical at 1500, and SAM geometry untouched: the template is already placing ten rings and a 0.729 fill, and the worked full overlays that moved those knobs jointly cut fill and correspondence.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9992437316181036,
+    "denoise_retained_ratio": 0.7719211863424968,
+    "depth_nan_ratio": 0.126232335049755,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4750298278506903,
+    "correspondence_f1@15": 0.3537747285068204,
+    "chamfer_sym_px": 77.0805892944336,
+    "sam_fill_rate": 0.7279008953840552,
+    "phase_incoherence_deg": 1.1
+  },
+  "score": 0.653929080377693,
+  "score_raw": 0.653929080377693,
+  "band": "refine",
+  "gt_miou": 0.819,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6591558534408575,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36367764129925506,
+    "sam_fill_rate": 0.7289890931960742,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.13082197231971604
+  },
+  "elapsed_s": 192.5,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-9/round2/params",
+  "finished_at": "2026-09-19T20:10:10"
+}

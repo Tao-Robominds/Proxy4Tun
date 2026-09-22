@@ -1,0 +1,53 @@
+{
+  "subset": "3-3",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 105,
+      "hough_threshold_oblique": 24,
+      "maxLineGap_oblique": 56
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was accepted: proxy 0.535\u21920.541, correspondence_f1@15 0.113\u21920.124, sam_fill_rate and ring_count_error unchanged, depth_nan_ratio unchanged. Chamfer only moved 94.0\u219293.5 px and boundary_explained_edge@25 is still 0.219. After images: negative-slope (red) segments now reach several rings, but positive-slope (green) segments remain on the edge columns, strips 5\u20136 have no oblique segment, and one stray red segment sits near y\u22481420 in strip 4. initial_prompt_points is still a flat row at y\u22481540.5: only three measured intersections (positive_slope, negative_slope, negative_slope) and seven assume markers. Stage-1 stays locked (residual 2.70 cm).",
+    "rule": "d7 still holds: oblique yield improved on the negative family only, so the distance-pattern step still assumes the centre rings instead of measuring them. The stray y\u22481420 segment was rejected, so d9 (spurious lines driving prompts) has not fired.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "The accepted step lowered hough_threshold_oblique to 30, raised maxLineGap_oblique to 45, and set binary_threshold to 112, with no loss of fill or ring count. The same failure remains, and those three knobs still have room above the floor, so take one further bounded step on the incumbent rather than a new stage: oblique 30\u219224, maxLineGap 45\u219256, binary 112\u2192105. That targets the still-missing positive-slope fragments in the centre columns. Do not raise pattern_tolerance or turn uniform_k_snap on: the y\u22481420 outlier must stay rejected, and the development collapse that zeroed correspondence combined a near-floor oblique threshold with snap and a wide tolerance. Leave vertical Hough, horizontal fallback, enhancing, denoising, SAM, and locked unfolding alone \u2014 fill, phase (1.7 deg), ring count, and NaN ratio are the stable terms.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.99996584722565,
+    "denoise_retained_ratio": 0.81787798500355,
+    "depth_nan_ratio": 0.11387375767737186,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.18140474987367358,
+    "correspondence_f1@15": 0.13583918610310708,
+    "chamfer_sym_px": 97.67450428009033,
+    "sam_fill_rate": 0.778987653038253,
+    "phase_incoherence_deg": 1.6
+  },
+  "score": 0.5478052228733965,
+  "score_raw": 0.5478052228733965,
+  "band": "refine",
+  "gt_miou": 0.812,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5411600783602838,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.12362049865380302,
+    "sam_fill_rate": 0.7801271061700175,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11387375767737186
+  },
+  "elapsed_s": 190.3,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-3/round2/params",
+  "finished_at": "2026-09-19T20:51:03"
+}

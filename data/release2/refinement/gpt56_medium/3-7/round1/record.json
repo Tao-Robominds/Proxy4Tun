@@ -1,0 +1,52 @@
+{
+  "subset": "3-7",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 30,
+      "maxLineGap_oblique": 60
+    }
+  },
+  "proposal": {
+    "observation": "The expected 10 rings are recovered and SAM fill is already high (0.7668), but correspondence_f1@15 is low (0.1717). The detection overlay shows very sparse accepted oblique lines, concentrated near the right edge, while most visible joint traces are fragmented.",
+    "rule": "Ontology rule d7: low oblique-line yield indicates f_missing_lines; remediation r_relax_hough lowers the oblique Hough threshold and raises maxLineGap after checking for upstream holes or weak joint contrast.",
+    "failure_mode": "stage_4_detection.f_missing_lines",
+    "rationale": "Preserve the locked, low-residual unfolding and the already-correct ring count. A detection-only relaxation targets fragmented oblique joints without changing SAM geometry or denoising; the moderate depth NaN ratio (0.1645) is noted as an upstream limitation, so the change is bounded rather than a broad full overlay.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991211319489915,
+    "denoise_retained_ratio": 0.7976920114616173,
+    "depth_nan_ratio": 0.16450624232718375,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.20879533922195076,
+    "correspondence_f1@15": 0.18186580436868935,
+    "chamfer_sym_px": 96.36786079406738,
+    "sam_fill_rate": 0.7667991671398826,
+    "phase_incoherence_deg": 1.7
+  },
+  "score": 0.5611264757251164,
+  "score_raw": 0.5611264757251164,
+  "band": "refine",
+  "gt_miou": 0.845,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5553118036890422,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.17174823917999785,
+    "sam_fill_rate": 0.7667991671398826,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.16450624232718375
+  },
+  "elapsed_s": 185.9,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-7/round1/params",
+  "finished_at": "2026-09-19T22:50:17"
+}

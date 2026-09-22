@@ -1,0 +1,62 @@
+{
+  "subset": "1-1",
+  "family": "staggered",
+  "arm": "fable",
+  "round": 1,
+  "overlay": {
+    "denoising": {
+      "z_step": 0.0015,
+      "grad_threshold": 0.2
+    },
+    "enhancing": {
+      "curvature_threshold": 0.006,
+      "inter_radius": 0.06
+    },
+    "detecting": {
+      "binary_threshold": 140,
+      "hough_threshold_oblique": 44,
+      "hough_threshold_horizontal": 84,
+      "maxLineGap_oblique": 60
+    }
+  },
+  "proposal": {
+    "observation": "Subset 1-1 (staggered, 10 rings). ring_count_error=0 and the 10 magenta vertical ring lines in detected_lines.png are evenly spaced (~240 px), so the vertical band and ring count are healthy. depth_nan_ratio=0.120 and sam_fill_rate=0.728 are at the same level as the development reference (0.126 / 0.720), so depth holes and SAM coverage are not the bottleneck. The dominant deficit is correspondence_f1@15=0.282 (reference 0.509) with chamfer_sym_px=105 and phase_incoherence=6.6 deg. In the outlier-only map the oblique joint lines are only recovered on the right half (x>1000): red/green oblique segments appear at x~1000-2300, while the left four rings (x<1000) yield essentially no oblique line and are instead covered by blue horizontal fallback segments (y~880, 1980, 2400, and along the top/bottom borders). The joint dots on the left are sparse/dotted, whereas the centre band (x~1200-1900) is flooded with speckle. initial_prompt_points.png confirms the consequence: 3 of 10 prompt centres are 'assume' (x=120, 360, 600), one is a lone negative-slope centre at x=850, and the x=1810 centre sits at y~2290, roughly one block height away from the alternating ~1200/~1640 staggered phase used by the other rings.",
+    "rule": "d7: m_line_yield low AND horizontal fallback triggered -> f_missing_lines; per inter_stage_dependencies, first suspect stage_3_upsample.f_joint_oversmoothed (faint/dotted joints on the low-density left half) and keep speckle in the dense centre band from feeding spurious horizontal fallback lines. Remediation r_relax_hough (lower oblique threshold, raise maxLineGap) applied only after checking that depth_nan_ratio and ring count are healthy, i.e. f_depth_holes / f_wrong_vertical_band are ruled out.",
+    "failure_mode": "stage_4_detection.f_missing_lines (oblique line yield low on the left half; horizontal fallback engaged; prompt centres drift off the staggered phase), with upstream suspect stage_3_upsample.f_joint_oversmoothed.",
+    "rationale": "Stage 1 is locked (residual 0.0 cm), so unfolding is untouched. The overlay targets oblique line yield and prompt-centre phase coherence, which is what correspondence_f1@15 and chamfer measure. Detecting: hough_threshold_oblique=44 and maxLineGap_oblique=60 relax the oblique HoughLinesP so the dotted left-side joint lines can be bridged into >=1 accepted oblique segment per ring instead of falling back to horizontal; hough_threshold_horizontal=84 makes the horizontal fallback harder to trigger from the border/speckle rows; binary_threshold=140 moderately suppresses the centre-band speckle that produces spurious intersections. Enhancing: inter_radius=0.06 and curvature_threshold=0.006 keep joint enhancement strong so the outlier map carries continuous joint lines. Denoising: z_step=0.0015 and grad_threshold=0.20 stay near the notebook defaults. These choices mirror the only improving analogy (Example s005: oblique 44, horizontal 84, binary 150, maxLineGap 47, inter_radius 0.058, curvature 0.0061, z_step 0.0012, grad 0.195; proxy 0.741->0.744 with depth_nan_ratio and sam_fill_rate both improving) and move away from the two degrading analogies, which shared high oblique threshold 76 (s011, catastrophic: F1->0, ring_count_error 1) or low horizontal threshold 43 with small inter_radius 0.022 and large z_step 0.006 (s002: F1 0.509->0.464). mask_r_low/high, hough_threshold_vertical and sam y_bounds are left at incumbent because ring count, depth_nan_ratio and sam_fill_rate are already healthy and the analogies attribute no isolated benefit to them. All values are inside parameter_bounds; the outcome is treated as a joint effect of the full overlay, not per-parameter causation.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999336994200428,
+    "denoise_retained_ratio": 0.7644138065518575,
+    "depth_nan_ratio": 0.11359218534959284,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.6874524714828897,
+    "correspondence_f1@15": 0.26208533236378256,
+    "chamfer_sym_px": 110.30517578125,
+    "sam_fill_rate": 0.7278250127321741,
+    "phase_incoherence_deg": 6.2
+  },
+  "score": 0.6034802098852765,
+  "score_raw": 0.6034802098852765,
+  "band": "refine",
+  "gt_miou": 0.784,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6139625641458475,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.2822583627704685,
+    "sam_fill_rate": 0.7278950267246003,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11990621963918995
+  },
+  "elapsed_s": 287.9,
+  "provenance": {
+    "model": "claude-fable-5-1-thinking-high"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/1-1/round1/params",
+  "finished_at": "2026-09-19T09:46:48"
+}

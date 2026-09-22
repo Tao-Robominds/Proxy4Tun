@@ -1,0 +1,87 @@
+{
+  "dev": "3-1",
+  "family": "continuous",
+  "trial_id": "s009",
+  "acquisition": "sobol",
+  "seed": 3,
+  "x_unit": [
+    0.06037636753171678,
+    0.09591084066778405,
+    0.12833071127533913,
+    0.7143292622640729,
+    0.45944516919553247,
+    0.6623674901202321,
+    0.563638087362051,
+    0.7240871144458652,
+    0.1789693422615528,
+    0.8017787989228964,
+    0.7515831841155887,
+    0.18623896036297083,
+    0.9500744733959436,
+    0.7664123084396124,
+    0.8646989688277245,
+    1.0,
+    0.3458402808755636,
+    0.0010637585073709488,
+    0.20306397043168545
+  ],
+  "x": [
+    0.8241505470126868,
+    1.0787732522003353,
+    2.128330711275339,
+    5.00030483584851,
+    2.83783355075866,
+    3.065591872530058,
+    1.8454571310430765,
+    17.89634845778346,
+    0.000522144816070795,
+    148.10672793537378,
+    50.06332736462355,
+    27.449558414518833,
+    2415.126604773104,
+    48.32061542198062,
+    17.970484532415867,
+    1.0,
+    1138.3361123502254,
+    700.3191275522113,
+    5.015319852158427
+  ],
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 0.8241505470126868,
+      "slice_spacing_factor": 1.0787732522003353,
+      "polynomial_degree": 2,
+      "random_seed": 5
+    },
+    "denoising": {
+      "mask_r_low": 2.83783355075866,
+      "mask_r_high": 3.065591872530058,
+      "mask_theta_low": 1.8454571310430765,
+      "mask_theta_high": 17.89634845778346
+    },
+    "enhancing": {
+      "curvature_threshold": 0.000522144816070795
+    },
+    "detecting": {
+      "binary_threshold": 148,
+      "hough_threshold_oblique": 50,
+      "hough_threshold_horizontal": 27,
+      "hough_threshold_vertical": 2415,
+      "maxLineGap_oblique": 48,
+      "pattern_tolerance": 18,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1138,
+      "K_height": 700.3191275522113,
+      "angle": 5.015319852158427
+    }
+  },
+  "overlay_in_bounds": true,
+  "measurements": null,
+  "gt_miou": null,
+  "valid": false,
+  "failure_reason": "Stage 5 failed for s009; see /home/boringtao/Projects/Proxy4Tun/data/release2/calibration/3-1/runs/s009/pipeline.log",
+  "elapsed_s": 124.6,
+  "log": "/home/boringtao/Projects/Proxy4Tun/data/release2/calibration/3-1/runs/s009/pipeline.log"
+}

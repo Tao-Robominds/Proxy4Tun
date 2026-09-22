@@ -1,0 +1,75 @@
+{
+  "subset": "3-4",
+  "family": "continuous",
+  "arm": "random",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_vertical": 1275,
+      "hough_threshold_horizontal": 52,
+      "maxLineGap_oblique": 54
+    },
+    "unfolding": {
+      "random_seed": 5,
+      "ransac_threshold": 0.8313938369983883
+    },
+    "sam": {
+      "angle": 8.686409776753035,
+      "segment_width": 1220
+    }
+  },
+  "proposal": {
+    "observation": "adaptive random control proposal",
+    "rule": "k-matched uniform draw on incumbent",
+    "failure_mode": "n/a (control)",
+    "rationale": "random bounded overlay on current best",
+    "full": true
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 3.186352633162641,
+    "orient_agreement": 0.9983912017391816,
+    "denoise_retained_ratio": 0.6959810274001609,
+    "depth_nan_ratio": 0.21511351855901387,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.411888998450486,
+    "correspondence_f1@15": 0.23058678395928672,
+    "chamfer_sym_px": 89.43889808654785,
+    "sam_fill_rate": 0.5564011349680261,
+    "phase_incoherence_deg": 2.4
+  },
+  "score": 0.5104097645538842,
+  "score_raw": 0.5104097645538842,
+  "band": "refine",
+  "gt_miou": 0.599,
+  "residual_cm": 23.200000000000003,
+  "incumbent_before_score": 0.5736463567853329,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3372976351528439,
+    "sam_fill_rate": 0.5621691441155295,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.21511351855901387
+  },
+  "elapsed_s": 198.6,
+  "provenance": {
+    "arm": "random",
+    "seed_base": 20260915,
+    "panel_index": 4,
+    "round": 2,
+    "k": 7,
+    "chosen": [
+      "detecting.hough_threshold_vertical",
+      "detecting.hough_threshold_horizontal",
+      "unfolding.random_seed",
+      "unfolding.ransac_threshold",
+      "detecting.maxLineGap_oblique",
+      "sam.angle",
+      "sam.segment_width"
+    ],
+    "stage1_unlocked": true
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/random/3-4/round2/params",
+  "finished_at": "2026-09-19T10:27:51"
+}

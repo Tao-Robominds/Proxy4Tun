@@ -1,0 +1,75 @@
+{
+  "subset": "4-1",
+  "family": "complex",
+  "arm": "gpt56_medium",
+  "round": 3,
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 0.9714595459401607,
+      "slice_spacing_factor": 1.8489205356687308,
+      "polynomial_degree": 3,
+      "random_seed": 0
+    },
+    "denoising": {
+      "mask_r_low": 3.6008071053773163,
+      "mask_r_high": 3.794932061433792
+    },
+    "enhancing": {
+      "curvature_threshold": 0.00036597516089677815
+    },
+    "detecting": {
+      "binary_threshold": 127,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 60,
+      "hough_threshold_vertical": 4306,
+      "maxLineGap_oblique": 74,
+      "maxLineGap_horizontal": 28,
+      "pattern_tolerance": 11
+    },
+    "sam": {
+      "segment_width": 1874,
+      "K_height": 1120.300923474133,
+      "angle": 11.78815640322864
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 was rejected after correspondence_f1@15 fell by 0.104184. Its after image contains additional oblique detections, but prompt locations changed only modestly; simultaneously, depth_nan_ratio and sam_fill_rate returned exactly to their start values rather than retaining the accepted round-1 values. The final proposal therefore needs to carry the complete accepted incumbent configuration, not another partial overlay.",
+    "rule": "Restore every parameter from the accepted round-1 incumbent, then make only a conservative opposite-direction adjustment to oblique-line acceptance. Because the permissive round-2 trial was rejected, slightly tighten the oblique Hough threshold while preserving the accepted gap, pattern, SAM, and upstream settings.",
+    "failure_mode": "Primary: stage_4_detection.f_spurious_lines, with an execution-level risk that a partial overlay fails to preserve the accepted upstream state. The added permissive oblique detections did not improve prompt quality and coincided with sharply worse correspondence.",
+    "rationale": "This full overlay preserves the only configuration demonstrated on this subset to improve score, correspondence, and depth completeness while keeping ring_count_error at zero. Relative to that accepted incumbent, only hough_threshold_oblique changes from 27 to 30, a small in-bounds tightening intended to reject weak extra oblique candidates without disturbing the accepted max-line-gap or fallback geometry. The round-2 outcome was joint with an apparent upstream reversion, so no isolated causal effect is claimed. Unfolding is included because stage1_unlocked is true.",
+    "full": true
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 1.2237754316221157,
+    "orient_agreement": 0.9397505922400965,
+    "denoise_retained_ratio": 0.7559316584932634,
+    "depth_nan_ratio": 0.21484203056029164,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4831627068443758,
+    "correspondence_f1@15": 0.374590728858071,
+    "chamfer_sym_px": 94.83076286315918,
+    "sam_fill_rate": 0.7449855463470147,
+    "phase_incoherence_deg": 33.4
+  },
+  "score": 0.6556249861419562,
+  "score_raw": 0.6556249861419562,
+  "band": "refine",
+  "gt_miou": 0.742,
+  "residual_cm": 2.4,
+  "incumbent_before_score": 0.6550547172691565,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.373598457503842,
+    "sam_fill_rate": 0.7449855463470147,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.21484203056029164
+  },
+  "elapsed_s": 258.2,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/4-1/round3/params",
+  "finished_at": "2026-09-20T00:51:18"
+}

@@ -1,0 +1,58 @@
+{
+  "subset": "4-1",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 50,
+      "hough_threshold_horizontal": 50,
+      "maxLineGap_oblique": 42,
+      "maxLineGap_horizontal": 8,
+      "pattern_tolerance": 7
+    },
+    "sam": {
+      "K_height": 1120.0
+    }
+  },
+  "proposal": {
+    "observation": "Incumbent is still the start (proxy 0.650). Round 1 was rejected: loosening oblique Hough (27), widening both line gaps (74 and 25), raising pattern tolerance to 12, dropping curvature to 0.000366, and fitting a degree-3 centre curve cut correspondence 0.365\u21920.279 and broke the regular left-side assume lattice, while ring count stayed 0. Round 2 set sam.angle to 11.79 and was also rejected: all four deltas are 0.000 and the before/after images are identical, so a taper inside [7, 12] does not move this proxy. Correspondence 0.365 remains the gap (chamfer 80 px, phase incoherence 33.5\u00b0). Fill 0.752 and ring count are already healthy. Vertical bands are regular and column-bounded; the red and green fragments are short diagonals that do not stay inside those columns, and most prompt centres are assumes rather than a locked K/AB lattice.",
+    "rule": "d7 already fired in the loosening direction and was rejected, so it is not repeated. d8 fires on the incumbent: prompt spacing is not a stable K/AB pattern (left assumes zigzag, centre and right rings sit on scattered slope and midpoint loci). The diagonals that are not column-bounded are the spurious-line side of that mismatch. d10 via taper does not fire as an actionable rule here, because the whole legal angle range only shifts the crop by about a centimetre and round 2 proved a null.",
+    "failure_mode": "f_pattern_mismatch",
+    "rationale": "Keep the reference unfolding, curvature, radial gate, vertical accumulator, segment width, and angle. Those either still outscore round 1 or, for angle, cannot move the four features. Tighten the knobs round 1 loosened, and raise the horizontal vote that round 1 never touched: oblique threshold 35\u219250, oblique gap 60\u219242, horizontal gap 15\u21928, horizontal threshold 35\u219250, pattern tolerance 10\u21927. That asks for shorter, stronger joints and a tighter pattern so the scattered slope points are not promoted the way they were in round 1. Set sam.K_height to 1120, the block height in the only joint example that raised correspondence without a ring error, because that actually resizes the K row; do not use that example's oblique relaxation, degree-3 fit, or 7\u00b0 taper. Stay clear of the tight high radial gate and the narrow segment width that collapsed fill.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9399161465063901,
+    "denoise_retained_ratio": 0.7610957754105794,
+    "depth_nan_ratio": 0.22606519178835907,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.49641103135625236,
+    "correspondence_f1@15": 0.31631231380836355,
+    "chamfer_sym_px": 100.37827491760254,
+    "sam_fill_rate": 0.7498479335788826,
+    "phase_incoherence_deg": 32.0
+  },
+  "score": 0.6217242983019984,
+  "score_raw": 0.6217242983019984,
+  "band": "refine",
+  "gt_miou": 0.633,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6504471704561834,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36527770315648833,
+    "sam_fill_rate": 0.7516065103119458,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22606519178835907
+  },
+  "elapsed_s": 234.7,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-1/round3/params",
+  "finished_at": "2026-09-19T21:32:31"
+}

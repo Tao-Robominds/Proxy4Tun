@@ -1,0 +1,51 @@
+{
+  "subset": "3-8",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 1,
+  "overlay": {
+    "unfolding": {
+      "polynomial_degree": 3
+    }
+  },
+  "proposal": {
+    "observation": "The centreline residual is 24.0 cm, above the 10.0 cm unlock gate, while orientation agreement is 0.9995 and the recovered ring count matches all 10 expected rings. The overlays show coherent ring columns but visibly slanted transverse structure, consistent with geometric unrolling error rather than a ring-count failure.",
+    "rule": "When centreline residual is high but axis orientation and ring count remain coherent, treat the geometry as centre-curve under-fit before changing downstream detection or SAM priors.",
+    "failure_mode": "stage_1_centreline.f_curve_overfit (under-fit branch: a degree-2 centre curve is too rigid for the observed scan curvature)",
+    "rationale": "Stage 1 is explicitly unlocked. Raising the centre-curve polynomial degree from the ontology default of 2 to the bounded maximum of 3 directly targets the large residual while leaving the already-correct ring count and coherent downstream prompt layout undisturbed.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 3.4688560301359703,
+    "orient_agreement": 0.9990039946365634,
+    "denoise_retained_ratio": 0.7271023581920254,
+    "depth_nan_ratio": 0.21622540322690537,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5092748735244519,
+    "correspondence_f1@15": 0.2996883037358452,
+    "chamfer_sym_px": 86.07421684265137,
+    "sam_fill_rate": 0.5141664132302053,
+    "phase_incoherence_deg": 2.6
+  },
+  "score": 0.535947163137876,
+  "score_raw": 0.535947163137876,
+  "band": "refine",
+  "gt_miou": 0.642,
+  "residual_cm": 31.100000000000005,
+  "incumbent_before_score": 0.5709255888387867,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3022120169979324,
+    "sam_fill_rate": 0.596949720945907,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.18208811279684348
+  },
+  "elapsed_s": 214.3,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-8/round1/params",
+  "finished_at": "2026-09-19T22:53:53"
+}

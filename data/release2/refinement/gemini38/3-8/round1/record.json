@@ -1,0 +1,56 @@
+{
+  "subset": "3-8",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "unfolding": {
+      "polynomial_degree": 3,
+      "ransac_threshold": 0.92
+    },
+    "detecting": {
+      "hough_threshold_oblique": 30,
+      "maxLineGap_oblique": 40
+    }
+  },
+  "proposal": {
+    "observation": "Stage-1 residual is 24 cm, above the 10 cm gate, while orientation agreement is 0.9995 and ring_count_error is already 0. The detection image has exactly ten evenly spaced vertical ring lines (about 111 px apart). Circumferential joint segments are missing on the left four of those rings: the green band near y=651-683 and the red band near y=737-754 both start only at x\u2248529, and the blue horizontal fallback is two short stubs on the right. The ten prompt centres are one propagated row at a single Y. Proxy weakness matches that geometry: correspondence_f1@15 is 0.302, chamfer is 82 px, and only 46% of edges are explained. Depth NaN is 0.182 and is concentrated in the leading tenth of the depth map; denoise retention is 0.726, so the radial gate is not collapsed. Phase incoherence is only 2.5\u00b0, and the label panel already shows the K/A/B sequence across ten rings.",
+    "rule": "A centre-curve residual above the gate, with the axis already agreed and the ring count already exact, is f_curve_overfit (under-fit), not a wrong axis and not a slice-spacing error. That distorted unroll is upstream of the low correspondence and of joints that are too faint to vote on the leading rings. Do not change slice_spacing_factor. Once the curve can move, the left-ring gap plus a flat propagated prompt row is f_missing_lines: lower the oblique Hough vote and raise maxLineGap so fragmented circumferential joints can form. Leave the vertical threshold alone, because it already returns exactly ten rings.",
+    "failure_mode": "f_curve_overfit",
+    "rationale": "polynomial_degree 3 is the in-bound step from the ontology default degree 2 that can absorb a 24 cm residual on a continuous span without touching slice spacing, which is what keeps ring_count_error at 0. ransac_threshold 0.92 sits inside [0.8, 1.2] and is tighter than the bound centre so outlier ellipse centres are not free to hold the residual open; it is not pushed to the 0.8 floor. hough_threshold_oblique 30 and maxLineGap_oblique 40 relax only the oblique detector that failed on the left four rings, staying clear of the 20 and 60 floors. Vertical Hough, the radial and theta gates, curvature, pattern_tolerance, uniform_k_snap, and all SAM template keys are left unchanged: the development full overlays that moved those together lowered fill and raised NaN, the vertical lines and the K/A/B layout are already complete, and phase is already small. Stage-1 is unlocked, so the unfolding keys are in scope.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 3.4688560301359703,
+    "orient_agreement": 0.9990039946365634,
+    "denoise_retained_ratio": 0.7271023581920254,
+    "depth_nan_ratio": 0.21622540322690537,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.509704641350211,
+    "correspondence_f1@15": 0.283358712263162,
+    "chamfer_sym_px": 85.77958488464355,
+    "sam_fill_rate": 0.5141664132302053,
+    "phase_incoherence_deg": 2.6
+  },
+  "score": 0.5265623737022858,
+  "score_raw": 0.5265623737022858,
+  "band": "refine",
+  "gt_miou": 0.642,
+  "residual_cm": 31.100000000000005,
+  "incumbent_before_score": 0.5709255888387867,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3022120169979324,
+    "sam_fill_rate": 0.596949720945907,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.18208811279684348
+  },
+  "elapsed_s": 214.1,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-8/round1/params",
+  "finished_at": "2026-09-19T19:22:50"
+}

@@ -1,0 +1,52 @@
+{
+  "subset": "1-5",
+  "family": "staggered",
+  "arm": "gpt56_medium",
+  "round": 3,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.25,
+      "mask_r_high": 2.87
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 preserved all 10 rings and improved sam_fill_rate from 0.7404 to 0.7481, boundary_explained_edge@25 from 0.8359 to 0.8531, chamfer_sym_px from 84.29 to 81.29, and phase_incoherence_deg from 24.2 to 18.7. However, depth_nan_ratio increased from 0.1204 to 0.1271 and correspondence_f1@15 remained effectively flat at 0.3216. The after depth map still contains internal voids, especially in the sparse left portion, while the prompt set remains complete and regularly ordered.",
+    "rule": "When an accepted incumbent has correct ring count and improved downstream alignment but a worse depth-hole ratio, preserve its enhancement, detection, and SAM settings and modestly widen the radial retention interval to recover lining support before projection.",
+    "failure_mode": "stage_2_denoise.f_over_gate propagating to stage_3_upsample.f_depth_holes",
+    "rationale": "The accepted incumbent already improved downstream structure, so changing Hough or SAM settings risks discarding that gain. Lowering mask_r_low from 2.2712 to 2.25 and raising mask_r_high from 2.8500 to 2.87 widens the retained radial band conservatively within bounds, targeting spatially missing lining support without touching locked unfolding. This is a targeted hypothesis based on the increased depth_nan_ratio and visible voids; no effect is attributed to either endpoint independently.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991680441522386,
+    "denoise_retained_ratio": 0.7871589271603217,
+    "depth_nan_ratio": 0.14624133089854022,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8217384685644695,
+    "correspondence_f1@15": 0.3215936573085326,
+    "chamfer_sym_px": 84.54667282104492,
+    "sam_fill_rate": 0.7455055082973086,
+    "phase_incoherence_deg": 22.3
+  },
+  "score": 0.6376648480969831,
+  "score_raw": 0.6376648480969831,
+  "band": "refine",
+  "gt_miou": 0.669,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6419486165743467,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3215874232049545,
+    "sam_fill_rate": 0.7480909217682331,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12714124339136773
+  },
+  "elapsed_s": 270.0,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/1-5/round3/params",
+  "finished_at": "2026-09-20T01:17:06"
+}

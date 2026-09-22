@@ -1,0 +1,51 @@
+{
+  "subset": "3-6",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 2,
+  "overlay": {
+    "sam": {
+      "angle": 7.0
+    }
+  },
+  "proposal": {
+    "observation": "The round-1 angle=4.5 trial left the depth map, detected lines, and ten prompt centres unchanged, but reduced correspondence_f1@15 by 0.028154 and slightly reduced SAM fill. The unchanged incumbent therefore remains preferable, and the controlled result indicates that moving the SAM taper angle downward was the wrong direction.",
+    "rule": "When an isolated bounded template-geometry change worsens correspondence while upstream artifacts and ring count remain unchanged, retain the incumbent pipeline and test a conservative move in the opposite direction for that same geometry parameter.",
+    "failure_mode": "stage_5_segmentation.f_template_mismatch",
+    "rationale": "Setting the SAM taper angle to 7.0 tests the opposite side of the bounded template-angle hypothesis on the unchanged incumbent. It leaves the correct ten-ring detection, prompt locations, depth holes, and locked unfolding stage untouched; the round-1 single-parameter rejection provides direct directional evidence for this follow-up.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9998273166785221,
+    "denoise_retained_ratio": 0.6947482510592177,
+    "depth_nan_ratio": 0.1052027439356335,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5736665423349496,
+    "correspondence_f1@15": 0.5025972948192823,
+    "chamfer_sym_px": 61.886231422424316,
+    "sam_fill_rate": 0.6517883535323677,
+    "phase_incoherence_deg": 0.8
+  },
+  "score": 0.7180505049291129,
+  "score_raw": 0.7180505049291129,
+  "band": "accept",
+  "gt_miou": 0.837,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6966921252558986,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.46700890973588527,
+    "sam_fill_rate": 0.6490524518014911,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.1052027439356335
+  },
+  "elapsed_s": 188.1,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-6/round2/params",
+  "finished_at": "2026-09-19T23:50:11"
+}

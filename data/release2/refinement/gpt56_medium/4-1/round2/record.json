@@ -1,0 +1,52 @@
+{
+  "subset": "4-1",
+  "family": "complex",
+  "arm": "gpt56_medium",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 25,
+      "maxLineGap_oblique": 80
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 improved correspondence_f1@15 by 0.008321 and reduced depth_nan_ratio by 0.011223 while preserving all 10 rings, but sam_fill_rate fell by 0.006621. The after image still shows sparse oblique detections and many horizontal fallback lines; the prompt set changed only slightly, so prompt geometry remains the clearest remaining bottleneck.",
+    "rule": "Retain the accepted incumbent across unfolding, denoising, enhancement, and SAM, and make a small detection-only refinement. When oblique-line yield remains sparse and horizontal fallback dominates, relax only the oblique Hough acceptance within bounds.",
+    "failure_mode": "stage_4_detection.f_missing_lines: too few usable oblique lines leave prompt centres dependent on horizontal fallback, limiting boundary correspondence.",
+    "rationale": "The accepted full overlay already improved depth completeness and correspondence without changing ring count, so replacing its upstream or SAM settings would risk losing demonstrated gains. Lowering the incumbent oblique threshold from 27 to the bounded minimum of 25 and raising its maximum line gap from 74 to the bounded maximum of 80 is a narrow follow-up intended to admit weak or fragmented oblique joints. This is a new partial overlay on the round-1 incumbent; no per-parameter causal effect is asserted.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9399161465063901,
+    "denoise_retained_ratio": 0.7610957754105794,
+    "depth_nan_ratio": 0.22606519178835907,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4256728120364484,
+    "correspondence_f1@15": 0.26941406258650435,
+    "chamfer_sym_px": 80.97832679748535,
+    "sam_fill_rate": 0.7516065103119458,
+    "phase_incoherence_deg": 28.9
+  },
+  "score": 0.5953533193464728,
+  "score_raw": 0.5953533193464728,
+  "band": "refine",
+  "gt_miou": 0.732,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6550547172691565,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.373598457503842,
+    "sam_fill_rate": 0.7449855463470147,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.21484203056029164
+  },
+  "elapsed_s": 235.5,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/4-1/round2/params",
+  "finished_at": "2026-09-20T00:06:51"
+}

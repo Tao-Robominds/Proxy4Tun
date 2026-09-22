@@ -1,0 +1,53 @@
+{
+  "subset": "3-10",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 104,
+      "hough_threshold_oblique": 20,
+      "maxLineGap_oblique": 56
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was accepted: detecting binary_threshold 110, hough_threshold_oblique 22, maxLineGap_oblique 48 moved the proxy 0.603\u21920.634. correspondence_f1@15 rose 0.287\u21920.341 (+0.054), boundary_explained_edge@25 rose to 0.500, and chamfer_sym_px fell 80\u219267. sam_fill_rate stayed 0.698, ring_count_error stayed 0, and depth_nan_ratio stayed 0.142. On the after detected-lines image the positive-angle (red) track now covers almost every ring except the second column, where joint pixels at about y=1630 are still uncovered. The negative-angle (green) track near y=1480 is only present from about x=1375 rightward, although signal remains in some columns to the left. A few short spurious red ticks sit off those tracks. Prompts are still one propagated row at y\u22481555, which is the continuous-family K-row snap, not a new failure. Stage-1 residual is still 10.20 cm with orient_agreement 0.999.",
+    "rule": "When a sparse oblique relax raises correspondence and leaves fill, ring count, and depth NaN unchanged, take one smaller step in that same direction for the rings still missing a track. Do not open denoising, SAM, or unfolding, and do not copy the development joint overlays that lowered the proxy.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "The accepted step recovered most of the positive-angle track but left the negative-angle track absent on the left rings and one positive-angle ring open. Those missing segments are why boundary_explained_edge is still 0.50 and chamfer is still 67 px. Correspondence is line-to-boundary F1, so the next change stays on the oblique detector that just moved it. From the accepted state, lower binary_threshold 110\u2192104 so fainter left-side joint pixels pass THRESH_BINARY, lower hough_threshold_oblique 22\u219220 (bound floor) so the weak negative-angle votes and the second-ring gap can pass, and raise maxLineGap_oblique 48\u219256 so short fragments in those columns can join. These three values are the full detecting overlay on the family reference, so the accepted round-1 setting is not reverted. uniform_k_snap, vertical Hough, SAM, denoising, and unfolding stay at the reference: the propagated K row is the continuous snap design, and the development overlays that disabled it or moved those stages cut fill and correspondence.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9990592937874491,
+    "denoise_retained_ratio": 0.7404734761200185,
+    "depth_nan_ratio": 0.14202755710717666,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5453610896941661,
+    "correspondence_f1@15": 0.3575517202314777,
+    "chamfer_sym_px": 64.76179885864258,
+    "sam_fill_rate": 0.6970917117423048,
+    "phase_incoherence_deg": 1.2
+  },
+  "score": 0.6430664710872571,
+  "score_raw": 0.6430664710872571,
+  "band": "refine",
+  "gt_miou": 0.854,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6339875171900373,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3414865926372692,
+    "sam_fill_rate": 0.6975566174270906,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.14202755710717666
+  },
+  "elapsed_s": 187.7,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-10/round2/params",
+  "finished_at": "2026-09-19T20:13:19"
+}

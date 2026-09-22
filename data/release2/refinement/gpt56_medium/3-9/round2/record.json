@@ -1,0 +1,51 @@
+{
+  "subset": "3-9",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 2,
+  "overlay": {
+    "sam": {
+      "angle": 7.0
+    }
+  },
+  "proposal": {
+    "observation": "The round-1 angle reduction left detected lines, prompt centres, depth-map holes, and the 10-ring layout unchanged, but reduced correspondence_f1@15 by 0.010034 and sam_fill_rate by 0.003583; the visible change is confined to stage-5 mask geometry.",
+    "rule": "When a one-parameter template-angle move degrades correspondence and fill without changing upstream artifacts, return to the unchanged incumbent and test the opposite bounded direction rather than altering stable detection or coverage stages.",
+    "failure_mode": "f_template_mismatch",
+    "rationale": "The rejected 4.5-degree taper provides direct directional feedback that a shallower template is harmful for this subset. A 7.0-degree taper tests a moderately steeper template on the unchanged incumbent while preserving the correct prompt spacing, ring count, depth-hole ratio, and locked unfolding.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9992437316181036,
+    "denoise_retained_ratio": 0.7719211863424968,
+    "depth_nan_ratio": 0.13082197231971604,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4716106604866744,
+    "correspondence_f1@15": 0.37297407396630483,
+    "chamfer_sym_px": 75.83143615722656,
+    "sam_fill_rate": 0.7302593469158074,
+    "phase_incoherence_deg": 1.1
+  },
+  "score": 0.6649189608600792,
+  "score_raw": 0.6649189608600792,
+  "band": "refine",
+  "gt_miou": 0.821,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6591558534408575,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36367764129925506,
+    "sam_fill_rate": 0.7289890931960742,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.13082197231971604
+  },
+  "elapsed_s": 189.2,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-9/round2/params",
+  "finished_at": "2026-09-19T23:59:36"
+}

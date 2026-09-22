@@ -1,0 +1,51 @@
+{
+  "subset": "3-3",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 1,
+  "overlay": {
+    "sam": {
+      "angle": 5.0
+    }
+  },
+  "proposal": {
+    "observation": "The recovered ring count is exactly 10 and SAM fill is high (0.780), but correspondence_f1@15 is only 0.113. The overlays show complete vertical ring coverage while the detected oblique joint traces are sparse and shallow, concentrated in a narrow horizontal band.",
+    "rule": "When ring count and coverage are healthy but boundary correspondence is poor, preserve the locked unfolding and ring geometry, and adjust the stage-5 template taper to better match the observed shallow joint orientation.",
+    "failure_mode": "f_template_mismatch",
+    "rationale": "The evidence points to boundary/template alignment rather than missing rings or broad under-coverage. A conservative in-bounds taper angle near the shallow end should better align segment templates with the visible oblique joints while avoiding changes to the correctly recovered ring count and the locked unfolding stage.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.99996584722565,
+    "denoise_retained_ratio": 0.81787798500355,
+    "depth_nan_ratio": 0.11387375767737186,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.14029345372460497,
+    "correspondence_f1@15": 0.06692466165773442,
+    "chamfer_sym_px": 100.20336055755615,
+    "sam_fill_rate": 0.7793478449096923,
+    "phase_incoherence_deg": 1.7
+  },
+  "score": 0.5083185083912996,
+  "score_raw": 0.5083185083912996,
+  "band": "refine",
+  "gt_miou": 0.807,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5349146506285205,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.11284116113121614,
+    "sam_fill_rate": 0.7799747173013317,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11387375767737186
+  },
+  "elapsed_s": 193.3,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-3/round1/params",
+  "finished_at": "2026-09-19T22:40:37"
+}

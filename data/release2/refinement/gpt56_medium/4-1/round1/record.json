@@ -1,0 +1,75 @@
+{
+  "subset": "4-1",
+  "family": "complex",
+  "arm": "gpt56_medium",
+  "round": 1,
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 0.9714595459401607,
+      "slice_spacing_factor": 1.8489205356687308,
+      "polynomial_degree": 3,
+      "random_seed": 0
+    },
+    "denoising": {
+      "mask_r_low": 3.6008071053773163,
+      "mask_r_high": 3.794932061433792
+    },
+    "enhancing": {
+      "curvature_threshold": 0.00036597516089677815
+    },
+    "detecting": {
+      "binary_threshold": 127,
+      "hough_threshold_oblique": 27,
+      "hough_threshold_horizontal": 60,
+      "hough_threshold_vertical": 4306,
+      "maxLineGap_oblique": 74,
+      "maxLineGap_horizontal": 28,
+      "pattern_tolerance": 11
+    },
+    "sam": {
+      "segment_width": 1874,
+      "K_height": 1120.300923474133,
+      "angle": 11.78815640322864
+    }
+  },
+  "proposal": {
+    "observation": "The expected 10 rings are recovered and SAM fill is substantial (0.7516), but correspondence_f1@15 is low (0.3653) and depth_nan_ratio remains high (0.2261). The detected-line overlay is dominated by vertical guides and horizontal fallback lines, with comparatively sparse oblique evidence, while the masks retain all 10 broad ring instances.",
+    "rule": "Preserve the correct ring count while jointly improving prompt-to-boundary correspondence and depth-map completeness. For a complex, stage-1-unlocked case, use the only worked overlay whose measured joint response improved correspondence_f1@15 and depth_nan_ratio without changing ring_count_error.",
+    "failure_mode": "Primary: stage_4_detection.f_missing_lines with likely upstream stage_3_upsample.f_joint_oversmoothed / f_depth_holes; secondary risk: stage_5_segmentation.f_crop_offset from weak or fallback-dominated prompt geometry.",
+    "rationale": "This is a condition-matched transfer from complex-correspondencef1at15-improve-s021: its full joint overlay increased correspondence_f1@15, reduced depth_nan_ratio, and preserved zero ring-count error. The current case has the same family and expected ring count, a lower correspondence score, and similar fill/depth-hole pressure. Stage 1 is explicitly unlocked, so the unfolding settings are admissible. Because the example reports only a joint outcome, no individual parameter effect is claimed.",
+    "full": true
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 1.2237754316221157,
+    "orient_agreement": 0.9397505922400965,
+    "denoise_retained_ratio": 0.7559316584932634,
+    "depth_nan_ratio": 0.21484203056029164,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4831627068443758,
+    "correspondence_f1@15": 0.373598457503842,
+    "chamfer_sym_px": 95.94448852539062,
+    "sam_fill_rate": 0.7449855463470147,
+    "phase_incoherence_deg": 33.4
+  },
+  "score": 0.6550547172691565,
+  "score_raw": 0.6550547172691565,
+  "band": "refine",
+  "gt_miou": 0.742,
+  "residual_cm": 2.4,
+  "incumbent_before_score": 0.6504471704561834,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36527770315648833,
+    "sam_fill_rate": 0.7516065103119458,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22606519178835907
+  },
+  "elapsed_s": 253.3,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/4-1/round1/params",
+  "finished_at": "2026-09-19T23:04:33"
+}

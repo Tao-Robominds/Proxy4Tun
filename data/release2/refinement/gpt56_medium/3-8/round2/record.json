@@ -1,0 +1,51 @@
+{
+  "subset": "3-8",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 30
+    }
+  },
+  "proposal": {
+    "observation": "The rejected degree-3 unfolding trial left ring count unchanged but reduced SAM fill by 0.082783 and increased depth NaNs by 0.034137, so it should not be repeated. On the unchanged incumbent, the detected-lines image contains only sparse, fragmented oblique detections while all 10 regularly spaced prompt centres are shown as propagated, indicating reliance on propagation rather than direct joint evidence.",
+    "rule": "When ring spacing and count are coherent but oblique line yield is sparse and prompt centres are propagated, apply the ontology's relax-Hough remediation before changing SAM geometry or unfolding.",
+    "failure_mode": "stage_4_detection.f_missing_lines",
+    "rationale": "Lowering the oblique Hough accumulator threshold to a moderate in-bounds value should admit more of the visible fragmented joint evidence and reduce dependence on propagated centres. This keeps the unchanged incumbent's successful degree-2 unfolding, exact 10-ring count, and all SAM geometry fixed.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9995216099864935,
+    "denoise_retained_ratio": 0.7258077773485341,
+    "depth_nan_ratio": 0.18208811279684348,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.45966830003769316,
+    "correspondence_f1@15": 0.3022120169979324,
+    "chamfer_sym_px": 82.05291843414307,
+    "sam_fill_rate": 0.596949720945907,
+    "phase_incoherence_deg": 2.5
+  },
+  "score": 0.5709255888387867,
+  "score_raw": 0.5709255888387867,
+  "band": "refine",
+  "gt_miou": 0.723,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5709255888387867,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3022120169979324,
+    "sam_fill_rate": 0.596949720945907,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.18208811279684348
+  },
+  "elapsed_s": 184.4,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-8/round2/params",
+  "finished_at": "2026-09-19T23:56:25"
+}

@@ -1,0 +1,61 @@
+{
+  "subset": "4-1",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "unfolding": {
+      "polynomial_degree": 3,
+      "ransac_threshold": 0.97
+    },
+    "enhancing": {
+      "curvature_threshold": 0.000366
+    },
+    "detecting": {
+      "hough_threshold_oblique": 27,
+      "maxLineGap_oblique": 74,
+      "maxLineGap_horizontal": 25,
+      "pattern_tolerance": 12
+    }
+  },
+  "proposal": {
+    "observation": "Incumbent proxy 0.650 is limited by correspondence_f1@15=0.365. Ring count is already exact (error 0) and sam_fill_rate=0.752 is healthy; depth_nan_ratio=0.226 is elevated but secondary. The detected-line image has ten regular vertical bands, but oblique fragments are short and scarce and the horizontal segments are sparse and staggered, leaving many ring columns without a joint. Intersection points are mostly assume-fallbacks in an irregular zigzag rather than a slope-intersection lattice. Stage-1 residual is 13.5 cm, above the 10 cm gate. Chamfer 80 px and phase incoherence 33.5 deg match prompts sitting off the joints.",
+    "rule": "d7: oblique line yield is low and detection has fallen back to sparse horizontals plus assume points. Upstream, residual above the gate with polynomial degree 2 is an under-fit centre curve, and the reference curvature_threshold 0.0005 is consistent with d6 (faint joints) feeding d7. Ring count and fill do not fire spurious-line, missing-edge-ring, or coverage-collapse rules, so the vertical accumulator and SAM template sizes stay at the reference.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "The only joint example that raised correspondence without a ring error (complex-correspondencef1at15-improve-s021) relaxed oblique Hough and slightly lowered curvature while keeping ring_count_error at 0. The depth-nan chase (s005) and the tight high radial gate (s016) both damaged correspondence or fill, so those overlays are not copied. Apply the same oblique relaxation (threshold 27, maxLineGap 74), bridge broken horizontal fragments (maxLineGap 25, not a higher horizontal vote threshold \u2014 horizontals are already sparse), and loosen pattern tolerance only from 10 to 12. Lower curvature_threshold to 0.000366 so joints are not flattened before detection. Stage 1 is unlocked, so set polynomial_degree 3 and ransac_threshold 0.97 for the 13.5 cm residual, and leave slice spacing, the radial gate, vertical Hough, and SAM width/height/angle unchanged so the exact ten-ring layout and healthy fill are not retuned in the same step.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 2.388762789235098,
+    "orient_agreement": 0.939778379559834,
+    "denoise_retained_ratio": 0.7596512111643188,
+    "depth_nan_ratio": 0.23030425401901342,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4423977853492334,
+    "correspondence_f1@15": 0.2790868956101418,
+    "chamfer_sym_px": 76.41157627105713,
+    "sam_fill_rate": 0.7500246991114194,
+    "phase_incoherence_deg": 29.5
+  },
+  "score": 0.5996273002000608,
+  "score_raw": 0.5996273002000608,
+  "band": "refine",
+  "gt_miou": 0.715,
+  "residual_cm": 9.9,
+  "incumbent_before_score": 0.6504471704561834,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36527770315648833,
+    "sam_fill_rate": 0.7516065103119458,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22606519178835907
+  },
+  "elapsed_s": 250.9,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-1/round1/params",
+  "finished_at": "2026-09-19T19:33:24"
+}

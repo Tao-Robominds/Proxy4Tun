@@ -1,0 +1,58 @@
+{
+  "subset": "4-1",
+  "family": "complex",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 0.97,
+      "slice_spacing_factor": 1.85,
+      "polynomial_degree": 3,
+      "random_seed": 0
+    },
+    "denoising": {
+      "mask_r_low": 3.6,
+      "mask_r_high": 3.8
+    }
+  },
+  "proposal": {
+    "observation": "Round-2 feedback: binary_threshold 115 + pattern_tolerance 18 + K_height 1220 + angle 9.0 produced a detected_lines.png and initial_prompt_points.png that are pixel-identical to the incumbent (same 10 vertical joints, same ~8 oblique segments, same 7 'assume' / 2 negative / 1 positive / 2 midpoint centres) and only a -0.005 change in correspondence_f1@15 (0.365 -> 0.360) with sam_fill_rate, ring_count_error and depth_nan_ratio exactly unchanged. Together with round 1 (Hough/curvature relaxation: line set essentially unchanged, one centre flipped to 'assume', f1 -0.09), two rounds show that on 4-1 the whole stage-4/stage-5 parameter block is inert: the outlier map that feeds detection is fixed upstream, and the SAM template geometry is already near the measured block geometry. The remaining weaknesses are upstream: the packet reports stage-1 unlocked because the centreline residual is 13.5 cm against a 10 cm gate, phase_incoherence is 33.5 deg and chamfer 80 px, and the depth map carries 22.6% NaN (left-column void, top/bottom margins, mid-height horizontal strip). The K-block chevrons in the outlier map are dotted and slightly wavy across rings, which is the signature of an imperfect unroll (f_curve_overfit) rather than of Hough settings.",
+    "rule": "Stage-1 residual above gate + wavy/dotted joint strokes + downstream stage-4/5 parameters proven inert -> stage_1_centreline.f_curve_overfit with inter-stage effect on stage_3 density uniformity / joint contrast and stage_4 f_missing_lines. Per orchestration_hint, defer to the upstream stage: change the unfolding fit (RANSAC threshold, slice spacing, degree-3 centre curve, fixed seed) and pair it with the radial gate used by the only condition-matched improving analogue.",
+    "failure_mode": "stage_1_centreline.f_curve_overfit -> stage_3_upsample.f_joint_oversmoothed -> stage_4_detection.f_missing_lines (joints not straight/continuous enough in the unrolled map for oblique Hough to fire; prompt centres fall back to 'assume')",
+    "rationale": "Two rounds have exhausted the downstream levers with null or negative response, so the final round uses the one lever that is both unlocked on this case and supported by the only condition-matched improving dev analogue: complex-correspondencef1at15-improve-s021 (same family, same dominant concern, expected_rings=10, stage-1 unlocked) raised correspondence_f1@15 0.446 -> 0.460 and lowered depth_nan_ratio 0.208 -> 0.197 with ring_count_error staying 0, using unfolding ransac_threshold 0.971, slice_spacing_factor 1.849, polynomial_degree 3, random_seed 0 and a radial band of 3.60 / 3.79. The two failing analogues (s005, s016) also used degree 3 but with slice_spacing_factor at the extremes (1.97 and 1.72) and broke ring_count_error, so slice_spacing_factor is held at the s021 mid value 1.85 to protect the ring count, which is currently perfect. This overlay adopts s021's unfolding block (ransac 0.97, spacing 1.85, degree 3, seed 0) and its radial gate (mask_r_low 3.60, mask_r_high 3.80, the latter rounded up 5 mm for safety inside [3.75, 4.05]), and deliberately leaves enhancing, detecting and sam at incumbent values, because rounds 1-2 showed those parameters do not move the outlier map or prompt centres on this scan. Expected joint response: straighter unrolled joints -> more continuous chevron strokes -> more oblique intersections replacing 'assume' centres -> higher correspondence_f1@15, with a small depth_nan_ratio improvement as in s021. Joint outcome; no per-parameter attribution claimed. All values inside configs/bounds/complex.json; unfolding is touched only because stage1_unlocked is true.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 1.2237754316221157,
+    "orient_agreement": 0.9397505922400965,
+    "denoise_retained_ratio": 0.7578013144733589,
+    "depth_nan_ratio": 0.21277230550868545,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4844687516593214,
+    "correspondence_f1@15": 0.24649701704293125,
+    "chamfer_sym_px": 80.04394817352295,
+    "sam_fill_rate": 0.7485865432832569,
+    "phase_incoherence_deg": 30.2
+  },
+  "score": 0.583571679673428,
+  "score_raw": 0.583571679673428,
+  "band": "refine",
+  "gt_miou": 0.641,
+  "residual_cm": 2.4,
+  "incumbent_before_score": 0.6504471704561834,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36527770315648833,
+    "sam_fill_rate": 0.7516065103119458,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22606519178835907
+  },
+  "elapsed_s": 253.7,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/4-1/round3/params",
+  "finished_at": "2026-09-19T14:55:16"
+}

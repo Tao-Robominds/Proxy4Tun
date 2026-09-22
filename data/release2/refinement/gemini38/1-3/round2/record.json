@@ -1,0 +1,56 @@
+{
+  "subset": "1-3",
+  "family": "staggered",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.005
+    },
+    "detecting": {
+      "binary_threshold": 150,
+      "hough_threshold_oblique": 56,
+      "maxLineGap_oblique": 30
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was rejected: score 0.6474 to 0.6382, correspondence_f1@15 0.3370 to 0.3223, sam_fill_rate 0.7349 to 0.7326, ring_count_error still 0, depth_nan_ratio unchanged at 0.122. The applied overlay lowered hough_threshold_oblique 50 to 44, raised maxLineGap_oblique 40 to 64, raised hough_threshold_horizontal 50 to 80, and raised inter_radius 0.06 to 0.068. After that, ring 5 gained extra oblique crossings (a new red/green pair near image y=1629/2036) and its midpoint prompt jumped from y=1235 to y=1833. Rings 0 and 2 were not repaired: centre 0 is still an assume at y=1123, and centre 2 is still a lone negative-slope hit at y=2278. Green segments increased 18 to 25. Stage 1 remains locked.",
+    "rule": "d9 / r_tighten_hough: extra oblique intersections produced a false prompt centre, so the miss is f_spurious_lines, not f_missing_lines. The round-1 relax (lower oblique threshold, larger gap) is the change that added those crossings. Upstream radial retention is already 0.76, so the gate is not the leak; do not widen it.",
+    "failure_mode": "f_spurious_lines",
+    "rationale": "Invert the rejected detection move and do not repeat it. Raise hough_threshold_oblique from 50 to 56 and cut maxLineGap_oblique from 40 to 30 so weak extra pairs are not formed and cannot become merge_positive[0]/merge_negative[0]. Raise binary_threshold from 127 to 150 so dim false edges, including the low negative-slope hits that pin rings 2 and 9, are thinner than the main 6-9 degree joints. If those lone hits drop, the assume rule places ring 2 one stagger step below the y=1200 neighbour and ring 9 one stagger step above the y=1634 neighbour, which is the pattern the good midpoints already follow. Raise curvature_threshold from 0.0005 to 0.005 to densify the segment surface and trim the 0.122 hole ratio without lowering the Hough threshold. Leave horizontal threshold, inter_radius, vertical threshold, z_step, y_bounds, and unfolding at the reference. This stays clear of the development collapse (oblique 76 with binary 109) and of the round-1 values (oblique 44, gap 64, horizontal 80, inter_radius 0.068).",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999867062401834,
+    "denoise_retained_ratio": 0.7630407091253434,
+    "depth_nan_ratio": 0.115542436082846,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8833217993079585,
+    "correspondence_f1@15": 0.28977888240786226,
+    "chamfer_sym_px": 89.59165954589844,
+    "sam_fill_rate": 0.7335057310595471,
+    "phase_incoherence_deg": 6.8
+  },
+  "score": 0.6209254251598058,
+  "score_raw": 0.6209254251598058,
+  "band": "refine",
+  "gt_miou": 0.87,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6473891053236706,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3369665231037002,
+    "sam_fill_rate": 0.7349035504612804,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12176547785903094
+  },
+  "elapsed_s": 275.2,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/1-3/round2/params",
+  "finished_at": "2026-09-19T20:42:57"
+}

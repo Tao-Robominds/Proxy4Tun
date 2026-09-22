@@ -1,0 +1,51 @@
+{
+  "subset": "3-7",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_oblique": 20
+    }
+  },
+  "proposal": {
+    "observation": "Round 1's oblique-Hough relaxation was accepted and improved correspondence_f1@15 from 0.1717 to 0.1819 while fill, ring count, and depth NaN ratio were unchanged. The before/after images retain all 10 regularly spaced prompts and essentially unchanged segmentation, but accepted oblique lines remain sparse and concentrated on the right side.",
+    "rule": "For low oblique-line yield with fragmented joint traces, continue the accepted detection relaxation by lowering the oblique Hough threshold; preserve the maximum line gap and all stages whose measurements remained healthy.",
+    "failure_mode": "stage_4_detection.f_missing_lines",
+    "rationale": "The isolated round-1 response provides direct case-specific evidence that relaxing oblique detection improves the weak correspondence feature without harming coverage or ring count. Lowering hough_threshold_oblique from the accepted incumbent value of 30 to its bounded minimum of 20 is the smallest new continuation; unfolding remains untouched because stage 1 is locked.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991211319489915,
+    "denoise_retained_ratio": 0.7976920114616173,
+    "depth_nan_ratio": 0.16450624232718375,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.20887384846775708,
+    "correspondence_f1@15": 0.16791245432002905,
+    "chamfer_sym_px": 96.97804641723633,
+    "sam_fill_rate": 0.7667991671398826,
+    "phase_incoherence_deg": 1.7
+  },
+  "score": 0.5531073374419073,
+  "score_raw": 0.5531073374419073,
+  "band": "refine",
+  "gt_miou": 0.845,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5611264757251164,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.18186580436868935,
+    "sam_fill_rate": 0.7667991671398826,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.16450624232718375
+  },
+  "elapsed_s": 186.5,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-7/round2/params",
+  "finished_at": "2026-09-19T23:53:19"
+}

@@ -1,0 +1,62 @@
+{
+  "arms": [
+    "gpt56_medium"
+  ],
+  "model": {
+    "gpt56_medium": "gpt-5.6-sol-medium"
+  },
+  "note": "0.770 is the Release 1 deterministic 22-case selected mean, not a GPT-5.6 medium baseline. The GPT-5.6 high arm results were removed.",
+  "gpt56_medium": {
+    "mean_start": 0.7623333333333335,
+    "mean_selected": 0.7643333333333333,
+    "mean_delta": 0.0020000000000000018,
+    "bootstrap": {
+      "point": 0.002785714285714288,
+      "ci95": [
+        7.142857142857149e-05,
+        0.005500000000000005
+      ],
+      "n_boot": 100000,
+      "n_clusters": 4
+    },
+    "up": 3,
+    "same": 12,
+    "down": 0,
+    "worst": 0.0,
+    "policies": {
+      "start": 0.7623333333333335,
+      "round1": 0.7342666666666666,
+      "uniform_round": 0.7522444444444445,
+      "max_proxy": 0.7622,
+      "monotone": 0.7643333333333333,
+      "oracle": 0.7666000000000001,
+      "oracle_recovery": 0.997043221149665,
+      "regret": 0.00226666666666675
+    },
+    "stability": {
+      "n": 45,
+      "n_valid": 45,
+      "mean_proposal_miou": 0.7522444444444443,
+      "std_delta": 0.04670693068204519,
+      "frac_drop_gt_0.05": 0.06666666666666667,
+      "models": [
+        "gpt-5.6-sol-medium"
+      ]
+    },
+    "point_error": {
+      "start": {
+        "correct": 0.8691247671378401,
+        "FN": 0.03236763106595231,
+        "FP": 0.0466626779213899,
+        "swap": 0.05184492387481757
+      },
+      "selected": {
+        "correct": 0.87001331388788,
+        "FN": 0.03223030241709613,
+        "FP": 0.046715481290340824,
+        "swap": 0.05104090240468299
+      }
+    },
+    "all27_delta": 0.0011111111111111122
+  }
+}

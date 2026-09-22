@@ -1,0 +1,61 @@
+{
+  "subset": "1-5",
+  "family": "staggered",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "denoising": {
+      "grad_threshold": 0.22
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0045,
+      "inter_radius": 0.072
+    },
+    "detecting": {
+      "binary_threshold": 148,
+      "hough_threshold_oblique": 66,
+      "hough_threshold_horizontal": 82,
+      "maxLineGap_oblique": 26
+    }
+  },
+  "proposal": {
+    "observation": "Incumbent remains round 1 (score 0.676): correspondence_f1@15 0.384, sam_fill_rate 0.735, ring_count_error 0, depth_nan_ratio 0.114, phase incoherence 13.8\u00b0, chamfer 71 px. Prompt y-values still repeat near 1200 and 1640, and a few rings sit about one AB height off, but positive-slope and negative-slope intersections are still present and oblique segments stay inside the ring columns. Round 2 was rejected (0.676\u21920.650): correspondence \u22120.049, fill +0.015, NaN +0.013, rings still 0. After that overlay the signed-slope classes disappeared (only assume and midpoint markers remain) and blue horizontals thickened at several y levels. Stage-1 residual is 0.00 cm.",
+    "rule": "d8 still fires on the incumbent: spacing is only partly the staggered K/AB pattern. The rejected round made d8 worse by dropping the signed-slope intersections, and depth holes increased after the wider radial gate. d11 does not fire. Do not repeat the looser binary, lower oblique threshold, longer maxLineGap, or wider mask. Stage 1 stays locked.",
+    "failure_mode": "f_pattern_mismatch",
+    "rationale": "Keep the accepted enhancing settings and the horizontal threshold and maxLineGap that left signed slopes inside the columns. Step binary_threshold and hough_threshold_oblique a little further up from that accepted point, still well short of the high-oblique collapse case, so weak extra slants drop without erasing the slope classes. Raise grad_threshold slightly instead of widening the radial gate. Leave mask radii, z_step, the vertical Hough threshold, y_bounds, and every unfolding key unchanged.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991680441522386,
+    "denoise_retained_ratio": 0.7713800957560545,
+    "depth_nan_ratio": 0.11379297231744062,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8453333333333334,
+    "correspondence_f1@15": 0.30860392521174146,
+    "chamfer_sym_px": 89.2023696899414,
+    "sam_fill_rate": 0.7349091247152885,
+    "phase_incoherence_deg": 29.9
+  },
+  "score": 0.6325231177352675,
+  "score_raw": 0.6325231177352675,
+  "band": "refine",
+  "gt_miou": 0.692,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6756026763609266,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3837283830650441,
+    "sam_fill_rate": 0.7346367312787617,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11382149327410482
+  },
+  "elapsed_s": 279.2,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/1-5/round3/params",
+  "finished_at": "2026-09-19T21:06:22"
+}

@@ -1,0 +1,51 @@
+{
+  "subset": "1-3",
+  "family": "staggered",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 150
+    }
+  },
+  "proposal": {
+    "observation": "Two rejected rounds bracket the problem. Round 1 (detector relaxed: oblique 42, gap 60, horizontal 72) lowered correspondence_f1@15 0.337 -> 0.296 and sam_fill_rate 0.735 -> 0.714; round 2 (upstream: grad_threshold 0.22, inter_radius 0.075, curvature 0.005) lowered correspondence_f1@15 0.337 -> 0.293 with fill and NaN essentially unchanged (0.734, 0.117). In both after/detected_lines.png images the outlier map itself is almost identical to the incumbent: the staggered oblique joints stay faint/dotted at every ring row, and the change that actually moved the score was one or two new oblique segments voted inside the dim speckle band at x~1200-1600 (round 1: y~100-200, ~950, ~1400, ~1650, ~2500; round 2: y~1430 at x 1600-1700 and y~2560). Each time this added an off-pattern midpoint ((1330,1500) in round 1, (1330,1815) in round 2) and/or dropped one on-pattern midpoint ((1570,1200) in round 2), and the labelled mask shifted a K/B block off its segment. So the incumbent's 8 on-pattern midpoints in two rows (y~1200, y~1630) are the fragile asset, and any extra line from the speckle band is destructive. Visually, in the binarised outlier map the true joint features (the 'D' markers and vertical joint lines) render bright white, whereas the x~1200-1600 band is a cloud of dim grey speckle pixels; grad_threshold (stage 2) did not remove it, so it is passing the density test and entering Hough at the binarisation step.",
+    "rule": "d9 (stage_4_detection): intersections off the K/AB pattern produced by lines in a non-joint region -> f_spurious_lines. Remediation r_tighten_hough says to check upstream f_under_gate first; that check was done in round 2 (density filter tightened, speckle unchanged, F1 fell), so the remaining in-bounds control at substep s4_2 'Binarise and dilate' is p_bin_threshold: raise it so only bright, systematic joint pixels survive binarisation while the dim speckle does not, which starves spurious oblique/horizontal votes without lowering the accumulator thresholds that the true lines already clear. r_relax_hough (round 1) and stage-3 joint sharpening (round 2) are ruled out by direct evidence.",
+    "failure_mode": "f_spurious_lines",
+    "rationale": "This is a single-lever, low-variance proposal for the final round. Raising detecting.binary_threshold to 150 (bounds 100-160) removes the dim speckle pixels of the x~1200-1600 band before dilation and Hough, so the marginal spurious oblique/horizontal segments that both prior rounds showed to be score-destroying should no longer reach threshold, while the bright joint markers and vertical joint lines that currently produce the 8 on-pattern midpoints and the correct 10-ring vertical band are preserved. Fewer unmatched lines raises correspondence precision, so correspondence_f1@15 (the dominant weakness, chamfer 79 px) should rise, and prompt centres should stay on the incumbent pattern so sam_fill_rate and ring_count_error are protected; depth_nan_ratio is unaffected because stages 2-3 are untouched. Worked-example analogy (joint outcomes, no per-parameter attribution): the only proxy-improving example (s005) used binary_threshold 150, whereas both examples that lowered correspondence_f1@15 used low binarisation (s002: 102, s011: 109); this is the most consistent single direction across all three examples. All other detecting keys, denoising, enhancing and SAM stay at incumbent (start) values because rounds 1 and 2 showed that moving them without first removing the speckle creates off-pattern prompts. Unfolding untouched (stage-1 locked). Value inside configs/bounds/staggered.json.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999867062401834,
+    "denoise_retained_ratio": 0.7630407091253434,
+    "depth_nan_ratio": 0.12176547785903094,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8671805514378891,
+    "correspondence_f1@15": 0.3369665231037002,
+    "chamfer_sym_px": 79.36960983276367,
+    "sam_fill_rate": 0.7349035504612804,
+    "phase_incoherence_deg": 10.0
+  },
+  "score": 0.6473891053236706,
+  "score_raw": 0.6473891053236706,
+  "band": "refine",
+  "gt_miou": 0.827,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6473891053236706,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3369665231037002,
+    "sam_fill_rate": 0.7349035504612804,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12176547785903094
+  },
+  "elapsed_s": 246.3,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/1-3/round3/params",
+  "finished_at": "2026-09-19T14:25:46"
+}

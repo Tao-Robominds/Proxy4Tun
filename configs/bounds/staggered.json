@@ -1,0 +1,151 @@
+{
+  "family": "staggered",
+  "space_key": "t1&2",
+  "source": "bo/runtime/spaces.py _t12_space",
+  "dims": [
+    {
+      "name": "ransac_threshold",
+      "stage": "unfolding",
+      "key": "ransac_threshold",
+      "kind": "float",
+      "low": 0.8,
+      "high": 1.2,
+      "special": null
+    },
+    {
+      "name": "slice_spacing_factor",
+      "stage": "unfolding",
+      "key": "slice_spacing_factor",
+      "kind": "float",
+      "low": 1.05,
+      "high": 1.35,
+      "special": null
+    },
+    {
+      "name": "polynomial_degree",
+      "stage": "unfolding",
+      "key": "polynomial_degree",
+      "kind": "int",
+      "low": 2,
+      "high": 3,
+      "special": null
+    },
+    {
+      "name": "random_seed",
+      "stage": "unfolding",
+      "key": "random_seed",
+      "kind": "int",
+      "low": 0,
+      "high": 7,
+      "special": null
+    },
+    {
+      "name": "mask_r_low",
+      "stage": "denoising",
+      "key": "mask_r_low",
+      "kind": "float",
+      "low": 2.2,
+      "high": 2.5,
+      "special": null
+    },
+    {
+      "name": "mask_r_high",
+      "stage": "denoising",
+      "key": "mask_r_high",
+      "kind": "float",
+      "low": 2.7,
+      "high": 2.9,
+      "special": null
+    },
+    {
+      "name": "z_step",
+      "stage": "denoising",
+      "key": "z_step",
+      "kind": "float",
+      "low": 0.001,
+      "high": 0.008,
+      "special": null
+    },
+    {
+      "name": "grad_threshold",
+      "stage": "denoising",
+      "key": "grad_threshold",
+      "kind": "float",
+      "low": 0.1,
+      "high": 0.25,
+      "special": null
+    },
+    {
+      "name": "curvature_threshold",
+      "stage": "enhancing",
+      "key": "curvature_threshold",
+      "kind": "float",
+      "low": 0.0003,
+      "high": 0.008,
+      "special": null
+    },
+    {
+      "name": "inter_radius",
+      "stage": "enhancing",
+      "key": "inter_radius",
+      "kind": "float",
+      "low": 0.02,
+      "high": 0.08,
+      "special": null
+    },
+    {
+      "name": "binary_threshold",
+      "stage": "detecting",
+      "key": "binary_threshold",
+      "kind": "int",
+      "low": 100,
+      "high": 160,
+      "special": null
+    },
+    {
+      "name": "hough_threshold_oblique",
+      "stage": "detecting",
+      "key": "hough_threshold_oblique",
+      "kind": "int",
+      "low": 40,
+      "high": 90,
+      "special": null
+    },
+    {
+      "name": "hough_threshold_horizontal",
+      "stage": "detecting",
+      "key": "hough_threshold_horizontal",
+      "kind": "int",
+      "low": 40,
+      "high": 90,
+      "special": null
+    },
+    {
+      "name": "hough_threshold_vertical",
+      "stage": "detecting",
+      "key": "hough_threshold_vertical",
+      "kind": "int",
+      "low": 400,
+      "high": 800,
+      "special": null
+    },
+    {
+      "name": "maxLineGap_oblique",
+      "stage": "detecting",
+      "key": "maxLineGap_oblique",
+      "kind": "int",
+      "low": 20,
+      "high": 80,
+      "special": null
+    },
+    {
+      "name": "y_bounds_lower",
+      "stage": "sam",
+      "key": "processing.y_bounds",
+      "kind": "int",
+      "low": 3600,
+      "high": 4400,
+      "special": "y_bounds_lower"
+    }
+  ]
+}

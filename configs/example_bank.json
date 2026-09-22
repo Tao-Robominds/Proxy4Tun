@@ -1,0 +1,1407 @@
+{
+  "frozen": true,
+  "n_examples": 23,
+  "features": [
+    "correspondence_f1@15",
+    "sam_fill_rate",
+    "ring_count_error",
+    "depth_nan_ratio"
+  ],
+  "sources": [
+    "data/release2/calibration/{2-1,3-1,5-1}",
+    "data/release2/references/{2-1,3-1,5-1}"
+  ],
+  "created_at": "2026-09-19T09:27:36",
+  "examples": [
+    {
+      "id": "staggered-correspondencef1at15-improve-s005",
+      "family": "staggered",
+      "dev": "2-1",
+      "source_trial": "s005",
+      "dominant_feature": "correspondence_f1@15",
+      "direction": "improve",
+      "condition": "family=staggered, development subset 2-1, expected_rings=10, reference proxy=0.741",
+      "problem": "Dominant concern correspondence_f1@15; measurements: correspondence_f1@15=0.5088, sam_fill_rate=0.7201, ring_count_error=0, depth_nan_ratio=0.126",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 1.1347414895892143,
+          "slice_spacing_factor": 1.2262968711555005,
+          "polynomial_degree": 3,
+          "random_seed": 3
+        },
+        "denoising": {
+          "mask_r_low": 2.271234368812293,
+          "mask_r_high": 2.849971817806363,
+          "z_step": 0.0012452491931617261,
+          "grad_threshold": 0.19536032313480972
+        },
+        "enhancing": {
+          "curvature_threshold": 0.006115869881771505,
+          "inter_radius": 0.05813454734161497
+        },
+        "detecting": {
+          "binary_threshold": 150,
+          "hough_threshold_oblique": 44,
+          "hough_threshold_horizontal": 84,
+          "hough_threshold_vertical": 508,
+          "maxLineGap_oblique": 47
+        },
+        "sam": {
+          "processing.y_bounds": [
+            3710,
+            13100
+          ]
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.5088439760748137,
+          "sam_fill_rate": 0.7201272583342118,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.12598067533686202
+        },
+        "score": 0.7405218074939608
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.507309578389086,
+          "sam_fill_rate": 0.7283855119373154,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.11489257528737636
+        },
+        "score": 0.7443650176483618
+      },
+      "response": "proxy 0.741\u21920.744; correspondence_f1@15 0.5088\u21920.5073; sam_fill_rate 0.7201\u21920.7284; ring_count_error 0\u21920; depth_nan_ratio 0.126\u21920.1149. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to staggered within configs/bounds/staggered.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "staggered-correspondencef1at15-degrade-s011",
+      "family": "staggered",
+      "dev": "2-1",
+      "source_trial": "s011",
+      "dominant_feature": "correspondence_f1@15",
+      "direction": "degrade",
+      "condition": "family=staggered, development subset 2-1, expected_rings=10, reference proxy=0.741",
+      "problem": "Dominant concern correspondence_f1@15; measurements: correspondence_f1@15=0.5088, sam_fill_rate=0.7201, ring_count_error=0, depth_nan_ratio=0.126",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 0.8039776083081961,
+          "slice_spacing_factor": 1.2935879392549396,
+          "polynomial_degree": 3,
+          "random_seed": 6
+        },
+        "denoising": {
+          "mask_r_low": 2.2271905393339697,
+          "mask_r_high": 2.7510838231071832,
+          "z_step": 0.004030265372246504,
+          "grad_threshold": 0.13755624913610517
+        },
+        "enhancing": {
+          "curvature_threshold": 0.003680999880749732,
+          "inter_radius": 0.052341929227113726
+        },
+        "detecting": {
+          "binary_threshold": 109,
+          "hough_threshold_oblique": 76,
+          "hough_threshold_horizontal": 63,
+          "hough_threshold_vertical": 532,
+          "maxLineGap_oblique": 32
+        },
+        "sam": {
+          "processing.y_bounds": [
+            3802,
+            13100
+          ]
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.5088439760748137,
+          "sam_fill_rate": 0.7201272583342118,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.12598067533686202
+        },
+        "score": 0.7405218074939608
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.0,
+          "sam_fill_rate": 0.17175379635772883,
+          "ring_count_error": 1.0,
+          "depth_nan_ratio": 0.26277171000767535
+        },
+        "score": 0.16345301916502714
+      },
+      "response": "proxy 0.741\u21920.163; correspondence_f1@15 0.5088\u21920; sam_fill_rate 0.7201\u21920.1718; ring_count_error 0\u21921; depth_nan_ratio 0.126\u21920.2628. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to staggered within configs/bounds/staggered.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "staggered-samfillrate-improve-s002",
+      "family": "staggered",
+      "dev": "2-1",
+      "source_trial": "s002",
+      "dominant_feature": "sam_fill_rate",
+      "direction": "improve",
+      "condition": "family=staggered, development subset 2-1, expected_rings=10, reference proxy=0.741",
+      "problem": "Dominant concern sam_fill_rate; measurements: correspondence_f1@15=0.5088, sam_fill_rate=0.7201, ring_count_error=0, depth_nan_ratio=0.126",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 1.180576153099537,
+          "slice_spacing_factor": 1.1790846057236195,
+          "polynomial_degree": 3,
+          "random_seed": 2
+        },
+        "denoising": {
+          "mask_r_low": 2.2105695122852924,
+          "mask_r_high": 2.8521516278386114,
+          "z_step": 0.0060206579854711895,
+          "grad_threshold": 0.1048939515836537
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0020109777326695623,
+          "inter_radius": 0.021713952962309123
+        },
+        "detecting": {
+          "binary_threshold": 102,
+          "hough_threshold_oblique": 47,
+          "hough_threshold_horizontal": 43,
+          "hough_threshold_vertical": 420,
+          "maxLineGap_oblique": 40
+        },
+        "sam": {
+          "processing.y_bounds": [
+            3603,
+            13100
+          ]
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.5088439760748137,
+          "sam_fill_rate": 0.7201272583342118,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.12598067533686202
+        },
+        "score": 0.7405218074939608
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.46434637391004985,
+          "sam_fill_rate": 0.7637985486307897,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.11429793641077597
+        },
+        "score": 0.7314992366818428
+      },
+      "response": "proxy 0.741\u21920.731; correspondence_f1@15 0.5088\u21920.4643; sam_fill_rate 0.7201\u21920.7638; ring_count_error 0\u21920; depth_nan_ratio 0.126\u21920.1143. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to staggered within configs/bounds/staggered.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "staggered-samfillrate-degrade-g007",
+      "family": "staggered",
+      "dev": "2-1",
+      "source_trial": "g007",
+      "dominant_feature": "sam_fill_rate",
+      "direction": "degrade",
+      "condition": "family=staggered, development subset 2-1, expected_rings=10, reference proxy=0.741",
+      "problem": "Dominant concern sam_fill_rate; measurements: correspondence_f1@15=0.5088, sam_fill_rate=0.7201, ring_count_error=0, depth_nan_ratio=0.126",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 0.942940097027287,
+          "slice_spacing_factor": 1.0580424869693237,
+          "polynomial_degree": 2,
+          "random_seed": 1
+        },
+        "denoising": {
+          "mask_r_low": 2.319928830894932,
+          "mask_r_high": 2.700253834495142,
+          "z_step": 0.0021020717723622844,
+          "grad_threshold": 0.13501075400482726
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0006583430526959423,
+          "inter_radius": 0.030086131176894848
+        },
+        "detecting": {
+          "binary_threshold": 101,
+          "hough_threshold_oblique": 41,
+          "hough_threshold_horizontal": 56,
+          "hough_threshold_vertical": 473,
+          "maxLineGap_oblique": 37
+        },
+        "sam": {
+          "processing.y_bounds": [
+            3915,
+            13100
+          ]
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.5088439760748137,
+          "sam_fill_rate": 0.7201272583342118,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.12598067533686202
+        },
+        "score": 0.7405218074939608
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.16619333127390057,
+          "sam_fill_rate": 0.04805516112430475,
+          "ring_count_error": 1.0,
+          "depth_nan_ratio": 0.8543768631462791
+        },
+        "score": 0.11173587865671947
+      },
+      "response": "proxy 0.741\u21920.112; correspondence_f1@15 0.5088\u21920.1662; sam_fill_rate 0.7201\u21920.04806; ring_count_error 0\u21921; depth_nan_ratio 0.126\u21920.8544. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to staggered within configs/bounds/staggered.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "staggered-ringcounterror-improve-g001",
+      "family": "staggered",
+      "dev": "2-1",
+      "source_trial": "g001",
+      "dominant_feature": "ring_count_error",
+      "direction": "improve",
+      "condition": "family=staggered, development subset 2-1, expected_rings=10, reference proxy=0.741",
+      "problem": "Dominant concern ring_count_error; measurements: correspondence_f1@15=0.5088, sam_fill_rate=0.7201, ring_count_error=0, depth_nan_ratio=0.126",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 1.1922250138592936,
+          "slice_spacing_factor": 1.2544825543907727,
+          "polynomial_degree": 2,
+          "random_seed": 3
+        },
+        "denoising": {
+          "mask_r_low": 2.493423552800907,
+          "mask_r_high": 2.893477504675673,
+          "z_step": 0.007339811496953514,
+          "grad_threshold": 0.16945369307605457
+        },
+        "enhancing": {
+          "curvature_threshold": 0.005946997308949733,
+          "inter_radius": 0.024250597241596058
+        },
+        "detecting": {
+          "binary_threshold": 123,
+          "hough_threshold_oblique": 89,
+          "hough_threshold_horizontal": 87,
+          "hough_threshold_vertical": 467,
+          "maxLineGap_oblique": 65
+        },
+        "sam": {
+          "processing.y_bounds": [
+            4055,
+            13100
+          ]
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.5088439760748137,
+          "sam_fill_rate": 0.7201272583342118,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.12598067533686202
+        },
+        "score": 0.7405218074939608
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.44992578286261964,
+          "sam_fill_rate": 0.7514680076640231,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.09528716986796905
+        },
+        "score": 0.7225469250184524
+      },
+      "response": "proxy 0.741\u21920.723; correspondence_f1@15 0.5088\u21920.4499; sam_fill_rate 0.7201\u21920.7515; ring_count_error 0\u21920; depth_nan_ratio 0.126\u21920.09529. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to staggered within configs/bounds/staggered.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "staggered-ringcounterror-degrade-g000",
+      "family": "staggered",
+      "dev": "2-1",
+      "source_trial": "g000",
+      "dominant_feature": "ring_count_error",
+      "direction": "degrade",
+      "condition": "family=staggered, development subset 2-1, expected_rings=10, reference proxy=0.741",
+      "problem": "Dominant concern ring_count_error; measurements: correspondence_f1@15=0.5088, sam_fill_rate=0.7201, ring_count_error=0, depth_nan_ratio=0.126",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 0.9365843450592368,
+          "slice_spacing_factor": 1.3204492027064703,
+          "polynomial_degree": 2,
+          "random_seed": 5
+        },
+        "denoising": {
+          "mask_r_low": 2.469301433873076,
+          "mask_r_high": 2.815455608203741,
+          "z_step": 0.003622330349040393,
+          "grad_threshold": 0.18217643178219353
+        },
+        "enhancing": {
+          "curvature_threshold": 0.005244243942375656,
+          "inter_radius": 0.0363219383931301
+        },
+        "detecting": {
+          "binary_threshold": 134,
+          "hough_threshold_oblique": 62,
+          "hough_threshold_horizontal": 64,
+          "hough_threshold_vertical": 416,
+          "maxLineGap_oblique": 23
+        },
+        "sam": {
+          "processing.y_bounds": [
+            4399,
+            13100
+          ]
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.5088439760748137,
+          "sam_fill_rate": 0.7201272583342118,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.12598067533686202
+        },
+        "score": 0.7405218074939608
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.34561360002756164,
+          "sam_fill_rate": 0.6664212236394189,
+          "ring_count_error": 1.0,
+          "depth_nan_ratio": 0.10088533677387716
+        },
+        "score": 0.5548616460163454
+      },
+      "response": "proxy 0.741\u21920.555; correspondence_f1@15 0.5088\u21920.3456; sam_fill_rate 0.7201\u21920.6664; ring_count_error 0\u21921; depth_nan_ratio 0.126\u21920.1009. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to staggered within configs/bounds/staggered.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "staggered-depthnanratio-improve-s010",
+      "family": "staggered",
+      "dev": "2-1",
+      "source_trial": "s010",
+      "dominant_feature": "depth_nan_ratio",
+      "direction": "improve",
+      "condition": "family=staggered, development subset 2-1, expected_rings=10, reference proxy=0.741",
+      "problem": "Dominant concern depth_nan_ratio; measurements: correspondence_f1@15=0.5088, sam_fill_rate=0.7201, ring_count_error=0, depth_nan_ratio=0.126",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 1.1051368672400712,
+          "slice_spacing_factor": 1.0653478011488915,
+          "polynomial_degree": 2,
+          "random_seed": 2
+        },
+        "denoising": {
+          "mask_r_low": 2.3568657116033136,
+          "mask_r_high": 2.816545394808054,
+          "z_step": 0.007445560372434557,
+          "grad_threshold": 0.22634048154577613
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0051919542929157615,
+          "inter_radius": 0.04342112265527248
+        },
+        "detecting": {
+          "binary_threshold": 146,
+          "hough_threshold_oblique": 52,
+          "hough_threshold_horizontal": 75,
+          "hough_threshold_vertical": 752,
+          "maxLineGap_oblique": 73
+        },
+        "sam": {
+          "processing.y_bounds": [
+            4194,
+            13100
+          ]
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.5088439760748137,
+          "sam_fill_rate": 0.7201272583342118,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.12598067533686202
+        },
+        "score": 0.7405218074939608
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.29850759317964487,
+          "sam_fill_rate": 0.7288965501561534,
+          "ring_count_error": 1.0,
+          "depth_nan_ratio": 0.08959512183210616
+        },
+        "score": 0.5504920521506713
+      },
+      "response": "proxy 0.741\u21920.550; correspondence_f1@15 0.5088\u21920.2985; sam_fill_rate 0.7201\u21920.7289; ring_count_error 0\u21921; depth_nan_ratio 0.126\u21920.0896. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to staggered within configs/bounds/staggered.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "staggered-depthnanratio-degrade-g004",
+      "family": "staggered",
+      "dev": "2-1",
+      "source_trial": "g004",
+      "dominant_feature": "depth_nan_ratio",
+      "direction": "degrade",
+      "condition": "family=staggered, development subset 2-1, expected_rings=10, reference proxy=0.741",
+      "problem": "Dominant concern depth_nan_ratio; measurements: correspondence_f1@15=0.5088, sam_fill_rate=0.7201, ring_count_error=0, depth_nan_ratio=0.126",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 0.9986583763795982,
+          "slice_spacing_factor": 1.280655312706486,
+          "polynomial_degree": 3,
+          "random_seed": 4
+        },
+        "denoising": {
+          "mask_r_low": 2.471124695682415,
+          "mask_r_high": 2.7036928355060947,
+          "z_step": 0.005006757442670622,
+          "grad_threshold": 0.13039394811119515
+        },
+        "enhancing": {
+          "curvature_threshold": 0.007410093126655055,
+          "inter_radius": 0.020708634310712744
+        },
+        "detecting": {
+          "binary_threshold": 122,
+          "hough_threshold_oblique": 82,
+          "hough_threshold_horizontal": 66,
+          "hough_threshold_vertical": 735,
+          "maxLineGap_oblique": 69
+        },
+        "sam": {
+          "processing.y_bounds": [
+            3602,
+            13100
+          ]
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.5088439760748137,
+          "sam_fill_rate": 0.7201272583342118,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.12598067533686202
+        },
+        "score": 0.7405218074939608
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.08659161846882521,
+          "sam_fill_rate": 0.04810114939677855,
+          "ring_count_error": 1.0,
+          "depth_nan_ratio": 0.8589514060947405
+        },
+        "score": 0.06518122084336125
+      },
+      "response": "proxy 0.741\u21920.065; correspondence_f1@15 0.5088\u21920.08659; sam_fill_rate 0.7201\u21920.0481; ring_count_error 0\u21921; depth_nan_ratio 0.126\u21920.859. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to staggered within configs/bounds/staggered.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "continuous-correspondencef1at15-improve-s019",
+      "family": "continuous",
+      "dev": "3-1",
+      "source_trial": "s019",
+      "dominant_feature": "correspondence_f1@15",
+      "direction": "improve",
+      "condition": "family=continuous, development subset 3-1, expected_rings=10, reference proxy=0.624",
+      "problem": "Dominant concern correspondence_f1@15; measurements: correspondence_f1@15=0.3437, sam_fill_rate=0.6735, ring_count_error=0, depth_nan_ratio=0.1623",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 1.107143509015441,
+          "slice_spacing_factor": 1.1542314120568336,
+          "polynomial_degree": 3,
+          "random_seed": 0
+        },
+        "denoising": {
+          "mask_r_low": 2.818221717886627,
+          "mask_r_high": 3.13379466147162,
+          "mask_theta_low": 1.0313344611786306,
+          "mask_theta_high": 16.31902088597417
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0008843313163146376
+        },
+        "detecting": {
+          "binary_threshold": 118,
+          "hough_threshold_oblique": 49,
+          "hough_threshold_horizontal": 46,
+          "hough_threshold_vertical": 2291,
+          "maxLineGap_oblique": 53,
+          "pattern_tolerance": 16,
+          "uniform_k_snap": false
+        },
+        "sam": {
+          "segment_width": 1395,
+          "K_height": 710.0875707343221,
+          "angle": 8.39040036406368
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.3437089519465762,
+          "sam_fill_rate": 0.6735175946644923,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.16229315232751773
+        },
+        "score": 0.623668596856872
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.302527963146231,
+          "sam_fill_rate": 0.432665046262437,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.2240701191151621
+        },
+        "score": 0.509199438637644
+      },
+      "response": "proxy 0.624\u21920.509; correspondence_f1@15 0.3437\u21920.3025; sam_fill_rate 0.6735\u21920.4327; ring_count_error 0\u21920; depth_nan_ratio 0.1623\u21920.2241. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to continuous within configs/bounds/continuous.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "continuous-correspondencef1at15-degrade-g005",
+      "family": "continuous",
+      "dev": "3-1",
+      "source_trial": "g005",
+      "dominant_feature": "correspondence_f1@15",
+      "direction": "degrade",
+      "condition": "family=continuous, development subset 3-1, expected_rings=10, reference proxy=0.624",
+      "problem": "Dominant concern correspondence_f1@15; measurements: correspondence_f1@15=0.3437, sam_fill_rate=0.6735, ring_count_error=0, depth_nan_ratio=0.1623",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 1.0296846675091944,
+          "slice_spacing_factor": 1.2594787760629067,
+          "polynomial_degree": 3,
+          "random_seed": 1
+        },
+        "denoising": {
+          "mask_r_low": 2.8911596294040742,
+          "mask_r_high": 2.976694722284688,
+          "mask_theta_low": 1.0823763855965738,
+          "mask_theta_high": 15.544656845105369
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0007102282768632207
+        },
+        "detecting": {
+          "binary_threshold": 150,
+          "hough_threshold_oblique": 22,
+          "hough_threshold_horizontal": 26,
+          "hough_threshold_vertical": 822,
+          "maxLineGap_oblique": 53,
+          "pattern_tolerance": 19,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1043,
+          "K_height": 998.7170069558166,
+          "angle": 6.896375485980592
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.3437089519465762,
+          "sam_fill_rate": 0.6735175946644923,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.16229315232751773
+        },
+        "score": 0.623668596856872
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.0,
+          "sam_fill_rate": 0.4935329065508109,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.2135520869557363
+        },
+        "score": 0.35736545735134656
+      },
+      "response": "proxy 0.624\u21920.357; correspondence_f1@15 0.3437\u21920; sam_fill_rate 0.6735\u21920.4935; ring_count_error 0\u21920; depth_nan_ratio 0.1623\u21920.2136. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to continuous within configs/bounds/continuous.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "continuous-samfillrate-improve-s000",
+      "family": "continuous",
+      "dev": "3-1",
+      "source_trial": "s000",
+      "dominant_feature": "sam_fill_rate",
+      "direction": "improve",
+      "condition": "family=continuous, development subset 3-1, expected_rings=10, reference proxy=0.624",
+      "problem": "Dominant concern sam_fill_rate; measurements: correspondence_f1@15=0.3437, sam_fill_rate=0.6735, ring_count_error=0, depth_nan_ratio=0.1623",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 1.079762351885438,
+          "slice_spacing_factor": 1.2104076792486014,
+          "polynomial_degree": 2,
+          "random_seed": 3
+        },
+        "denoising": {
+          "mask_r_low": 2.831238817702979,
+          "mask_r_high": 3.022039988869801,
+          "mask_theta_low": 1.4647601777687669,
+          "mask_theta_high": 18.906503092497587
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0008407603044062853
+        },
+        "detecting": {
+          "binary_threshold": 100,
+          "hough_threshold_oblique": 58,
+          "hough_threshold_horizontal": 41,
+          "hough_threshold_vertical": 2066,
+          "maxLineGap_oblique": 36,
+          "pattern_tolerance": 14,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1042,
+          "K_height": 839.9676816537976,
+          "angle": 5.60974286030978
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.3437089519465762,
+          "sam_fill_rate": 0.6735175946644923,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.16229315232751773
+        },
+        "score": 0.623668596856872
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.300488636762222,
+          "sam_fill_rate": 0.6570977751082258,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.19719293471927066
+        },
+        "score": 0.5871252296815499
+      },
+      "response": "proxy 0.624\u21920.587; correspondence_f1@15 0.3437\u21920.3005; sam_fill_rate 0.6735\u21920.6571; ring_count_error 0\u21920; depth_nan_ratio 0.1623\u21920.1972. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to continuous within configs/bounds/continuous.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "continuous-samfillrate-degrade-s018",
+      "family": "continuous",
+      "dev": "3-1",
+      "source_trial": "s018",
+      "dominant_feature": "sam_fill_rate",
+      "direction": "degrade",
+      "condition": "family=continuous, development subset 3-1, expected_rings=10, reference proxy=0.624",
+      "problem": "Dominant concern sam_fill_rate; measurements: correspondence_f1@15=0.3437, sam_fill_rate=0.6735, ring_count_error=0, depth_nan_ratio=0.1623",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 0.9292115960270166,
+          "slice_spacing_factor": 1.2501285994425417,
+          "polynomial_degree": 2,
+          "random_seed": 5
+        },
+        "denoising": {
+          "mask_r_low": 2.9783463248983026,
+          "mask_r_high": 2.9806711274199187,
+          "mask_theta_low": 1.9741524001583457,
+          "mask_theta_high": 18.719496872276068
+        },
+        "enhancing": {
+          "curvature_threshold": 0.001381358864158392
+        },
+        "detecting": {
+          "binary_threshold": 155,
+          "hough_threshold_oblique": 21,
+          "hough_threshold_horizontal": 23,
+          "hough_threshold_vertical": 1236,
+          "maxLineGap_oblique": 13,
+          "pattern_tolerance": 8,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1029,
+          "K_height": 967.6435800269246,
+          "angle": 5.846449822187424
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.3437089519465762,
+          "sam_fill_rate": 0.6735175946644923,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.16229315232751773
+        },
+        "score": 0.623668596856872
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.0,
+          "sam_fill_rate": 0.014594530668899132,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.9252756822356798
+        },
+        "score": 0.07099807784504486
+      },
+      "response": "proxy 0.624\u21920.071; correspondence_f1@15 0.3437\u21920; sam_fill_rate 0.6735\u21920.01459; ring_count_error 0\u21920; depth_nan_ratio 0.1623\u21920.9253. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to continuous within configs/bounds/continuous.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "continuous-ringcounterror-improve-g003",
+      "family": "continuous",
+      "dev": "3-1",
+      "source_trial": "g003",
+      "dominant_feature": "ring_count_error",
+      "direction": "improve",
+      "condition": "family=continuous, development subset 3-1, expected_rings=10, reference proxy=0.624",
+      "problem": "Dominant concern ring_count_error; measurements: correspondence_f1@15=0.3437, sam_fill_rate=0.6735, ring_count_error=0, depth_nan_ratio=0.1623",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 1.17566673447332,
+          "slice_spacing_factor": 1.2237711390855832,
+          "polynomial_degree": 3,
+          "random_seed": 6
+        },
+        "denoising": {
+          "mask_r_low": 2.816899026090796,
+          "mask_r_high": 3.099836427710328,
+          "mask_theta_low": 2.461479864497342,
+          "mask_theta_high": 17.444843677019314
+        },
+        "enhancing": {
+          "curvature_threshold": 0.001707429781503714
+        },
+        "detecting": {
+          "binary_threshold": 145,
+          "hough_threshold_oblique": 58,
+          "hough_threshold_horizontal": 27,
+          "hough_threshold_vertical": 997,
+          "maxLineGap_oblique": 35,
+          "pattern_tolerance": 5,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1361,
+          "K_height": 772.7284454397203,
+          "angle": 5.47029829595881
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.3437089519465762,
+          "sam_fill_rate": 0.6735175946644923,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.16229315232751773
+        },
+        "score": 0.623668596856872
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.2768595875682221,
+          "sam_fill_rate": 0.39729987955894297,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.2378281039531098
+        },
+        "score": 0.48027264971723777
+      },
+      "response": "proxy 0.624\u21920.480; correspondence_f1@15 0.3437\u21920.2769; sam_fill_rate 0.6735\u21920.3973; ring_count_error 0\u21920; depth_nan_ratio 0.1623\u21920.2378. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to continuous within configs/bounds/continuous.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "continuous-ringcounterror-degrade-g000",
+      "family": "continuous",
+      "dev": "3-1",
+      "source_trial": "g000",
+      "dominant_feature": "ring_count_error",
+      "direction": "degrade",
+      "condition": "family=continuous, development subset 3-1, expected_rings=10, reference proxy=0.624",
+      "problem": "Dominant concern ring_count_error; measurements: correspondence_f1@15=0.3437, sam_fill_rate=0.6735, ring_count_error=0, depth_nan_ratio=0.1623",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 1.0894961134153907,
+          "slice_spacing_factor": 1.2922607061537947,
+          "polynomial_degree": 2,
+          "random_seed": 5
+        },
+        "denoising": {
+          "mask_r_low": 2.747200962481015,
+          "mask_r_high": 2.964603735667865,
+          "mask_theta_low": 2.265163713510307,
+          "mask_theta_high": 18.463370613295105
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0005056758948359012
+        },
+        "detecting": {
+          "binary_threshold": 138,
+          "hough_threshold_oblique": 52,
+          "hough_threshold_horizontal": 30,
+          "hough_threshold_vertical": 2081,
+          "maxLineGap_oblique": 43,
+          "pattern_tolerance": 8,
+          "uniform_k_snap": false
+        },
+        "sam": {
+          "segment_width": 1160,
+          "K_height": 739.0200893080571,
+          "angle": 7.906067618143172
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.3437089519465762,
+          "sam_fill_rate": 0.6735175946644923,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.16229315232751773
+        },
+        "score": 0.623668596856872
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.09858921107531868,
+          "sam_fill_rate": 0.28996729107211217,
+          "ring_count_error": 1.0,
+          "depth_nan_ratio": 0.5402644498378095
+        },
+        "score": 0.20937388746064944
+      },
+      "response": "proxy 0.624\u21920.209; correspondence_f1@15 0.3437\u21920.09859; sam_fill_rate 0.6735\u21920.29; ring_count_error 0\u21921; depth_nan_ratio 0.1623\u21920.5403. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to continuous within configs/bounds/continuous.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "continuous-depthnanratio-improve-g007",
+      "family": "continuous",
+      "dev": "3-1",
+      "source_trial": "g007",
+      "dominant_feature": "depth_nan_ratio",
+      "direction": "improve",
+      "condition": "family=continuous, development subset 3-1, expected_rings=10, reference proxy=0.624",
+      "problem": "Dominant concern depth_nan_ratio; measurements: correspondence_f1@15=0.3437, sam_fill_rate=0.6735, ring_count_error=0, depth_nan_ratio=0.1623",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 0.8823210174623429,
+          "slice_spacing_factor": 1.3216450481722137,
+          "polynomial_degree": 3,
+          "random_seed": 0
+        },
+        "denoising": {
+          "mask_r_low": 2.7603294379003436,
+          "mask_r_high": 3.0768920670930475,
+          "mask_theta_low": 1.0833493459343013,
+          "mask_theta_high": 18.449177003003577
+        },
+        "enhancing": {
+          "curvature_threshold": 0.001284656938569296
+        },
+        "detecting": {
+          "binary_threshold": 120,
+          "hough_threshold_oblique": 40,
+          "hough_threshold_horizontal": 60,
+          "hough_threshold_vertical": 836,
+          "maxLineGap_oblique": 49,
+          "pattern_tolerance": 13,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1357,
+          "K_height": 967.4003092803395,
+          "angle": 7.652105756437759
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.3437089519465762,
+          "sam_fill_rate": 0.6735175946644923,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.16229315232751773
+        },
+        "score": 0.623668596856872
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.11069683941070724,
+          "sam_fill_rate": 0.38288118660894627,
+          "ring_count_error": 1.0,
+          "depth_nan_ratio": 0.17092680921752437
+        },
+        "score": 0.3134395369021351
+      },
+      "response": "proxy 0.624\u21920.313; correspondence_f1@15 0.3437\u21920.1107; sam_fill_rate 0.6735\u21920.3829; ring_count_error 0\u21921; depth_nan_ratio 0.1623\u21920.1709. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to continuous within configs/bounds/continuous.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "continuous-depthnanratio-degrade-s030",
+      "family": "continuous",
+      "dev": "3-1",
+      "source_trial": "s030",
+      "dominant_feature": "depth_nan_ratio",
+      "direction": "degrade",
+      "condition": "family=continuous, development subset 3-1, expected_rings=10, reference proxy=0.624",
+      "problem": "Dominant concern depth_nan_ratio; measurements: correspondence_f1@15=0.3437, sam_fill_rate=0.6735, ring_count_error=0, depth_nan_ratio=0.1623",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 0.8638954877853394,
+          "slice_spacing_factor": 1.207174257002771,
+          "polynomial_degree": 2,
+          "random_seed": 1
+        },
+        "denoising": {
+          "mask_r_low": 2.7558027056045833,
+          "mask_r_high": 2.9055073872208594,
+          "mask_theta_low": 2.062532172072679,
+          "mask_theta_high": 18.793250415474176
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0015454213870689274
+        },
+        "detecting": {
+          "binary_threshold": 106,
+          "hough_threshold_oblique": 32,
+          "hough_threshold_horizontal": 37,
+          "hough_threshold_vertical": 2457,
+          "maxLineGap_oblique": 30,
+          "pattern_tolerance": 13,
+          "uniform_k_snap": true
+        },
+        "sam": {
+          "segment_width": 1315,
+          "K_height": 943.5035334900022,
+          "angle": 5.560164070688188
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.3437089519465762,
+          "sam_fill_rate": 0.6735175946644923,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.16229315232751773
+        },
+        "score": 0.623668596856872
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.0,
+          "sam_fill_rate": 0.027231505139752085,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.9312166100385886
+        },
+        "score": 0.07411244001063139
+      },
+      "response": "proxy 0.624\u21920.074; correspondence_f1@15 0.3437\u21920; sam_fill_rate 0.6735\u21920.02723; ring_count_error 0\u21920; depth_nan_ratio 0.1623\u21920.9312. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to continuous within configs/bounds/continuous.json; stage-1 locked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "complex-correspondencef1at15-improve-s021",
+      "family": "complex",
+      "dev": "5-1",
+      "source_trial": "s021",
+      "dominant_feature": "correspondence_f1@15",
+      "direction": "improve",
+      "condition": "family=complex, development subset 5-1, expected_rings=10, reference proxy=0.700",
+      "problem": "Dominant concern correspondence_f1@15; measurements: correspondence_f1@15=0.4462, sam_fill_rate=0.7524, ring_count_error=0, depth_nan_ratio=0.2084",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 0.9714595459401607,
+          "slice_spacing_factor": 1.8489205356687308,
+          "polynomial_degree": 3,
+          "random_seed": 0
+        },
+        "denoising": {
+          "mask_r_low": 3.6008071053773163,
+          "mask_r_high": 3.794932061433792
+        },
+        "enhancing": {
+          "curvature_threshold": 0.00036597516089677815
+        },
+        "detecting": {
+          "binary_threshold": 127,
+          "hough_threshold_oblique": 27,
+          "hough_threshold_horizontal": 60,
+          "hough_threshold_vertical": 4306,
+          "maxLineGap_oblique": 74,
+          "maxLineGap_horizontal": 28,
+          "pattern_tolerance": 11
+        },
+        "sam": {
+          "segment_width": 1874,
+          "K_height": 1120.300923474133,
+          "angle": 11.78815640322864
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.4462335954083966,
+          "sam_fill_rate": 0.7523882116676637,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.20837608761858697
+        },
+        "score": 0.7004103348607466
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.45958425928256696,
+          "sam_fill_rate": 0.7456686762775828,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.1968222542749303
+        },
+        "score": 0.7079354182941334
+      },
+      "response": "proxy 0.700\u21920.708; correspondence_f1@15 0.4462\u21920.4596; sam_fill_rate 0.7524\u21920.7457; ring_count_error 0\u21920; depth_nan_ratio 0.2084\u21920.1968. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to complex within configs/bounds/complex.json; stage-1 unlocked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "complex-correspondencef1at15-degrade-g000",
+      "family": "complex",
+      "dev": "5-1",
+      "source_trial": "g000",
+      "dominant_feature": "correspondence_f1@15",
+      "direction": "degrade",
+      "condition": "family=complex, development subset 5-1, expected_rings=10, reference proxy=0.700",
+      "problem": "Dominant concern correspondence_f1@15; measurements: correspondence_f1@15=0.4462, sam_fill_rate=0.7524, ring_count_error=0, depth_nan_ratio=0.2084",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 0.8684785222461876,
+          "slice_spacing_factor": 1.829279270268848,
+          "polynomial_degree": 2,
+          "random_seed": 4
+        },
+        "denoising": {
+          "mask_r_low": 3.7683144540956803,
+          "mask_r_high": 3.8083144540956804
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0005456754986379483
+        },
+        "detecting": {
+          "binary_threshold": 147,
+          "hough_threshold_oblique": 63,
+          "hough_threshold_horizontal": 25,
+          "hough_threshold_vertical": 3420,
+          "maxLineGap_oblique": 37,
+          "maxLineGap_horizontal": 9,
+          "pattern_tolerance": 14
+        },
+        "sam": {
+          "segment_width": 2090,
+          "K_height": 1377.850333257409,
+          "angle": 11.081315565175647
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.4462335954083966,
+          "sam_fill_rate": 0.7523882116676637,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.20837608761858697
+        },
+        "score": 0.7004103348607466
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.0,
+          "sam_fill_rate": 0.020930537894899785,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.9281934542499354
+        },
+        "score": 0.07257052396948932
+      },
+      "response": "proxy 0.700\u21920.073; correspondence_f1@15 0.4462\u21920; sam_fill_rate 0.7524\u21920.02093; ring_count_error 0\u21920; depth_nan_ratio 0.2084\u21920.9282. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to complex within configs/bounds/complex.json; stage-1 unlocked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "complex-samfillrate-improve-s028",
+      "family": "complex",
+      "dev": "5-1",
+      "source_trial": "s028",
+      "dominant_feature": "sam_fill_rate",
+      "direction": "improve",
+      "condition": "family=complex, development subset 5-1, expected_rings=10, reference proxy=0.700",
+      "problem": "Dominant concern sam_fill_rate; measurements: correspondence_f1@15=0.4462, sam_fill_rate=0.7524, ring_count_error=0, depth_nan_ratio=0.2084",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 1.1896771639585495,
+          "slice_spacing_factor": 1.7718921441584825,
+          "polynomial_degree": 3,
+          "random_seed": 4
+        },
+        "denoising": {
+          "mask_r_low": 3.5849630857817827,
+          "mask_r_high": 4.0397284020669755
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0013000535065308214
+        },
+        "detecting": {
+          "binary_threshold": 113,
+          "hough_threshold_oblique": 42,
+          "hough_threshold_horizontal": 26,
+          "hough_threshold_vertical": 4532,
+          "maxLineGap_oblique": 35,
+          "maxLineGap_horizontal": 23,
+          "pattern_tolerance": 8
+        },
+        "sam": {
+          "segment_width": 1952,
+          "K_height": 1164.699537679553,
+          "angle": 10.322905539534986
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.4462335954083966,
+          "sam_fill_rate": 0.7523882116676637,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.20837608761858697
+        },
+        "score": 0.7004103348607466
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.36515216400325956,
+          "sam_fill_rate": 0.7586311009299452,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.21922907474996636
+        },
+        "score": 0.6539278544064453
+      },
+      "response": "proxy 0.700\u21920.654; correspondence_f1@15 0.4462\u21920.3652; sam_fill_rate 0.7524\u21920.7586; ring_count_error 0\u21920; depth_nan_ratio 0.2084\u21920.2192. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to complex within configs/bounds/complex.json; stage-1 unlocked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "complex-samfillrate-degrade-g007",
+      "family": "complex",
+      "dev": "5-1",
+      "source_trial": "g007",
+      "dominant_feature": "sam_fill_rate",
+      "direction": "degrade",
+      "condition": "family=complex, development subset 5-1, expected_rings=10, reference proxy=0.700",
+      "problem": "Dominant concern sam_fill_rate; measurements: correspondence_f1@15=0.4462, sam_fill_rate=0.7524, ring_count_error=0, depth_nan_ratio=0.2084",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 0.9576979331345302,
+          "slice_spacing_factor": 1.6102269297642489,
+          "polynomial_degree": 3,
+          "random_seed": 1
+        },
+        "denoising": {
+          "mask_r_low": 3.7986340197350836,
+          "mask_r_high": 4.045975097550956
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0007228470662847283
+        },
+        "detecting": {
+          "binary_threshold": 155,
+          "hough_threshold_oblique": 51,
+          "hough_threshold_horizontal": 53,
+          "hough_threshold_vertical": 4872,
+          "maxLineGap_oblique": 32,
+          "maxLineGap_horizontal": 22,
+          "pattern_tolerance": 13
+        },
+        "sam": {
+          "segment_width": 1625,
+          "K_height": 1489.9337782046296,
+          "angle": 10.154370042682586
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.4462335954083966,
+          "sam_fill_rate": 0.7523882116676637,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.20837608761858697
+        },
+        "score": 0.7004103348607466
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.0,
+          "sam_fill_rate": 0.006653121674524772,
+          "ring_count_error": 1.0,
+          "depth_nan_ratio": 0.9824951883575135
+        },
+        "score": 0.0
+      },
+      "response": "proxy 0.700\u21920.000; correspondence_f1@15 0.4462\u21920; sam_fill_rate 0.7524\u21920.006653; ring_count_error 0\u21921; depth_nan_ratio 0.2084\u21920.9825. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to complex within configs/bounds/complex.json; stage-1 unlocked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "complex-ringcounterror-degrade-g001",
+      "family": "complex",
+      "dev": "5-1",
+      "source_trial": "g001",
+      "dominant_feature": "ring_count_error",
+      "direction": "degrade",
+      "condition": "family=complex, development subset 5-1, expected_rings=10, reference proxy=0.700",
+      "problem": "Dominant concern ring_count_error; measurements: correspondence_f1@15=0.4462, sam_fill_rate=0.7524, ring_count_error=0, depth_nan_ratio=0.2084",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 1.0144986834794267,
+          "slice_spacing_factor": 1.6512231254082843,
+          "polynomial_degree": 3,
+          "random_seed": 1
+        },
+        "denoising": {
+          "mask_r_low": 3.7757707827540328,
+          "mask_r_high": 3.960644170575029
+        },
+        "enhancing": {
+          "curvature_threshold": 0.00024176945833585855
+        },
+        "detecting": {
+          "binary_threshold": 159,
+          "hough_threshold_oblique": 33,
+          "hough_threshold_horizontal": 26,
+          "hough_threshold_vertical": 4596,
+          "maxLineGap_oblique": 40,
+          "maxLineGap_horizontal": 22,
+          "pattern_tolerance": 15
+        },
+        "sam": {
+          "segment_width": 1847,
+          "K_height": 1014.4125120977629,
+          "angle": 8.347717155044599
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.4462335954083966,
+          "sam_fill_rate": 0.7523882116676637,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.20837608761858697
+        },
+        "score": 0.7004103348607466
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.0,
+          "sam_fill_rate": 0.01707036839688019,
+          "ring_count_error": 1.0,
+          "depth_nan_ratio": 0.9546594276478024
+        },
+        "score": 0.0
+      },
+      "response": "proxy 0.700\u21920.000; correspondence_f1@15 0.4462\u21920; sam_fill_rate 0.7524\u21920.01707; ring_count_error 0\u21921; depth_nan_ratio 0.2084\u21920.9547. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to complex within configs/bounds/complex.json; stage-1 unlocked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "complex-depthnanratio-improve-s005",
+      "family": "complex",
+      "dev": "5-1",
+      "source_trial": "s005",
+      "dominant_feature": "depth_nan_ratio",
+      "direction": "improve",
+      "condition": "family=complex, development subset 5-1, expected_rings=10, reference proxy=0.700",
+      "problem": "Dominant concern depth_nan_ratio; measurements: correspondence_f1@15=0.4462, sam_fill_rate=0.7524, ring_count_error=0, depth_nan_ratio=0.2084",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 0.9964667443186045,
+          "slice_spacing_factor": 1.9663509022444488,
+          "polynomial_degree": 3,
+          "random_seed": 6
+        },
+        "denoising": {
+          "mask_r_low": 3.5142921728082,
+          "mask_r_high": 4.012441172730178
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0019850904366001485
+        },
+        "detecting": {
+          "binary_threshold": 150,
+          "hough_threshold_oblique": 44,
+          "hough_threshold_horizontal": 70,
+          "hough_threshold_vertical": 4133,
+          "maxLineGap_oblique": 64,
+          "maxLineGap_horizontal": 12,
+          "pattern_tolerance": 13
+        },
+        "sam": {
+          "segment_width": 1969,
+          "K_height": 1094.3226064555347,
+          "angle": 7.12304752599448
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.4462335954083966,
+          "sam_fill_rate": 0.7523882116676637,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.20837608761858697
+        },
+        "score": 0.7004103348607466
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.19403407819884594,
+          "sam_fill_rate": 0.7524009835360399,
+          "ring_count_error": 1.0,
+          "depth_nan_ratio": 0.18400943387055751
+        },
+        "score": 0.4812642217139874
+      },
+      "response": "proxy 0.700\u21920.481; correspondence_f1@15 0.4462\u21920.194; sam_fill_rate 0.7524\u21920.7524; ring_count_error 0\u21921; depth_nan_ratio 0.2084\u21920.184. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to complex within configs/bounds/complex.json; stage-1 unlocked on this reference; development scan only \u2014 not an evaluation subset."
+    },
+    {
+      "id": "complex-depthnanratio-degrade-s016",
+      "family": "complex",
+      "dev": "5-1",
+      "source_trial": "s016",
+      "dominant_feature": "depth_nan_ratio",
+      "direction": "degrade",
+      "condition": "family=complex, development subset 5-1, expected_rings=10, reference proxy=0.700",
+      "problem": "Dominant concern depth_nan_ratio; measurements: correspondence_f1@15=0.4462, sam_fill_rate=0.7524, ring_count_error=0, depth_nan_ratio=0.2084",
+      "overlay": {
+        "unfolding": {
+          "ransac_threshold": 1.077580063045025,
+          "slice_spacing_factor": 1.715012985095382,
+          "polynomial_degree": 3,
+          "random_seed": 3
+        },
+        "denoising": {
+          "mask_r_low": 3.795598308369517,
+          "mask_r_high": 3.966197416651994
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0011984110618010165
+        },
+        "detecting": {
+          "binary_threshold": 109,
+          "hough_threshold_oblique": 45,
+          "hough_threshold_horizontal": 68,
+          "hough_threshold_vertical": 3654,
+          "maxLineGap_oblique": 53,
+          "maxLineGap_horizontal": 9,
+          "pattern_tolerance": 12
+        },
+        "sam": {
+          "segment_width": 1610,
+          "K_height": 1147.9954258538783,
+          "angle": 8.085971118882298
+        }
+      },
+      "before": {
+        "measurements": {
+          "correspondence_f1@15": 0.4462335954083966,
+          "sam_fill_rate": 0.7523882116676637,
+          "ring_count_error": 0.0,
+          "depth_nan_ratio": 0.20837608761858697
+        },
+        "score": 0.7004103348607466
+      },
+      "after": {
+        "measurements": {
+          "correspondence_f1@15": 0.0,
+          "sam_fill_rate": 0.007367324554121303,
+          "ring_count_error": 1.0,
+          "depth_nan_ratio": 0.9831422686872267
+        },
+        "score": 0.0
+      },
+      "response": "proxy 0.700\u21920.000; correspondence_f1@15 0.4462\u21920; sam_fill_rate 0.7524\u21920.007367; ring_count_error 0\u21921; depth_nan_ratio 0.2084\u21920.9831. Joint outcome of the full overlay; no per-parameter causal attribution.",
+      "limits": "Applies to complex within configs/bounds/complex.json; stage-1 unlocked on this reference; development scan only \u2014 not an evaluation subset."
+    }
+  ],
+  "sha256": "43290a3568e6d5270e55a4a43ae2729666e52f349ee943415d470c29923215e6"
+}

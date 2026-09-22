@@ -1,0 +1,69 @@
+{
+  "subset": "4-2",
+  "family": "complex",
+  "arm": "gpt56_medium",
+  "round": 1,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.6008071053773163,
+      "mask_r_high": 3.794932061433792
+    },
+    "enhancing": {
+      "curvature_threshold": 0.00036597516089677815
+    },
+    "detecting": {
+      "binary_threshold": 127,
+      "hough_threshold_oblique": 27,
+      "hough_threshold_horizontal": 60,
+      "hough_threshold_vertical": 4306,
+      "maxLineGap_oblique": 74,
+      "maxLineGap_horizontal": 28,
+      "pattern_tolerance": 11
+    },
+    "sam": {
+      "segment_width": 1874,
+      "K_height": 1120.300923474133,
+      "angle": 11.78815640322864
+    }
+  },
+  "proposal": {
+    "observation": "All 10 expected rings are recovered, but correspondence_f1@15 is only 0.453 and sam_fill_rate is 0.730 while depth_nan_ratio remains 0.209. The overlays show coherent ring partitions but visibly coarse block-template placement and substantial uncovered depth-map structure, so the remaining error is downstream of ring counting rather than a missing-ring failure.",
+    "rule": "With ring_count_error equal to zero, preserve the recovered ring topology; when correspondence is weak and coverage is low with material depth holes, apply the ontology's d12 downstream coverage/template check and use the successful complex correspondence-oriented joint setting as a bounded analogy, without assigning causality to any individual parameter.",
+    "failure_mode": "Primary: stage_5 f_over_under_coverage with possible f_template_mismatch/crop offset; upstream contributor: stage_3 f_depth_holes. Avoid changing stage 1 because it is locked.",
+    "rationale": "This is one joint downstream overlay patterned on the only worked complex example that improved both correspondence_f1@15 and depth_nan_ratio while preserving zero ring-count error. Its measured response was joint, so the proposal keeps the downstream combination together and makes no per-parameter causal claim. Unfolding keys are omitted because stage1_unlocked is false, and every value is inside the packet bounds.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9672561546948405,
+    "denoise_retained_ratio": 0.7374504584442473,
+    "depth_nan_ratio": 0.2106168066902547,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5969208044540393,
+    "correspondence_f1@15": 0.4721795795458012,
+    "chamfer_sym_px": 81.78235244750977,
+    "sam_fill_rate": 0.7229170685287347,
+    "phase_incoherence_deg": 9.6
+  },
+  "score": 0.7051666560990272,
+  "score_raw": 0.7051666560990272,
+  "band": "accept",
+  "gt_miou": 0.785,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6966793181559678,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.45298510069511344,
+    "sam_fill_rate": 0.7297588827591528,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.20905922176413247
+  },
+  "elapsed_s": 236.6,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/4-2/round1/params",
+  "finished_at": "2026-09-19T23:08:40"
+}

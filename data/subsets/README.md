@@ -39,6 +39,23 @@ ring 36) after the thin tail 107–116 hung in unfolding. Leftover rings
 ./venv/bin/python scripts/extract_t3_subsets.py --windows 3-8
 ```
 
+## Drive direction (engineering metadata)
+
+`tunnel_meta.json` stores the unit XY direction along which stage-1 unfolded
+`h` must increase. It is derived once by `scripts/build_tunnel_meta.py` from
+the Seg2Tunnel ring-index column and the family frame (`h_ring_sign` +1 for
+staggered and complex, −1 for continuous), then treated as project metadata.
+Only tunnel 3 (one combined scan) shares a heading across subsets. The other
+tunnels keep one vector per subset, because each cloud's long axis points a
+different way. Pipeline stages 1–5 read the vector for the subset they are
+running and do not read the per-point ring column. Expected ring counts for
+the ring-count residual come from each subset's `*_rings_meta.json`
+(`n_rings_kept`), not from counting ring ids at runtime.
+
+```bash
+./venv/bin/python scripts/build_tunnel_meta.py
+```
+
 ## How to run the pipeline on a subset
 
 The BO / holdout runners set `PROXY4TUN_INPUT_TXT` to `data/subsets/<id>.txt`.

@@ -1,0 +1,55 @@
+{
+  "subset": "3-4",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.001
+    },
+    "detecting": {
+      "hough_threshold_oblique": 40,
+      "maxLineGap_oblique": 18
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was rejected: score 0.5265\u21920.3562, correspondence_f1@15 0.244\u21920.038, sam_fill_rate 0.571\u21920.474, depth_nan_ratio 0.195\u21920.305, ring_count_error stayed 0. The after depth map is shorter and whiter. The after line plot no longer has one oblique band: red and green pixels are spread over a wide Y range, while the horizontal detector is still a single stub. The incumbent is still the start, whose lines are one dominant ~6\u00b0 band plus a weaker secondary red cluster, with all 10 ring centres present.",
+    "rule": "Lowering the oblique vote and raising maxLineGap, jointly with polynomial degree 3, admitted off-band fragments (f_spurious_lines) and opened depth holes. A horizontal threshold of 22 did not create circumferential joints, so that knob is not the recovery path. Ring count is already 0, so vertical Hough and slice spacing stay put. Do not repeat degree 3.",
+    "failure_mode": "f_spurious_lines",
+    "rationale": "The new overlay is applied on the start, not stacked on the rejected parameters. It reverses only the oblique settings that scattered the joint band: vote 30\u219240 and maxLineGap 30\u219218, so short off-band fragments are not bridged into lines. Curvature threshold 0.0005\u21920.001 densifies the flat surface (fewer small depth gaps for SAM) without opening the radial gate, which would feed more false joints. No unfolding, no horizontal retune, and uniform_k_snap stays on.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9984156385609421,
+    "denoise_retained_ratio": 0.6936518019734892,
+    "depth_nan_ratio": 0.1876038832373969,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4562829525483304,
+    "correspondence_f1@15": 0.2720838282705015,
+    "chamfer_sym_px": 79.6001329421997,
+    "sam_fill_rate": 0.5451192139922924,
+    "phase_incoherence_deg": 2.8
+  },
+  "score": 0.5354679451520715,
+  "score_raw": 0.5354679451520715,
+  "band": "refine",
+  "gt_miou": 0.599,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5264765228145997,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.24397684368509054,
+    "sam_fill_rate": 0.5707661034176089,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19497856422227988
+  },
+  "elapsed_s": 189.8,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-4/round2/params",
+  "finished_at": "2026-09-19T20:54:14"
+}

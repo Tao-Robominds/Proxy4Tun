@@ -1,0 +1,53 @@
+{
+  "subset": "3-10",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 22,
+      "maxLineGap_oblique": 48
+    }
+  },
+  "proposal": {
+    "observation": "Incumbent proxy 0.603 is held down by correspondence_f1@15=0.287 (chamfer_sym_px=80.2, boundary_explained_edge@25=0.384). Ring count is already exact (error 0, ten columns in the ring map), SAM fill is 0.698, and depth_nan_ratio is 0.142. In detected_lines the two longitudinal tracks are incomplete: the green series near y=1450-1500 starts only around the third ring, the red series near y=1600-1650 starts around the fourth, and a few isolated red fragments sit off those tracks. initial_prompt_points shows eleven points, all marked propagated, on one horizontal row at y\u22481558, between the two tracks rather than on them. Stage-1 residual is 10.20 cm against a 10.0 cm gate and orient_agreement is 0.999, so the axis is not the visible failure.",
+    "rule": "When oblique tracks do not cover every ring and every prompt centre is propagated, classify f_missing_lines and relax oblique Hough before changing ring-count, SAM geometry, the radial gate, or unfolding. The development joint overlays that moved those stages together lowered correspondence and fill even when labeled improve, so they are not copied.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Joint pixels are still visible on the left rings, but no accepted oblique segment covers them, so distance-pattern matching falls back to propagating the K-row snap (prior row 1553; observed prompts at 1558). That row lies about 80 px off the visible tracks, matching the chamfer, and most longitudinal edges stay unexplained. Lower binary_threshold 127\u2192110 so faint left-side joint pixels pass THRESH_BINARY, lower hough_threshold_oblique 30\u219222, and raise maxLineGap_oblique 30\u219248 so broken longitudinal segments can connect. Vertical Hough, uniform_k_snap, SAM, denoising, and unfolding stay at the reference so the correct ten-ring count and the 0.70 fill are not traded away. Stage 1 is unlocked but unused: orientation already agrees and the miss is at detection.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9990592937874491,
+    "denoise_retained_ratio": 0.7404734761200185,
+    "depth_nan_ratio": 0.14202755710717666,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5004868549172347,
+    "correspondence_f1@15": 0.3414865926372692,
+    "chamfer_sym_px": 67.15145683288574,
+    "sam_fill_rate": 0.6975566174270906,
+    "phase_incoherence_deg": 1.3
+  },
+  "score": 0.6339875171900373,
+  "score_raw": 0.6339875171900373,
+  "band": "refine",
+  "gt_miou": 0.854,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6028244393016267,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.2872649727544261,
+    "sam_fill_rate": 0.697552574768962,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.14202755710717666
+  },
+  "elapsed_s": 186.2,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-10/round1/params",
+  "finished_at": "2026-09-19T19:29:05"
+}

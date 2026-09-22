@@ -1,0 +1,51 @@
+{
+  "subset": "3-7",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 3,
+  "overlay": {
+    "sam": {
+      "angle": 4.0
+    }
+  },
+  "proposal": {
+    "observation": "Lowering the accepted oblique Hough threshold from 30 to 20 reduced correspondence_f1@15 by 0.014 and was rejected, while fill, ring count, depth holes, prompt positions, and the segmentation layout were unchanged. The accepted joint lines are shallow, near the lower end of the permitted taper range, whereas the masks remain dominated by broad horizontal template bands.",
+    "rule": "When prompt count and spacing are stable but correspondence remains weak after detection tuning reaches a rejected direction, preserve the accepted detector and adjust the downstream template geometry toward the observed boundary slope.",
+    "failure_mode": "stage_5_segmentation.f_template_mismatch",
+    "rationale": "The round-2 rejection bounds further Hough relaxation and returns the search to the round-1 incumbent. Setting only the SAM taper angle to the bounded minimum targets the visible shallow joint geometry without disturbing the accepted detector, correct 10-ring recovery, or high fill rate; unfolding remains untouched because stage 1 is locked.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991211319489915,
+    "denoise_retained_ratio": 0.7976920114616173,
+    "depth_nan_ratio": 0.16450624232718375,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.17197858235594085,
+    "correspondence_f1@15": 0.1447346985683574,
+    "chamfer_sym_px": 99.02987670898438,
+    "sam_fill_rate": 0.7673017551417364,
+    "phase_incoherence_deg": 1.6
+  },
+  "score": 0.5399531504266297,
+  "score_raw": 0.5399531504266297,
+  "band": "refine",
+  "gt_miou": 0.844,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5611264757251164,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.18186580436868935,
+    "sam_fill_rate": 0.7667991671398826,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.16450624232718375
+  },
+  "elapsed_s": 187.6,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-7/round3/params",
+  "finished_at": "2026-09-20T00:37:21"
+}

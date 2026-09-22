@@ -1,0 +1,54 @@
+{
+  "subset": "3-7",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 100,
+      "hough_threshold_oblique": 24,
+      "maxLineGap_oblique": 56,
+      "pattern_tolerance": 16
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was accepted but the gain was small: proxy 0.5553 to 0.5587, correspondence_f1@15 0.1717 to 0.1767, sam_fill_rate 0.7668 to 0.7683, ring_count_error still 0, depth_nan_ratio unchanged at 0.1645. Chamfer is still 94.6 px and phase_incoherence_deg rose 1.7 to 2.5. On the after detected_lines image the ten magenta boundaries are unchanged, and the oblique overlays are still only on the last three ring intervals (green y about 667-678 and red y about 740-753, both x about 835-1145). The blue horizontal fallback at x about 1093-1134, y about 375 is unchanged. Left and middle rings have a similar count of gray joint pixels at or above intensity 110, but no line overlay. The after prompt plot still has ten propagated centres, nine of them on one horizontal row. The depth map is identical to before.",
+    "rule": "d7 still fires: oblique yield remains low and the horizontal fallback is still present, so f_missing_lines was only partly relieved. d8 also fires: the distance pattern did not place centres on the detected joint bands, so the centres stay propagated. Depth holes and ring count do not explain this, and stage 1 remains locked at 3.60 cm.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Round 1 set binary_threshold=110, hough_threshold_oblique=32, and maxLineGap_oblique=40. That moved correspondence by only 0.005 and did not extend lines left of x about 835. Left-ring gray pixels have median intensity about 106, so 110 still drops about half of them, and a gap of 40 does not bridge the fragmented clusters. Lower the binary threshold to 100, the oblique accumulator to 24, and raise maxLineGap_oblique to 56 so those clusters can form lines. Raise pattern_tolerance to 16 so new intersections can match the K/AB spacing instead of staying on the flat propagated row. Keep uniform_k_snap false, leave vertical Hough and the horizontal threshold at the round-1 incumbent, and do not touch unfolding, denoising, enhancing, or SAM: fill and depth holes are not the failing measurements, and ring count is already exact.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991211319489915,
+    "denoise_retained_ratio": 0.7976920114616173,
+    "depth_nan_ratio": 0.16450624232718375,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.20887384846775708,
+    "correspondence_f1@15": 0.1871216029163313,
+    "chamfer_sym_px": 96.34200668334961,
+    "sam_fill_rate": 0.7667991671398826,
+    "phase_incoherence_deg": 1.7
+  },
+  "score": 0.5641470389013608,
+  "score_raw": 0.5641470389013608,
+  "band": "refine",
+  "gt_miou": 0.845,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5586570894042744,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.17671592239628878,
+    "sam_fill_rate": 0.768280822677815,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.16450624232718375
+  },
+  "elapsed_s": 187.6,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-7/round2/params",
+  "finished_at": "2026-09-19T20:03:48"
+}

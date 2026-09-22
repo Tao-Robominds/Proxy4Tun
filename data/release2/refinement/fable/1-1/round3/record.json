@@ -1,0 +1,64 @@
+{
+  "subset": "1-1",
+  "family": "staggered",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0005,
+      "inter_radius": 0.08
+    },
+    "detecting": {
+      "binary_threshold": 100,
+      "hough_threshold_oblique": 40,
+      "hough_threshold_horizontal": 90,
+      "maxLineGap_oblique": 80
+    },
+    "sam": {
+      "processing.y_bounds": [
+        3600,
+        13100
+      ]
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 (enhancing inter_radius 0.08; detecting binary 100, oblique 40, horizontal 90, maxLineGap 80) was accepted: proxy 0.6140 -> 0.6181, correspondence_f1@15 0.282 -> 0.290 (+0.0075), chamfer_sym_px 104.7 -> 100.2, boundary_explained_edge 0.689 -> 0.691, depth_nan_ratio and ring_count_error unchanged, sam_fill_rate 0.7279 -> 0.7275 (flat). The before/after detected_lines.png differ only marginally (the oblique segments at x~1000-1450 and x~1450-1650 are slightly longer, a couple of blue fallback segments shift by a few px) and initial_prompt_points.png is again pixel-identical to rounds 0 and 1: three 'assume' centres at x=120/360/600, the lone negative-slope centre at x=850, the x=1810 midpoint at y~2290, phase_incoherence_deg still 6.6. Two rounds at opposite ends of the detecting bounds have therefore moved zero prompt centres; the F1/chamfer gain is attributable to the joint effect with the joint-enhancement change (inter_radius), i.e. to the depth-map edge structure, not to stage 4. Stage-4 knobs are saturated at their bounds on this scan. The remaining headroom in the four-feature proxy is sam_fill_rate (0.727, ~27% of the lining left unlabeled: the top band and the lower rail-side band in segmentation_results.png are uncovered, and the round-2 change did not touch SAM at all), plus a small edge-structure margin via enhancing.",
+    "rule": "d12 (m_coverage low, ~0.73, with no background bleed and ring count correct) -> f_over_under_coverage; r_balance_coverage: since upstream depth holes are already low (depth_nan_ratio 0.12) and prompt centres cannot be moved within bounds, the only bounded SAM lever is the processing band lower bound. Both fill-improving analogies (s005: y_bounds lower 3710, fill 0.720->0.728; s002: 3603, fill 0.720->0.764) sit at the low end of the [3600, 4400] range, whereas the catastrophic s011 used 3802 together with a high oblique threshold. Keep every stage-4 value at the accepted round-2 setting; do not reopen denoising (round 1 showed the joint denoising move cost F1); nudge curvature_threshold back toward the notebook default (0.0005) since the only tested move in the other direction (0.006, round 1) was part of a net-negative overlay.",
+    "failure_mode": "stage_5_segmentation.f_over_under_coverage (lining left as label 0 at the band edges; sam_fill_rate 0.727) on top of a saturated stage_4_detection.f_missing_lines that is no longer actionable within parameter_bounds.",
+    "rationale": "Final round on the round-2 incumbent (score 0.6181). Stage 1 is locked, so unfolding is untouched. The overlay re-states the accepted round-2 values (enhancing.inter_radius 0.08; detecting binary 100 / oblique 40 / horizontal 90 / maxLineGap 80) so the result is robust to whether overlays compose on the incumbent or on the start config, and adds two bounded changes: (1) sam.processing.y_bounds lower = 3600 (bound minimum, upper kept at 13100 as in every worked example) to extend the SAM processing band and recover unlabeled lining at the top edge, the direction in which both fill-improving analogies lie; (2) enhancing.curvature_threshold = 0.0005, the documented Algorithm-3 default, so joint/surface separation is at the reference value rather than the 0.006 that participated in the rejected round-1 overlay. Denoising (mask_r, z_step, grad_threshold) and hough_threshold_vertical are left at incumbent because denoise_retained_ratio, depth_nan_ratio and ring_count_error are healthy and round 1 showed the denoising move to be net negative. Expected effect: sam_fill_rate up, correspondence_f1@15 held or slightly up via unchanged prompts and reference joint separation, ring_count_error 0, depth_nan_ratio unchanged. All values inside bounds; outcome is a joint effect of the whole overlay.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999336994200428,
+    "denoise_retained_ratio": 0.763569489665416,
+    "depth_nan_ratio": 0.11987814952498968,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.7001083759095835,
+    "correspondence_f1@15": 0.29055146799474885,
+    "chamfer_sym_px": 99.76755142211914,
+    "sam_fill_rate": 0.7274661261932199,
+    "phase_incoherence_deg": 6.6
+  },
+  "score": 0.6185918125497573,
+  "score_raw": 0.6185918125497573,
+  "band": "refine",
+  "gt_miou": 0.784,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6181307322243652,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.28975187298138716,
+    "sam_fill_rate": 0.7274614585937249,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11987814952498968
+  },
+  "elapsed_s": 258.7,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/1-1/round3/params",
+  "finished_at": "2026-09-19T14:21:35"
+}

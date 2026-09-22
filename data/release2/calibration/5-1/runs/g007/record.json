@@ -1,0 +1,92 @@
+{
+  "dev": "5-1",
+  "family": "complex",
+  "trial_id": "g007",
+  "acquisition": "gp_uncertainty_sigma=0.2090",
+  "seed": 5,
+  "x_unit": [
+    0.39424483283632555,
+    0.025567324410621935,
+    0.9960620418316326,
+    0.17353543333608204,
+    0.9954467324502794,
+    0.9865836585031875,
+    0.2904705923804047,
+    0.9105953594282047,
+    0.5848234957105553,
+    0.632189735552369,
+    0.9695345873981339,
+    0.03350128926071875,
+    0.6842942857482563,
+    0.5581080937585867,
+    0.20916533130804812,
+    0.9798675564092592,
+    0.6308740085365173
+  ],
+  "x": [
+    0.9576979331345302,
+    1.6102269297642489,
+    2.9960620418316326,
+    1.2147480333525742,
+    3.7986340197350836,
+    4.045975097550956,
+    0.0007228470662847283,
+    154.63572156569228,
+    51.31705730697499,
+    53.448538099856606,
+    4872.0452670721625,
+    31.675064463035937,
+    22.10735714370641,
+    13.3716214063788,
+    1625.4991987848289,
+    1489.9337782046296,
+    10.154370042682586
+  ],
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 0.9576979331345302,
+      "slice_spacing_factor": 1.6102269297642489,
+      "polynomial_degree": 3,
+      "random_seed": 1
+    },
+    "denoising": {
+      "mask_r_low": 3.7986340197350836,
+      "mask_r_high": 4.045975097550956
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0007228470662847283
+    },
+    "detecting": {
+      "binary_threshold": 155,
+      "hough_threshold_oblique": 51,
+      "hough_threshold_horizontal": 53,
+      "hough_threshold_vertical": 4872,
+      "maxLineGap_oblique": 32,
+      "maxLineGap_horizontal": 22,
+      "pattern_tolerance": 13
+    },
+    "sam": {
+      "segment_width": 1625,
+      "K_height": 1489.9337782046296,
+      "angle": 10.154370042682586
+    }
+  },
+  "overlay_in_bounds": true,
+  "measurements": {
+    "unfold_residual": 1.547562508716013,
+    "orient_agreement": 0.7997250674075596,
+    "denoise_retained_ratio": 0.007497086736823391,
+    "depth_nan_ratio": 0.9824951883575135,
+    "ring_count_error": 1.0,
+    "boundary_explained_edge@25": 0.7376237623762376,
+    "correspondence_f1@15": 0.0,
+    "chamfer_sym_px": 200.0,
+    "sam_fill_rate": 0.006653121674524772,
+    "phase_incoherence_deg": 13.8
+  },
+  "gt_miou": 0.037,
+  "valid": true,
+  "failure_reason": null,
+  "elapsed_s": 157.6,
+  "log": "/home/boringtao/Projects/Proxy4Tun/data/release2/calibration/5-1/runs/g007/pipeline.log"
+}

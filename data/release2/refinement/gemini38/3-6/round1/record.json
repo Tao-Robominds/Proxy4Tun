@@ -1,0 +1,52 @@
+{
+  "subset": "3-6",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_vertical": 900,
+      "hough_threshold_horizontal": 22
+    }
+  },
+  "proposal": {
+    "observation": "Continuous 3-6 already has 10 rings (ring_count_error 0), stage-1 residual 3.2 cm so unfolding stays locked, and the K-row is healthy: all 10 prompts are propagated at one Y (~1547), anchor Y scatter is only a few pixels, and the red/green oblique pair sits on that row at about 6 degrees with a separation matching K_height. The failure is elsewhere. Magenta ring lines are evenly spaced synthetic centres, not fitted vertical joints, and the blue horizontal joints exist only on a subset of rings (upper band around y~790 and lower band around y~2300, mostly left-of-centre). Label bands follow K/B2/A3/A2/A1/B1 but are speckled, and correspondence_f1@15 is 0.467 with chamfer ~66 px while sam_fill_rate 0.649 and depth_nan_ratio 0.105 are secondary.",
+    "rule": "When oblique K-lines and the uniform K-row already agree, and ring count is already exact, do not retune unfolding, the radial gate, K_height, angle, or uniform_k_snap. Relax only the detectors that actually failed: the vertical accumulator that produced no lines, and the horizontal threshold that left AB-level joints truncated. The development full-overlays that moved many stages together lowered correspondence and fill even when ring count stayed 0.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Vertical Hough at 1500 returned no lines, so ring centres fell back to even spacing; dropping hough_threshold_vertical to 900 (bounds 800-2500) should recover the real seams and seat SAM crops on them without touching stage 1, so ring_count_error stays 0. Horizontal lines already lie near 0.5*K+AB from the prompt row but cover only part of the span; lowering hough_threshold_horizontal from 30 to 22 (bounds 20-60) extends those joints so more label transitions fall within the correspondence window. Oblique thresholds, uniform_k_snap, and SAM heights are left at the reference because the K pair is already aligned.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9998273166785221,
+    "denoise_retained_ratio": 0.6947482510592177,
+    "depth_nan_ratio": 0.1052027439356335,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5464216634429401,
+    "correspondence_f1@15": 0.4666691544113074,
+    "chamfer_sym_px": 65.06020450592041,
+    "sam_fill_rate": 0.6490524518014911,
+    "phase_incoherence_deg": 0.8
+  },
+  "score": 0.6964968642669072,
+  "score_raw": 0.6964968642669072,
+  "band": "refine",
+  "gt_miou": 0.836,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6966921252558986,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.46700890973588527,
+    "sam_fill_rate": 0.6490524518014911,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.1052027439356335
+  },
+  "elapsed_s": 190.1,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-6/round1/params",
+  "finished_at": "2026-09-19T19:16:08"
+}

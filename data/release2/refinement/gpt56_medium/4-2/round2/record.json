@@ -1,0 +1,51 @@
+{
+  "subset": "4-2",
+  "family": "complex",
+  "arm": "gpt56_medium",
+  "round": 2,
+  "overlay": {
+    "denoising": {
+      "mask_r_high": 3.9
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was accepted because correspondence_f1@15 rose from 0.4530 to 0.4722 while the 10-ring topology remained exact. However, sam_fill_rate fell from 0.7298 to 0.7229 and depth_nan_ratio rose from 0.2091 to 0.2106. The before/after prompt-centre plots are unchanged and the ring partitions remain coherent, while the same large depth-map voids persist, so another detection or template-wide change is not justified.",
+    "rule": "Preserve the accepted downstream geometry and exact ring count. When coverage weakens and depth holes persist without a prompt-count change, make a small bounded radial-gate widening on the new incumbent rather than replacing the accepted joint setting.",
+    "failure_mode": "Stage-2 radial gate likely remains slightly too tight at the outer radius, contributing to stage-3 depth holes and stage-5 under-coverage; confidence is moderate because Round 1 changed parameters jointly.",
+    "rationale": "Increase only mask_r_high from the incumbent value 3.794932061433792 to 3.90. This is a conservative test of retaining additional outer-radius lining points while leaving the correspondence-improving detection and SAM settings intact. The value is within [3.75, 4.05], no unfolding key is touched, and no individual Round-1 effect is treated as causally identified.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9672561546948405,
+    "denoise_retained_ratio": 0.7425428545709399,
+    "depth_nan_ratio": 0.20905922176413247,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.561616517097777,
+    "correspondence_f1@15": 0.45298510069511344,
+    "chamfer_sym_px": 71.36006736755371,
+    "sam_fill_rate": 0.7297588827591528,
+    "phase_incoherence_deg": 9.4
+  },
+  "score": 0.6966793181559678,
+  "score_raw": 0.6966793181559678,
+  "band": "refine",
+  "gt_miou": 0.787,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.7051666560990272,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.4721795795458012,
+    "sam_fill_rate": 0.7229170685287347,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.2106168066902547
+  },
+  "elapsed_s": 237.8,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/4-2/round2/params",
+  "finished_at": "2026-09-20T00:10:58"
+}

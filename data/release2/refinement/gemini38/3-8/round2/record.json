@@ -1,0 +1,54 @@
+{
+  "subset": "3-8",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.73,
+      "mask_r_high": 3.1,
+      "mask_theta_low": 1.25,
+      "mask_theta_high": 18.0
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was rejected: score 0.5709\u21920.5266, correspondence_f1@15 \u22120.019, sam_fill_rate \u22120.083, depth_nan_ratio +0.034, ring_count_error still 0. The applied keys were polynomial_degree 3, ransac_threshold 0.92, hough_threshold_oblique 30, maxLineGap_oblique 40. The after depth map is holier (content white 0.160\u21920.194), worst in the leading decile (0.72\u21920.81) and the next decile (0.10\u21920.24); top and bottom bands were already the holey part of the start map. Ten verticals remain, but the green/red joint pair still begins only near the fifth ring and the ten prompts are still one propagated row, so the looser oblique Hough did not recover the left joints. Incumbent is still the start: correspondence 0.302, fill 0.597, NaN 0.182, residual 24 cm with the axis already agreed.",
+    "rule": "A curve change that raises depth NaN and drops fill is not a usable fix for the 24 cm residual. The holes that grew on the leading rings, plus the top and bottom bands already present, are f_over_gate: lining radii and theta fall outside the denoise window and become depth holes, which cuts fill. Widen the radial gate and the theta gate. Do not repeat degree 3, ransac 0.92, or the oblique-threshold/gap relaxation. Do not move slice spacing or the vertical Hough threshold; ring count is already exact.",
+    "failure_mode": "f_over_gate",
+    "rationale": "mask_r_low 2.73 and mask_r_high 3.10 open the radial window inside [2.7, 3.0] and [2.9, 3.15] without sitting on the stops, so leading-ring points the 24 cm residual pushes just outside the band can stay as lining. mask_theta_low 1.25 and mask_theta_high 18.0 likewise open the circumferential window inside [1.0, 2.5] and [15.0, 19.0], aimed at the top and bottom hole bands rather than at a full-open gate. Unfolding and detection are omitted: the cubic plus tighter RANSAC increased NaN, and lowering the oblique vote to 30 with maxLineGap 40 did not extend joints onto the left four rings or move the prompts off a single Y. SAM template keys stay at the start; the development overlays that retuned them jointly cut fill.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9995216099864935,
+    "denoise_retained_ratio": 0.7566311307649946,
+    "depth_nan_ratio": 0.18417238539596117,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.6723824369966225,
+    "correspondence_f1@15": 0.3231501009110357,
+    "chamfer_sym_px": 75.98232650756836,
+    "sam_fill_rate": 0.6037103097952508,
+    "phase_incoherence_deg": 2.1
+  },
+  "score": 0.5848216336523125,
+  "score_raw": 0.5848216336523125,
+  "band": "refine",
+  "gt_miou": 0.711,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5709255888387867,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3022120169979324,
+    "sam_fill_rate": 0.596949720945907,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.18208811279684348
+  },
+  "elapsed_s": 186.5,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-8/round2/params",
+  "finished_at": "2026-09-19T20:06:56"
+}

@@ -1,0 +1,52 @@
+{
+  "subset": "3-3",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "denoising": {
+      "mask_theta_low": 2.3,
+      "mask_theta_high": 15.8
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 (binary 100, oblique 25, maxLineGap 60, tolerance 16) was rejected: proxy 0.5578 -> 0.5476, correspondence_f1@15 0.153 -> 0.136, sam_fill_rate -0.001, ring_count_error and depth_nan_ratio unchanged. The round-2 'after' detected_lines.png explains the loss: the extra relaxation produced spurious oblique segments through the bolt-hole grid (red at x~800/y~1400, green at x~930/y~1660) and a wrong-sign green segment duplicating the red K joint in column 1 at y~1620, while the four central/right columns (x~1090-1580 and ~1825-2075) still show no joint pixels at all at y~1470/1620 even at binary 100 -- the joint trace simply is not present in the outlier map there, so detection is saturated: prompts stayed a single propagated row at y~1540 in all three runs and the SAM masks were unchanged (fill rate constant to 1e-3). Round 1 remains the incumbent. Across all runs the depth map shows heavy background leakage at both circumferential ends: cables/walkway clutter and large white voids over the top ~400 px (full-res) and a rail/equipment void band with ragged NaN patches over the bottom ~2300-3100 px; the labelled mask in these bands is fragmented and its boundaries follow void outlines rather than joints (chamfer_sym_px 90.7, boundary_explained_edge@25 0.226).",
+    "rule": "Detecting-stage r_relax_hough is exhausted: round 1 improved, round 2 over-relaxed into f_spurious_lines with no new true joints. Ontology chain for f_spurious_lines lists likely_upstream f_under_gate (stage 2); d2 (m_bg_leakage high: rails/cables retained at both map ends) fires on the depth map. For the continuous (T3-like) family the ontology names the theta gate as the tunnel-specific remedy: r_radial_gate_tighten -> 'add/tighten p_theta_gate if tunnel provides one (e.g. T3)'. Stage 1 is locked, so unfolding is untouched.",
+    "failure_mode": "stage_2_denoise.f_under_gate (background leakage at both circumferential ends of the unrolled map; downstream unmatched mask boundaries in stage 5 and spurious-line susceptibility in stage 4)",
+    "rationale": "The remaining in-bounds lever that acts on the mask-boundary side rather than the saturated line side is the stage-2 theta gate. Because theta=0 lies at the floor, both the top and bottom ends of the 15.5 m-tall map are floor-adjacent, so tightening BOTH mask_theta_low (raise to 2.3) and mask_theta_high (lower to 15.8) is orientation-agnostic and trims roughly 0.5 m from one end and ~1.2 m from the other under a mid-bounds incumbent. Expected effects on the four features: depth_nan_ratio should fall (the trimmed bands carry most of the NaN voids), correspondence_f1@15 should rise via precision (fewer void-following mask boundaries with no matching edge, fewer bolt/clutter pixels available to seed spurious lines), sam_fill_rate is a fraction over the retained lining and should be neutral-to-positive, and ring_count_error should stay 0 because the 10 vertical ring lines have been recovered in every run so far, including worked examples with vertical accumulator thresholds spanning 822-2291, indicating a comfortable vote margin against a ~10% height reduction. The K prompt row at y~1540 sits mid-height and is not affected. Radial gates are left alone because tightening r would create new NaNs. Detecting keys are not included, so the accepted round-1 values (binary 110, oblique 30, maxLineGap 50, tolerance 14) remain in force; SAM geometry (segment_width ~1200 mm matches the observed 241 px ring pitch, and the K block already spans the detected joints) is deliberately unchanged, as worked example s019 shows SAM-geometry moves can collapse fill rate.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.99996584722565,
+    "denoise_retained_ratio": 0.7193100940308588,
+    "depth_nan_ratio": 0.12165014724416758,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.38545454545454544,
+    "correspondence_f1@15": 0.1609585139361002,
+    "chamfer_sym_px": 91.38893795013428,
+    "sam_fill_rate": 0.6782135868529967,
+    "phase_incoherence_deg": 0.8
+  },
+  "score": 0.5274964666989841,
+  "score_raw": 0.5274964666989841,
+  "band": "refine",
+  "gt_miou": 0.606,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5578123030644832,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.15268920015725135,
+    "sam_fill_rate": 0.779964327151194,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11387375767737186
+  },
+  "elapsed_s": 152.7,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-3/round3/params",
+  "finished_at": "2026-09-19T14:32:46"
+}

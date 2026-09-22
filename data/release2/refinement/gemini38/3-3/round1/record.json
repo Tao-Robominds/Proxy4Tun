@@ -1,0 +1,54 @@
+{
+  "subset": "3-3",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 112,
+      "hough_threshold_oblique": 30,
+      "maxLineGap_oblique": 45,
+      "uniform_k_snap": false
+    }
+  },
+  "proposal": {
+    "observation": "Family continuous, 10 rings, stage-1 locked (residual 2.70 cm). Incumbent proxy 0.535 is limited by correspondence_f1@15=0.113 and boundary_explained_edge@25=0.207 (chamfer_sym_px=94), while ring_count_error=0, sam_fill_rate=0.780, depth_nan_ratio=0.114, and phase_incoherence_deg=1.7 are already healthy. detected_lines shows ten magenta vertical ring boundaries, but the short green (positive) and red (negative) oblique segments sit only in edge columns (about rings 1, 2, 9, 10) near y=1470-1640; columns 3-8 have the same white joint clusters and no oblique lines. initial_prompt_points contains only a propagated row: ten centres on one flat line at y\u22481545, not per-ring intersections.",
+    "rule": "d7: oblique line yield is low and prompt centres are propagated from the edge detections rather than measured on each ring, so circumferential joints stay unexplained even though vertical ring count matches.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Upstream depth holes and joint loss are not the driver: retained ratio is 0.82, NaN ratio is 0.11, and joint clusters are visible across the first nine columns, so stage 1 stays untouched and denoising/enhancing/SAM are left as-is (fill and phase are the healthy terms; the worked full overlays that also moved SAM geometry and uniform_k_snap all cut correspondence). Remediation is r_relax_hough only: lower the oblique accumulator so the weaker middle-column K-taper fragments qualify, raise maxLineGap so the ~100 px fragments bridge inside a ring, and ease binary_threshold so those fragments survive binarisation. uniform_k_snap is set false so a single flat K row is not re-imposed on the slightly warped joint band. Vertical and horizontal Hough stay at the incumbent so the correct ring count and the existing fallback are not traded away. Values stay inside continuous bounds and clear of the low-vertical / high-tolerance / snap-on combination that zeroed correspondence on the development scan.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.99996584722565,
+    "denoise_retained_ratio": 0.81787798500355,
+    "depth_nan_ratio": 0.11387375767737186,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.21869712351945855,
+    "correspondence_f1@15": 0.12362049865380302,
+    "chamfer_sym_px": 93.47066974639893,
+    "sam_fill_rate": 0.7801271061700175,
+    "phase_incoherence_deg": 1.7
+  },
+  "score": 0.5411600783602838,
+  "score_raw": 0.5411600783602838,
+  "band": "refine",
+  "gt_miou": 0.807,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5349146506285205,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.11284116113121614,
+    "sam_fill_rate": 0.7799747173013317,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11387375767737186
+  },
+  "elapsed_s": 198.2,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-3/round1/params",
+  "finished_at": "2026-09-19T19:04:42"
+}

@@ -1,0 +1,55 @@
+{
+  "subset": "1-3",
+  "family": "staggered",
+  "arm": "fable",
+  "round": 2,
+  "overlay": {
+    "denoising": {
+      "grad_threshold": 0.22
+    },
+    "enhancing": {
+      "inter_radius": 0.075,
+      "curvature_threshold": 0.005
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 relaxed the oblique Hough detector (threshold 42, gap 60, horizontal 72) and was rejected: proxy 0.6474 -> 0.6171, correspondence_f1@15 0.337 -> 0.296, sam_fill_rate 0.735 -> 0.714, depth_nan_ratio unchanged. The after/detected_lines.png explains why: the extra oblique lines did not come from the faint staggered joints outside the centre; they were long spurious segments voted by the dense speckle band at x~1200-1600 (new lines at y~100-200, ~950, ~1400, ~1650, ~2500) plus one at the right edge (y~1950). after/initial_prompt_points.png shows the consequence: a new off-pattern midpoint at (1330,1500) and (2290,1130), one negative_slope point lost, and the two prompt rows no longer regular; after/segmentation_results.png shows a misplaced K block (orange) at x~1330,y~1500 inside the green A-block band and a dark blob in the ring map, i.e. a crop-offset that lowered both fill and correspondence. The before images show the true oblique joints are present but dotted/faint in the outlier map at every ring row, while the centre band is filled with retained speckle. Depth map itself is well filled (NaN 0.122) and ring count is correct (10).",
+    "rule": "Round 1 fired d9 (m_prompt_count / intersections off-pattern from spurious lines) -> f_spurious_lines, whose likely_upstream is stage_2 f_under_gate (retained speckle in the outlier map); the persistent low oblique yield is d6 (m_joint_contrast low) -> stage_3 f_joint_oversmoothed, whose inter-stage effect is stage_4 f_missing_lines. Per orchestration_hint and the r_relax_hough precondition ('first rule out upstream f_joint_oversmoothed'), the detector must not be relaxed further; the remedy moves upstream: r_radial/density tighten for the leaked speckle (in-bounds knob: denoising.grad_threshold) and joint sharpening for faint joints (in-bounds knob: enhancing.inter_radius, since depth_threshold_low/high are not exposed).",
+    "failure_mode": "f_joint_oversmoothed (stage_3) with f_under_gate (stage_2) feeding f_spurious_lines when the detector is relaxed",
+    "rationale": "Detecting keys are deliberately omitted so they revert to the incumbent (start) values, which produced fewer but on-pattern intersections than round 1. Raising denoising.grad_threshold to 0.22 makes the density-gradient test stricter, thinning the retained speckle in the x~1200-1600 band that supplied false Hough votes, without touching the radial gate (the band is a theta/density artefact, not a radius leak, so mask_r is left alone to protect depth_nan_ratio). Raising enhancing.inter_radius to 0.075 interpolates joint points over a longer reach so the dotted oblique joint traces become continuous, letting the incumbent oblique Hough threshold recover true lines at rows currently served only by horizontal fallback; enhancing.curvature_threshold is raised to 0.005 so more lining points are treated as smooth surface and upsampled, keeping fill and NaN ratio stable while joint points stay separate. Analogy to worked examples (joint outcomes, no per-parameter attribution): the only proxy-improving example (s005) combined a high grad_threshold (0.195), a large inter_radius (0.058) and a high curvature_threshold (0.0061), whereas both examples with low grad_threshold and small inter_radius/curvature (s002: 0.105/0.022/0.002; s011: 0.138/0.052/0.0037) lowered correspondence_f1@15. Unfolding is untouched (stage-1 locked). All values are inside configs/bounds/staggered.json.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999867062401834,
+    "denoise_retained_ratio": 0.7619702737413845,
+    "depth_nan_ratio": 0.11657180246931939,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8768136970400464,
+    "correspondence_f1@15": 0.2929053730663965,
+    "chamfer_sym_px": 87.02799224853516,
+    "sam_fill_rate": 0.7335299038762688,
+    "phase_incoherence_deg": 16.7
+  },
+  "score": 0.6225453011137541,
+  "score_raw": 0.6225453011137541,
+  "band": "refine",
+  "gt_miou": 0.556,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6473891053236706,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3369665231037002,
+    "sam_fill_rate": 0.7349035504612804,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12176547785903094
+  },
+  "elapsed_s": 271.2,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/1-3/round2/params",
+  "finished_at": "2026-09-19T13:24:55"
+}

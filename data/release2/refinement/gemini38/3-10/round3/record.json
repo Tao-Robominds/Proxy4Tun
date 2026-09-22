@@ -1,0 +1,56 @@
+{
+  "subset": "3-10",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.001
+    },
+    "detecting": {
+      "binary_threshold": 104,
+      "hough_threshold_oblique": 20,
+      "maxLineGap_oblique": 56
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 was accepted, but the gain shrank. The overlay binary_threshold 104, hough_threshold_oblique 20, maxLineGap_oblique 56 moved the proxy 0.634\u21920.643. correspondence_f1@15 rose only 0.341\u21920.358 (+0.016), versus +0.054 in round 1; sam_fill_rate dipped 0.6976\u21920.6971; ring_count_error stayed 0; depth_nan_ratio stayed 0.142. Chamfer is still 64.8 px and boundary_explained_edge@25 is 0.545. hough_threshold_oblique is now on its lower bound of 20. The after image shows the positive-angle track nearly continuous from about y=1600 on the left to y=1700 on the right, while the negative-angle track near y=1470 still covers only the right-hand rings. New off-track segments appeared: red ticks near y=1350 and y=1130, and green segments near y=2200. Prompts remain one propagated row at y\u22481560. Stage-1 residual is 10.20 cm with orient_agreement 0.999. The depth map still has the same crown, invert, and joint voids that fragment the label and ring masks.",
+    "rule": "When the oblique threshold is already on its bound, the last relax added off-track segments, and correspondence moved only +0.016, do not relax detection further. Keep that detector and treat the unchanged depth voids as f_depth_holes.",
+    "failure_mode": "f_depth_holes",
+    "rationale": "Another step down in binary_threshold (104\u2192100) or up in maxLineGap_oblique (56\u219260) can only add more of the off-track segments that already appeared, and it cannot create the missing left-hand negative-angle track once the Hough vote is at 20. Those voids are upstream of SAM: the label and ring masks speckle where the depth map is white, and depth_nan_ratio has not moved in either accepted round because both overlays were detection-only. Raise enhancing.curvature_threshold from 0.0005 to 0.001 so surface interpolation accepts moderately curved neighbourhoods and fills sparse lining pixels, without going to the 0.002 ceiling that would interpolate through joints. Outlier joint extraction does not use this threshold, so the accepted lines stay. The detecting keys are restated at the accepted values because the overlay is applied on the family reference; leaving them out would revert binary 127, oblique 30, and gap 30 and give back both rounds. uniform_k_snap stays on so one spurious intersection cannot pull a ring off the K row. Unfolding stays untouched: orientation already agrees and the residual is only 0.2 cm over the gate.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9990592937874491,
+    "denoise_retained_ratio": 0.7404734761200185,
+    "depth_nan_ratio": 0.13525346442948238,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5476982806433721,
+    "correspondence_f1@15": 0.3533153162476168,
+    "chamfer_sym_px": 64.12213134765625,
+    "sam_fill_rate": 0.6953654967214042,
+    "phase_incoherence_deg": 1.3
+  },
+  "score": 0.641277660106974,
+  "score_raw": 0.641277660106974,
+  "band": "refine",
+  "gt_miou": 0.852,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6430664710872571,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3575517202314777,
+    "sam_fill_rate": 0.6970917117423048,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.14202755710717666
+  },
+  "elapsed_s": 193.0,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-10/round3/params",
+  "finished_at": "2026-09-19T21:28:26"
+}

@@ -1,0 +1,73 @@
+{
+  "subset": "4-2",
+  "family": "complex",
+  "arm": "random",
+  "round": 2,
+  "overlay": {
+    "sam": {
+      "K_height": 1355.3690541085361
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0014541009658376478
+    },
+    "denoising": {
+      "mask_r_low": 3.6313326155466044
+    },
+    "detecting": {
+      "binary_threshold": 152,
+      "hough_threshold_vertical": 2321
+    }
+  },
+  "proposal": {
+    "observation": "adaptive random control proposal",
+    "rule": "k-matched uniform draw on incumbent",
+    "failure_mode": "n/a (control)",
+    "rationale": "random bounded overlay on current best",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9672561546948405,
+    "denoise_retained_ratio": 0.7420665354988877,
+    "depth_nan_ratio": 0.20541881636489698,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.6125518925518926,
+    "correspondence_f1@15": 0.4111100323124953,
+    "chamfer_sym_px": 73.10524940490723,
+    "sam_fill_rate": 0.7292347260265165,
+    "phase_incoherence_deg": 9.4
+  },
+  "score": 0.6730939066018637,
+  "score_raw": 0.6730939066018637,
+  "band": "refine",
+  "gt_miou": 0.772,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6966793181559678,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.45298510069511344,
+    "sam_fill_rate": 0.7297588827591528,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.20905922176413247
+  },
+  "elapsed_s": 246.6,
+  "provenance": {
+    "arm": "random",
+    "seed_base": 20260915,
+    "panel_index": 11,
+    "round": 2,
+    "k": 5,
+    "chosen": [
+      "sam.K_height",
+      "enhancing.curvature_threshold",
+      "denoising.mask_r_low",
+      "detecting.binary_threshold",
+      "detecting.hough_threshold_vertical"
+    ],
+    "stage1_unlocked": false
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/random/4-2/round2/params",
+  "finished_at": "2026-09-19T11:36:27"
+}

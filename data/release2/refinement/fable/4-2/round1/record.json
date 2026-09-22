@@ -1,0 +1,69 @@
+{
+  "subset": "4-2",
+  "family": "complex",
+  "arm": "fable",
+  "round": 1,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.6,
+      "mask_r_high": 3.85
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "binary_threshold": 125,
+      "hough_threshold_oblique": 28,
+      "hough_threshold_horizontal": 60,
+      "hough_threshold_vertical": 4300,
+      "maxLineGap_oblique": 74,
+      "maxLineGap_horizontal": 28,
+      "pattern_tolerance": 11
+    },
+    "sam": {
+      "segment_width": 1874,
+      "K_height": 1120.0,
+      "angle": 11.5
+    }
+  },
+  "proposal": {
+    "observation": "detected_lines.png: 12 vertical ring joints are found for 10 expected rings, but oblique yield is very low (about 10 positive-slope red and 6 negative-slope green segments over 12 joint columns, several of them tiny fragments), while blue horizontal fallback segments dominate. initial_prompt_points.png: only 10 prompt centres, of which 4 are 'midpoint', 2 are 'assume' (extrapolated) and just 4 come from real oblique intersections; spacing is irregular and clustered in the lower half. depth_map_viridis.png: broad NaN bands from the service tube and arched fittings (depth_nan_ratio 0.209) plus speckle holes. segmentation_results.png: 10 rings recovered (ring_count_error 0) and the K/B/A label sequence is present, but coverage is patchy (sam_fill_rate 0.73). correspondence_f1@15 = 0.453 is the weakest normalised measurement.",
+    "rule": "d7 (m_line_yield low AND horizontal fallback triggered) -> f_missing_lines; precondition from r_relax_hough: rule out upstream f_joint_oversmoothed / f_depth_holes (d5/d6) first, so stage-3 densification and the stage-2 radial gate are adjusted jointly with the Hough relaxation. Inter-stage chain f_missing_lines -> unstable prompt centres -> f_crop_offset explains the low correspondence_f1@15.",
+    "failure_mode": "stage_4_detection.f_missing_lines (with likely upstream stage_3_upsample.f_joint_oversmoothed and mild stage_3_upsample.f_depth_holes)",
+    "rationale": "Stage-1 is locked (residual 1.90 cm), so unfolding is untouched. The closest worked analogy is complex-correspondencef1at15-improve-s021 (same family, expected_rings=10, same dominant concern): a low curvature_threshold (~0.00037), permissive oblique Hough (threshold 27, maxLineGap 74), stricter horizontal fallback (60), pattern_tolerance 11, a tight radial gate (3.60/3.79) and SAM template 1874/1120/11.8 jointly raised correspondence_f1@15 0.446->0.460 and lowered depth_nan_ratio 0.208->0.197 at a small fill-rate cost, net proxy +0.008. The degrade analogies warn against the opposite moves: s028 (higher curvature_threshold 0.0013, oblique threshold 42, maxLineGap 35, mask_r_high 4.04) cut correspondence to 0.365, and g007 (mask_r_low 3.80 with mask_r_high 4.05) collapsed the lining to depth_nan_ratio 0.98, so mask_r_low is kept low (3.60) and mask_r_high is kept well below 4.0 but slightly looser than the analogy (3.85) to avoid over-gating a different T4 scan. Detecting values follow r_relax_hough: lower oblique threshold and higher maxLineGap_oblique to bridge the fragmented joint traces seen in the image, raise the horizontal threshold so horizontal fallback stops dominating the intersection set, and set pattern_tolerance 11 so the K/AB distance pattern accepts slightly more oblique intersections instead of falling back to 'assume' points. SAM values are set to the improving analogy's template (segment_width 1874, K_height 1120, angle 11.5) since the current 10-ring recovery should be preserved. This is a joint overlay; no per-parameter causal effect is claimed.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9672561546948405,
+    "denoise_retained_ratio": 0.7445818705554055,
+    "depth_nan_ratio": 0.209318279915068,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5930509821732712,
+    "correspondence_f1@15": 0.49168118133685346,
+    "chamfer_sym_px": 79.83012771606445,
+    "sam_fill_rate": 0.7293530342193588,
+    "phase_incoherence_deg": 9.4
+  },
+  "score": 0.7187375177901674,
+  "score_raw": 0.7187375177901674,
+  "band": "accept",
+  "gt_miou": 0.775,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6966793181559678,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.45298510069511344,
+    "sam_fill_rate": 0.7297588827591528,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.20905922176413247
+  },
+  "elapsed_s": 233.6,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/4-2/round1/params",
+  "finished_at": "2026-09-19T12:52:48"
+}

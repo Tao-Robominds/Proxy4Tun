@@ -1,0 +1,55 @@
+{
+  "subset": "3-7",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 32,
+      "hough_threshold_horizontal": 48,
+      "maxLineGap_oblique": 40,
+      "uniform_k_snap": false
+    }
+  },
+  "proposal": {
+    "observation": "Correspondence is the weak feature (correspondence_f1@15=0.172, chamfer_sym_px=96.3, boundary_explained_edge@25=0.209) while ring_count_error=0, sam_fill_rate=0.767, depth_nan_ratio=0.165, phase_incoherence_deg=1.7, and denoise_retained_ratio=0.798 are already serviceable. Stage-1 residual is 3.60 cm, under the 10 cm gate. On detected_lines.png (1171x1458) ten magenta ring boundaries sit at x about 136, 243, 351, 458, 566, 673, 780, 888, 995, and 1103. Oblique overlays exist only on the right: green segments at y about 667-678 and red segments at y about 740-753, both confined to x about 835-1145 (the last three ring intervals). A single blue horizontal fallback sits at x about 1093-1134, y about 375. Mid-ring joint pixels are faint gray rather than absent. initial_prompt_points.png shows ten propagated centres, nine of them on one horizontal row.",
+    "rule": "d7: oblique line yield is low and a horizontal fallback is present, so prompt centres are propagated instead of taken from per-ring intersections. Upstream depth_nan_ratio and denoise_retained_ratio do not show an over-tight radial gate or a hole-dominated depth map, and the ten vertical boundaries already cover the expected rings, so this is not f_wrong_vertical_band or a stage-1 failure.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Recover the same slightly sloped joint bands left of x about 835 by letting fainter joint pixels through binarisation, lowering the oblique Hough accumulator threshold, and bridging short gaps, while making the horizontal fallback stricter and turning off uniform K snap so centres are not forced onto the flat propagated row. Leave unfolding untouched because stage 1 is locked. Do not retune denoising, enhancing, vertical Hough, or SAM: ring count, fill, and depth holes are not the failing measurements, and the development full-stack overlays that moved those stages together lowered the proxy.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991211319489915,
+    "denoise_retained_ratio": 0.7976920114616173,
+    "depth_nan_ratio": 0.16450624232718375,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.23333333333333334,
+    "correspondence_f1@15": 0.17671592239628878,
+    "chamfer_sym_px": 94.58639812469482,
+    "sam_fill_rate": 0.768280822677815,
+    "phase_incoherence_deg": 2.5
+  },
+  "score": 0.5586570894042744,
+  "score_raw": 0.5586570894042744,
+  "band": "refine",
+  "gt_miou": 0.843,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5553118036890422,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.17174823917999785,
+    "sam_fill_rate": 0.7667991671398826,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.16450624232718375
+  },
+  "elapsed_s": 185.4,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-7/round1/params",
+  "finished_at": "2026-09-19T19:19:15"
+}

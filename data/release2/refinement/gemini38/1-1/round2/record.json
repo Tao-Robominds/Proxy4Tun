@@ -1,0 +1,53 @@
+{
+  "subset": "1-1",
+  "family": "staggered",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 150,
+      "hough_threshold_oblique": 58,
+      "maxLineGap_oblique": 34
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was rejected: proxy 0.6140\u21920.5802, correspondence_f1@15 0.282\u21920.223 (\u22120.059), sam_fill_rate +0.0007, ring_count_error still 0, depth_nan_ratio unchanged. The looser detector added oblique pixels (red 2013\u21922195, green 2055\u21922290) and cut horizontal pixels (blue 5347\u21924903). In the after intersection plot one midpoint marker jumped upward while the other centres, including the three left assume points, stayed put. Ten vertical dividers remain. Incumbent is still the start, so correspondence 0.282, chamfer 105 px, and phase 6.6\u00b0 are the problem to beat, not the rejected state.",
+    "rule": "d8: spacing against the K/AB pattern is wrong. The extra intersections from a lower oblique threshold moved a centre instead of creating the missing left joints.",
+    "failure_mode": "f_spurious_lines",
+    "rationale": "Stage 1 stays locked. Do not repeat the rejected direction (inter_radius 0.074, hough_threshold_oblique 42, hough_threshold_horizontal 72, maxLineGap_oblique 64): more lines moved a prompt centre and cut correspondence, and ring count was already exact so the vertical threshold stays 500. r_tighten_hough from the reference: raise binary_threshold 127\u2192150 so faint joint pixels never enter Hough (the staggered improve example used 150 and did not collapse correspondence), raise hough_threshold_oblique 50\u219258 (well below the degrade example's 76), and lower maxLineGap_oblique 40\u219234 so gaps are not bridged into false intersections. Horizontal threshold and inter_radius are left at the reference.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999336994200428,
+    "denoise_retained_ratio": 0.763569489665416,
+    "depth_nan_ratio": 0.11990621963918995,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.6923076923076923,
+    "correspondence_f1@15": 0.2926098358823092,
+    "chamfer_sym_px": 102.11490631103516,
+    "sam_fill_rate": 0.7278711701049587,
+    "phase_incoherence_deg": 6.6
+  },
+  "score": 0.6199037709779585,
+  "score_raw": 0.6199037709779585,
+  "band": "refine",
+  "gt_miou": 0.784,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6139625641458475,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.2822583627704685,
+    "sam_fill_rate": 0.7278950267246003,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11990621963918995
+  },
+  "elapsed_s": 255.1,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/1-1/round2/params",
+  "finished_at": "2026-09-19T20:38:17"
+}

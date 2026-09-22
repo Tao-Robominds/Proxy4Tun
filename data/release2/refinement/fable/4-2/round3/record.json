@@ -1,0 +1,69 @@
+{
+  "subset": "4-2",
+  "family": "complex",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.6,
+      "mask_r_high": 3.85
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "binary_threshold": 125,
+      "hough_threshold_oblique": 28,
+      "hough_threshold_horizontal": 60,
+      "hough_threshold_vertical": 4300,
+      "maxLineGap_oblique": 74,
+      "maxLineGap_horizontal": 28,
+      "pattern_tolerance": 11
+    },
+    "sam": {
+      "segment_width": 1855,
+      "K_height": 1105.0,
+      "angle": 11.3
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 was rejected (0.7187 -> 0.7111): correspondence_f1@15 fell 0.492 -> 0.478 while sam_fill_rate (+0.0004) and depth_nan_ratio (0.0) were unchanged. The round-2 after-images explain why: initial_prompt_points.png is pixel-identical to the round-1 and start versions (same 10 centres at the same coordinates: 3 positive_slope, 1 negative_slope, 4 midpoint, 2 assume), so pushing oblique Hough to the permissive bound (25/80), lowering binary_threshold to 110 and raising pattern_tolerance to 14 changed nothing that reaches stage 5; detected_lines.png only gained a handful of short spurious oblique fragments (x~1000/y~2830, x~1700/y~1880, x~1600/y~2740) without producing any new pattern-matching intersection. The depth map is also identical across all three rounds. Since prompt centres and depth map are fixed, the only overlay component that actually altered the stage-5 output in both rounds is the SAM template: round 1 (1874 / 1120 / 11.5) lifted correspondence by +0.039; round 2 moved all three template values upward (1900 / 1140 / 11.8) and lost 0.0135. segmentation_results.png is otherwise stable: 10 rings, ring_count_error 0, K/B1/A1-A4/B2 sequence intact, a few thin dark unlabeled bars at ring boundaries in both rounds.",
+    "rule": "d7/d8 (f_missing_lines / f_pattern_mismatch) are confirmed as insensitive to the in-bounds stage-4 controls on this scan: the prompt-centre set is invariant to Hough thresholds, maxLineGap, binary_threshold and pattern_tolerance across three rounds, matching the ontology note that the vertical-line fallback can mask oblique Hough sensitivity (p_hough_oblique priority fallback_dependent). The remaining active lever is stage_5_segmentation.f_template_mismatch / f_crop_offset via r_fix_template (segment_width, K_height, taper angle), and the two completed rounds bracket that lever: the incumbent template is a local best and the upward step overshot, so the untested downward side is probed with a step of similar size.",
+    "failure_mode": "stage_5_segmentation.f_template_mismatch (template geometry slightly off the true segment size/taper, degrading SAM boundary correspondence); stage-4 f_missing_lines persists but is not addressable within bounds on this scan",
+    "rationale": "Stage-1 remains locked, so unfolding is untouched. Denoising (3.60/3.85), enhancing (0.0004) and all detecting values are reset to the accepted round-1 values, because round 2 showed the stage-4 relaxation adds only spurious fragments and cannot change the prompt centres, while round 1 showed the stage-2/3 values are neutral for NaN ratio and fill rate; reverting them removes the variables that carried no signal and keeps the g007 over-gate risk closed. The single deliberate change is the SAM template. Round 1 (1874/1120/11.5) is the best measured point; round 2 (1900/1140/11.8, all three larger) was worse by 0.0135; therefore round 3 takes a step of comparable magnitude on the opposite, still untested side: segment_width 1855, K_height 1105, angle 11.3. This is a one-dimensional bracket search along the direction that has demonstrably moved correspondence_f1@15, rather than a new joint move. The improving analogy s021 (1874/1120/11.79) and the degrade analogy s028 (1952/1165/10.3, correspondence fell) are consistent with the template being close to, not above, the round-1 values. Expected outcome: correspondence_f1@15 at or above the incumbent with fill rate, ring count and NaN ratio held; if the downward side is also worse, the round-1 incumbent is confirmed as the template optimum for this scan. This is a joint overlay; no per-parameter causal effect is claimed beyond the observed bracket.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9672561546948405,
+    "denoise_retained_ratio": 0.7445818705554055,
+    "depth_nan_ratio": 0.209318279915068,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5901370173253312,
+    "correspondence_f1@15": 0.46622275247544326,
+    "chamfer_sym_px": 80.73772048950195,
+    "sam_fill_rate": 0.7290932705785528,
+    "phase_incoherence_deg": 9.3
+  },
+  "score": 0.7040203283858739,
+  "score_raw": 0.7040203283858739,
+  "band": "accept",
+  "gt_miou": 0.772,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.7187375177901674,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.49168118133685346,
+    "sam_fill_rate": 0.7293530342193588,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.209318279915068
+  },
+  "elapsed_s": 232.7,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/4-2/round3/params",
+  "finished_at": "2026-09-19T14:59:19"
+}

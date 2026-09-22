@@ -1,0 +1,54 @@
+{
+  "subset": "3-7",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.00035
+    },
+    "detecting": {
+      "hough_threshold_horizontal": 32
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 was accepted: proxy 0.5587 to 0.5641, correspondence_f1@15 0.1767 to 0.1871, while sam_fill_rate gave back its round-1 gain (0.7683 to 0.7668), ring_count_error stayed 0, and depth_nan_ratio stayed 0.1645. Chamfer worsened to 96.3 px and boundary_explained_edge@25 fell to 0.209. On the after detected_lines image the oblique overlays still start at x=835: three green segments at y about 667-678 and two red segments at y about 740-753, all inside the last three ring intervals. The red segment grew (x 841-876 to 840-910) but no line appeared left of the magenta boundary at 780. The blue horizontal fallback is unchanged (x 1093-1134, y 375). Ten prompt centres remain propagated, nine on one horizontal row. Left-ring joint pixels in the joint band are fewer and not collinear (about 53-93 bright pixels, principal axis near vertical) versus 134-181 on the two rightmost intervals. The depth map is unchanged because round 2 only touched detection.",
+    "rule": "d6: joint contrast is low on the left and middle rings, so the joint map is not line-like and d7 cannot be finished from detection alone. Binary threshold is already at its floor (100), oblique threshold is 24 of a 20 floor, and maxLineGap_oblique is 56 of a 60 ceiling. Further gap lengthening is what round 2 did, and it did not move the x=835 cutoff. Stage 1 stays locked at 3.60 cm. Ring boundaries already cover all ten rings, so this is not f_wrong_vertical_band.",
+    "failure_mode": "f_joint_oversmoothed",
+    "rationale": "The missing left-ring lines are upstream of Hough. Depth-threshold knobs are outside this bounded set, so lower curvature_threshold from the ontology default region to 0.00035 so more joint points are enhanced and the scattered left-ring pixels can form lines. Also lower hough_threshold_horizontal from the round-1 value 48 to 32: the drawn obliques are only about 6-8 degrees, the oblique angle gate is fixed at 5-10 degrees, and anything shallower can enter only as a horizontal line. The horizontal detector has so far produced one 41 px fallback on the last ring. Leave binary, oblique threshold, maxLineGap, pattern_tolerance, and uniform_k_snap at the round-2 incumbent, and do not touch vertical Hough, unfolding, denoising, or SAM. Fill is the strong feature and just dipped, ring count is exact, and the development full-stack overlays that moved SAM and denoising together lowered the proxy.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991211319489915,
+    "denoise_retained_ratio": 0.7976920114616173,
+    "depth_nan_ratio": 0.17140620154709463,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.20212571009712296,
+    "correspondence_f1@15": 0.15945069624707997,
+    "chamfer_sym_px": 97.36568641662598,
+    "sam_fill_rate": 0.7681829159242071,
+    "phase_incoherence_deg": 1.7
+  },
+  "score": 0.547462437012039,
+  "score_raw": 0.547462437012039,
+  "band": "refine",
+  "gt_miou": 0.847,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5641470389013608,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.1871216029163313,
+    "sam_fill_rate": 0.7667991671398826,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.16450624232718375
+  },
+  "elapsed_s": 182.7,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-7/round3/params",
+  "finished_at": "2026-09-19T21:18:57"
+}

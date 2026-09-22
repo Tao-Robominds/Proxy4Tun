@@ -1,0 +1,54 @@
+{
+  "subset": "3-9",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 35,
+      "hough_threshold_horizontal": 28,
+      "maxLineGap_oblique": 45
+    }
+  },
+  "proposal": {
+    "observation": "Round-1 feedback: the stage-5 geometry overlay (sam.K_height=845, sam.segment_width=1215) left the label layout essentially unchanged (K band still ~1475-1625 px, A/B bands at the same rows, before/after segmentation_results.png nearly identical) while correspondence_f1@15 fell 0.364 -> 0.333 and sam_fill_rate 0.729 -> 0.725; so the incumbent SAM template already matched the scan and SAM is not the lever. correspondence_f1@15 is the harmonic mean of (a) the fraction of replayed oblique+horizontal line pixels lying within 15 px of a block-block label transition and (b) the fraction of block-block transition pixels lying within 15 px of a detected line. In detected_lines.png the only long lines are the green/red K-edge chains at y ~ 1470 / 1639 (green ends at x ~ 2167, red at x ~ 1898, so rings 6-9 are largely uncovered), whereas the label map has further circumferential transitions at y ~ 805-830 (A1/B1), ~ 1456-1475 (A2/K), ~ 1625-1629 (K/B2) and ~ 2305 (B2/A3). The binarised outlier map shows dense dotted joint rows exactly at y ~ 790 and y ~ 2300 across the full width, but the horizontal Hough only returned two short blue fragments there (x 120-360 at y ~ 785-808, x 120-170 at y ~ 2288-2310). Ring count (10 magenta lines, error 0), prompt row (all 10 'propagated' at y ~ 1550 on the K centre) and depth_nan_ratio (0.131) are healthy.",
+    "rule": "d7 (stage_4_detection): m_line_yield low on visible joints -> f_missing_lines; r_relax_hough: lower the Hough accumulator thresholds and raise maxLineGap toward the tunnel prior so the visible A1/B1 and B2/A3 horizontal joints and the faint right-hand K edges are recovered. Upstream precondition checked: depth holes are moderate (nan ratio 0.13, retained ratio 0.77) and the joint rows are clearly present in the binarised map, so this is a detection-threshold problem rather than f_joint_oversmoothed / f_depth_holes. Stage 1 is locked, so unfolding is untouched; denoising, enhancing and sam are left at incumbent because round 1 showed the SAM template is already aligned and the worked examples show that perturbing the early stages jointly collapsed sam_fill_rate.",
+    "failure_mode": "f_missing_lines: too few oblique/horizontal joint lines are detected on joints that the label map already segments, so most block-block boundary pixels have no line within 15 px and correspondence_f1@15 is capped near 0.36.",
+    "rationale": "The proxy's weakest term is boundary-explained-by-line: SAM already places transitions at ~805, ~1470, ~1629 and ~2305 px, but only the two K chains have supporting lines, and even those stop before rings 6-9. Lowering hough_threshold_horizontal (to 28) lets the full-width dotted joint rows at ~790 and ~2300 px become horizontal lines that sit on existing A1/B1 and B2/A3 transitions, so both F1 terms rise together (new line pixels are on boundaries; those boundaries become explained). Lowering hough_threshold_oblique (to 35) and raising maxLineGap_oblique (to 45) bridge the dotted, sparser K edges on the right so the K chains extend across rings 6-9 where the A2/K and K/B2 transitions already exist. Lowering binary_threshold to 115 keeps more of the faint joint pixels of the right-hand rings in the binarised outlier map, which is what the Hough votes are counted on. Thresholds are kept moderate (not at the bounds) so bolt-hole squares, which are short and sparse, do not pass while the continuous joint rows do. This is a detecting-only overlay: ring_count_error (stage-1 slice count) and depth_nan_ratio (stage 3) cannot move, and with uniform_k_snap unchanged the prompt row is the median of anchors, so extra oblique intersections leave the K row and sam_fill_rate essentially stable. All values are inside bounds; unfolding keys untouched.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9992437316181036,
+    "denoise_retained_ratio": 0.7719211863424968,
+    "depth_nan_ratio": 0.13082197231971604,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4735565259582727,
+    "correspondence_f1@15": 0.3430680772300641,
+    "chamfer_sym_px": 79.45089530944824,
+    "sam_fill_rate": 0.7289890931960742,
+    "phase_incoherence_deg": 1.1
+  },
+  "score": 0.6473113183542193,
+  "score_raw": 0.6473113183542193,
+  "band": "refine",
+  "gt_miou": 0.82,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6591558534408575,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36367764129925506,
+    "sam_fill_rate": 0.7289890931960742,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.13082197231971604
+  },
+  "elapsed_s": 187.9,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-9/round2/params",
+  "finished_at": "2026-09-19T13:47:52"
+}

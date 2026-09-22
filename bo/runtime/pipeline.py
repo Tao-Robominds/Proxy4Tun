@@ -13,9 +13,9 @@ from pathlib import Path
 _REPO = Path(__file__).resolve().parents[2]
 if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
-from bo.paths import REPO_ROOT, UNIFIED_DATA, VENV_PY  # noqa: E402
+from bo.paths import PIPELINE_DIR, REPO_ROOT, UNIFIED_DATA, VENV_PY  # noqa: E402
 
-SCRIPT_DIR = REPO_ROOT / "anchors" / "unified"
+SCRIPT_DIR = PIPELINE_DIR
 DATA_ROOT = UNIFIED_DATA
 
 STAGE_SCRIPTS = {
@@ -61,6 +61,7 @@ def make_env(input_txt: Path, params_dir: Path, out_root: Path) -> dict[str, str
     env["PROXY4TUN_OUT_ROOT"] = str(out_root.resolve())
     env["PROXY4TUN_INPUT_TXT"] = str(input_txt.resolve())
     env["PROXY4TUN_PARAMS_DIR"] = str(params_dir.resolve())
+    env["PROXY4TUN_TUNNEL_META"] = str((REPO_ROOT / "data" / "subsets" / "tunnel_meta.json").resolve())
     env["PYTHONPATH"] = os.pathsep.join(
         [
             str(SCRIPT_DIR),

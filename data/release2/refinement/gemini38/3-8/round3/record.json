@@ -1,0 +1,54 @@
+{
+  "subset": "3-8",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0003
+    },
+    "detecting": {
+      "hough_threshold_horizontal": 32
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 was accepted and is the incumbent: score 0.5709\u21920.5848, correspondence_f1@15 +0.021 to 0.323, sam_fill_rate +0.007 to 0.604, ring_count_error still 0, depth_nan_ratio +0.002 to 0.184. Retained lining rose to 0.757 and boundary_explained_edge@25 is 0.672, but chamfer is still 76 px and phase incoherence is 2.1\u00b0. The after detection image still has exactly ten verticals at 108 px spacing. The green circumferential band (y\u2248668\u2013685) starts only at x\u2248653, so the left five rings have no green joint, and the red band is a short main run plus fragments. Blue horizontal fallback is two short right-side stubs. All ten prompt centres remain one propagated row at a single Y. Stage-1 residual is still 24 cm. Round 1\u2019s degree-3 / ransac-0.92 fit and its oblique-threshold 30 / maxLineGap 40 move were rejected and are not in the incumbent.",
+    "rule": "The accepted radial/theta widen improved correspondence without fixing left-ring joints, so do not override that gate and do not refit the centre curve. Faint joints on the leading rings are f_joint_oversmoothed: the outlier map never forms a line there, the oblique detector already failed to extend them, and the horizontal fallback barely fires, so prompts stay propagated and correspondence stays near 0.32. Lower curvature_threshold so those joints are enhanced, and lower only hough_threshold_horizontal so near-horizontal votes can form. Do not lower the oblique threshold or raise maxLineGap again, and do not move slice spacing or the vertical threshold.",
+    "failure_mode": "f_joint_oversmoothed",
+    "rationale": "curvature_threshold 0.0003 is inside [0.0002, 0.002] and below the ontology default 0.0005, so faint leading-ring joints are kept instead of smoothed away. hough_threshold_horizontal 32 is inside [20, 60] and only relaxes the fallback that is currently two right-side stubs; it is not the oblique threshold of 30 that was rejected in round 1. The accepted denoise keys (mask_r_low 2.73, mask_r_high 3.1, mask_theta_low 1.25, mask_theta_high 18.0) are left in place. Unfolding, oblique Hough, maxLineGap, pattern_tolerance, and the SAM template are omitted: the cubic fit raised NaN and cut fill, the oblique relaxation did not grow left joints, and the development overlays that retuned segment width, K_height, and angle together cut fill.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9995216099864935,
+    "denoise_retained_ratio": 0.7258077773485341,
+    "depth_nan_ratio": 0.1886421607684663,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4630300833635375,
+    "correspondence_f1@15": 0.3109548847884164,
+    "chamfer_sym_px": 80.3303918838501,
+    "sam_fill_rate": 0.5988730981990942,
+    "phase_incoherence_deg": 2.3
+  },
+  "score": 0.5754090931275051,
+  "score_raw": 0.5754090931275051,
+  "band": "refine",
+  "gt_miou": 0.725,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5848216336523125,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3231501009110357,
+    "sam_fill_rate": 0.6037103097952508,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.18417238539596117
+  },
+  "elapsed_s": 180.0,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-8/round3/params",
+  "finished_at": "2026-09-19T21:21:58"
+}

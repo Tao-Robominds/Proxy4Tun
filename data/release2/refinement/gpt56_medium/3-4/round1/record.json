@@ -1,0 +1,77 @@
+{
+  "subset": "3-4",
+  "family": "continuous",
+  "arm": "gpt56_medium",
+  "round": 1,
+  "overlay": {
+    "unfolding": {
+      "ransac_threshold": 0.9,
+      "slice_spacing_factor": 1.18,
+      "polynomial_degree": 3,
+      "random_seed": 3
+    },
+    "denoising": {
+      "mask_r_low": 2.75,
+      "mask_r_high": 3.12,
+      "mask_theta_low": 1.2,
+      "mask_theta_high": 18.5
+    },
+    "enhancing": {
+      "curvature_threshold": 0.00045
+    },
+    "detecting": {
+      "binary_threshold": 112,
+      "hough_threshold_oblique": 28,
+      "hough_threshold_horizontal": 38,
+      "hough_threshold_vertical": 1450,
+      "maxLineGap_oblique": 52,
+      "pattern_tolerance": 12,
+      "uniform_k_snap": true
+    },
+    "sam": {
+      "segment_width": 1260,
+      "K_height": 840.0,
+      "angle": 6.0
+    }
+  },
+  "proposal": {
+    "observation": "The expected 10 ring instances are recovered and the vertical loci are regular, but correspondence_f1@15 is low (0.244), fill is only moderate (0.571), and depth_nan_ratio is elevated (0.195). The detected oblique joint evidence is sparse and concentrated near the middle of the map, while the stage-1 residual of 20.8 cm exceeds the 10.0 cm unlock gate.",
+    "rule": "Because ring count is already correct, preserve a regular 10-ring layout while addressing the unlocked centre-curve fit and downstream depth-hole/missing-line chain; use a cubic centre curve with stricter RANSAC support, retain a broad but bounded lining gate, relax oblique-line detection, and keep the SAM template near the visual joint angle.",
+    "failure_mode": "Centre curve under-fit or contaminated support causing density nonuniformity and depth holes, followed by joint oversmoothing or too few oblique lines and resulting prompt/template offset.",
+    "rationale": "The ontology links centreline distortion to downstream density loss, depth holes to low coverage, and weak joint evidence to missing oblique lines and crop offset. Since stage1_unlocked is true, this single bounded overlay tests that full chain. The settings remain conservative around the permitted ranges, retain the already-correct ring count, and avoid treating any individual parameter as causally established from the joint worked examples.",
+    "full": true
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 3.5610460826040513,
+    "orient_agreement": 0.9911766792971446,
+    "denoise_retained_ratio": 0.7435649853894042,
+    "depth_nan_ratio": 0.3348073582139205,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5152413209144793,
+    "correspondence_f1@15": 0.16720327220550738,
+    "chamfer_sym_px": 108.0807991027832,
+    "sam_fill_rate": 0.34637699572269515,
+    "phase_incoherence_deg": 5.6
+  },
+  "score": 0.38297606678579155,
+  "score_raw": 0.38297606678579155,
+  "band": "flag",
+  "gt_miou": 0.349,
+  "residual_cm": 34.199999999999996,
+  "incumbent_before_score": 0.5264765228145997,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.24397684368509054,
+    "sam_fill_rate": 0.5707661034176089,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19497856422227988
+  },
+  "elapsed_s": 201.1,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/3-4/round1/params",
+  "finished_at": "2026-09-19T22:44:00"
+}

@@ -1,0 +1,54 @@
+{
+  "subset": "4-3",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 110,
+      "hough_threshold_oblique": 28,
+      "maxLineGap_oblique": 76,
+      "hough_threshold_horizontal": 58
+    }
+  },
+  "proposal": {
+    "observation": "Incumbent remains round 1 (proxy 0.6323). Round 2 was rejected: the same detecting keys plus curvature_threshold 0.00035 scored 0.6323\u21920.6320. correspondence_f1@15, sam_fill_rate, and ring_count_error did not move (0.356, 0.714, 0); depth_nan_ratio rose 0.2291\u21920.2306. detected_lines.png and initial_prompt_points.png are byte-identical before and after, so the oblique fragments, horizontal fallback, and assume/midpoint seeds did not change. Depth and label renders did change, but not the centres that moved correspondence in round 1. Stage-1 residual is still 3.0 cm. The four-feature gap is still correspondence, with chamfer_sym_px=78.2 and phase_incoherence_deg=17.1.",
+    "rule": "d7 still holds: oblique yield is low and horizontal fallback is active, so f_missing_lines. d6 was tested by lowering curvature to 0.00035 and did not fire usefully \u2014 joint pixels reaching Hough were unchanged and nan worsened, so do not repeat that remediation. The remaining gate on those pixels is the binariser (reference binary_threshold 125).",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Keep the accepted detecting overlay (hough_threshold_oblique 28, maxLineGap_oblique 76, hough_threshold_horizontal 58) and do not reapply curvature 0.00035. Leave Hough where it is: round 1 already spent most of that headroom for a small centre shift, and round 2 showed further upstream smoothing does not redraw lines. Lower binary_threshold from 125 to 110, inside [100, 160], so fainter oblique joint pixels survive dilation and can use the gap of 76. Do not raise it toward the degrade example's 155, and do not copy that example's narrow-to-wide radial gate. Do not chase sam_fill_rate: the fill-improve example's joint move cut correspondence. Do not touch unfolding, denoising, or SAM angle; phase did not respond when centres stayed fixed, and a signed angle guess can move the 78 px chamfer the wrong way.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9853621137665801,
+    "denoise_retained_ratio": 0.7244459655940515,
+    "depth_nan_ratio": 0.22909308809933374,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.47121755186271314,
+    "correspondence_f1@15": 0.35639383452509676,
+    "chamfer_sym_px": 78.23246765136719,
+    "sam_fill_rate": 0.7137013969678645,
+    "phase_incoherence_deg": 17.1
+  },
+  "score": 0.6322540236030219,
+  "score_raw": 0.6322540236030219,
+  "band": "refine",
+  "gt_miou": 0.554,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6322540236030219,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.35639383452509676,
+    "sam_fill_rate": 0.7137013969678645,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22909308809933374
+  },
+  "elapsed_s": 237.4,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-3/round3/params",
+  "finished_at": "2026-09-19T21:40:50"
+}

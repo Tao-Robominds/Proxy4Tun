@@ -1,0 +1,56 @@
+{
+  "subset": "4-4",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 127,
+      "hough_threshold_oblique": 27,
+      "hough_threshold_horizontal": 60,
+      "maxLineGap_oblique": 74,
+      "maxLineGap_horizontal": 28,
+      "pattern_tolerance": 11
+    }
+  },
+  "proposal": {
+    "observation": "Dominant concern is correspondence_f1@15=0.315 (proxy 0.615), with chamfer_sym_px=76.2, boundary_explained_edge@25=0.543, and phase_incoherence_deg=15.8. Ring count is already exact (ring_count_error=0, expected 10) and sam_fill_rate=0.728 is secondary; depth_nan_ratio=0.223 and denoise_retained_ratio=0.739 are not a collapsed radial gate. Stage-1 residual is 9.10 cm, inside the 10 cm lock. detected_lines.png shows ten full-height magenta verticals, but circumferential joints are carried mostly by short horizontal blue fallback segments; red/green oblique segments are sparse, short, and leave gaps where the joint point pattern continues. initial_prompt_points.png has only about ten irregular centres (assume, one negative-slope, two positive-slope, four midpoints), not a regular K/AB lattice across the ten rings. segmentation_results.png still paints ten rings, so the miss is joint geometry, not ring count.",
+    "rule": "d7: oblique line yield is low and the horizontal fallback is active, while ring count already matches. Upstream f_depth_holes / f_over_gate are not the lead failure (NaN and retention are near the development band). Do not unlock unfolding.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "Ontology r_relax_hough: lower the oblique Hough threshold and raise oblique maxLineGap so intersections replace the horizontal fallback, after ruling out a collapsed depth map. The closest worked analogy is complex-correspondencef1at15-improve-s021 (same family, 10 rings, correspondence-led, ring_count_error=0), whose detecting block was binary_threshold=127, hough_threshold_oblique=27, hough_threshold_horizontal=60, maxLineGap_oblique=74, maxLineGap_horizontal=28, pattern_tolerance=11 and, jointly, lifted correspondence 0.446\u21920.460 without losing rings. That reference had stage-1 unlocked, so unfolding is omitted here. The degrade analogy (oblique threshold 63, horizontal threshold 25, maxLineGap_oblique 37, plus a near-zero radial window) collapsed correspondence and fill; the fill-seeking analogy raised sam_fill_rate only 0.752\u21920.759 while correspondence fell 0.446\u21920.365, so SAM and denoising are left unchanged. Vertical Hough is left unchanged because the ten ring lines are already correct.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9419279327470528,
+    "denoise_retained_ratio": 0.7386938922343486,
+    "depth_nan_ratio": 0.2232064422522924,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5968806862490252,
+    "correspondence_f1@15": 0.40420114892251,
+    "chamfer_sym_px": 56.93916654586792,
+    "sam_fill_rate": 0.7284786673779505,
+    "phase_incoherence_deg": 17.7
+  },
+  "score": 0.6656771274481178,
+  "score_raw": 0.6656771274481178,
+  "band": "refine",
+  "gt_miou": 0.807,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6146403436848227,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3153968305460408,
+    "sam_fill_rate": 0.7284786673779505,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.2232064422522924
+  },
+  "elapsed_s": 236.7,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/4-4/round1/params",
+  "finished_at": "2026-09-19T19:45:37"
+}

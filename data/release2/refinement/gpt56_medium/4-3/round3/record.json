@@ -1,0 +1,51 @@
+{
+  "subset": "4-3",
+  "family": "complex",
+  "arm": "gpt56_medium",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "pattern_tolerance": 11
+    }
+  },
+  "proposal": {
+    "observation": "The rejected round-2 overlay added duplicate oblique lines around existing detections but did not visibly change the selected prompt points; correspondence_f1@15 fell from 0.3523 to 0.3502 while fill, ring count, and depth holes were unchanged. This indicates that generating longer line segments is no longer the limiting step on the retained round-1 incumbent; the sparse and vertically irregular prompt set instead suggests restrictive distance-pattern selection.",
+    "rule": "When additional line evidence does not alter selected prompts and prompt spacing remains irregular, apply the stage-4 distance-pattern rule and adjust pattern tolerance rather than further relaxing Hough line generation.",
+    "failure_mode": "stage_4_detection.f_pattern_mismatch",
+    "rationale": "Setting pattern_tolerance to 11 provides a modest relaxation of K/AB spacing acceptance that may admit coherent prompt candidates already present in the detected-line map without introducing the duplicate-line behavior seen in round 2. The value is within the allowed [5, 20] range and appears in the successful complex-family development overlay, used only as a joint-outcome analogy. The accepted round-1 oblique threshold remains part of the incumbent, and no unfolding parameter is changed because stage 1 is locked.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9853621137665801,
+    "denoise_retained_ratio": 0.7244459655940515,
+    "depth_nan_ratio": 0.22909308809933374,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.46675741900353934,
+    "correspondence_f1@15": 0.3368749830151404,
+    "chamfer_sym_px": 81.90960121154785,
+    "sam_fill_rate": 0.7137013969678645,
+    "phase_incoherence_deg": 17.1
+  },
+  "score": 0.6210363325939159,
+  "score_raw": 0.6210363325939159,
+  "band": "refine",
+  "gt_miou": 0.554,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6299165116799266,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3523265493687654,
+    "sam_fill_rate": 0.7137013969678645,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22909308809933374
+  },
+  "elapsed_s": 238.8,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/4-3/round3/params",
+  "finished_at": "2026-09-20T00:59:39"
+}

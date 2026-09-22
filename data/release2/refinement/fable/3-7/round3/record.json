@@ -1,0 +1,55 @@
+{
+  "subset": "3-7",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "uniform_k_snap": false,
+      "pattern_tolerance": 15
+    },
+    "sam": {
+      "segment_width": 1225
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 (binary_threshold 105, hough_oblique 22, maxLineGap 30, K_height 885, angle 5.5) was rejected: proxy 0.5624 -> 0.5617, correspondence_f1@15 -0.002, sam_fill_rate +0.001, nan ratio and ring count unchanged. Pixel-level comparison of the round-1 and round-2 detected_lines.png shows the oblique Hough output is identical to within a few pixels (green segments at image x 835-919 / 941-1042 / 1061-1144, angles 5.3-5.9 deg; red at 841-882 and the bridged 937-1145 segment; one blue horizontal at y 374), and initial_prompt_points.png is byte-identical across rounds 0, 1 and 2 (all 10 centres 'propagated' at y~1550). Two consecutive relaxations of the oblique/binary thresholds therefore had no effect on line yield: the left seven rings' joint marks are simply too short for the oblique HoughLinesP (fixed minLineLength) at any admissible threshold, and the K locus is anchored by the vertical-line fallback plus propagation. Measured geometry from the right three rings: K top edge y~1485, bottom edge y~1662 at ring centre, so the true K centre is y~1573, 23 px below the propagated prompt row (outside the 15 px correspondence window); ring pitch from the ten magenta boundaries is 107.3 image px x 2.283 = 245 data px = 1225 mm at 5 mm/px. Setting K_height/angle to measured values in round 2 was neutral, so the incumbent SAM K template already matches; the remaining discrepancy is the vertical placement of the prompt row and the ring-width prior.",
+    "rule": "d8 (stage_4_detection): m_spacing_regularity / prompt placement inconsistent with the observed K/AB pattern -> f_pattern_mismatch, whose downstream effect is stage_5 f_crop_offset (masks shifted relative to the true joints). Per the ontology, r_relax_hough is exhausted here (fallback path masks oblique Hough sensitivity: two rounds with identical line output), so the applicable remediation is r_fix_height_priors: adjust the distance-pattern acceptance (pattern_tolerance) and the snapping behaviour (uniform_k_snap) so that the genuinely detected intersections in rings 8-10 (K centre y~1573) drive the prompt row instead of a snapped/propagated row at y~1550, and align the ring-width prior (segment_width) with the measured 1225 mm pitch.",
+    "failure_mode": "f_pattern_mismatch",
+    "rationale": "Final round; the detecting thresholds are proven inert on this scan and the SAM K geometry is already matched, so both are left at the incumbent (round-1) values. The overlay instead targets the one measurable residual: the propagated prompt row sits 23 px above the K centre implied by the detected oblique lines. uniform_k_snap=false stops snapping the K row to a uniform prior position and lets the detected intersections (present in rings 8-10) set the row, which is then propagated to the remaining rings; pattern_tolerance=15 (mid-bounds) gives the K/AB distance-pattern check enough slack to accept those intersections rather than discard them and fall back. segment_width=1225 mm is set from the measured ring pitch so the per-ring SAM crop/template width matches the magenta boundaries exactly; it is inside the bounds and, like K_height in round 2, is a low-risk alignment (no change if the incumbent already matches). ring_count_error is protected because hough_threshold_vertical is untouched; denoising/enhancing are untouched because depth_nan_ratio and fill rate did not move in any round and changing them would risk the exact ring count; unfolding is locked. If uniform_k_snap is already false on the incumbent, the outcome is neutral and the incumbent is retained, which is the acceptable downside for a final-round probe.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991211319489915,
+    "denoise_retained_ratio": 0.7976920114616173,
+    "depth_nan_ratio": 0.16450624232718375,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.2419950738916256,
+    "correspondence_f1@15": 0.17778089936716288,
+    "chamfer_sym_px": 92.9375,
+    "sam_fill_rate": 0.7675824211687455,
+    "phase_incoherence_deg": 2.5
+  },
+  "score": 0.5590380298122526,
+  "score_raw": 0.5590380298122526,
+  "band": "refine",
+  "gt_miou": 0.843,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5624260119449889,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.18418713823435579,
+    "sam_fill_rate": 0.7666947332693675,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.16450624232718375
+  },
+  "elapsed_s": 184.3,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-7/round3/params",
+  "finished_at": "2026-09-19T14:41:27"
+}

@@ -1,0 +1,87 @@
+{
+  "subset": "3-9",
+  "family": "continuous",
+  "arm": "random",
+  "round": 1,
+  "overlay": {
+    "denoising": {
+      "mask_r_high": 3.139222650212716,
+      "mask_theta_high": 18.63056684997148,
+      "mask_theta_low": 1.055339567231469
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0008778504735092801
+    },
+    "detecting": {
+      "binary_threshold": 129,
+      "pattern_tolerance": 7,
+      "hough_threshold_horizontal": 36,
+      "uniform_k_snap": true,
+      "hough_threshold_vertical": 2074,
+      "maxLineGap_oblique": 39
+    },
+    "sam": {
+      "K_height": 994.340458116676,
+      "angle": 4.528323962771963
+    }
+  },
+  "proposal": {
+    "observation": "adaptive random control proposal",
+    "rule": "k-matched uniform draw on incumbent",
+    "failure_mode": "n/a (control)",
+    "rationale": "random bounded overlay on current best",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9992437316181036,
+    "denoise_retained_ratio": 0.796862845699343,
+    "depth_nan_ratio": 0.12327787969045542,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.24487951807228917,
+    "correspondence_f1@15": 0.05847961100042723,
+    "chamfer_sym_px": 113.77540588378906,
+    "sam_fill_rate": 0.7244583836745503,
+    "phase_incoherence_deg": 1.1
+  },
+  "score": 0.48361149670332576,
+  "score_raw": 0.48361149670332576,
+  "band": "flag",
+  "gt_miou": 0.759,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6591558534408575,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36367764129925506,
+    "sam_fill_rate": 0.7289890931960742,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.13082197231971604
+  },
+  "elapsed_s": 191.8,
+  "provenance": {
+    "arm": "random",
+    "seed_base": 20260915,
+    "panel_index": 8,
+    "round": 1,
+    "k": 12,
+    "chosen": [
+      "denoising.mask_r_high",
+      "denoising.mask_theta_high",
+      "enhancing.curvature_threshold",
+      "detecting.binary_threshold",
+      "detecting.pattern_tolerance",
+      "detecting.hough_threshold_horizontal",
+      "sam.K_height",
+      "denoising.mask_theta_low",
+      "detecting.uniform_k_snap",
+      "detecting.hough_threshold_vertical",
+      "detecting.maxLineGap_oblique",
+      "sam.angle"
+    ],
+    "stage1_unlocked": false
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/random/3-9/round1/params",
+  "finished_at": "2026-09-19T11:00:59"
+}

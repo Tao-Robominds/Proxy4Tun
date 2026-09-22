@@ -1,0 +1,56 @@
+{
+  "subset": "1-5",
+  "family": "staggered",
+  "arm": "fable",
+  "round": 1,
+  "overlay": {
+    "enhancing": {
+      "inter_radius": 0.07
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 42,
+      "maxLineGap_oblique": 60
+    }
+  },
+  "proposal": {
+    "observation": "detected_lines.png: 10 magenta vertical ring boundaries are found (ring_count_error=0), but oblique red/green joint lines are sparse (~20 short segments over 10 rings, almost none in the left third x<1200 where the outlier map is very thin), while many blue horizontal fallback lines dominate, especially in the top/bottom rail/invert bands. initial_prompt_points.png shows only ~11 prompt centres for 10 rings and 9 of them are 'midpoint' fallbacks, with a single 'positive_slope' and one 'assume' point. segmentation_results.png shows 10 ring instances and a plausible staggered K/B/A pattern, but block boundaries drift and some blocks are mis-sized, consistent with prompt centres placed by fallback rather than by joint intersections. Incumbent measurements: correspondence_f1@15=0.322 (low vs the 0.51 staggered dev reference), sam_fill_rate=0.740 (healthy), ring_count_error=0, depth_nan_ratio=0.120 (comparable to dev 0.126), boundary_explained_edge@25=0.836, phase_incoherence=24.2 deg.",
+    "rule": "d7 (stage_4_detection): m_line_yield low AND horizontal/midpoint fallback triggered -> f_missing_lines; upstream check d6 (stage_3_upsample): joint contrast low in the outlier map (sparse left third) -> f_joint_oversmoothed is a plausible contributing cause via inter_stage_dependencies (f_joint_oversmoothed -> f_missing_lines). d5 does not fire (depth_nan_ratio 0.12 is at the dev-reference level), and ring count is exact, so stage-2 gating and SAM y_bounds are left untouched.",
+    "failure_mode": "stage_4_detection.f_missing_lines (too few oblique joint lines, prompt centres fall back to midpoints -> low correspondence_f1@15), with likely upstream stage_3_upsample.f_joint_oversmoothed.",
+    "rationale": "Remediation r_relax_hough (lower oblique Hough threshold, raise maxLineGap) directly targets f_missing_lines; its precondition asks to first address upstream joint enhancement, which within the allowed bounds is enhancing.inter_radius (enhance_outlier_points interpolation radius) - raising it densifies joint/outlier points so faint joint lines gain pixels in the outlier map. binary_threshold is lowered slightly below the 127 default so more faint interpolated joint pixels survive binarisation. The staggered worked examples are joint outcomes, but they bound the risk: the catastrophic degrade (Example 2) coincided with unfolding/denoising/y_bounds moves, so those stages are deliberately left at incumbent values; Example 1 kept F1 and fill stable with oblique threshold 44 and maxLineGap 47, and Example 3 with the smallest inter_radius (0.022) lost F1, so the proposal moves inter_radius toward the upper range instead. Changes are moderate and all inside configs/bounds/staggered.json; unfolding is not touched because stage-1 is locked; sam.processing.y_bounds is not touched because sam_fill_rate and ring count are already healthy.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9991680441522386,
+    "denoise_retained_ratio": 0.7712866638776553,
+    "depth_nan_ratio": 0.1204049322241058,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8298155226857238,
+    "correspondence_f1@15": 0.18545238749523182,
+    "chamfer_sym_px": 103.45658874511719,
+    "sam_fill_rate": 0.7405745363268721,
+    "phase_incoherence_deg": 28.3
+  },
+  "score": 0.5624334067990113,
+  "score_raw": 0.5624334067990113,
+  "band": "refine",
+  "gt_miou": 0.514,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6410668863547464,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.32237648215183345,
+    "sam_fill_rate": 0.7404006879561196,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12040894298363669
+  },
+  "elapsed_s": 262.1,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/1-5/round1/params",
+  "finished_at": "2026-09-19T12:23:18"
+}

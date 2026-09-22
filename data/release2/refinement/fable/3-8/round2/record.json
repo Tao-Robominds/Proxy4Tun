@@ -1,0 +1,53 @@
+{
+  "subset": "3-8",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 105,
+      "hough_threshold_oblique": 20,
+      "maxLineGap_oblique": 60
+    }
+  },
+  "proposal": {
+    "observation": "Round-1 feedback: the detecting-only overlay (hough_threshold_oblique 30, maxLineGap_oblique 45) was accepted with a small gain, proxy 0.5709 -> 0.5718; correspondence_f1@15 0.3022 -> 0.3027, sam_fill_rate 0.5969 -> 0.5987, ring_count_error 0 -> 0, depth_nan_ratio unchanged at 0.1821 (stages 1-3 untouched, as intended). Supporting terms moved more clearly in the intended direction: boundary_explained_edge@25 0.460 -> 0.570 and chamfer_sym_px 82.1 -> 75.2. The after detected_lines.png shows a few additional short green/red oblique segments on the right rings (x>~1650, e.g. near y~740, ~1400, ~1550, ~1700, ~2350) but still no oblique lines anywhere left of x~1000; the left ~4 rings remain covered only by sparse dotted joint traces, blue horizontal fallback segments still fire at y~800 and y~2300, and initial_prompt_points.png still shows all 10 centres tagged 'propagated' at y~1545 (unchanged). All 10 vertical joints are still found at ~245 px pitch. Segmentation layout is unchanged: 10 ring instances and a plausible K/B/A band sequence, with ~40% of lining pixels still unfilled. Weakest term remains correspondence_f1@15 (0.303).",
+    "rule": "d7 (stage_4_detection): m_line_yield low AND horizontal fallback triggered -> f_missing_lines still fires on the left ~40% of the map. The round-1 response (positive proxy delta, boundary_explained_edge up, chamfer down, no change to ring count or NaN ratio) confirms the direction of r_relax_hough but shows the relaxation was too mild to link the sparser left-side joint traces; d7 remains the active rule and no upstream rule (d3/d5 unchanged: retained_ratio 0.73, nan 0.18) changed state.",
+    "failure_mode": "stage_4_detection.f_missing_lines persisting on the left rings after a partial fix; prompt centres are still propagated rather than detected, so stage_5_segmentation.f_crop_offset remains the secondary mode limiting correspondence_f1@15 and sam_fill_rate.",
+    "rationale": "Continue r_relax_hough to the full extent the bounds allow and add the one remaining stage-4 admission knob: (1) hough_threshold_oblique 30 -> 20 (bound minimum) so fewer votes are needed for the sparse left-side dotted traces; (2) maxLineGap_oblique 45 -> 60 (bound maximum) so dots spaced ~50-60 px apart on the left joints can be bridged into one segment; (3) binary_threshold -> 105 (near the bound minimum; ontology default 127) so fainter outlier-map pixels on the left rings survive binarisation and dilation and contribute votes. Spurious-line risk is bounded by the fixed [5,10] deg oblique angle filter: bolt-hole rows are horizontal (~0 deg) and grid diagonals in the 5-10 deg window would need collinear points ~400 px apart, beyond maxLineGap 60, so they will not link; horizontal fallback and vertical accumulator thresholds are left unchanged so the 10 vertical joints (ring_count_error 0) are not disturbed. Unfolding is left untouched (unlocked, but joints are straight and orient_agreement 0.9995; round-1 gain came without touching it), denoising/enhancing untouched so depth_nan_ratio stays 0.1821, and SAM untouched because every worked example that moved segment_width/K_height/angle jointly saw sam_fill_rate collapse (0.67 -> 0.29-0.43) and those joint outcomes cannot be attributed per parameter. All values in bounds: binary_threshold 105 in [100,160], hough_threshold_oblique 20 in [20,60], maxLineGap_oblique 60 in [10,60]. Expected response: oblique lines appear on rings left of x~1000, prompt centres become detected rather than propagated, correspondence_f1@15 and boundary_explained_edge rise further, ring_count_error stays 0, depth_nan_ratio unchanged.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9995216099864935,
+    "denoise_retained_ratio": 0.7258077773485341,
+    "depth_nan_ratio": 0.18208811279684348,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.45966830003769316,
+    "correspondence_f1@15": 0.2880107213091362,
+    "chamfer_sym_px": 85.21115684509277,
+    "sam_fill_rate": 0.596949720945907,
+    "phase_incoherence_deg": 2.5
+  },
+  "score": 0.5627639535661066,
+  "score_raw": 0.5627639535661066,
+  "band": "refine",
+  "gt_miou": 0.723,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5717945934800576,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3026899718498576,
+    "sam_fill_rate": 0.5987456950049729,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.18208811279684348
+  },
+  "elapsed_s": 183.6,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-8/round2/params",
+  "finished_at": "2026-09-19T13:44:42"
+}

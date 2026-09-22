@@ -1,0 +1,52 @@
+{
+  "subset": "5-5",
+  "family": "complex",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_horizontal": 70,
+      "maxLineGap_oblique": 80
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 was accepted: score 0.630\u21920.672 and correspondence_f1@15 0.316\u21920.390, with sam_fill_rate 0.756, ring_count_error 0, and depth_nan_ratio 0.193 unchanged. On the after detected-lines image the negative-oblique stubs did merge (fewer, longer segments, median length about 21\u219229 px) but the near-0\u00b0 horizontal segments did not fall (still about 50, still more numerous than the oblique lines). Left rings are still almost empty, positive-oblique lines still miss several circumferential bands, chamfer stays 67.8 px, and phase_incoherence stays 28\u00b0. Stage-1 residual is 1.90 cm, inside the 10 cm gate.",
+    "rule": "When an oblique-gap relaxation is accepted and correspondence rises, but horizontal fallback count does not fall and oblique pieces remain much shorter than a ring, keep ring count and depth-NaN fixed and only finish that same detecting move: raise the horizontal accumulator to the bound and extend the oblique gap to the bound. Do not reopen unfolding or the radial gate.",
+    "failure_mode": "f_missing_lines",
+    "rationale": "The incumbent already holds oblique threshold 27, horizontal threshold 60, and oblique maxLineGap 74, so repeating that overlay would not change the state. The after image shows the gap increase did the visible work, while horizontal threshold 60 left the fallback segments in place. Set horizontal threshold to 70 and oblique maxLineGap to 80, both on the bound, and leave the oblique threshold at 27 so a lower threshold does not admit more stubs. Do not copy the ring-count degrade example (binary 159, horizontal 26, vertical 4596, tight radial gate): that joint overlay drove ring_count_error to 1 and depth_nan_ratio to 0.95. Do not chase sam_fill_rate; it is unchanged at 0.756, and the fill-seeking example lost correspondence. Unfolding is omitted because stage 1 is locked.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9125884650166897,
+    "denoise_retained_ratio": 0.7673354664684634,
+    "depth_nan_ratio": 0.19323166894404062,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5706447933076213,
+    "correspondence_f1@15": 0.38132191927238307,
+    "chamfer_sym_px": 68.22948265075684,
+    "sam_fill_rate": 0.7561778560970978,
+    "phase_incoherence_deg": 26.4
+  },
+  "score": 0.6670800265110173,
+  "score_raw": 0.6670800265110173,
+  "band": "refine",
+  "gt_miou": 0.779,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.672323284180667,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3904452199408769,
+    "sam_fill_rate": 0.7561778560970978,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19323166894404062
+  },
+  "elapsed_s": 238.6,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/5-5/round2/params",
+  "finished_at": "2026-09-19T20:33:52"
+}

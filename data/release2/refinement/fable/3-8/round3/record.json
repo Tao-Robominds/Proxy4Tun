@@ -1,0 +1,51 @@
+{
+  "subset": "3-8",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "denoising": {
+      "mask_r_high": 3.15
+    }
+  },
+  "proposal": {
+    "observation": "Round-2 feedback: pushing detection to the bound limits (binary_threshold 105, hough_threshold_oblique 20, maxLineGap_oblique 60) was rejected: proxy 0.5718 -> 0.5628, correspondence_f1@15 0.3027 -> 0.2880, sam_fill_rate 0.5987 -> 0.5969, ring_count_error 0 -> 0, depth_nan_ratio unchanged 0.1821. The round-2 after detected_lines.png still shows no oblique lines left of x~1000; instead it gained many short isolated red/green fragments on bolt-hole clusters (e.g. ~(200,2430), ~(1900,600-650), ~(1500-1800,900), ~(1800-2150,1330-1350), ~(2150,2150)), i.e. f_spurious_lines, while the left-side dotted joint traces are too sparse to ever link at 5-10 deg. initial_prompt_points.png is identical across start, round 1 and round 2 (10 centres, all 'propagated', y~1545), and sam_fill_rate in round 2 returned to exactly the start value 0.596949, so the SAM segmentation has been essentially invariant to every detection change; correspondence_f1@15 moved only because the detected-line set it is compared against changed (true joint lines in round 1 raised it slightly, spurious fragments in round 2 lowered it). Detection is therefore saturated and no longer the lever. Of the remaining proxy terms, depth_nan_ratio 0.1821 is a direct term and is visibly concentrated in depth_map_viridis.png as NaN bands along the three circumferential joint rows (top ~y80-130, middle ~y500, lower ~y700-800 of the thumbnail), around each bolt pocket ('T' shaped voids), the bottom strip, and the left edge. These recessed joint/bolt-pocket regions lie at a larger radius than the lining surface, which is exactly what a radial gate upper bound (mask_r_high) removes; denoise_retained_ratio is 0.726.",
+    "rule": "d5 (stage_3_upsample): m_hole_ratio high (depth_nan_ratio 0.18, NaN concentrated at joint recesses and bolt pockets) -> f_depth_holes; via inter_stage_dependencies stage_2_denoise.f_over_gate -> stage_3_upsample.f_depth_holes ('too-tight radial gate deletes lining -> depth-map voids'), with the downstream chain f_depth_holes -> stage_4 f_missing_lines (faint left-side joints, which detection alone could not fix in rounds 1-2) and f_depth_holes -> stage_5 f_over_under_coverage (sam_fill_rate 0.60). Round-2 negative feedback closes d7/r_relax_hough as a route (further relaxation only produced f_spurious_lines), so the orchestration hint applies: defer to the upstream stage whose failure mode is the likely cause.",
+    "failure_mode": "stage_2_denoise.f_over_gate (radial gate upper bound clipping recessed joint and bolt-pocket points), manifesting as stage_3_upsample.f_depth_holes along all circumferential joints, and upstream of the persistent f_missing_lines / propagated prompt centres and the 0.60 fill rate.",
+    "rationale": "Remediation r_radial_gate_widen: raise denoising.mask_r_high to the bound maximum 3.15 (in [2.9, 3.15]) so points in joint recesses and bolt pockets that sit a few cm beyond the lining surface are retained as pred=9, filling the NaN joint bands (directly lowering depth_nan_ratio), giving the joint enhancement denser input on the left rings (more chance of true oblique lines, which round 1 showed raise correspondence_f1@15), and giving SAM lining pixels at the K-block boundaries (fill rate). mask_r_low is left unchanged to avoid admitting inward-protruding fixtures (f_under_gate / spurious structure); the theta gate is left unchanged. Analogical support from the worked examples (joint outcomes, not per-parameter attribution): the one example whose depth_nan_ratio exploded (g000, 0.16 -> 0.54) is the one with the tightest upper gate (mask_r_high 2.965), whereas g003/s019 with mask_r_high 3.10/3.13 stayed at 0.22-0.24 despite similar-magnitude changes elsewhere; the direction 'higher mask_r_high -> fewer holes' is consistent with r_radial_gate_widen and with the visible void pattern. Detection stays at the accepted round-1 values (incumbent), so the spurious-line regression of round 2 is not carried; unfolding is untouched (straight, evenly spaced joints; orient_agreement 0.9995; every accepted gain so far came without moving it); enhancing and SAM untouched because all three examples that moved SAM geometry saw sam_fill_rate collapse. Worst case if the incumbent already sits at 3.15 is a no-op, not a degradation. Expected response: depth_nan_ratio drops below 0.18 (joint bands partially filled), sam_fill_rate rises, ring_count_error stays 0 (vertical joint lines are dense and unaffected), correspondence_f1@15 flat-to-up.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9995216099864935,
+    "denoise_retained_ratio": 0.7570667674932805,
+    "depth_nan_ratio": 0.1654180212804075,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5088495575221239,
+    "correspondence_f1@15": 0.226449799107279,
+    "chamfer_sym_px": 87.79173278808594,
+    "sam_fill_rate": 0.6083050443445311,
+    "phase_incoherence_deg": 1.7
+  },
+  "score": 0.5341370973024391,
+  "score_raw": 0.5341370973024391,
+  "band": "refine",
+  "gt_miou": 0.705,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.5717945934800576,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3026899718498576,
+    "sam_fill_rate": 0.5987456950049729,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.18208811279684348
+  },
+  "elapsed_s": 183.3,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-8/round3/params",
+  "finished_at": "2026-09-19T14:44:32"
+}

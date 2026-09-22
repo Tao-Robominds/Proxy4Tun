@@ -1,0 +1,51 @@
+{
+  "subset": "1-3",
+  "family": "staggered",
+  "arm": "degraded",
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.2072379357181493,
+      "mask_r_high": 2.7408075435087085,
+      "z_step": 0.00632605788204819,
+      "grad_threshold": 0.183471255376935
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0007136792694218457,
+      "inter_radius": 0.035289531778544186
+    },
+    "detecting": {
+      "binary_threshold": 125,
+      "hough_threshold_oblique": 46,
+      "hough_threshold_horizontal": 60,
+      "hough_threshold_vertical": 520,
+      "maxLineGap_oblique": 36
+    },
+    "sam": {
+      "processing.y_bounds": [
+        4003,
+        13100
+      ]
+    }
+  },
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999867062401834,
+    "denoise_retained_ratio": 0.07841398996512808,
+    "depth_nan_ratio": 0.7643102086099951,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.3125344099834832,
+    "correspondence_f1@15": 0.07318315363752664,
+    "chamfer_sym_px": 142.46197509765625,
+    "sam_fill_rate": 0.06698655360795054,
+    "phase_incoherence_deg": 11.6
+  },
+  "score": 0.15931598502615396,
+  "score_raw": 0.15931598502615396,
+  "band": "flag",
+  "gt_miou": 0.039,
+  "valid": true,
+  "failure_reason": null,
+  "elapsed_s": 191.8,
+  "stage1_unwrapped_sha256": "255ce1ad6e1ab539bc07557972e4a501d598bdf181ad275d42367c9d0c72e458",
+  "log": "/home/boringtao/Projects/Proxy4Tun/data/release2/degradation/1-3/pipeline.log"
+}

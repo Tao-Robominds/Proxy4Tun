@@ -1,0 +1,57 @@
+{
+  "subset": "1-1",
+  "family": "staggered",
+  "arm": "fable",
+  "round": 2,
+  "overlay": {
+    "enhancing": {
+      "inter_radius": 0.08
+    },
+    "detecting": {
+      "binary_threshold": 100,
+      "hough_threshold_oblique": 40,
+      "hough_threshold_horizontal": 90,
+      "maxLineGap_oblique": 80
+    }
+  },
+  "proposal": {
+    "observation": "Round-1 overlay (denoising z_step 0.0015 / grad 0.20; enhancing curvature 0.006 / inter_radius 0.06; detecting binary 140, oblique 44, horizontal 84, maxLineGap 60) was valid but rejected: proxy 0.6140 -> 0.6035, correspondence_f1@15 0.282 -> 0.262 (-0.020), depth_nan_ratio 0.120 -> 0.114 (better), sam_fill_rate and ring_count_error unchanged. The before/after detected_lines.png are nearly identical: the same red/green oblique segments on the right half, the same blue horizontal fallback segments, only one extra short red segment near (1100, 2300) and slightly longer blue segments. initial_prompt_points.png before/after are pixel-identical: three 'assume' centres at x=120/360/600 (y~1120/1555/1120), the lone negative-slope centre at x=850 (y~1640), and the x=1810 midpoint still at y~2290 while the other right-half centres alternate ~1210/~1640. So the moderate Hough relaxation did not change a single prompt centre - consistent with the ontology note that on 1-1 the vertical-line fallback makes moderate stage-4 Hough changes unidentifiable - and the F1 loss must come from the joint denoising/enhancing change altering depth-map edges without moving prompts. The left four rings (x<1000) still show only sparse dotted joint pixels in the outlier map, and raising binary_threshold to 140 in round 1 could only have thinned them further.",
+    "rule": "d7 still fires (m_line_yield low on the left half AND horizontal fallback engaged) -> f_missing_lines; upstream suspect f_joint_oversmoothed (faint joints from the low-density far-from-scanner half). Round-1 feedback adds a constraint: small deltas inside the detecting stage are below the identifiability floor on this scan, and the denoising/enhancing perturbation of round 1 was net negative for F1. Therefore push r_relax_hough to the bound edge in one direction only (lowest oblique threshold, largest maxLineGap, lowest binary threshold so faint joint pixels survive binarisation), strengthen joint enhancement only via inter_radius, and leave denoising at the incumbent.",
+    "failure_mode": "stage_4_detection.f_missing_lines (left-half rings receive 'assume' centres; prompt phase drifts by ~90 px between halves and by ~one block height at x=1810), upstream stage_3_upsample.f_joint_oversmoothed; the round-1 denoising/enhancing perturbation is retracted as a non-helpful joint change.",
+    "rationale": "Stage 1 is locked, so unfolding is untouched. Denoising keys are omitted so they return to the incumbent (round 1 showed the combined denoising+enhancing move cost F1 while changing nothing in stage 4). Detecting: binary_threshold=100 (bound minimum) keeps the faint left-half joint pixels that round 1's 140 suppressed; hough_threshold_oblique=40 (minimum) and maxLineGap_oblique=80 (maximum) give the oblique HoughLinesP its best chance to bridge the dotted joint lines at x<1000 into accepted oblique segments so those rings stop receiving 'assume' centres; hough_threshold_horizontal=90 (maximum) keeps the lower binary threshold from adding horizontal fallback lines from border/speckle rows. Enhancing: inter_radius=0.08 (maximum) increases the interpolation radius of enhance_outlier_points so joint points on the sparse half are densified; curvature_threshold is left at incumbent. This is a deliberate bound-edge probe in the direction all three worked examples agree on (the two better outcomes s005/s002 used low oblique thresholds 44/47; the catastrophic s011 used 76), with sam y_bounds, hough_threshold_vertical and mask_r untouched because ring count, depth_nan_ratio and sam_fill_rate remain healthy. If prompt centres still do not move, the next round should conclude that stage-4 knobs are saturated on this scan and turn to the remaining upstream/SAM knobs. Outcome is a joint effect of the full overlay; no per-parameter causal claim.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999336994200428,
+    "denoise_retained_ratio": 0.763569489665416,
+    "depth_nan_ratio": 0.11987814952498968,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.691194393662401,
+    "correspondence_f1@15": 0.28975187298138716,
+    "chamfer_sym_px": 100.15042877197266,
+    "sam_fill_rate": 0.7274614585937249,
+    "phase_incoherence_deg": 6.6
+  },
+  "score": 0.6181307322243652,
+  "score_raw": 0.6181307322243652,
+  "band": "refine",
+  "gt_miou": 0.784,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6139625641458475,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.2822583627704685,
+    "sam_fill_rate": 0.7278950267246003,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11990621963918995
+  },
+  "elapsed_s": 255.7,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/1-1/round2/params",
+  "finished_at": "2026-09-19T13:20:19"
+}

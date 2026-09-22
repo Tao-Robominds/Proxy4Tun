@@ -1,0 +1,61 @@
+{
+  "subset": "3-6",
+  "arm": "fable",
+  "family": "continuous",
+  "start": {
+    "score": 0.6966921252558986,
+    "band": "refine",
+    "gt_miou": 0.836
+  },
+  "candidates": [
+    {
+      "round": 0,
+      "name": "start",
+      "score": 0.6966921252558986,
+      "band": "refine",
+      "gt_miou": 0.836,
+      "valid": true,
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/references/3-6"
+    },
+    {
+      "round": 1,
+      "name": "round1",
+      "score": 0.764011917693086,
+      "band": "accept",
+      "gt_miou": 0.693,
+      "valid": true,
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-6/round1"
+    },
+    {
+      "round": 2,
+      "name": "round2",
+      "score": 0.7442078657232216,
+      "band": "accept",
+      "gt_miou": 0.764,
+      "valid": true,
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-6/round2"
+    },
+    {
+      "round": 3,
+      "name": "round3",
+      "score": 0.7486047795806771,
+      "band": "accept",
+      "gt_miou": 0.639,
+      "valid": true,
+      "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-6/round3"
+    }
+  ],
+  "selected": {
+    "round": 1,
+    "name": "round1",
+    "score": 0.764011917693086,
+    "band": "accept",
+    "gt_miou": 0.693,
+    "valid": true,
+    "run_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-6/round1"
+  },
+  "selection_rule": "max score among start+valid; ties within 0.01 keep earlier (start, then round order)",
+  "delta_score": 0.0673,
+  "delta_gt_miou": -0.143,
+  "finished_at": "2026-09-19T15:11:46"
+}

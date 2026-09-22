@@ -1,0 +1,55 @@
+{
+  "subset": "4-1",
+  "family": "complex",
+  "arm": "fable",
+  "round": 1,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "hough_threshold_oblique": 30,
+      "maxLineGap_oblique": 70
+    }
+  },
+  "proposal": {
+    "observation": "detected_lines.png shows all 10 magenta vertical ring joints (ring_count_error=0, spacing ~365 px), but oblique line yield is very low: only ~8 short green/red oblique segments across 10 rings, while ~30 blue horizontal fallback segments carry most of the K-block evidence. initial_prompt_points.png confirms this: 7 of 12 prompt centres are 'assume' (green diamonds) and only 3 are direct negative/positive-slope intersections plus 2 midpoints, so most prompt centres are inferred rather than detected. The binarised outlier map shows the K-block chevron edges as faint dotted arcs rather than continuous strokes. depth_map_viridis.png is cleanly unrolled (no banding, orient_agreement 0.94, unfold_residual 2.67) with moderate holes at the left column and top/bottom margins (depth_nan_ratio 0.226). segmentation_results.png recovers 10 rings with staggered K blocks, but the weak prompt evidence is consistent with the low correspondence_f1@15 = 0.365 and chamfer 80 px, the dominant weakness relative to the other three proxy measurements.",
+    "rule": "d7: m_line_yield low AND horizontal fallback triggered -> f_missing_lines; precondition check via d6/inter_stage_dependencies: faint dotted joint strokes in the outlier map indicate stage_3 f_joint_oversmoothed is a likely upstream contributor, so remediate both r_lower_depth_threshold-analogue (enhancing.curvature_threshold down) and r_relax_hough (lower hough_threshold_oblique, raise maxLineGap_oblique).",
+    "failure_mode": "stage_4_detection.f_missing_lines with upstream stage_3_upsample.f_joint_oversmoothed",
+    "rationale": "The unrolling and ring count are healthy, so unfolding and denoising are left untouched even though stage-1 is unlocked; the two dev examples that perturbed unfolding/denoising jointly (s005, s016) both broke ring_count_error and collapsed correspondence_f1@15. The closest analogue is complex-correspondencef1at15-improve-s021 (same dominant concern, same family, expected_rings=10), whose improving overlay used a low curvature_threshold (0.00037), a low oblique Hough threshold (27) and a high oblique maxLineGap (74) and raised correspondence_f1@15 0.446->0.460 with ring_count_error staying 0 and depth_nan_ratio slightly improving. This proposal takes the same direction but stays a targeted three-parameter change: lowering curvature_threshold marks more of the faint chevron points as joint points so the outlier map carries continuous oblique strokes; lowering hough_threshold_oblique and raising maxLineGap_oblique let HoughLinesP link those dotted strokes into oblique lines, replacing 'assume'/horizontal-fallback prompt centres with direct slope intersections and improving boundary correspondence. Joint outcome expected; no per-parameter attribution claimed. All values are inside configs/bounds/complex.json.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9399161465063901,
+    "denoise_retained_ratio": 0.7610957754105794,
+    "depth_nan_ratio": 0.2271747589358401,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4746350923752169,
+    "correspondence_f1@15": 0.2727622198916814,
+    "chamfer_sym_px": 81.95160675048828,
+    "sam_fill_rate": 0.7516065103119458,
+    "phase_incoherence_deg": 30.8
+  },
+  "score": 0.5970781802612892,
+  "score_raw": 0.5970781802612892,
+  "band": "refine",
+  "gt_miou": 0.637,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6504471704561834,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36527770315648833,
+    "sam_fill_rate": 0.7516065103119458,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22606519178835907
+  },
+  "elapsed_s": 230.7,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/4-1/round1/params",
+  "finished_at": "2026-09-19T12:48:44"
+}

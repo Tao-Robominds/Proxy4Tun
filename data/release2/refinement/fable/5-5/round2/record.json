@@ -1,0 +1,60 @@
+{
+  "subset": "5-5",
+  "family": "complex",
+  "arm": "fable",
+  "round": 2,
+  "overlay": {
+    "enhancing": {
+      "curvature_threshold": 0.0003
+    },
+    "detecting": {
+      "binary_threshold": 115,
+      "hough_threshold_oblique": 27,
+      "hough_threshold_horizontal": 65,
+      "maxLineGap_oblique": 76
+    },
+    "sam": {
+      "angle": 10.5
+    }
+  },
+  "proposal": {
+    "observation": "Round-1 feedback: the joint-evidence overlay was accepted, proxy 0.630 -> 0.711, correspondence_f1@15 0.316 -> 0.462 (+0.146), sam_fill_rate 0.756 -> 0.750 (-0.006), depth_nan_ratio 0.193 -> 0.195, ring_count_error 0 -> 0; boundary_explained_edge@25 rose 0.572 -> 0.601 and chamfer_sym_px fell 68.7 -> 60.8. After-images: initial_prompt_points.png now has 3 positive_slope + 1 negative_slope prompts (was 2 positive_slope) and 4 'midpoint' fallbacks (was 6); the 2 'assume' centres at x=180 and x=900 are unchanged. Rings at x~1260, 1980, 2700, 3420 still rely on midpoint fallbacks with erratic y (1640, 3380, 4110, 1900). detected_lines.png (after) still shows only ~8 usable oblique pairs; the vertical joints remain a clean 10-line 360 px pitch; blue horizontal fallback segments still appear at nearly every ring and a few short spurious oblique/horizontal fragments persist at the noisy top/bottom margins (y<60, y>4850). Measured oblique joint slopes on the long red/green pairs are ~8-11 deg (median ~10 deg): x1090-1450 red 7.9/green 9.5, x1800-2160 red 11/green 11, x2520-2880 red 9.5/green 11, x2150-2560 red 5.6/green 11. segmentation_results.png: K-block positions are more regular than before but two rings still have K blocks offset from their neighbours. The remaining deficit is still correspondence_f1@15 (0.462 vs 0.46-0.70 band on dev), the other three measurements are healthy.",
+    "rule": "d7 (m_line_yield still low AND horizontal fallback still triggered on 4/10 rings -> f_missing_lines) with residual d8 (m_spacing_regularity poor on the fallback rings -> f_pattern_mismatch) and stage-5 f_template_mismatch risk (taper angle prior vs measured joint slope). Remediations: r_relax_hough (continue lowering oblique threshold / raising oblique maxLineGap), suppress horizontal fallback further, r_lower_depth_threshold analogue via curvature_threshold, r_fix_template (set taper angle from the measured oblique slope). Unfolding untouched (stage1_unlocked=false); vertical Hough, radial band, segment_width and pattern_tolerance kept at the accepted round-1 values.",
+    "failure_mode": "stage_4_detection.f_missing_lines (residual, 4 rings on midpoint fallback) -> stage_4_detection.f_pattern_mismatch -> stage_5_segmentation.f_crop_offset; secondary stage_5_segmentation.f_template_mismatch (taper angle)",
+    "rationale": "The round-1 regime (lower curvature_threshold, relaxed oblique Hough with wide gap, stricter horizontal Hough, measured segment_width) produced the accepted +0.082 proxy gain with essentially no cost on fill rate or NaN ratio, and the after-images show the mechanism (more slope-derived prompt centres, fewer midpoint fallbacks) is what moved correspondence_f1@15. Four rings still fall back to midpoints, so round 2 continues the same direction in a bounded step rather than opening a new axis: curvature_threshold 0.0004 -> 0.0003 and binary_threshold 120 -> 115 to retain slightly more faint joint pixels in the outlier map; hough_threshold_oblique 30 -> 27 and maxLineGap_oblique 70 -> 76 to bridge the still-dotted oblique joints on the fallback rings (this lands on the values of the only improving worked example, 27/74, which is the closest condition->response analogue for family complex); hough_threshold_horizontal 60 -> 65 so short blue horizontal fragments at the margins are less likely to seed fallback centres. The single new element is sam.angle = 10.5, set directly from the measured oblique joint slopes (~8-11 deg, median ~10 deg) so the K-block template taper matches the observed joint geometry; it is inside [7, 12] and near the improving example's 11.8 rather than the degrading example's 10.3 region only by coincidence \u2014 the justification is the measurement, not the example. Radial band (3.60/3.80), segment_width 1800, pattern_tolerance 12, maxLineGap_horizontal 25 and hough_threshold_vertical are left at the accepted incumbent because NaN ratio, ring count and vertical joints are healthy and changing them risks the fill-rate/NaN terms for no diagnosed benefit. K_height is left untouched because the red/green pair separation varies 160-380 px across the map and cannot be read reliably. These are joint changes; no per-parameter causal effect is claimed. Downside is bounded: every value is inside configs/bounds/complex.json and the step from the round-1 incumbent is small.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9125884650166897,
+    "denoise_retained_ratio": 0.7673354664684634,
+    "depth_nan_ratio": 0.19580889451420389,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5715329610104911,
+    "correspondence_f1@15": 0.3051084844456931,
+    "chamfer_sym_px": 69.84787178039551,
+    "sam_fill_rate": 0.7561778560970978,
+    "phase_incoherence_deg": 28.8
+  },
+  "score": 0.6228162961054403,
+  "score_raw": 0.6228162961054403,
+  "band": "refine",
+  "gt_miou": 0.774,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.7112494292642254,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.4623385895190617,
+    "sam_fill_rate": 0.7498994349982542,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19497982605977907
+  },
+  "elapsed_s": 233.4,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/5-5/round2/params",
+  "finished_at": "2026-09-19T14:11:13"
+}

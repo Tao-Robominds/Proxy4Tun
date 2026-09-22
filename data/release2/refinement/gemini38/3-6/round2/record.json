@@ -1,0 +1,52 @@
+{
+  "subset": "3-6",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 2,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.76,
+      "mask_r_high": 3.08
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 set detecting.hough_threshold_vertical to 900 and hough_threshold_horizontal to 22. Verdict rejected: score 0.6967\u21920.6965, correspondence_f1@15 \u22120.00034, sam_fill_rate, ring_count_error and depth_nan_ratio unchanged. Before/after images match on prompts, depth and segmentation; only a handful of horizontal pixels moved, and the ten magenta ring lines stayed on the even-spacing fallback. The K-row is already tight and stage 1 stays locked (residual 3.2 cm). What did not move is the hole pattern: depth_nan_ratio 0.105, with white voids clustered at the circumferential joint and the top and bottom bands, under the reference radial gate [2.85, 3.0] (15 cm) while denoise_retained_ratio is only 0.695. Correspondence remains 0.467 (chamfer ~66 px).",
+    "rule": "Do not repeat a Hough relaxation that left prompts and masks identical. With unfolding locked, a too-narrow radial window is the remaining control on depth holes. Widen only that window. Do not retune theta, K_height, angle or uniform_k_snap, and do not copy the development full-overlays: their NaN increases were joint with unfolding changes this case cannot make.",
+    "failure_mode": "f_over_gate",
+    "rationale": "Ontology r_radial_gate_widen: a tight [r_low, r_high] deletes lining and leaves depth-map voids, which show up here as joint-band and crown/invert holes and as speckled SAM boundaries off the detected K-lines. Move mask_r_low 2.85\u21922.76 and mask_r_high 3.0\u21923.08, both inside bounds, so the locked 3.2 cm centreline residual and joint relief stay inside the annulus. Theta stays at the reference so the floor is not admitted. Expected joint effect is lower depth_nan_ratio and a fuller depth image for SAM (fill and correspondence), without touching ring count.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9998273166785221,
+    "denoise_retained_ratio": 0.7189673859493546,
+    "depth_nan_ratio": 0.09998032231046348,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.6048296817527586,
+    "correspondence_f1@15": 0.49343711562218,
+    "chamfer_sym_px": 60.14987087249756,
+    "sam_fill_rate": 0.6602456728084869,
+    "phase_incoherence_deg": 0.9
+  },
+  "score": 0.7165230606819417,
+  "score_raw": 0.7165230606819417,
+  "band": "accept",
+  "gt_miou": 0.821,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6966921252558986,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.46700890973588527,
+    "sam_fill_rate": 0.6490524518014911,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.1052027439356335
+  },
+  "elapsed_s": 194.3,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-6/round2/params",
+  "finished_at": "2026-09-19T20:00:39"
+}

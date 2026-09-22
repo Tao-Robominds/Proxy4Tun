@@ -1,0 +1,51 @@
+{
+  "subset": "4-3",
+  "family": "complex",
+  "arm": "gpt56_medium",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "maxLineGap_oblique": 74
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 improved correspondence_f1@15 from 0.3369 to 0.3523 without changing fill, ring count, or depth holes. The after image adds one useful positive-oblique line near the right side and converts the corresponding prompt from negative-slope fallback to midpoint, but oblique detections remain sparse and short across most vertical bands.",
+    "rule": "Continue the accepted stage-4 missing-line remediation by improving continuity of fragmented oblique evidence while preserving the accepted oblique accumulator threshold and the correct 10-ring result.",
+    "failure_mode": "stage_4_detection.f_missing_lines",
+    "rationale": "Increasing maxLineGap_oblique should allow nearby collinear joint fragments to form longer oblique detections, potentially replacing additional fallback prompts and improving correspondence. The proposed value 74 is within the allowed [30, 80] range and appears in the successful complex-family development overlay, but that example is treated only as a joint-outcome analogy rather than per-parameter causal proof. No unfolding parameter is changed because stage 1 is locked.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9853621137665801,
+    "denoise_retained_ratio": 0.7244459655940515,
+    "depth_nan_ratio": 0.22909308809933374,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.4680607119458397,
+    "correspondence_f1@15": 0.35019599297778353,
+    "chamfer_sym_px": 78.84635925292969,
+    "sam_fill_rate": 0.7137013969678645,
+    "phase_incoherence_deg": 17.1
+  },
+  "score": 0.6286920583221396,
+  "score_raw": 0.6286920583221396,
+  "band": "refine",
+  "gt_miou": 0.554,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6299165116799266,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3523265493687654,
+    "sam_fill_rate": 0.7137013969678645,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22909308809933374
+  },
+  "elapsed_s": 234.1,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/4-3/round2/params",
+  "finished_at": "2026-09-20T00:15:01"
+}

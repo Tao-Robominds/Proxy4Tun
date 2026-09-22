@@ -1,0 +1,66 @@
+{
+  "subset": "5-5",
+  "family": "complex",
+  "arm": "fable",
+  "round": 1,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 3.6,
+      "mask_r_high": 3.8
+    },
+    "enhancing": {
+      "curvature_threshold": 0.0004
+    },
+    "detecting": {
+      "binary_threshold": 120,
+      "hough_threshold_oblique": 30,
+      "hough_threshold_horizontal": 60,
+      "maxLineGap_oblique": 70,
+      "maxLineGap_horizontal": 25,
+      "pattern_tolerance": 12
+    },
+    "sam": {
+      "segment_width": 1800
+    }
+  },
+  "proposal": {
+    "observation": "detected_lines.png: 10 magenta vertical ring joints at x~180,540,...,3420 with a regular 360 px pitch (=1.80 m at 0.005 m/px), so ring detection is healthy (ring_count_error 0). Oblique joint evidence is weak: only a handful of long red/green oblique segments, several short spurious oblique fragments in the noisy edge regions (bottom-left ~y4900, ~y2150-2250 x1050-1700), and the outlier map itself is sparse (joints appear as faint dotted chevrons, not continuous lines). Blue horizontal fallback segments fire at almost every ring at many different y. initial_prompt_points.png: of 10 prompt centres only 2 are positive_slope and 2 assume; 6 are 'midpoint' fallbacks, and their y-positions jump erratically (650 -> 1640 -> 1120 -> 1210 -> 2120 -> 1430 -> 1900 -> 3380 -> 4110), not the regular staggered K/AB pattern expected across neighbouring rings. segmentation_results.png: K blocks land at inconsistent heights ring to ring, consistent with crop offsets from bad prompts. depth_map_viridis.png: NaN holes are structural (two horizontal walkway/tube bands, curved cable lines), depth_nan_ratio 0.19 is on par with the dev reference (0.208), sam_fill_rate 0.756 is fine. Dominant deficit is correspondence_f1@15 = 0.316 vs 0.446 on dev 5-1.",
+    "rule": "d6 (m_joint_contrast low -> f_joint_oversmoothed, stage 3) feeding d7 (m_line_yield low AND horizontal fallback triggered -> f_missing_lines, stage 4), which via inter_stage_dependencies produces d8 f_pattern_mismatch -> stage 5 f_crop_offset. Remediations: r_lower_depth_threshold analogue via curvature_threshold (only stage-3 knob in bounds), r_relax_hough (lower oblique threshold, raise oblique maxLineGap), suppress spurious horizontal fallback (raise horizontal threshold), r_fix_height_priors (moderate pattern_tolerance, segment_width from measured ring pitch). Vertical Hough and unfolding untouched (stage1_unlocked=false; verticals already correct).",
+    "failure_mode": "stage_4_detection.f_missing_lines (upstream stage_3_upsample.f_joint_oversmoothed) -> stage_4_detection.f_pattern_mismatch -> stage_5_segmentation.f_crop_offset",
+    "rationale": "The proxy deficit is entirely in correspondence_f1@15; fill rate, ring count and NaN ratio are healthy, so the overlay targets oblique-joint evidence and prompt-centre regularity while leaving the healthy vertical band and radial coverage largely alone. Worked Example 1 (the only improving joint outcome, +0.008 proxy, f1 0.446->0.460) combined a low curvature_threshold (~0.0004), low oblique Hough threshold (27) with a large oblique maxLineGap (74), a high horizontal threshold (60) with large horizontal gap, pattern_tolerance 11 and a mid radial band (3.60/3.79); the two non-improving examples both used higher curvature_threshold and higher oblique thresholds with small oblique gaps, and the catastrophic one used a very tight radial band (3.77/3.81). Treating these as condition->change->response analogies (not per-parameter causes), this overlay adopts the same regime: curvature_threshold 0.0004 to keep more joint points as boundary candidates so dotted joints become continuous; hough_threshold_oblique 30 and maxLineGap_oblique 70 to bridge the dotted oblique joints (slightly less aggressive than 27/74 to avoid admitting more short spurious fragments); hough_threshold_horizontal 60 and maxLineGap_horizontal 25 so horizontal fallback only fires on genuine long joints instead of the many short blue fragments; pattern_tolerance 12 so slightly imperfect intersections still satisfy the K/AB pattern; sam.segment_width 1800 taken directly from the measured 360 px ring pitch so the template block width matches the rings; denoising 3.60/3.80 mirrors the improving example's mid radial band and avoids the tight-band failure. Unfolding is not touched because stage-1 is locked (residual 1.90 cm < 10 cm gate). All values are inside configs/bounds/complex.json.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9125884650166897,
+    "denoise_retained_ratio": 0.7601820788062067,
+    "depth_nan_ratio": 0.19497982605977907,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.6011226944667202,
+    "correspondence_f1@15": 0.4623385895190617,
+    "chamfer_sym_px": 60.84438419342041,
+    "sam_fill_rate": 0.7498994349982542,
+    "phase_incoherence_deg": 28.8
+  },
+  "score": 0.7112494292642254,
+  "score_raw": 0.7112494292642254,
+  "band": "accept",
+  "gt_miou": 0.801,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6296687362455977,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3162260435797977,
+    "sam_fill_rate": 0.7561778560970978,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.19323166894404062
+  },
+  "elapsed_s": 235.8,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/5-5/round1/params",
+  "finished_at": "2026-09-19T13:04:57"
+}

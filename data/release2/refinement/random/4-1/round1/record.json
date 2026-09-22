@@ -1,0 +1,81 @@
+{
+  "subset": "4-1",
+  "family": "complex",
+  "arm": "random",
+  "round": 1,
+  "overlay": {
+    "detecting": {
+      "hough_threshold_horizontal": 63,
+      "pattern_tolerance": 10,
+      "hough_threshold_vertical": 2285
+    },
+    "sam": {
+      "angle": 11.830734618045131,
+      "segment_width": 1639,
+      "K_height": 1136.1989815373413
+    },
+    "unfolding": {
+      "slice_spacing_factor": 1.7576027844534967
+    },
+    "denoising": {
+      "mask_r_high": 3.8593850244784225,
+      "mask_r_low": 3.563401861440287
+    }
+  },
+  "proposal": {
+    "observation": "adaptive random control proposal",
+    "rule": "k-matched uniform draw on incumbent",
+    "failure_mode": "n/a (control)",
+    "rationale": "random bounded overlay on current best",
+    "full": true
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 2.6741486494265287,
+    "orient_agreement": 0.9399161465063901,
+    "denoise_retained_ratio": 0.7662775154776648,
+    "depth_nan_ratio": 0.22347657364807175,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.5108233233233234,
+    "correspondence_f1@15": 0.3452663993808999,
+    "chamfer_sym_px": 101.8130874633789,
+    "sam_fill_rate": 0.7542467785683273,
+    "phase_incoherence_deg": 32.0
+  },
+  "score": 0.6402852803225458,
+  "score_raw": 0.6402852803225458,
+  "band": "refine",
+  "gt_miou": 0.631,
+  "residual_cm": 13.5,
+  "incumbent_before_score": 0.6504471704561834,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.36527770315648833,
+    "sam_fill_rate": 0.7516065103119458,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.22606519178835907
+  },
+  "elapsed_s": 257.2,
+  "provenance": {
+    "arm": "random",
+    "seed_base": 20260915,
+    "panel_index": 10,
+    "round": 1,
+    "k": 9,
+    "chosen": [
+      "detecting.hough_threshold_horizontal",
+      "sam.angle",
+      "sam.segment_width",
+      "detecting.pattern_tolerance",
+      "sam.K_height",
+      "unfolding.slice_spacing_factor",
+      "denoising.mask_r_high",
+      "denoising.mask_r_low",
+      "detecting.hough_threshold_vertical"
+    ],
+    "stage1_unlocked": true
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/random/4-1/round1/params",
+  "finished_at": "2026-09-19T11:21:00"
+}

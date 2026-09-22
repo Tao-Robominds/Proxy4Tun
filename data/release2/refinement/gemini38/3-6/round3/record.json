@@ -1,0 +1,52 @@
+{
+  "subset": "3-6",
+  "family": "continuous",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.71,
+      "mask_r_high": 3.13
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 widened the radial gate to mask_r_low 2.76 and mask_r_high 3.08 and was accepted: score 0.6967\u21920.7165, correspondence_f1@15 +0.0264 (0.467\u21920.493), sam_fill_rate +0.0112, depth_nan_ratio \u22120.0052, ring_count_error stayed 0. Retained fraction rose 0.695\u21920.719. Images: the depth map and SAM masks changed; interior joint-band holes shrank; the K oblique pair stayed aligned (separation still ~165 px) and off-band fragments dropped. Crown and invert white bands did not move, and ring 8 still has no red segment. Chamfer is still ~60 px and boundary_explained_edge@25 is 0.605. Stage 1 remains locked (residual 3.2 cm). Round 1's Hough relaxation did not move prompts or masks.",
+    "rule": "When a radial widen improves correspondence, fill and NaN together without touching ring count, take one more step along that same gate and stop before the bound. Do not reopen vertical or horizontal Hough, do not retune theta (the unchanged end bands are outside the scan, and the development overlays that raised theta_high jointly inflated NaN), and do not touch unfolding or the already-aligned K_height, angle and uniform_k_snap.",
+    "failure_mode": "f_over_gate",
+    "rationale": "The accepted window is still inside the bounds and the joint band is still porous, so the gate is only partly relieved. Move mask_r_low 2.76\u21922.71 and mask_r_high 3.08\u21923.13 (bounds [2.7, 3.0] and [2.9, 3.15]). Because the LLM overlay replaces the family reference, these two keys are the whole overlay: they keep the accepted direction and extend it by 5 mm on each side, short of the wall. Expected effect is another drop in depth_nan_ratio and a fuller surface for SAM, the same joint pattern that raised correspondence last round, with ring_count_error unchanged.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9998273166785221,
+    "denoise_retained_ratio": 0.722517817847407,
+    "depth_nan_ratio": 0.10174364734779813,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.6353459972862958,
+    "correspondence_f1@15": 0.3980761748690545,
+    "chamfer_sym_px": 65.64463806152344,
+    "sam_fill_rate": 0.6607613229546425,
+    "phase_incoherence_deg": 0.9
+  },
+  "score": 0.6615719300140529,
+  "score_raw": 0.6615719300140529,
+  "band": "refine",
+  "gt_miou": 0.814,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.7165230606819417,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.49343711562218,
+    "sam_fill_rate": 0.6602456728084869,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.09998032231046348
+  },
+  "elapsed_s": 187.1,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/3-6/round3/params",
+  "finished_at": "2026-09-19T21:15:53"
+}

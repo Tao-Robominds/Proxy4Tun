@@ -1,0 +1,56 @@
+{
+  "subset": "1-3",
+  "family": "staggered",
+  "arm": "gemini38",
+  "round": 3,
+  "overlay": {
+    "denoising": {
+      "mask_r_low": 2.27,
+      "mask_r_high": 2.85,
+      "grad_threshold": 0.19
+    },
+    "enhancing": {
+      "curvature_threshold": 0.006
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 was rejected: score 0.6474 to 0.6209. correspondence_f1@15 fell 0.3370 to 0.2898, sam_fill_rate 0.7349 to 0.7335, ring_count_error stayed 0, and depth_nan_ratio improved 0.1218 to 0.1155. The overlay raised binary_threshold 127 to 150, hough_threshold_oblique 50 to 56, cut maxLineGap_oblique 40 to 30, and raised curvature_threshold 0.0005 to 0.005. Tightening Hough moved ring 0 off its assume at y=1123 onto a positive-slope prompt at y=1632, so the label boundaries left the lines that still explain them; red segments fell 16 to 15 while blue horizontals were unchanged. The hole-ratio drop matches the curvature change, which does not set the Hough thresholds. The incumbent is still the start. Stage 1 is locked. An earlier relax (oblique 44, gap 64, horizontal 80) also lowered correspondence, so neither side of the reference Hough settings is the lever.",
+    "rule": "d5: depth_nan_ratio 0.122 is the hole signal that actually moved the right way under curvature, so the remaining failure is f_depth_holes. d7/d9 do not justify another Hough edit: both a lower and a higher oblique threshold reduced correspondence_f1@15, and ring_count_error is already 0.",
+    "failure_mode": "f_depth_holes",
+    "rationale": "Keep every detecting key at the reference. Those edits are what cut correspondence, by 0.015 when the gap was opened and by 0.047 when it was closed. Repeat the hole-filling direction that measured a nan drop, and extend it one step: curvature_threshold 0.0005 to 0.006, just past the 0.005 that cut nan by 0.006 and in line with the only development overlay that raised the proxy while holding ring count. Widen the radial gate from 2.32/2.79 to 2.27/2.85 and set grad_threshold to 0.19 so the lining tail is retained rather than cut; that is the same gate move as that development overlay, which took depth_nan_ratio from 0.126 to 0.115 without a ring-count error. Leave z_step at 0.001 (already the fine end), leave inter_radius at 0.06, leave y_bounds at [4200, 13100], and do not touch unfolding.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999867062401834,
+    "denoise_retained_ratio": 0.778446675817304,
+    "depth_nan_ratio": 0.1461855910203757,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.9017818339852238,
+    "correspondence_f1@15": 0.34233822497948047,
+    "chamfer_sym_px": 82.19456481933594,
+    "sam_fill_rate": 0.7439835961163742,
+    "phase_incoherence_deg": 7.1
+  },
+  "score": 0.6490933591079331,
+  "score_raw": 0.6490933591079331,
+  "band": "refine",
+  "gt_miou": 0.831,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6473891053236706,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.3369665231037002,
+    "sam_fill_rate": 0.7349035504612804,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12176547785903094
+  },
+  "elapsed_s": 283.3,
+  "provenance": {
+    "model": "inherit"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gemini38/1-3/round3/params",
+  "finished_at": "2026-09-19T21:01:38"
+}

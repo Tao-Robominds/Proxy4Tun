@@ -1,0 +1,54 @@
+{
+  "subset": "1-1",
+  "family": "staggered",
+  "arm": "gpt56_medium",
+  "round": 2,
+  "overlay": {
+    "sam": {
+      "processing.y_bounds": [
+        3710,
+        13100
+      ]
+    }
+  },
+  "proposal": {
+    "observation": "Round 1 changed some oblique line extents but left the prompt-point plot and segmentation visually unchanged; correspondence_f1@15 fell by 0.004372 while fill, ring count, and depth NaN ratio were effectively unchanged. This indicates that further Hough relaxation is unlikely to address the incumbent's low correspondence, while the segmented masks still show visible row-boundary and block-alignment discontinuities.",
+    "rule": "When a valid stage-4 perturbation does not move prompt centres or downstream masks, stop tuning the insensitive detection path and test the bounded downstream SAM processing extent instead. Preserve the exact 10-ring recovery and the locked unfolding stage.",
+    "failure_mode": "stage_5_segmentation.f_crop_offset",
+    "rationale": "The unchanged prompt centres after round 1 rule out missing-line yield as the useful control for this incumbent. Setting the SAM lower processing bound to 3710 targets crop and mask alignment without altering depth generation, ring detection, or stage 1. The value is within bounds and matches the lower bound used by the only improving staggered correspondence development overlay, while no isolated causal effect is claimed from that joint example.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "accepted",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999336994200428,
+    "denoise_retained_ratio": 0.763569489665416,
+    "depth_nan_ratio": 0.11990621963918995,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.6989889705882353,
+    "correspondence_f1@15": 0.28403997741461096,
+    "chamfer_sym_px": 104.32079696655273,
+    "sam_fill_rate": 0.7279059177900887,
+    "phase_incoherence_deg": 6.6
+  },
+  "score": 0.6149900810225005,
+  "score_raw": 0.6149900810225005,
+  "band": "refine",
+  "gt_miou": 0.784,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6139625641458475,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.2822583627704685,
+    "sam_fill_rate": 0.7278950267246003,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11990621963918995
+  },
+  "elapsed_s": 255.9,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/1-1/round2/params",
+  "finished_at": "2026-09-19T22:30:35"
+}

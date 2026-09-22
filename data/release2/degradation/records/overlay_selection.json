@@ -1,0 +1,97 @@
+{
+  "frozen": true,
+  "families": [
+    {
+      "family": "staggered",
+      "dev": "2-1",
+      "source_trial": "s017",
+      "source_gt_miou": 0.032,
+      "source_record": "/home/boringtao/Projects/Proxy4Tun/data/release2/calibration/2-1/runs/s017/record.json",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 2.2072379357181493,
+          "mask_r_high": 2.7408075435087085,
+          "z_step": 0.00632605788204819,
+          "grad_threshold": 0.183471255376935
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0007136792694218457,
+          "inter_radius": 0.035289531778544186
+        },
+        "detecting": {
+          "binary_threshold": 125,
+          "hough_threshold_oblique": 46,
+          "hough_threshold_horizontal": 60,
+          "hough_threshold_vertical": 520,
+          "maxLineGap_oblique": 36
+        },
+        "sam": {
+          "processing.y_bounds": [
+            4003,
+            13100
+          ]
+        }
+      }
+    },
+    {
+      "family": "continuous",
+      "dev": "3-1",
+      "source_trial": "s030",
+      "source_gt_miou": 0.042,
+      "source_record": "/home/boringtao/Projects/Proxy4Tun/data/release2/calibration/3-1/runs/s030/record.json",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 2.7558027056045833,
+          "mask_r_high": 2.9055073872208594,
+          "mask_theta_low": 2.062532172072679,
+          "mask_theta_high": 18.793250415474176
+        },
+        "enhancing": {
+          "curvature_threshold": 0.0015454213870689274
+        },
+        "detecting": {
+          "binary_threshold": 106,
+          "hough_threshold_oblique": 32,
+          "hough_threshold_horizontal": 37,
+          "hough_threshold_vertical": 2457,
+          "pattern_tolerance": 13
+        },
+        "sam": {
+          "segment_width": 1315,
+          "K_height": 943.5035334900022,
+          "angle": 5.560164070688188
+        }
+      }
+    },
+    {
+      "family": "complex",
+      "dev": "5-1",
+      "source_trial": "g001",
+      "source_gt_miou": 0.036,
+      "source_record": "/home/boringtao/Projects/Proxy4Tun/data/release2/calibration/5-1/runs/g001/record.json",
+      "overlay": {
+        "denoising": {
+          "mask_r_low": 3.7757707827540328,
+          "mask_r_high": 3.960644170575029
+        },
+        "enhancing": {
+          "curvature_threshold": 0.00024176945833585855
+        },
+        "detecting": {
+          "binary_threshold": 159,
+          "hough_threshold_oblique": 33,
+          "hough_threshold_horizontal": 26,
+          "hough_threshold_vertical": 4596,
+          "maxLineGap_oblique": 40,
+          "maxLineGap_horizontal": 22,
+          "pattern_tolerance": 15
+        },
+        "sam": {
+          "segment_width": 1847,
+          "K_height": 1014.4125120977629,
+          "angle": 8.347717155044599
+        }
+      }
+    }
+  ]
+}

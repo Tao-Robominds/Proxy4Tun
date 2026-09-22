@@ -1,0 +1,42 @@
+{
+  "subset": "2-1",
+  "family": "staggered",
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/configs/references/staggered",
+  "params_sha256": "243c9523ee44d084eb89f2b966c422cd554ac5776e0fc2d0a9d6f84e29051cb1",
+  "overlay": {},
+  "input_txt": "/home/boringtao/Projects/Proxy4Tun/data/subsets/2-1.txt",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9998893893906059,
+    "denoise_retained_ratio": 0.7505875130989068,
+    "depth_nan_ratio": 0.12598067533686202,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8891252326508907,
+    "correspondence_f1@15": 0.5088439760748137,
+    "chamfer_sym_px": 45.04164791107178,
+    "sam_fill_rate": 0.7201272583342118,
+    "phase_incoherence_deg": 2.4
+  },
+  "expected_rings": 10,
+  "ring_count": 10,
+  "ring_count_source": "log:/home/boringtao/Projects/Proxy4Tun/data/release2/references/2-1/pipeline.log",
+  "valid": true,
+  "gt_miou": 0.873,
+  "elapsed_s": 283.1,
+  "log": "/home/boringtao/Projects/Proxy4Tun/data/release2/references/2-1/pipeline.log",
+  "checks": {
+    "metadata_orientation": true,
+    "label_free_invariant": true,
+    "invariant_corr": -0.9999,
+    "invariant_expected_sign": -1,
+    "invariant_ok": true,
+    "only_label_columns": [
+      "pred_labels",
+      "pred_rings"
+    ],
+    "only_label_no_gt": true,
+    "ring_column_reads": 0
+  },
+  "failure": null,
+  "measure_error": null
+}

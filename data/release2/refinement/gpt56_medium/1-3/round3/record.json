@@ -1,0 +1,51 @@
+{
+  "subset": "1-3",
+  "family": "staggered",
+  "arm": "gpt56_medium",
+  "round": 3,
+  "overlay": {
+    "detecting": {
+      "maxLineGap_oblique": 52
+    }
+  },
+  "proposal": {
+    "observation": "Lowering hough_threshold_oblique from the accepted incumbent value of 44 to 40 reduced correspondence_f1@15 by 0.0083 while leaving depth_nan_ratio and ring count unchanged. The before/after depth and segmentation images are effectively stable, but the prompt plot changes the far-right candidate from a midpoint to a negative-slope point and the detected-line view loses useful edge oblique hypotheses, indicating that extra low-vote candidates disrupted line selection rather than fixing an upstream coverage problem.",
+    "rule": "Keep the accepted oblique vote threshold and apply ontology remediation r_relax_hough through its alternative control: modestly raise maxLineGap_oblique so fragmented high-support joint evidence can connect without admitting the low-vote candidates rejected in round 2.",
+    "failure_mode": "stage_4_detection.f_missing_lines",
+    "rationale": "Round 2 directly shows that further threshold relaxation is harmful, while unchanged depth holes and ring count argue against changing denoising, enhancement, or unfolding. Increasing only maxLineGap_oblique from the accepted incumbent value 47 to 52 stays close to the successful round-1 setting and tests continuity of supported oblique fragments without repeating the rejected threshold change.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999867062401834,
+    "denoise_retained_ratio": 0.7630407091253434,
+    "depth_nan_ratio": 0.12176547785903094,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.8693089730366877,
+    "correspondence_f1@15": 0.3323384548840318,
+    "chamfer_sym_px": 80.92499542236328,
+    "sam_fill_rate": 0.7351263607719326,
+    "phase_incoherence_deg": 10.1
+  },
+  "score": 0.6448030372158824,
+  "score_raw": 0.6448030372158824,
+  "band": "refine",
+  "gt_miou": 0.828,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6518237235003882,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.34580535655421357,
+    "sam_fill_rate": 0.7329539602430735,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.12176547785903094
+  },
+  "elapsed_s": 252.3,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/1-3/round3/params",
+  "finished_at": "2026-09-20T01:12:31"
+}

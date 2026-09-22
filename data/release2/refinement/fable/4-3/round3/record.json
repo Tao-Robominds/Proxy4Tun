@@ -1,0 +1,53 @@
+{
+  "subset": "4-3",
+  "family": "complex",
+  "arm": "fable",
+  "round": 3,
+  "overlay": {
+    "sam": {
+      "segment_width": 1874,
+      "K_height": 1120.3,
+      "angle": 11.79
+    }
+  },
+  "proposal": {
+    "observation": "Round 2 (binary_threshold 112, hough_threshold_oblique 25, maxLineGap_oblique 80, pattern_tolerance 13) was rejected: correspondence_f1@15 0.380->0.344, everything else unchanged. The after-images show why: over-relaxing binarisation and the oblique Hough did not recover the four 'assume' rings (x~180, 540, 1620 still 'assume') but instead produced a spurious short red segment near (x~3400, y~4050) at the far-right ring, which became a 'positive_slope' prompt centre at y~4150 while every other centre lies between y~1130 and y~1870; the ring near x~3060 also lost its red partner and fell back to 'negative_slope'. The label map shifted accordingly (block pattern of the right-most rings changed) with no fill-rate gain. So on this scan the round-1 detection settings are a local optimum inside the bounds: relaxing further trades missing lines for spurious lines (f_missing_lines -> f_spurious_lines). Measuring the incumbent detected_lines.png directly: the 10 vertical ring boundaries are spaced ~371 map px, i.e. ~1.86 m at 0.005 m/px, and the paired red/green joint edges have slopes of 7.0-9.9 deg (mean ~8.7 deg, capped by the [5,10] angle filter) and converge across the ring, so the K block is strongly tapered. The remaining rings with measured centres still yield a scrambled K/B/A sequence in segmentation_results.png, i.e. the template placed at those centres does not match segment geometry.",
+    "rule": "d9 (stage_4_detection): m_prompt_count / spurious intersections rose in round 2 -> f_spurious_lines; therefore stop relaxing stage 4 (r_tighten_hough would just return to the incumbent). With detection centres fixed at their round-1 state, the residual symptom is d10-type: block-label consistency broken around each ring while ring count is correct -> stage_5_segmentation.f_template_mismatch, remediated by r_fix_template (set segment_width / K_height / taper angle to the tunnel geometry).",
+    "failure_mode": "stage_5_segmentation.f_template_mismatch (template width/height/taper not matching the measured ring pitch and tapered K joints), with stage-4 f_missing_lines/f_spurious_lines now at their in-bounds trade-off and left unchanged.",
+    "rationale": "Final round, so the overlay moves to the only stage not yet touched and the one with a matching improving analogy. Stage 1 locked (unfolding untouched). Denoising and hough_threshold_vertical untouched: ring_count_error is 0 and Example 2 shows the radial gate is the collapse mode on this family. Detection keeps the accepted round-1 values (already the incumbent) because round 2 demonstrated that any further relaxation creates spurious lines. The SAM template block is taken from Example 3 (s021, the only worked example that improved correspondence_f1@15 on this family, proxy 0.700->0.708, ring_count_error 0->0, sam_fill_rate only -0.007): segment_width 1874, K_height 1120, angle 11.79. This is the same source trial whose detecting block was adopted in round 1 and accepted on this subset, so it is the most coherent joint analogy available. It is also consistent with the image: the measured ring pitch of ~1.86 m matches segment_width ~1874 mm, and the joint edges are steep and strongly convergent, so a larger taper angle with a shorter nominal K height is plausible for the template. Values are used as a joint analogy, not per-parameter attribution. Expected response: templates align with ring pitch and tapered K joints, more consistent K/B/A sequence per ring, correspondence_f1@15 up and chamfer down, ring_count_error unchanged, sam_fill_rate roughly unchanged (small drop acceptable as in Example 3). All values inside configs/bounds/complex.json.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9853621137665801,
+    "denoise_retained_ratio": 0.7244459655940515,
+    "depth_nan_ratio": 0.22909308809933374,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.48581604598850286,
+    "correspondence_f1@15": 0.3344211965076954,
+    "chamfer_sym_px": 105.7284164428711,
+    "sam_fill_rate": 0.7108686821557896,
+    "phase_incoherence_deg": 16.2
+  },
+  "score": 0.6186887210726228,
+  "score_raw": 0.6186887210726228,
+  "band": "refine",
+  "gt_miou": 0.545,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6455389914618006,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.37978231530158785,
+    "sam_fill_rate": 0.7137013969678645,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.2299648889785332
+  },
+  "elapsed_s": 233.7,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/4-3/round3/params",
+  "finished_at": "2026-09-19T15:03:23"
+}

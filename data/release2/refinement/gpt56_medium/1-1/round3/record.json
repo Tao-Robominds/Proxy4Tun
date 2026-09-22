@@ -1,0 +1,54 @@
+{
+  "subset": "1-1",
+  "family": "staggered",
+  "arm": "gpt56_medium",
+  "round": 3,
+  "overlay": {
+    "sam": {
+      "processing.y_bounds": [
+        3650,
+        13100
+      ]
+    }
+  },
+  "proposal": {
+    "observation": "The round-2 SAM lower bound of 3710 was accepted: correspondence_f1@15 increased by 0.001782 and boundary-explained edge coverage increased, while fill, exact 10-ring recovery, depth NaN ratio, detected lines, and prompt centres remained stable. The before/after segmentation change is subtle, so the useful signal is a small downstream alignment gain rather than a structural detection change.",
+    "rule": "Continue a validated parameter direction conservatively when it improves correspondence without disturbing upstream artifacts or ring recovery. Move only the SAM lower processing bound, retain the accepted upstream state, and avoid the rejected Hough path.",
+    "failure_mode": "stage_5_segmentation.f_crop_offset",
+    "rationale": "A modest continuation from 3710 to 3650 tests whether including slightly more of the lower processing extent further reduces crop-boundary mismatch. The step is deliberately smaller than the prior move and remains above the 3603 development setting associated with higher fill but lower joint proxy, limiting extrapolation risk. No unfolding or detection parameters are changed.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9999336994200428,
+    "denoise_retained_ratio": 0.763569489665416,
+    "depth_nan_ratio": 0.11990621963918995,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.6989889705882353,
+    "correspondence_f1@15": 0.28403997741461096,
+    "chamfer_sym_px": 104.32079696655273,
+    "sam_fill_rate": 0.7279059177900887,
+    "phase_incoherence_deg": 6.6
+  },
+  "score": 0.6149900810225005,
+  "score_raw": 0.6149900810225005,
+  "band": "refine",
+  "gt_miou": 0.784,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6149900810225005,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.28403997741461096,
+    "sam_fill_rate": 0.7279059177900887,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.11990621963918995
+  },
+  "elapsed_s": 257.1,
+  "provenance": {
+    "model": "gpt-5.6-sol-medium"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/gpt56_medium/1-1/round3/params",
+  "finished_at": "2026-09-19T22:36:23"
+}

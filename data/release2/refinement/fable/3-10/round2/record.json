@@ -1,0 +1,53 @@
+{
+  "subset": "3-10",
+  "family": "continuous",
+  "arm": "fable",
+  "round": 2,
+  "overlay": {
+    "detecting": {
+      "binary_threshold": 104,
+      "hough_threshold_oblique": 26,
+      "maxLineGap_oblique": 56
+    }
+  },
+  "proposal": {
+    "observation": "Round-1 feedback: the detecting-only relaxation (binary_threshold 112, hough_threshold_oblique 32, maxLineGap_oblique 48) was accepted, proxy 0.6028 -> 0.6177. The whole gain came from correspondence_f1@15 (0.287 -> 0.313; chamfer_sym_px 80.2 -> 74.8; boundary_explained_edge@25 0.38 -> 0.50) while sam_fill_rate, ring_count_error and depth_nan_ratio were unchanged, so the change was cost-free. After-images: detected_lines.png now shows a few additional oblique segments (extra red segments near x~1000/y~1640, x~1900/y~1350, x~1850/y~1700 and x~2400/y~830) and the existing red/green K-joint rows are longer, but rings 1-3 (x < ~850 px) still yield no oblique lines and initial_prompt_points.png still reports all 10 centres as 'propagated' with no 'detected' centre. Vertical lines remain 10 = expected_rings, so the vertical band is healthy. The outlier binary map is still very sparse: joint traces at y~1470 and y~1640 are dotted, and the bolt-hole pattern dominates. No spurious oblique lines appeared on bolt rows after the relaxation, so there is no sign yet of f_spurious_lines. Segmentation results are visually unchanged (10 coherent rings, K/B/A band layout).",
+    "rule": "d7 still fires (m_line_yield low on the left rings; all prompt centres propagated rather than detected), with d6 (low joint contrast in the outlier map) as the upstream cause that cannot be addressed within the bounded set (depth_threshold_low/high not exposed). Remediation r_relax_hough applied in round 1 moved the proxy in the right direction with zero side-effects, and d9 (m_prompt_count much larger than expected) did not trigger, so the precondition for a further step along the same axis holds. Vertical threshold, horizontal threshold and pattern_tolerance are left untouched: ring count is correct, horizontal lines are fallback-only and already pick up bolt rows (blue segments at y~800 and y~2320), and the 10 propagated centres are regularly spaced.",
+    "failure_mode": "stage_4_detection.f_missing_lines (upstream suspect stage_3_upsample.f_joint_oversmoothed), still propagating to stage_5_segmentation.f_crop_offset and hence sub-par boundary correspondence.",
+    "rationale": "Round 1 established an accepted, monotone direction: lower binarisation threshold + lower oblique Hough accumulator + larger oblique gap -> more oblique K-joint segments -> better prompt-centre placement -> higher correspondence_f1@15, with sam_fill_rate/NaN/ring count untouched. Since the left three rings still yield no oblique lines and no spurious lines appeared, round 2 takes a second, moderate step along the same axis rather than opening a new stage: binary_threshold 112 -> 104, hough_threshold_oblique 32 -> 26, maxLineGap_oblique 48 -> 56. Values stay off the hard bounds (100/20/60) to leave headroom and reduce the risk of tipping into f_spurious_lines on the dense bolt-hole rows. Unfolding is left alone even though stage-1 is marginally unlocked (10.2 vs 10.0 cm gate): all worked examples that changed unfolding/denoising/SAM jointly degraded the proxy and collapsed sam_fill_rate, and the incumbent's fill rate (0.698) is the second-largest contributor to keep intact. SAM geometry is not changed because there is no image evidence of template mismatch (10 coherent rings, consistent K/B/A bands) and the oblique-line slope (~5 deg) and K-row spacing (~170 px ~ 850 mm) are consistent with in-bound priors. This is a joint stage-4 change; no per-parameter causal attribution is claimed.",
+    "full": false
+  },
+  "valid": true,
+  "failure_reason": null,
+  "verdict": "rejected",
+  "measurements": {
+    "unfold_residual": 0.0,
+    "orient_agreement": 0.9990592937874491,
+    "denoise_retained_ratio": 0.7404734761200185,
+    "depth_nan_ratio": 0.14202755710717666,
+    "ring_count_error": 0.0,
+    "boundary_explained_edge@25": 0.39076445479239424,
+    "correspondence_f1@15": 0.2993494907318469,
+    "chamfer_sym_px": 78.2037935256958,
+    "sam_fill_rate": 0.697827475521705,
+    "phase_incoherence_deg": 1.4
+  },
+  "score": 0.6098605093895288,
+  "score_raw": 0.6098605093895288,
+  "band": "refine",
+  "gt_miou": 0.854,
+  "residual_cm": 0.0,
+  "incumbent_before_score": 0.6176870969249272,
+  "incumbent_before_measurements": {
+    "correspondence_f1@15": 0.313123760888178,
+    "sam_fill_rate": 0.6975566174270906,
+    "ring_count_error": 0.0,
+    "depth_nan_ratio": 0.14202755710717666
+  },
+  "elapsed_s": 187.4,
+  "provenance": {
+    "model": "fable"
+  },
+  "params_dir": "/home/boringtao/Projects/Proxy4Tun/data/release2/refinement/fable/3-10/round2/params",
+  "finished_at": "2026-09-19T13:51:01"
+}
